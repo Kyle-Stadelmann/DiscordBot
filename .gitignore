@@ -1,6 +1,8 @@
 # General file types
 *.png
 *.jpg
+*.lnk
+
 
 # Specific files/directories
 /node_modules

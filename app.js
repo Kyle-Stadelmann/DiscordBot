@@ -21,7 +21,7 @@ bot.on("ready", () => {
 bot.on('message', message => {
 
     // Changes message to lowercase
-    let msg = message.content.toLowerCase();
+	let msg = message.content.toLowerCase();
     // Author's name
     let sender = message.author;
 
@@ -32,18 +32,18 @@ bot.on('message', message => {
     // Command handling
 
     // Handles Daniel's move carter command
-    if (msg.startsWith(prefix + "move")) {
-    	console.log("Daniel's move command detected on: " + mention.user.username + ", by: " + sender.username);
+	if (msg.startsWith(prefix + "move")) {
+  		console.log("Daniel's move command detected on: " + mention.user.username + ", by: " + sender.username);
 
       	// If memeber id isn't Daniel's ID, ignore this event
-      	if (sender.id != "250076166323568640") {
+		if (sender.id != DANIEL_ID) {
         	console.log("Command was unsuccessful. Member wasn't Daniel");
         	printSpace();
         	return;
       	}
 
       	// If memeber id isn't Carter's ID, ignore this event
-      	if (mention.id != "186540977610031104") {
+      	if (mention.id != CARTER_ID) {
         	console.log("Command was unsuccessful. Daniel tried to move someone other than Carter");
         	printSpace();
         	return;
@@ -51,13 +51,13 @@ bot.on('message', message => {
 
 		// Test if carter is in a channel or not
 		if (mention.voiceChannel == null) {
-			console.log("Command was unsuccessful. Carter isn't in a channel")
+			console.log("Command was unsuccessful. Carter isn't in a channel");
 			printSpace();
 			return;
 		}
 
       	// Put carter into AFK channel
-      	mention.setVoiceChannel("201880000478183425");
+     	mention.setVoiceChannel(AFK_CHANNEL_ID);
 
       	console.log("Command was successful, Carter was moved to AFK");
       	printSpace();
@@ -72,6 +72,8 @@ bot.on('message', message => {
 	if (msg == prefix + "ping") {
       	message.channel.send("pong!");
     }
+
+	if (sender.id == KHANG_ID)
 
 });
 
