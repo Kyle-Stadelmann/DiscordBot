@@ -69,3 +69,5 @@ bot.on('message', async (message) => {
 
 // Login to the correct bot token
 bot.login(process.env.BOT_TOKEN);
+
+/// TEST HIGH JUSTIN
