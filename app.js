@@ -1,5 +1,6 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const bot = new Discord.Client();
+bot.commands = new Discord.Collection();
 
 /* Bot settings - Global settings this file can use */
 // Bot prefix
@@ -11,70 +12,59 @@ function printSpace() {
   console.log();
 }
 
+var constants = require("./constants.js");
+
+require("fs").readdir("./Commands/", (err, files) => {
+ 	if(err) console.error(err);
+
+  	let jsfiles = files.filter(f => f.split(".").pop() === "js");
+  	if(jsfiles.length <= 0) {
+    	console.log("No commands to load!");
+    	return;
+  	}
+
+  	console.log(`Loading ${jsfiles.length} commands!`);
+
+  	jsfiles.forEach((f, i) => {
+    	let props = require(`./Commands/${f}`);
+		console.log(`${i + 1}: ${f} loaded!`)
+		bot.commands.set(props.help.CommandName, props);
+ 	});
+})
+
 // Listener event: runs whenever the bot sends a ready event (when it first starts for example)
 bot.on("ready", () => {
 	console.log("Bot starting up...");
     printSpace();
+
+	bot.user.setActivity("With Khang's Catgirls");
 });
 
 // Listener event: runs whenever a message is received
-bot.on('message', message => {
+bot.on('message', async (message) => {
 
-    // Changes message to lowercase
-	let msg = message.content.toLowerCase();
-    // Author's name
-    let sender = message.author;
+	// Return if non-command
+	if (message.content.indexOf(prefix) !== 0) return;
+	if (message.author.bot) return;
+    if (message.channel.type === "dm") return;
 
-    // First mention from author
-    let mention = message.mentions.members.first();
+	// Messsage is a command
 
+	let messageArray = message.content.toLowerCase().split(" ");
+	// Cmd String
+	let cmdStr = messageArray[0].slice(prefix.length);
+	// Args String array
+	let args = messageArray.slice(1);
+
+
+	// Grab actual command from collection
+	let cmd = bot.commands.get(cmdStr);
 
     // Command handling
-
-    // Handles Daniel's move carter command
-	if (msg.startsWith(prefix + "move")) {
-  		console.log("Daniel's move command detected on: " + mention.user.username + ", by: " + sender.username);
-
-      	// If memeber id isn't Daniel's ID, ignore this event
-		if (sender.id != DANIEL_ID) {
-        	console.log("Command was unsuccessful. Member wasn't Daniel");
-        	printSpace();
-        	return;
-      	}
-
-      	// If memeber id isn't Carter's ID, ignore this event
-      	if (mention.id != CARTER_ID) {
-        	console.log("Command was unsuccessful. Daniel tried to move someone other than Carter");
-        	printSpace();
-        	return;
-      	}
-
-		// Test if carter is in a channel or not
-		if (mention.voiceChannel == null) {
-			console.log("Command was unsuccessful. Carter isn't in a channel");
-			printSpace();
-			return;
-		}
-
-      	// Put carter into AFK channel
-     	mention.setVoiceChannel(AFK_CHANNEL_ID);
-
-      	console.log("Command was successful, Carter was moved to AFK");
-      	printSpace();
-		message.channel.send("Goodbye Carter");
-    }
-
-	if (msg == prefix + "tweed") {
-    	message.channel.send("fite me tweed");
-    }
-
-
-	if (msg == prefix + "ping") {
-      	message.channel.send("pong!");
-    }
-
-	if (sender.id == KHANG_ID)
-
+    if (cmd) {
+		cmd.run(bot, message, args);
+		printSpace();
+	}
 });
 
 // Login to the correct bot token
