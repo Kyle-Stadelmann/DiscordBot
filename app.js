@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
+bot.events = new Discord.Collection();
 
 /* Bot settings - Global settings this file can use */
 // Bot prefix
@@ -29,6 +30,25 @@ require("fs").readdir("./Commands/", (err, files) => {
     	let props = require(`./Commands/${f}`);
 		console.log(`${i + 1}: ${f} loaded!`)
 		bot.commands.set(props.help.CommandName, props);
+ 	});
+})
+printSpace();
+
+require("fs").readdir("./RandomEvents/", (err, files) => {
+ 	if(err) console.error(err);
+
+  	let jsfiles = files.filter(f => f.split(".").pop() === "js");
+  	if(jsfiles.length <= 0) {
+    	console.log("No random events to load!");
+    	return;
+  	}
+
+  	console.log(`Loading ${jsfiles.length} random events!`);
+
+  	jsfiles.forEach((f, i) => {
+    	let props = require(`./RandomEvents/${f}`);
+		console.log(`${i + 1}: ${f} loaded!`)
+		bot.events.set(props.help.EventName, props);
  	});
 })
 
