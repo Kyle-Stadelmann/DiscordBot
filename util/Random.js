@@ -1,12 +1,21 @@
 // Likelihood/possibilities chance to spawn a true return value
-// Input: Likelihood of a "true" return value out of possibilities number of
-// potential values
+// Input: Percentage (can be non-int) of returning true.
 // Output: returns true/false
-module.exports.random = function(likelihood, possibilities) {
+module.exports = (chance) => {
+
+	let ourChance = chance;
+	// Default val is 100 assuming we are using int percentages
+	let possibilities = 100;
+
+	// Convert our number into an int
+	while (ourChance % 1 != 0) {
+		possibilities *= 10;
+		ourChance *= 10;
+	}
 
 	// Random num from 1 to possibilities
 	randomVal = (Math.random() * possibilities) + 1;
-	if (randomVal <= likelihood) {
+	if (randomVal <= ourChance) {
 		return true;
 	} else {
 		return false;

@@ -1,5 +1,3 @@
-var constants = require('../constants.js');
-
 module.exports.help = {
     CommandName: "move"
 }
@@ -12,13 +10,13 @@ module.exports.run = async (bot, msg, args) => {
 	console.log("Daniel's move command detected on: " + mention.user.username + ", by: " + msg.author.username);
 
 	// If memeber id isn't Daniel's ID, ignore this event
-	if (msg.author.id != constants.DANIEL_ID) {
+	if (msg.author.id != bot.constants.DANIEL_ID) {
 		console.log("Command was unsuccessful. Member wasn't Daniel");
 		return;
 	}
 
 	// If memeber id isn't Carter's ID, ignore this event
-	if (mention.id != constants.CARTER_ID) {
+	if (mention.id != bot.constants.CARTER_ID) {
 		console.log("Command was unsuccessful. Daniel tried to move someone other than Carter");
 		return;
 	}
@@ -30,7 +28,7 @@ module.exports.run = async (bot, msg, args) => {
 	}
 
 	// Put carter into AFK channel
-	mention.setVoiceChannel(constants.AFK_CHANNEL_ID);
+	mention.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
 
 	console.log("Command was successful, Carter was moved to AFK");
 	message.channel.send("Goodbye Carter");

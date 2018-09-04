@@ -10,7 +10,7 @@ bot.printSpace = () => {
   console.log();
 }
 
-var constants = require("./constants.js");
+bot.constants = require("./constants.js");
 
 // Load all commands into our bot.commands collection
 require("fs").readdir("./commands/", (err, files) => {
