@@ -3,9 +3,14 @@ module.exports.help = {
 }
 
 module.exports.run = async (bot, msg, args) => {
-
 	// First mention from author
-    let mention = msg.mentions.members.first();
+	let mention = null;
+    mention = msg.mentions.members.first();
+
+	if (mention == null) {
+		console.log("Daniel's move command detected, however command was unsuccessful because there was no target");
+		return;
+	}
 
 	console.log("Daniel's move command detected on: " + mention.user.username + ", by: " + msg.author.username);
 
