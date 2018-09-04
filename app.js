@@ -13,7 +13,7 @@ bot.printSpace = () => {
 var constants = require("./constants.js");
 
 // Load all commands into our bot.commands collection
-require("fs").readdir("./Commands/", (err, files) => {
+require("fs").readdir("./commands/", (err, files) => {
 	bot.printSpace();
  	if(err) return console.error(err);
 
@@ -27,7 +27,7 @@ require("fs").readdir("./Commands/", (err, files) => {
 
   	jsfiles.forEach((f, i) => {
 		// Load command file
-    	let props = require(`./Commands/${f}`);
+    	let props = require(`./commands/${f}`);
 		console.log(`${i + 1}: ${f} loaded!`)
 		bot.commands.set(props.help.CommandName, props);
  	});
@@ -35,7 +35,7 @@ require("fs").readdir("./Commands/", (err, files) => {
 
 
 // Bind all tracked events to our event objects
-require("fs").readdir("./Events/", (err, files) => {
+require("fs").readdir("./events/listeners/", (err, files) => {
 	bot.printSpace();
  	if(err) return console.error(err);
 
@@ -49,7 +49,7 @@ require("fs").readdir("./Events/", (err, files) => {
 
   	jsfiles.forEach((f, i) => {
 		// Load event file
-    	let event = require(`./Events/${f}`);
+    	let event = require(`./events/listeners/${f}`);
 		// Get event name from the file name
 		let eventName = f.split(".")[0];
 
@@ -57,7 +57,7 @@ require("fs").readdir("./Events/", (err, files) => {
 		bot.on(eventName, event.bind(null, bot));
 
 		console.log(`${i + 1}: ${f} loaded!`)
-		delete require.cache[require.resolve(`./events/${f}`)];
+		delete require.cache[require.resolve(`./events/listeners/${f}`)];
  	});
 	bot.printSpace();
 });
