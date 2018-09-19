@@ -20,6 +20,14 @@ module.exports.run = async (bot, msg, args) => {
 		return;
 	}
 
+	// If daniel didn't send it to BOT_STUFF
+	if (msg.channel.id != bot.constants.BOT_STUFF_CHANNEL_ID) {
+		console.log("Command was unsuccessful. Typed it into the wrong chat")
+		msg.delete();
+		msg.author.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
+		return;
+	}
+
 	// If memeber id isn't Carter's ID, ignore this event
 	if (mention.id != bot.constants.CARTER_ID) {
 		console.log("Command was unsuccessful. Daniel tried to move someone other than Carter");
@@ -36,5 +44,5 @@ module.exports.run = async (bot, msg, args) => {
 	mention.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
 
 	console.log("Command was successful, Carter was moved to AFK");
-	message.channel.send("Goodbye Carter");
+	msg.channel.send("Goodbye Carter");
 }
