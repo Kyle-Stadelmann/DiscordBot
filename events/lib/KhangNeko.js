@@ -7,9 +7,7 @@ module.exports = async (bot, message) => {
 		message.react(bot.emojis.find(val => val.name == "cat_thonk"));
 
 		console.log("Event was triggered. Reacted to Khang's message");
-		return;
 	} else {
 		console.log("Event was NOT triggered. Khang's message was untouched");
-		return;
 	}
 }
