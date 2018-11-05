@@ -1,7 +1,7 @@
 // Likelihood/possibilities chance to spawn a true return value
 // Input: Percentage (can be non-int) of returning true.
 // Output: returns true/false
-module.exports = (chance) => {
+module.exports.random = (chance) => {
 
 	let ourChance = chance;
 	// Default val is 100 assuming we are using int percentages

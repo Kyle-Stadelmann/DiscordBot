@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client();
+bot.util = new Discord.Collection();
 bot.commands = new Discord.Collection();
 bot.events = new Discord.Collection();
 
@@ -15,7 +16,7 @@ bot.constants = require("./constants.js");
 // Load all commands into our bot.commands collection
 require("fs").readdir("./commands/", (err, files) => {
 	bot.printSpace();
- 	if(err) return console.error(err);
+ 	if(err) return console.error(`ERROR: ${err}`);
 
   	let jsfiles = files.filter(f => f.split(".").pop() === "js");
   	if(jsfiles.length <= 0) {
@@ -28,7 +29,7 @@ require("fs").readdir("./commands/", (err, files) => {
   	jsfiles.forEach((f, i) => {
 		// Load command file
     	let props = require(`./commands/${f}`);
-		console.log(`${i + 1}: ${f} loaded!`)
+		console.log(`${i + 1}: ${f} loaded!`);
 		bot.commands.set(props.help.CommandName, props);
  	});
 });
@@ -37,7 +38,7 @@ require("fs").readdir("./commands/", (err, files) => {
 // Bind all tracked events to our event objects
 require("fs").readdir("./events/listeners/", (err, files) => {
 	bot.printSpace();
- 	if(err) return console.error(err);
+ 	if(err) return console.error(`ERROR: ${err}`);
 
   	let jsfiles = files.filter(f => f.split(".").pop() === "js");
   	if(jsfiles.length <= 0) {
@@ -56,11 +57,14 @@ require("fs").readdir("./events/listeners/", (err, files) => {
 		// Does the actual event binding and includes the event params with it
 		bot.on(eventName, event.bind(null, bot));
 
-		console.log(`${i + 1}: ${f} loaded!`)
+		console.log(`${i + 1}: ${f} loaded!`);
 		delete require.cache[require.resolve(`./events/listeners/${f}`)];
  	});
 	bot.printSpace();
 });
+
+// Bind all util functions to the bot.util collection
+bot.util = require("./util");
 
 // Login to the correct bot token
 bot.login(process.env.BOT_TOKEN);

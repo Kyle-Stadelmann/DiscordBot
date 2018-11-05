@@ -28,6 +28,14 @@ module.exports.run = async (bot, msg, args) => {
 		return;
 	}
 
+	// If daniel isnt in a channel
+	if (msg.member.voiceChannel == null ||
+		msg.member.voiceChannel == bot.constants.AFK_CHANNEL_ID) {
+
+		console.log("Command was unsuccessful. Daniel not in a channel");
+		return;
+	}
+
 	// If memeber id isn't Carter's ID, ignore this event
 	if (mention.id != bot.constants.CARTER_ID) {
 		console.log("Command was unsuccessful. Daniel tried to move someone other than Carter");
@@ -40,8 +48,13 @@ module.exports.run = async (bot, msg, args) => {
 		return;
 	}
 
-	// Put carter into AFK channel
-	mention.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
+	if (bot.util.random(require("../event_percentages.js").DANIEL_SUCCESS_MOVE_CHANCE)) {
+		// Put carter into AFK channel
+		mention.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
+	} else {
+		// Put Daniel into AFK channel
+		msg.member.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
+	}
 
 	console.log("Command was successful, Carter was moved to AFK");
 	msg.channel.send("Goodbye Carter");
