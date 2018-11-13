@@ -1,61 +1,76 @@
 module.exports.help = {
-    CommandName: "move"
+    commandName: "move",
+	description: "Moves Daniel/Carter to AFK where they RIGHTFULLY BELONG."
 }
 
 module.exports.run = async (bot, msg, args) => {
-	// First mention from author
-	let mention = null;
-    mention = msg.mentions.members.first();
+	let sender = msg.member;
+	let victim;
 
-	if (mention == null) {
-		console.log("Daniel's move command detected, however command was unsuccessful because there was no target");
-		return;
+	// If sender id isn't Daniel/Carters ID, ignore this event
+	if (sender.id != bot.constants.DANIEL_ID &&
+		sender.id != bot.constants.CARTER_ID) {
+
+		return false;
 	}
 
-	console.log("Daniel's move command detected on: " + mention.user.username + ", by: " + msg.author.username);
-
-	// If memeber id isn't Daniel's ID, ignore this event
-	if (msg.author.id != bot.constants.DANIEL_ID) {
-		console.log("Command was unsuccessful. Member wasn't Daniel");
-		return;
-	}
-
-	// If daniel didn't send it to BOT_STUFF
-	if (msg.channel.id != bot.constants.BOT_STUFF_CHANNEL_ID) {
-		console.log("Command was unsuccessful. Typed it into the wrong chat")
-		msg.delete();
-		msg.author.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
-		return;
-	}
-
-	// If daniel isnt in a channel
-	if (msg.member.voiceChannel == null ||
-		msg.member.voiceChannel == bot.constants.AFK_CHANNEL_ID) {
-
-		console.log("Command was unsuccessful. Daniel not in a channel");
-		return;
-	}
-
-	// If memeber id isn't Carter's ID, ignore this event
-	if (mention.id != bot.constants.CARTER_ID) {
-		console.log("Command was unsuccessful. Daniel tried to move someone other than Carter");
-		return;
-	}
-
-	// Test if carter is in a channel or not
-	if (mention.voiceChannel == null) {
-		console.log("Command was unsuccessful. Carter isn't in a channel");
-		return;
-	}
-
-	if (bot.util.random(require("../event_percentages.js").DANIEL_SUCCESS_MOVE_CHANCE)) {
-		// Put carter into AFK channel
-		mention.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
+	if (sender.id == bot.constants.DANIEL_ID) {
+		victim = bot.guilds.get(bot.constants.BD4_ID).members.get(bot.constants.CARTER_ID);
 	} else {
-		// Put Daniel into AFK channel
-		msg.member.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
+		victim = bot.guilds.get(bot.constants.BD4_ID).members.get(bot.constants.DANIEL_ID);
 	}
 
-	console.log("Command was successful, Carter was moved to AFK");
-	msg.channel.send("Goodbye Carter");
+	// If sender didn't send it to BOT_STUFF
+	if (msg.channel.id != bot.constants.BOT_STUFF_CHANNEL_ID) {
+		msg.delete();
+		return false;
+	}
+
+	// If sender isnt in a channel
+	if (sender.voiceChannel == null ||
+		sender.voiceChannel == bot.constants.AFK_CHANNEL_ID) {
+
+		return false;
+	}
+
+	// Test if victim is in a channel or not
+	if (victim.voiceChannel == null) {
+		return false;
+	}
+
+	// Whether or not they were successful at moving the victim
+	let success = true;
+
+	if (bot.util.random(require("../events/event_percentages.js").DANIEL_SUCCESS_MOVE_CHANCE)) {
+		// Put Victim into AFK channel
+		victim.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
+		console.log("Command was successful, victim was moved to AFK");
+		success = true;
+	} else {
+		// Put Sender into AFK channel
+		sender.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
+		console.log("Command was successful, sender was moved to AFK");
+	}
+
+	// Send the correct "Goodbye message"
+
+	let victimBeDaniel = true;
+	if (victim.user.username == bot.constants.CARTER_ID) {
+		victimBeDaniel = false;
+	}
+
+	if (success) {
+		if (victimBeDaniel) {
+			msg.channel.send("Goodbye Daniel");
+		} else {
+			msg.channel.send("Goodbye Carter");
+		}
+	} else {
+		if (victimBeDaniel) {
+			msg.channel.send("Goodbye Carter");
+		} else {
+			msg.channel.send("Goodbye Daniel");
+		}
+	}
+	return true;
 }

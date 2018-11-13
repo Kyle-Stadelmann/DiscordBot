@@ -4,6 +4,10 @@ bot.util = new Discord.Collection();
 bot.commands = new Discord.Collection();
 bot.events = new Discord.Collection();
 
+bot.roles = new Discord.Collection();
+bot.roles.main = new Discord.Collection();
+bot.roles.players = new Discord.Collection();
+bot.roles.colors = new Discord.Collection();
 
 bot.printSpace = () => {
   console.log();
@@ -30,7 +34,7 @@ require("fs").readdir("./commands/", (err, files) => {
 		// Load command file
     	let props = require(`./commands/${f}`);
 		console.log(`${i + 1}: ${f} loaded!`);
-		bot.commands.set(props.help.CommandName, props);
+		bot.commands.set(props.help.commandName, props);
  	});
 });
 

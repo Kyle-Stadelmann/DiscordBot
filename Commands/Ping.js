@@ -1,11 +1,10 @@
 module.exports.help = {
-	CommandName: "ping"
+	commandName: "ping",
+	description: "Sends pong! for testing purposes."
 }
 
 module.exports.run = async (bot, msg, args) => {
-	console.log("Ping command detected by: " + msg.author.username);
-
 	msg.channel.send("pong!");
 
-	console.log("Command was successful. pong! has been sent");
+	return true;
 }
