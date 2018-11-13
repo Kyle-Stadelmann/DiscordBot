@@ -13,13 +13,18 @@ module.exports.run = async (bot, msg, args) => {
 	let targetRoleStr = args[0] + " players";
 	let targetRole = allRoles.find(val => val.name.toLowerCase() === targetRoleStr);
 
-	if (targetRole != null) {
-		msg.member.addRoles(targetRole)
-			.catch(console.error);
-	} else {
+	if (targetRole == null) {
 		msg.channel.send("Incorrect player role specified");
 		return false;
 	}
+
+	if (msg.member.roles.has(targetRole.id)) {
+		msg.channel.send("You already have the player role specified");
+		return false;
+	}
+
+	msg.member.addRoles(targetRole)
+		.catch(console.error);
 
 	msg.channel.send("You have been given the player role specified");
 	return true;
