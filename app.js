@@ -4,11 +4,6 @@ bot.util = new Discord.Collection();
 bot.commands = new Discord.Collection();
 bot.events = new Discord.Collection();
 
-bot.roles = new Discord.Collection();
-bot.roles.main = new Discord.Collection();
-bot.roles.players = new Discord.Collection();
-bot.roles.colors = new Discord.Collection();
-
 bot.printSpace = () => {
   console.log();
   console.log("--------------------------------------------------------------");
