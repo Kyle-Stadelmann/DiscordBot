@@ -57,6 +57,5 @@ module.exports = async (bot, message) => {
 	// KhangNeko RandomEvent
 	if (message.author.id == bot.constants.KHANG_ID) {
 		require("../lib/khang_neko.js")(bot, message);
-		bot.printSpace();
 	}
 };
