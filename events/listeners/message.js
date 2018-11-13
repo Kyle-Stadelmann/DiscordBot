@@ -1,6 +1,8 @@
 // Bot prefix
 const prefix = ">";
 
+const discord = require('discord.js');
+
 // Listener event: runs whenever a message is received
 module.exports = async (bot, message) => {
 	// Command processing
@@ -24,11 +26,15 @@ module.exports = async (bot, message) => {
 
 		// If help command was triggered
 		if (args[0] != null && args[0].toLowerCase() === "help") {
-			console.log(`Help ${cmd.help.commandName} detected by: ${message.author.username}`);
+			console.log(`Help for the ${cmd.help.commandName} command detected by: ${message.author.username}`);
 
-			let output = `${cmd.help.commandName} Command Description: ${cmd.help.description}`;
+			let helpStr = new discord.RichEmbed()
+				.setTitle(`\`${cmd.help.commandName}\``)
+				.setDescription(cmd.help.description)
+				.setColor(0x0)
 
-			message.channel.send(`${output}`);
+
+			message.channel.send(helpStr);
 			console.log("Help was successful.");
 			bot.printSpace();
 			return;
