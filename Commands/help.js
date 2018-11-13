@@ -2,7 +2,8 @@ const discord = require('discord.js');
 
 module.exports.help = {
     commandName: "help",
-	description: "Lists all commands that this bot currently has to offer."
+	description: "Lists all commands that this bot currently has to offer.",
+	usage: `help`
 }
 
 module.exports.run = (bot, msg, args) => {
@@ -15,6 +16,7 @@ module.exports.run = (bot, msg, args) => {
 	var roleInfo = new discord.RichEmbed()
 		.addField("All Commands", outputStr)
 		.setThumbnail(bot.guilds.get(bot.constants.BD4_ID).iconURL)
+		.setFooter(`Use '${bot.constants.PREFIX}commandName help' to recieve instructions on how to use any command.`)
 		.setColor(0x0)
 
 	msg.channel.send(roleInfo);

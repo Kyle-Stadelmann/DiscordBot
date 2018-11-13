@@ -1,6 +1,7 @@
 module.exports.help = {
 	commandName: "ping",
-	description: "Sends pong! for testing purposes."
+	description: "Sends pong! for testing purposes.",
+	usage: `ping`
 }
 
 module.exports.run = async (bot, msg, args) => {

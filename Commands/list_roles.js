@@ -2,7 +2,8 @@ const discord = require('discord.js');
 
 module.exports.help = {
     commandName: "listroles",
-	description: "Lists the 'main' and 'player' roles on the BD4 server."
+	description: "Lists the 'main' and 'player' roles on the BD4 server.",
+	usage: `listRoles`
 }
 
 module.exports.run = async (bot, msg, args) => {

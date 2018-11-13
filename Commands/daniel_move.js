@@ -1,6 +1,7 @@
 module.exports.help = {
     commandName: "move",
-	description: "Moves Daniel/Carter to AFK (where they RIGHTFULLY BELONG)."
+	description: "Exclusive command for Daniel/Carter to send the other to AFK (where they RIGHTFULLY BELONG).",
+	usage: `move`
 }
 
 module.exports.run = async (bot, msg, args) => {
