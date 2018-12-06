@@ -11,7 +11,7 @@ module.exports.run = async (bot, msg, args) => {
 
 	// If sender or victim isn't an admin, ignore this event
 	if (!sender.hasPermission("ADMINISTRATOR") ||
-		!victim.hasPermission("ADMINISTRATOR") {
+		!victim.hasPermission("ADMINISTRATOR")) {
 		return false;
 	}
 
@@ -36,13 +36,19 @@ module.exports.run = async (bot, msg, args) => {
 	let chanceToMove = 100
 	while (bot.util.random(chanceToMove)) {
 		// sleep for 5 minutes
-		bot.util.sleep(300000);
+		await bot.util.sleep(300000);
 
-		let randomChannel = bot.guilds.get(bot.constants.BD4_ID).channels.random();
+		let randomChannel;
+		do {
+			randomChannel = bot.guilds.get(bot.constants.BD4_ID).channels.random();
+		} while (randomChannel.type !== "voice");
+
 		victim.setVoiceChannel(randomChannel);
 
+		console.log(randomChannel.name)
+
 		msg.channel.send(`${victim} has been banished!`);
-		chanceToMove/2;
+		chanceToMove /= 2;
 	}
 
 	return true;
