@@ -3,15 +3,20 @@ const Discord = require("discord.js");
 // Add a command to cooldown
 // Input: The discord client (contains cooldown collection), command name we
 // are putting a cooldown on, and the member that we are putting on cooldown.
-module.exports.cooldown = async (bot, cmdName, member) => {
-	// Check if this command doesn't have a cooldown collection
-	if (bot.cooldown.get(cmdName) == null) {
-		let coll = new Discord.Collection();
-		bot.cooldown.set(cmdName, coll);
+module.exports.cooldown = (bot, cmdName, member) => {
+	if (member == null) {
+		return;
 	}
 
-	cmdCollection = bot.cooldown.get(cmdName);
+	// Check if this command doesn't have a member cooldown collection
+	if (bot.cooldowns.get(cmdName) == null) {
+		let coll = new Discord.Collection();
+		// Create and bind the member cooldown collection
+		bot.cooldowns.set(cmdName, coll);
+	}
 
+	cmdCollection = bot.cooldowns.get(cmdName);
 
-	cmdCollection.set(member, new Date());
+	let date = new Date();
+	cmdCollection.set(member, date.getTime());
 }

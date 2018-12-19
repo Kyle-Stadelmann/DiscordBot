@@ -3,11 +3,20 @@
 // are putting a cooldown on, and the member that we are determining if they
 // are on cooldown.
 // Output: Returns T/F, whether or not the command is on cooldown.
-// (Also removes the command from the cooldown collection)
-module.exports.endCooldown = async (bot, cmdName, member) => {
-	let cmdCollection = bot.cooldown.get(cmdName);
-	let cooldownTimer = cmdCollection.get(member);
+// (Also removes the command from the cooldown collection if returned true)
+module.exports.endCooldown = (bot, cmdName, member) => {
+	if (member == null) {
+		// Member doesnt exist... no cooldown
+		return true;
+	}
 
+	let memberCoolColl = bot.cooldowns.get(cmdName);
+	if (memberCoolColl == null) {
+		// There are no cooldowns for this command
+		return true;
+	}
+
+	let cooldownTimer = memberCoolColl.get(member);
 	if (cooldownTimer == null) {
 		// Member is not on cooldown
 		return true;
@@ -15,5 +24,13 @@ module.exports.endCooldown = async (bot, cmdName, member) => {
 
 	let coolTime = bot.constants.cooldownTimes.get(cmdName);
 	if (coolTime == null) coolTime = 0;
-	//if (cooldownTimer)
+
+	let date = new Date();
+	if (cooldownTimer + coolTime <= date.getTime()) {
+		memberCoolColl.delete(member);
+		return true;
+	}
+
+	// cooldown is not complete yet
+	return false;
 }
