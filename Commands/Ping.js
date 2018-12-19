@@ -6,6 +6,6 @@ module.exports.help = {
 
 module.exports.run = async (bot, msg, args) => {
 	msg.channel.send("pong!");
-
+	bot.util.endCooldown(bot, "move", null);
 	return true;
 }

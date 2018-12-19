@@ -1,5 +1,18 @@
+const Discord = require("discord.js");
+
+// Cooldowns are measured in ms
+let cooldownColl = new Discord.Collection();
+cooldownColl.set("move", 5*60*1000);
+cooldownColl.set("help", 0);
+cooldownColl.set("listroles", 0);
+cooldownColl.set("ping", 0);
+cooldownColl.set("role", 0);
+cooldownColl.set("randommove", 5*60*1000);
+
+
 module.exports = {
 	PREFIX: ">",
+	cooldownTimes: cooldownColl,
 	DANIEL_ID: "250076166323568640",
 	CARTER_ID: "186540977610031104",
 	AFK_CHANNEL_ID: "201880000478183425",
