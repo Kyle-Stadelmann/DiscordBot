@@ -1,10 +1,10 @@
 // Check if we can take a command off cooldown
 // Input: The discord client (contains cooldown collection), command name we
-// are putting a cooldown on, and the member that we are determining if they
-// are on cooldown.
+// are putting a cooldown on, the member that we are determining if they
+// are on cooldown, and whether or not we want to force the end of the cooldown
 // Output: Returns T/F, whether or not the command is on cooldown.
 // (Also removes the command from the cooldown collection if returned true)
-module.exports.endCooldown = (bot, cmdName, member) => {
+module.exports.endCooldown = (bot, cmdName, member, forceEndCooldown = false) => {
 	if (member == null) {
 		// Member doesnt exist... no cooldown
 		return true;
@@ -27,6 +27,11 @@ module.exports.endCooldown = (bot, cmdName, member) => {
 
 	let date = new Date();
 	if (cooldownTimer + coolTime <= date.getTime()) {
+		memberCoolColl.delete(member);
+		return true;
+	}
+
+	if (forceEndCooldown) {
 		memberCoolColl.delete(member);
 		return true;
 	}
