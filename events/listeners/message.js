@@ -7,7 +7,7 @@ module.exports = async (bot, message) => {
 		if (message.author.bot) return;
     	if (message.channel.type === "dm") return;
 
-		// Messsage is a command
+		// Messsage is a command, continue to parse cmd
 
 		let messageArray = message.content.toLowerCase().split(" ");
 		// Cmd String
@@ -53,7 +53,6 @@ module.exports = async (bot, message) => {
 		}
 
 		bot.util.cooldown(bot, cmdStr, message.member);
-
     	// Command handling
     	if (cmd) {
 			if (await cmd.run(bot, message, args)) {

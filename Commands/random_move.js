@@ -47,6 +47,11 @@ module.exports.run = async (bot, msg, args) => {
 			randomChannel = bot.guilds.get(bot.constants.BD4_ID).channels.random();
 		} while (randomChannel.type !== "voice" && randomChannel !== victim.voiceChannel);
 
+		// Test if victim is still in a channel or not
+		if (victim.voiceChannel == null) {
+			continue;
+		}
+
 		victim.setVoiceChannel(randomChannel);
 
 		msg.channel.send(`${victim} has been banished!`);

@@ -1,6 +1,6 @@
 // Check if we can take a command off cooldown
 // Input: The discord client (contains cooldown collection), command name we
-// are putting a cooldown on, the member that we are determining if they
+// are ending the cooldown of, the member that we are determining if they
 // are on cooldown, and whether or not we want to force the end of the cooldown
 // Output: Returns T/F, whether or not the command is on cooldown.
 // (Also removes the command from the cooldown collection if returned true)

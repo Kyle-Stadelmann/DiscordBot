@@ -10,8 +10,8 @@ module.exports.cooldown = (bot, cmdName, member) => {
 
 	// Check if this command doesn't have a member cooldown collection
 	if (bot.cooldowns.get(cmdName) == null) {
-		let coll = new Discord.Collection();
 		// Create and bind the member cooldown collection
+		let coll = new Discord.Collection();
 		bot.cooldowns.set(cmdName, coll);
 	}
 
