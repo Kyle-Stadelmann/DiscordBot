@@ -51,6 +51,7 @@ module.exports.run = async (bot, msg, args) => {
 		// Put Sender into AFK channel
 		sender.setVoiceChannel(bot.constants.AFK_CHANNEL_ID);
 		console.log("Command was successful, sender was moved to AFK");
+		success = false;
 	}
 
 	// Send the correct "Goodbye message"
