@@ -40,7 +40,7 @@ module.exports.run = async (bot, msg, args) => {
 	}
 
 	// Whether or not they were successful at moving the victim
-	let success = true;
+	let success;
 
 	if (bot.util.random(require("../events/event_percentages.js").DANIEL_SUCCESS_MOVE_CHANCE)) {
 		// Put Victim into AFK channel
@@ -57,7 +57,7 @@ module.exports.run = async (bot, msg, args) => {
 	// Send the correct "Goodbye message"
 
 	let victimBeDaniel = true;
-	if (victim.user.username == bot.constants.CARTER_ID) {
+	if (victim.id === bot.constants.CARTER_ID) {
 		victimBeDaniel = false;
 	}
 
