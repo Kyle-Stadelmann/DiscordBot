@@ -1,9 +1,8 @@
 # General file types
-*.png
-*.jpg
 *.lnk
 
 
 # Specific files/directories
 /node_modules
 package-lock.json
+/Pics
