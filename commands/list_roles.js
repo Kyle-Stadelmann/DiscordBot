@@ -3,8 +3,10 @@ const discord = require('discord.js');
 module.exports.help = {
     commandName: "listroles",
 	description: "Lists the 'main' and 'player' roles on the BD4 server.",
-	usage: `listRoles`
+	usage: `listRoles`,
 }
+
+module.exports.disabled = true;
 
 module.exports.run = async (bot, msg, args) => {
 	let allRoles = bot.guilds.get(bot.constants.BD4_ID).roles;

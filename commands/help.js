@@ -3,8 +3,10 @@ const discord = require('discord.js');
 module.exports.help = {
     commandName: "help",
 	description: "Lists all commands that this bot currently has to offer.",
-	usage: `help`
+	usage: `help`,
 }
+
+module.exports.disabled = false;
 
 module.exports.run = (bot, msg, args) => {
 	let outputStr = "";

@@ -24,13 +24,18 @@ require("fs").readdir("./commands/", (err, files) => {
 		return;
 	}
 
-	console.log(`Loading ${jsfiles.length} commands!`);
+	console.log(`Loading commands...`);
 
-	jsfiles.forEach((f, i) => {
+	let i=0;
+	jsfiles.forEach((f) => {
 		// Load command file
 		let props = require(`./commands/${f}`);
-		console.log(`${i + 1}: ${f} loaded!`);
-		bot.commands.set(props.help.commandName, props);
+
+		// only load command if its not disabled
+		if (!props.disabled) {
+			console.log(`${++i}: ${f} loaded!`);
+			bot.commands.set(props.help.commandName, props);
+		}
 	});
 });
 
@@ -46,7 +51,7 @@ require("fs").readdir("./events/listeners/", (err, files) => {
 		return;
 	}
 
-	console.log(`Loading ${jsfiles.length} random events!`);
+	console.log(`Loading ${jsfiles.length} event listeners...`);
 
 	jsfiles.forEach((f, i) => {
 		// Load event file

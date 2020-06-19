@@ -4,6 +4,8 @@ module.exports.help = {
 	usage: `move`
 }
 
+module.exports.disabled = true;
+
 module.exports.run = async (bot, msg, args) => {
 	let sender = msg.member;
 	let victim;
