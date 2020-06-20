@@ -8,6 +8,7 @@ cooldownColl.set("listroles", 0);
 cooldownColl.set("ping", 0);
 cooldownColl.set("role", 0);
 cooldownColl.set("randommove", 5*60*1000);
+cooldownColl.set("sword", 7*24*60*60*1000);
 
 
 module.exports = {
@@ -20,4 +21,7 @@ module.exports = {
 	ALLEN_ID: "145042861451116545",
 	BD4_ID: "191318875667824650",
 	BIPEN_IMG_URL: "https://i.imgur.com/cIoLOxW.jpg",
+	ZACH_ID: '95734974409351168',
+	MIN_SHARPEN_TIME: 30*60*1000,
+	BD4_BOT_ID: '480909013593227277',
 }
