@@ -12,13 +12,14 @@ module.exports.run = async (bot, msg, args) => {
 	let victim = msg.mentions.members.first();
 
 	if (victim == null) {
-		msg.channel.send('You must specify an admin on the server.');
+		msg.channel.send('Command was NOT successful, you must specify an admin on the server.');
 		return false;
 	}
 
 	// If sender or victim isn't an admin, ignore this event
 	if (!sender.hasPermission("ADMINISTRATOR") ||
 		!victim.hasPermission("ADMINISTRATOR")) {
+		msg.channel.send('Command was NOT successful, you or your victim are not an admin.');
 		return false;
 	}
 
@@ -33,11 +34,14 @@ module.exports.run = async (bot, msg, args) => {
 	if (sender.voiceChannel == null ||
 		sender.voiceChannel == msg.guild.afkChannel.id) {
 
+		msg.channel.send('Command was NOT successful, you must be in a non-AFK channel.');
 		return false;
 	}
 
 	// Test if victim is in a channel or not
 	if (victim.voiceChannel == null) {
+
+		msg.channel.send('Command was NOT successful, your victim isn\'t in a channel.');
 		return false;
 	}
 
