@@ -12,6 +12,7 @@ module.exports.run = async (bot, msg, args) => {
 	let victim = msg.mentions.members.first();
 
 	if (victim == null) {
+		msg.channel.send('You must specify an admin on the server.');
 		return false;
 	}
 
@@ -21,15 +22,16 @@ module.exports.run = async (bot, msg, args) => {
 		return false;
 	}
 
+	/*
 	// If sender didn't send it to BOT_STUFF
 	if (msg.channel.id != bot.constants.BOT_STUFF_CHANNEL_ID) {
 		msg.delete();
 		return false;
-	}
+	}*/
 
 	// If sender isnt in a channel
 	if (sender.voiceChannel == null ||
-		sender.voiceChannel == bot.constants.AFK_CHANNEL_ID) {
+		sender.voiceChannel == msg.guild.afkChannel.id) {
 
 		return false;
 	}
@@ -39,6 +41,8 @@ module.exports.run = async (bot, msg, args) => {
 		return false;
 	}
 
+	msg.channel.send('Initiating start of randomMove...')
+
 	let chanceToMove = 100
 	while (bot.util.random(chanceToMove)) {
 		// sleep for 5 minutes
@@ -46,7 +50,7 @@ module.exports.run = async (bot, msg, args) => {
 
 		let randomChannel;
 		do {
-			randomChannel = bot.guilds.get(bot.constants.BD4_ID).channels.random();
+			randomChannel = msg.guild.channels.random();
 		} while (randomChannel.type !== "voice" && randomChannel !== victim.voiceChannel);
 
 		// Test if victim is still in a channel or not
