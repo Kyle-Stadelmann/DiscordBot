@@ -1,0 +1,15 @@
+{
+  "name": "bd4discordbot",
+  "version": "1.0.0",
+  "description": "BD4 Discord Bot",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Kyle Stadelmann",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0"
+  }
+}

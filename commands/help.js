@@ -15,7 +15,7 @@ module.exports.run = (bot, msg, args) => {
 		outputStr += value.help.commandName + "\n";
 	});
 
-	let roleInfo = new discord.RichEmbed()
+	let roleInfo = new discord.MessageEmbed()
 		.addField("All Commands", outputStr)
 		.setThumbnail(msg.guild.iconURL)
 		.setFooter(`Use '${bot.constants.PREFIX}commandName help' to recieve instructions on how to use any command.`)
