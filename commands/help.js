@@ -11,7 +11,7 @@ module.exports.disabled = false;
 module.exports.run = (bot, msg, args) => {
 	let outputStr = "";
 
-	bot.commands.forEach((value, key, collection) => {
+	bot.commands.forEach((value) => {
 		outputStr += value.help.commandName + "\n";
 	});
 

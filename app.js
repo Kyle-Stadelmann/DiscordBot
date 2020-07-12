@@ -44,7 +44,7 @@ require("fs").readdir("./commands/", (err, files) => {
 
 
 // Bind all tracked events to our event objects
-require("fs").readdir("./events/listeners/", (err, files) => {
+require("fs").readdir("./events/handlers/", (err, files) => {
 	bot.printSpace();
 	if(err) return console.error(`ERROR: ${err}`);
 
@@ -54,11 +54,11 @@ require("fs").readdir("./events/listeners/", (err, files) => {
 		return;
 	}
 
-	console.log(`Loading ${jsfiles.length} event listeners...`);
+	console.log(`Loading ${jsfiles.length} event handlers...`);
 
 	jsfiles.forEach((f, i) => {
 		// Load event file
-		let event = require(`./events/listeners/${f}`);
+		let event = require(`./events/handlers/${f}`);
 		// Get event name from the file name
 		let eventName = f.split(".")[0];
 
@@ -66,7 +66,7 @@ require("fs").readdir("./events/listeners/", (err, files) => {
 		bot.on(eventName, event.bind(null, bot));
 
 		console.log(`${i + 1}: ${f} loaded!`);
-		delete require.cache[require.resolve(`./events/listeners/${f}`)];
+		delete require.cache[require.resolve(`./events/handlers/${f}`)];
 	});
 	bot.printSpace();
 });

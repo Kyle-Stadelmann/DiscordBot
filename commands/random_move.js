@@ -50,7 +50,7 @@ module.exports.run = async (bot, msg, args) => {
 	let chanceToMove = 100
 	while (bot.util.random(chanceToMove)) {
 		// sleep for 5 minutes
-		await bot.util.sleep(300000);
+		await bot.util.sleep(5*60*1000);
 
 		let randomChannel;
 		do {

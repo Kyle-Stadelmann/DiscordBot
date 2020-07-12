@@ -4,6 +4,6 @@
 
 # Specific files/directories
 /node_modules
-/Pics
+/pics
 .env
 DBWS.code-workspace

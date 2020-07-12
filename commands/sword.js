@@ -43,7 +43,7 @@ module.exports.run = async (bot, msg, args) => {
 	}
 
 	if (!victim.kickable || victim.id == BD4_BOT_ID) {
-		msg.channel.send('Command was NOT successful, you fear your victims strength completely eclipses yours.');
+		msg.channel.send('Command was NOT successful, you fear your victim\'s strength completely eclipses yours.');
 		return false;
 	}
 
