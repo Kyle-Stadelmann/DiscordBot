@@ -45,7 +45,7 @@ module.exports.run = async (bot, msg, args) => {
 		playerRoleStr += "\n";
 	});
 
-	var roleInfo = new discord.RichEmbed()
+	var roleInfo = new discord.MessageEmbed()
 		.addField("Main Roles", mainRoleStr)
 		.addField("Player Roles", playerRoleStr)
 		.setThumbnail(bot.guilds.get(bot.constants.BD4_ID).iconURL)

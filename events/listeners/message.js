@@ -25,7 +25,7 @@ module.exports = async (bot, message) => {
 		if (args[0] != null && args[0].toLowerCase() === "help") {
 			console.log(`Help for the ${cmd.help.commandName} command detected by: ${message.author.username}`);
 
-			let helpStr = new discord.RichEmbed()
+			let helpStr = new discord.MessageEmbed()
 				.addField("Command", `\`${cmd.help.commandName}\``, true)
 				.addField("Description", cmd.help.description)
 				.addField("Usage", `\`${bot.constants.PREFIX}${cmd.help.usage}\``)

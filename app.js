@@ -1,3 +1,6 @@
+// import .env file variables (for BOT_TOKEN)
+require('dotenv').config()
+
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 bot.util = new Discord.Collection();

@@ -11,7 +11,7 @@ module.exports.disabled = false;
 module.exports.run = async (bot, msg, args) => {
 	let message = "I'm a dragon, Rob! ~ *Bipen*";
 	
-	let embed = new discord.RichEmbed()
+	let embed = new discord.MessageEmbed()
 		.addField("Bipen", message)
 		.setThumbnail(bot.constants.BIPEN_IMG_URL)
 		.setFooter(`R.I.P. Bipen 08/2012`)
