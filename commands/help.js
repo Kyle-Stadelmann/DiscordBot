@@ -17,7 +17,7 @@ module.exports.run = (bot, msg, args) => {
 
 	let roleInfo = new discord.MessageEmbed()
 		.addField("All Commands", outputStr)
-		.setThumbnail(msg.guild.iconURL)
+		.setThumbnail(msg.guild.iconURL())
 		.setFooter(`Use '${bot.constants.PREFIX}commandName help' to recieve instructions on how to use any command.`)
 		.setColor(0x0)
 
