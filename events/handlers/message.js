@@ -70,8 +70,13 @@ module.exports = async (bot, message) => {
 		require("../lib/khang_neko.js")(bot, message);
 	}
 
-	// DanielWPM Call
+	// DanielWPM RandomEvent
 	if (message.author.id === bot.constants.DANIEL_ID) {
 		require("../lib/daniel_wpm.js")(bot, message);
+	}
+
+	// Question Mark Ending RandomEvent
+	if (message.content.charAt(message.content.length - 1) === '?') {
+		require("../lib/question_mark_ending.js")(bot, message);
 	}
 };
