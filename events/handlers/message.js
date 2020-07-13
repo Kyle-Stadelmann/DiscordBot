@@ -69,4 +69,9 @@ module.exports = async (bot, message) => {
 	if (message.author.id === bot.constants.KHANG_ID) {
 		require("../lib/khang_neko.js")(bot, message);
 	}
+
+	// DanielWPM Call
+	if (message.author.id === bot.constants.DANIEL_ID) {
+		require("../lib/daniel_wpm.js")(bot, message);
+	}
 };
