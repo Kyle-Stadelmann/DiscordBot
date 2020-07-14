@@ -7,11 +7,12 @@ module.exports = async (bot) => {
     var statusMessages = require("../status_messages.js");
     var possibleStatuses = statusMessages.length;
     var i = Math.floor(Math.random() * possibleStatuses);
+    bot.user.setActivity(statusMessages[i]);
 
     function statLoop() {
         setTimeout(function () {
-            bot.user.setActivity(statusMessages[i]);
             i = Math.floor(Math.random() * possibleStatuses);
+            bot.user.setActivity(statusMessages[i]);
             statLoop();
             // New status every 5 minutes
         }, 300000)
