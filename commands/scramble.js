@@ -34,7 +34,7 @@ module.exports.run = async (bot, msg, args) => {
 		return false;
 	}
 
-	msg.channel.send(`Initiating channel scramble on ${voiceChannel.name}.`);
+	msg.channel.send(`Initiating channel scramble on *${voiceChannel.name}*.`);
 
 	// Collection of people in the message member's channel
 	let channelMembers = voiceChannel.members;
