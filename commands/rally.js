@@ -20,6 +20,7 @@ module.exports.run = async (bot, message, args) => {
         pullToHidden = true;
     } 
 
+    // Check if called from valid voice channel
     if (!voiceChannel || voiceChannel === message.guild.afkChannel || 
         (!publicChannel && !pullToHidden)) {
 		message.channel.send("Rally failed because you are not in a valid voice channel! Brigitte would be sad...");
