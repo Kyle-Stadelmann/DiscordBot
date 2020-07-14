@@ -20,7 +20,7 @@ module.exports.run = async (bot, msg, args) => {
 	let validChannels = new discord.Collection();
 
 	// Gets all valid channels 
-	// (that are voice, another channel thatn current, and that everyone can see)
+	// (that are voice, another channel than current, and that everyone can see)
 	msg.guild.channels.cache.forEach(channel => {
 		let perm = channel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL");
 		if (channel.type === "voice" && channel.id !== voiceChannel.id && perm) {
