@@ -11,13 +11,13 @@ module.exports.disabled = false;
 module.exports.run = (bot, msg, args) => {
 	let outputStr = "";
 
-	bot.commands.forEach((value, key, collection) => {
+	bot.commands.forEach((value) => {
 		outputStr += value.help.commandName + "\n";
 	});
 
 	let roleInfo = new discord.MessageEmbed()
 		.addField("All Commands", outputStr)
-		.setThumbnail(msg.guild.iconURL)
+		.setThumbnail(msg.guild.iconURL())
 		.setFooter(`Use '${bot.constants.PREFIX}commandName help' to recieve instructions on how to use any command.`)
 		.setColor(0x0)
 
