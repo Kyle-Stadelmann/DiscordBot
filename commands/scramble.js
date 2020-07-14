@@ -19,14 +19,14 @@ module.exports.run = async (bot, msg, args) => {
 
     let validChannels = new discord.Collection();
 
-    // Gets all valid channels 
-    // (that are voice, another channel thatn current, and that everyone can see)
-    msg.guild.channels.cache.forEach(channel => {
-        let perm = channel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL");
-        if (channel.type === "voice" && channel.id !== voiceChannel.id && perm) {
-            validChannels.set(channel.id, channel);
-        }
-    });
+	// Gets all valid channels 
+	// (that are voice, another channel than current, and that everyone can see)
+	msg.guild.channels.cache.forEach(channel => {
+		let perm = channel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL");
+		if (channel.type === "voice" && channel.id !== voiceChannel.id && perm) {
+			validChannels.set(channel.id, channel);
+		}
+	});
 
     // Test if there exists valid channels
     if (validChannels.array().length <= 0) {
@@ -34,7 +34,7 @@ module.exports.run = async (bot, msg, args) => {
         return false;
     }
 
-    msg.channel.send(`Initiating channel scramble on ${voiceChannel.name}.`);
+	msg.channel.send(`Initiating channel scramble on *${voiceChannel.name}*.`);
 
     // Collection of people in the message member's channel
     let channelMembers = voiceChannel.members;

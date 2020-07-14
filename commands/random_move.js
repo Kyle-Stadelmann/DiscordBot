@@ -1,3 +1,5 @@
+const discord = require('discord.js');
+
 module.exports.help = {
     commandName: "randommove",
     description: "Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time.",
@@ -38,8 +40,8 @@ module.exports.run = async (bot, msg, args) => {
         return false;
     }
 
-    // Test if victim is in a channel or not
-    if (victim.voiceChannel == null) {
+	// Test if victim is in a channel or not
+	if (victim.voice.channel == null) {
 
         msg.channel.send('Command was NOT successful, your victim isn\'t in a channel.');
         return false;
@@ -47,15 +49,21 @@ module.exports.run = async (bot, msg, args) => {
 
     msg.channel.send('Initiating start of randomMove...')
 
-    let chanceToMove = 100
-    while (bot.util.random(chanceToMove)) {
-        // sleep for 5 minutes
-        await bot.util.sleep(5 * 60 * 1000);
+	let validChannels = new discord.Collection();
+	// Gets all valid channels 
+	// (that are voice, another channel than current)
+	msg.guild.channels.cache.forEach(channel => {
+		if (channel.type === "voice" && channel.id !== victim.voice.channel.id) {
+			validChannels.set(channel.id, channel);
+		}
+	});
 
-        let randomChannel;
-        do {
-            randomChannel = msg.guild.channels.random();
-        } while (randomChannel.type !== "voice" || randomChannel.id === victim.voice.channel.id);
+	let chanceToMove = 100
+	while (bot.util.random(chanceToMove)) {
+		// sleep for 5 minutes
+		await bot.util.sleep(5*60*1000);
+
+		let randomChannel = validChannels.random();
 
         // Test if victim is still in a channel or not
         if (victim.voice.channel == null) {
