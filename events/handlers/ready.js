@@ -4,6 +4,8 @@ module.exports = async (bot) => {
     bot.printSpace();
 
     // Status rotation
+
+    // TODO: add random choosing of messages with an integer that is randomly generated and an array of messages (strings, so it can be stored in a seperate file and dosen't clutter ready.js)
     var i = 1;
     var statuses = 11;
     function statusLoop() {
