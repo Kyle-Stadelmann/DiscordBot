@@ -1,27 +1,27 @@
 module.exports.help = {
-  commandName: "randommove",
-  description: "Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time.",
-  usage: `randomMove @admin`,
-  example: "randomMove @Dualkim",
+    commandName: "randommove",
+    description: "Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time.",
+    usage: `randomMove @admin`,
+    example: "randomMove @Dualkim",
 }
 
 module.exports.disabled = false;
 
 module.exports.run = async (bot, msg, args) => {
-  let sender = msg.member;
-  let victim = msg.mentions.members.first();
+    let sender = msg.member;
+    let victim = msg.mentions.members.first();
 
-  if (victim == null) {
-    msg.channel.send('Command was NOT successful, you must specify an admin on the server.');
-    return false;
-  }
+    if (victim == null) {
+        msg.channel.send('Command was NOT successful, you must specify an admin on the server.');
+        return false;
+    }
 
-  // If sender or victim isn't an admin, ignore this event
-  if (!sender.hasPermission("ADMINISTRATOR") ||
-    !victim.hasPermission("ADMINISTRATOR")) {
-    msg.channel.send('Command was NOT successful, you or your victim are not an admin.');
-    return false;
-  }
+    // If sender or victim isn't an admin, ignore this event
+    if (!sender.hasPermission("ADMINISTRATOR") ||
+        !victim.hasPermission("ADMINISTRATOR")) {
+        msg.channel.send('Command was NOT successful, you or your victim are not an admin.');
+        return false;
+    }
 
 	/*
 	// If sender didn't send it to BOT_STUFF
@@ -30,43 +30,43 @@ module.exports.run = async (bot, msg, args) => {
 		return false;
 	}*/
 
-  // If sender isnt in a channel
-  if (sender.voice.channel == null ||
-    sender.voice.channel == msg.guild.afkChannel.id) {
+    // If sender isnt in a channel
+    if (sender.voice.channel == null ||
+        sender.voice.channel == msg.guild.afkChannel.id) {
 
-    msg.channel.send('Command was NOT successful, you must be in a non-AFK channel.');
-    return false;
-  }
-
-  // Test if victim is in a channel or not
-  if (victim.voiceChannel == null) {
-
-    msg.channel.send('Command was NOT successful, your victim isn\'t in a channel.');
-    return false;
-  }
-
-  msg.channel.send('Initiating start of randomMove...')
-
-  let chanceToMove = 100
-  while (bot.util.random(chanceToMove)) {
-    // sleep for 5 minutes
-    await bot.util.sleep(5 * 60 * 1000);
-
-    let randomChannel;
-    do {
-      randomChannel = msg.guild.channels.random();
-    } while (randomChannel.type !== "voice" || randomChannel.id === victim.voice.channel.id);
-
-    // Test if victim is still in a channel or not
-    if (victim.voice.channel == null) {
-      continue;
+        msg.channel.send('Command was NOT successful, you must be in a non-AFK channel.');
+        return false;
     }
 
-    victim.edit({ channel: randomChannel });
+    // Test if victim is in a channel or not
+    if (victim.voiceChannel == null) {
 
-    msg.channel.send(`${victim} has been banished!`);
-    chanceToMove /= 2;
-  }
+        msg.channel.send('Command was NOT successful, your victim isn\'t in a channel.');
+        return false;
+    }
 
-  return true;
+    msg.channel.send('Initiating start of randomMove...')
+
+    let chanceToMove = 100
+    while (bot.util.random(chanceToMove)) {
+        // sleep for 5 minutes
+        await bot.util.sleep(5 * 60 * 1000);
+
+        let randomChannel;
+        do {
+            randomChannel = msg.guild.channels.random();
+        } while (randomChannel.type !== "voice" || randomChannel.id === victim.voice.channel.id);
+
+        // Test if victim is still in a channel or not
+        if (victim.voice.channel == null) {
+            continue;
+        }
+
+        victim.edit({ channel: randomChannel });
+
+        msg.channel.send(`${victim} has been banished!`);
+        chanceToMove /= 2;
+    }
+
+    return true;
 }
