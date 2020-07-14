@@ -31,8 +31,8 @@ module.exports.run = async (bot, msg, args) => {
 	}*/
 
 	// If sender isnt in a channel
-	if (sender.voiceChannel == null ||
-		sender.voiceChannel == msg.guild.afkChannel.id) {
+	if (sender.voice.channel == null ||
+		sender.voice.channel == msg.guild.afkChannel.id) {
 
 		msg.channel.send('Command was NOT successful, you must be in a non-AFK channel.');
 		return false;
@@ -55,14 +55,14 @@ module.exports.run = async (bot, msg, args) => {
 		let randomChannel;
 		do {
 			randomChannel = msg.guild.channels.random();
-		} while (randomChannel.type !== "voice" && randomChannel !== victim.voiceChannel);
+		} while (randomChannel.type !== "voice" || randomChannel.id === victim.voice.channel.id);
 
 		// Test if victim is still in a channel or not
-		if (victim.voiceChannel == null) {
+		if (victim.voice.channel == null) {
 			continue;
 		}
 
-		victim.setVoiceChannel(randomChannel);
+		victim.edit({channel: randomChannel});
 
 		msg.channel.send(`${victim} has been banished!`);
 		chanceToMove /= 2;

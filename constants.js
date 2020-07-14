@@ -9,6 +9,7 @@ cooldownColl.set("ping", 0);
 cooldownColl.set("role", 0);
 cooldownColl.set("randommove", 5*60*1000);
 cooldownColl.set("sword", 7*24*60*60*1000);
+cooldownColl.set("scramble", 60*60*1000);
 
 
 module.exports = {
@@ -25,6 +26,6 @@ module.exports = {
 	MIN_SHARPEN_TIME: 30*60*1000,
 	BD4_BOT_ID: '480909013593227277',
 	DANIEL_WPM: "48",
-	ASIAN_KYLE_ID: "202325951999115264",
+	ASIAN_KYLE_ID: "191266619387936770",
 	QUESTION_MARK_URL: "https://media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG",
 }
