@@ -82,4 +82,9 @@ module.exports = async (bot, message) => {
     if (message.content.charAt(message.content.length - 1) === '?') {
         require("../lib/question_mark_ending.js")(bot, message);
     }
+
+    // Zach => Zacc Event
+    if(message.content.toLowerCase().includes("zach")) {
+        require("../lib/zach_zacc.js")(bot, message);
+    }
 };
