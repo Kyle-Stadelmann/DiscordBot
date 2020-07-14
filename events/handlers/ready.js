@@ -13,7 +13,8 @@ module.exports = async (bot) => {
             bot.user.setActivity(statusMessages[i]);
             i = Math.floor(Math.random() * possibleStatuses);
             statLoop();
-        }, 3000)
+            // New status every 5 minutes
+        }, 300000)
     }
 
     statLoop();
