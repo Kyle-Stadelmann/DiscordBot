@@ -1,4 +1,4 @@
 
 module.exports = async (bot, member) => {
-    member.edit({deaf: true});
+  member.edit({ deaf: true });
 }
