@@ -84,7 +84,7 @@ module.exports = async (bot, message) => {
     }
 
     // Zach => Zacc Event
-    if(message.content.toLowerCase().includes("zach")) {
+    if (message.content.toLowerCase().includes("zach")) {
         require("../lib/zach_zacc.js")(bot, message);
     }
 };
