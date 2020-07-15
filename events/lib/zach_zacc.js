@@ -1,5 +1,3 @@
-const Discord = require("discord.js");
-
 module.exports = async (bot, message) => {
     let newString = "";
     // loop through until message has no more "zach"'s
