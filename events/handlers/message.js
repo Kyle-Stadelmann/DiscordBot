@@ -87,4 +87,7 @@ module.exports = async (bot, message) => {
     if (message.content.toLowerCase().includes("zach")) {
         require("../lib/zach_zacc.js")(bot, message);
     }
+
+    //Epic sunglasses event
+    require("../lib/epic.js")(bot,message);
 };
