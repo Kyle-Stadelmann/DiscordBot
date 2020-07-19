@@ -1,5 +1,8 @@
 
 module.exports = async (bot, message) => {
+    // ignore commands for this event
+    if (message.content.startsWith(bot.constants.PREFIX)) return;
+
     let numWords = wordCount(message.content);
     if (bot.util.random(require("../event_percentages.js").DANIEL_WPM_CHANCE_FUNCTION(numWords))) {
         message.channel.send("It took Daniel approximately " + wordsPerMinute(bot.constants.DANIEL_WPM, numWords) +
