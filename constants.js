@@ -7,7 +7,7 @@ cooldownColl.set("help", 0);
 cooldownColl.set("listroles", 0);
 cooldownColl.set("ping", 0);
 cooldownColl.set("role", 0);
-cooldownColl.set("randommove", 5 * 60 * 1000);
+cooldownColl.set("randommove", 10 * 60 * 1000);
 cooldownColl.set("sword", 7 * 24 * 60 * 60 * 1000);
 cooldownColl.set("scramble", 60 * 60 * 1000);
 

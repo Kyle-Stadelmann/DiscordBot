@@ -5,7 +5,7 @@ module.exports.help = {
     example: 'sword @Dualkim'
 }
 
-module.exports.disabled = false;
+module.exports.disabled = true;
 
 var sharpeningDate = null;
 module.exports.run = async (bot, msg, args) => {
