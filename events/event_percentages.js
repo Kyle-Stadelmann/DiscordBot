@@ -5,7 +5,7 @@ module.exports = {
     DANIEL_SUCCESS_MOVE_CHANCE: 50,
     HEAVY_DOLLAR_SIGN: 5,
     DANIEL_WPM_CHANCE_FUNCTION: daniel_wpm_chance_function,
-    QUESTION_MARK_CHANCE: 5,
+    QUESTION_MARK_CHANCE: 0.5,
     EPIC_SUNGLASSES_CHANCE: 100,
 }
 
