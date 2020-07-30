@@ -25,13 +25,6 @@ module.exports.run = async (bot, msg, args) => {
         return false;
     }
 
-	/*
-	// If sender didn't send it to BOT_STUFF
-	if (msg.channel.id != bot.constants.BOT_STUFF_CHANNEL_ID) {
-		msg.delete();
-		return false;
-	}*/
-
     // If sender isnt in a channel
     if (sender.voice.channel == null ||
         sender.voice.channel == msg.guild.afkChannel.id) {
@@ -75,6 +68,8 @@ module.exports.run = async (bot, msg, args) => {
         msg.channel.send(`${victim} has been banished!`);
         chanceToMove /= 2;
     }
+
+    msg.channel.send(`Fear not ${victim}, your randomMove has completed.`)
 
     return true;
 }

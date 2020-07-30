@@ -1,21 +1,22 @@
 
 module.exports = async (bot, message) => {
-    if (bot.util.random(require("../event_percentages.js").DANIEL_WPM_CHANCE)) {
-        let words = wordCount(message.content);
+    // ignore commands for this event
+    if (message.content.startsWith(bot.constants.PREFIX)) return;
 
-        message.channel.send("It took Daniel approximately " + howFast(bot, words) +
+    let numWords = wordCount(message.content);
+    if (bot.util.random(require("../event_percentages.js").DANIEL_WPM_CHANCE_FUNCTION(numWords))) {
+        message.channel.send("It took Daniel approximately " + wordsPerMinute(bot.constants.DANIEL_WPM, numWords) +
             " seconds to type that assuming he types at " +
             bot.constants.DANIEL_WPM + " words per minute.");
     }
 }
 
-function howFast(bot, wordCount) {
-    return wordCount / bot.constants.DANIEL_WPM;
+// Calculates words per minutes (in seconds)
+function wordsPerMinute(wpm, numWords) {
+    return (numWords / wpm)*60;
 }
 
 function wordCount(messageString) {
-    // Theres probably a better way to do this than having it start at 1
-    // Then you wouldn't need the empty string check (?)
     let wordCounter = 1;
 
     for (i = 0; i < messageString.length; i++) {
@@ -24,5 +25,5 @@ function wordCount(messageString) {
         }
     }
 
-    return wordCounter * 60;
+    return wordCounter;
 }

@@ -12,7 +12,7 @@ module.exports.run = async (bot, msg, args) => {
     // voiceChannel that the author of the message is in
     let voiceChannel = msg.member.voice.channel;
 
-    if (!voiceChannel) {
+    if (!voiceChannel || (msg.guild.afkChannel === voiceChannel)) {
         msg.channel.send("Scramble failed because you are not in a valid voice channel!");
         return false;
     }
@@ -20,10 +20,11 @@ module.exports.run = async (bot, msg, args) => {
     let validChannels = new discord.Collection();
 
 	// Gets all valid channels 
-	// (that are voice, another channel than current, and that everyone can see)
+	// (that are voice, another channel than current, that everyone can see, and that aren't afk)
 	msg.guild.channels.cache.forEach(channel => {
+        let notAfkChannel = msg.guild.afkChannel !== channel;
 		let perm = channel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL");
-		if (channel.type === "voice" && channel.id !== voiceChannel.id && perm) {
+		if (channel.type === "voice" && channel.id !== voiceChannel.id && perm && notAfkChannel) {
 			validChannels.set(channel.id, channel);
 		}
 	});
@@ -41,7 +42,8 @@ module.exports.run = async (bot, msg, args) => {
 
     channelMembers.forEach(victim => {
         let randomChannel = validChannels.random();
-        victim.edit({ channel: randomChannel });
+        if (victim.voice.channel)
+            victim.edit({ channel: randomChannel });
     });
 
     msg.channel.send("Channel scramble completed!");

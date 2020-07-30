@@ -1,4 +1,7 @@
 module.exports = async (bot, message) => {
+    // Don't activate for bot messages
+    if (message.author.bot) return;
+
     let newString = "";
     // loop through until message has no more "zach"'s
     let msg = message.content;

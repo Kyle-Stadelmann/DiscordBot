@@ -7,7 +7,7 @@ cooldownColl.set("help", 0);
 cooldownColl.set("listroles", 0);
 cooldownColl.set("ping", 0);
 cooldownColl.set("role", 0);
-cooldownColl.set("randommove", 5 * 60 * 1000);
+cooldownColl.set("randommove", 10 * 60 * 1000);
 cooldownColl.set("sword", 7 * 24 * 60 * 60 * 1000);
 cooldownColl.set("scramble", 60 * 60 * 1000);
 
@@ -30,4 +30,5 @@ module.exports = {
     ASIAN_KYLE_ID: "191266619387936770",
     QUESTION_MARK_URL: "https://media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG",
     SUNGLASSES: '😎',
+    KHANG_NEKO_EMOJI: 'cat_thonk',
 }
