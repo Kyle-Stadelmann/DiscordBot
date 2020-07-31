@@ -4,7 +4,7 @@ module.exports.help = {
     usage: `whip @user`,
 }
 
-module.exports.disabled = false;
+module.exports.disabled = true;
 
 module.exports.run = async (bot, msg, args) => {
     let sender = msg.member;
@@ -27,7 +27,7 @@ module.exports.run = async (bot, msg, args) => {
     }
 
     // number of channels to move the user
-    let numChannels = 4;//Math.floor(Math.random() * bot.constants.MAX_NUM_CHANNELS_WHIPPED);
+    let numChannels = 30;//Math.floor(Math.random() * bot.constants.MAX_NUM_CHANNELS_WHIPPED);
     // the raw position in the guild of the victim's voice channel
     let currPos = victim.voice.channel.position;
 
@@ -56,8 +56,8 @@ module.exports.run = async (bot, msg, args) => {
         // if there are no avilable channels, create a new one
         if (nextIterator.done) {
             if (currTempChannel) tempChannels.push(currTempChannel);
-            currTempChannel = await msg.guild.channels.create("rekt", { type: "voice", position: 5});
-            currTempChannel.edit({position: 5});//.catch(console.error);
+            currTempChannel = await msg.guild.channels.create("rekt", { type: "voice", position: currPos+1});
+            currTempChannel.edit({position: currPos+1});//.catch(console.error);
             nextChannel = currTempChannel;
         }
 
