@@ -3,9 +3,12 @@
 module.exports = {
     KHANG_NEKO_CHANCE: 5,
     DANIEL_SUCCESS_MOVE_CHANCE: 50,
-    HEAVY_DOLLAR_SIGN: 5,
+    HEAVY_DOLLAR_SIGN_CHANCE: 0.5,
     DANIEL_WPM_CHANCE_FUNCTION: daniel_wpm_chance_function,
     QUESTION_MARK_CHANCE: 5,
+    EPIC_SUNGLASSES_CHANCE: 100,
+    SUNGLASSES_EPIC_CHANCE: 100,
+    ZACC_CHANCE: 100,
 }
 
 function daniel_wpm_chance_function(numWords) {

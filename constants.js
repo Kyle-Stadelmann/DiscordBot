@@ -29,6 +29,7 @@ module.exports = {
     DANIEL_WPM: "48",
     ASIAN_KYLE_ID: "191266619387936770",
     QUESTION_MARK_URL: "https://media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG",
+    SUNGLASSES: '😎',
     KHANG_NEKO_EMOJI: 'cat_thonk',
     MAX_NUM_CHANNELS_WHIPPED: 30,
 }
