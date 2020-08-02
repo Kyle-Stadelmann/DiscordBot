@@ -4,7 +4,7 @@ module.exports.help = {
     usage: `whip @user`,
 }
 
-module.exports.disabled = true;
+module.exports.disabled = false;
 
 module.exports.run = async (bot, msg, args) => {
     let sender = msg.member;
@@ -27,7 +27,7 @@ module.exports.run = async (bot, msg, args) => {
     }
 
     // number of channels to move the user
-    let numChannels = 30;//Math.floor(Math.random() * bot.constants.MAX_NUM_CHANNELS_WHIPPED);
+    let numChannels = bot.constants.NUM_CHANNELS_WHIPPED;
     // the raw position in the guild of the victim's voice channel
     let currPos = victim.voice.channel.position;
 
@@ -56,18 +56,19 @@ module.exports.run = async (bot, msg, args) => {
         // if there are no avilable channels, create a new one
         if (nextIterator.done) {
             if (currTempChannel) tempChannels.push(currTempChannel);
-            currTempChannel = await msg.guild.channels.create("rekt", { type: "voice", position: currPos+1});
-            currTempChannel.edit({position: currPos+1});//.catch(console.error);
+            
+            // check to make sure victim hasn't left channel while moving was happening
+            if (victim.voice.channel === null) break;
+
+            // clone the channel that the user is currently in
+            currTempChannel = await victim.voice.channel.clone({ name: "rekt" });
             nextChannel = currTempChannel;
         }
 
         // check to make sure victim hasn't left channel while moving was happening
         if (victim.voice.channel === null) break;
 
-        victim.voice.setChannel(nextChannel);
-        currPos = nextChannel.position;
-        console.log("Currposition: " + currPos);
-        await bot.util.sleep(2000);
+        await victim.voice.setChannel(nextChannel);
     }
 
     // delete tempChannels
@@ -77,14 +78,14 @@ module.exports.run = async (bot, msg, args) => {
     if (currTempChannel) {
         // The max number of iterations we'll check for if the user left the channel
         // after this amount, we will just delete the channel with the user in it
-        const MAX_ITERATIONS_TO_WAIT = 60;
+        const MAX_ITERATIONS_TO_WAIT = 600;
         // current number of iterations waited
         let numIterationsWaited = 0;
 
         while (victim.voice.channelID === currTempChannel.id && numIterationsWaited < MAX_ITERATIONS_TO_WAIT) {
             numIterationsWaited++;
 
-            await bot.util.sleep(10000);
+            await bot.util.sleep(100);
         }
 
         // delete the last temp channel that the user used to be in
