@@ -71,6 +71,9 @@ module.exports.run = async (bot, msg, args) => {
         await victim.voice.setChannel(nextChannel);
     }
 
+    // Wait for some time for everyone to comprehend what happened to this poor soul
+    await bot.util.sleep(10000);
+
     // delete tempChannels
     tempChannels.forEach(channel => channel.delete());
 
@@ -78,7 +81,7 @@ module.exports.run = async (bot, msg, args) => {
     if (currTempChannel) {
         // The max number of iterations we'll check for if the user left the channel
         // after this amount, we will just delete the channel with the user in it
-        const MAX_ITERATIONS_TO_WAIT = 600;
+        const MAX_ITERATIONS_TO_WAIT = 500;
         // current number of iterations waited
         let numIterationsWaited = 0;
 

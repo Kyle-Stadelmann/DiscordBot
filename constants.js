@@ -10,6 +10,7 @@ cooldownColl.set("role", 0);
 cooldownColl.set("randommove", 10 * 60 * 1000);
 cooldownColl.set("sword", 7 * 24 * 60 * 60 * 1000);
 cooldownColl.set("scramble", 60 * 60 * 1000);
+cooldownColl.set("whip", 60 * 60 * 1000);
 
 
 module.exports = {
