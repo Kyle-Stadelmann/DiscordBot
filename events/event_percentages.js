@@ -8,7 +8,7 @@ module.exports = {
     QUESTION_MARK_CHANCE: 5,
     EPIC_SUNGLASSES_CHANCE: 100,
     SUNGLASSES_EPIC_CHANCE: 100,
-    ZACC_CHANCE: 100,
+    ZACC_CHANCE: 5,
 }
 
 function daniel_wpm_chance_function(numWords) {
