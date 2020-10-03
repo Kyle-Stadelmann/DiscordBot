@@ -60,15 +60,27 @@ module.exports.run = async (bot, msg, args) => {
             // check to make sure victim hasn't left channel while moving was happening
             if (victim.voice.channel === null) break;
 
-            // clone the channel that the user is currently in
-            currTempChannel = await victim.voice.channel.clone({ name: "rekt" });
+            // try catch block wrap since errors can happen in between the preceding check and now
+            try {
+                // clone the channel that the user is currently in
+                currTempChannel = await victim.voice.channel.clone({ name: "rekt" });
+            }
+            catch (err) {
+                break;
+            }
             nextChannel = currTempChannel;
         }
 
         // check to make sure victim hasn't left channel while moving was happening
         if (victim.voice.channel === null) break;
 
-        await victim.voice.setChannel(nextChannel);
+        // try catch block wrap since errors can happen in between the preceding check and now
+        try {
+            await victim.voice.setChannel(nextChannel);
+        }
+        catch (err) {
+            break;
+        }
     }
 
     // Wait for some time for everyone to comprehend what happened to this poor soul
