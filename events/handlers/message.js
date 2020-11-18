@@ -2,9 +2,14 @@ const discord = require('discord.js');
 
 // Listener event: runs whenever a message is received
 module.exports = async (bot, message) => {
+    // if message comes from a bot, don't perform any of the below events
+    // (to stop bd4 bot from triggering other bots events)
+    if (message.author.bot) {
+        return;
+    }
+
     // Command processing
     if (message.content.indexOf(bot.constants.PREFIX) == 0) {
-        if (message.author.bot) return;
         if (message.channel.type === "dm") return;
 
         // Messsage is a command, continue to parse cmd
