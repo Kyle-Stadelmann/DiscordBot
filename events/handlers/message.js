@@ -81,7 +81,7 @@ module.exports = async (bot, message) => {
     // DanielWPM RandomEvent & Daniel_TY event! 
     if (message.author.id === bot.constants.DANIEL_ID) {
         require("../lib/daniel_wpm.js")(bot, message);
-	require("../lib/daniel_ty.js")(bot, message);
+	    require("../lib/daniel_ty.js")(bot, message);
     }
 
     // Question Mark Ending RandomEvent
