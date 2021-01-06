@@ -1,5 +1,3 @@
-const { Console } = require("console");
-
 // Our functions object that we are exporting
 var functions = {};
 

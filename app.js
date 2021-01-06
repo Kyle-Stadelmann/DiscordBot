@@ -7,6 +7,7 @@ bot.util = new Discord.Collection();
 bot.commands = new Discord.Collection();
 bot.events = new Discord.Collection();
 bot.cooldowns = new Discord.Collection();
+bot.schedules = new Discord.Collection();
 
 bot.printSpace = () => {
     console.log();
