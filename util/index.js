@@ -1,3 +1,5 @@
+const { Console } = require("console");
+
 // Our functions object that we are exporting
 var functions = {};
 
@@ -17,12 +19,16 @@ if (jsfiles.length <= 0) {
     return;
 }
 
-jsfiles.forEach((f, i) => {
+jsfiles.forEach((f) => {
     // Put our util function into our functions object
     let bufferFunction = (require(`./${f}`));
-    let functionKey = Object.keys(bufferFunction)[0];
-    let functionValue = Object.values(bufferFunction)[0];
-    functions[`${functionKey}`] = functionValue;
+
+    let functionKeys = Object.keys(bufferFunction);
+    let functionValues = Object.values(bufferFunction);
+
+    for (i=0; i<functionKeys.length; i++) {
+        functions[`${functionKeys[i]}`] = functionValues[i];
+    }
 });
 
 // Export our functions
