@@ -70,6 +70,8 @@ module.exports = async (bot, message) => {
         }
     }
 
+    require("../lib/nyaa_embed.js")(bot, message);
+
     // KhangNeko RandomEvent
     if (message.author.id === bot.constants.KHANG_ID) {
         require("../lib/khang_neko.js")(bot, message);
