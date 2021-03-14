@@ -50,7 +50,7 @@ module.exports = async (bot, message) => {
 
 
         // Check if cooldown is over
-        if (!bot.util.endCooldown(bot, cmdStr, message.member)) {
+        if (!bot.util.tryEndCooldown(bot, cmdStr, message.member)) {
             console.log("Command was NOT successful, member is on cooldown.")
             message.channel.send("Command was NOT successful, you are on cooldown for this command.");
             bot.printSpace();
@@ -64,7 +64,7 @@ module.exports = async (bot, message) => {
                 console.log("Command was successful.");
             } else {
                 console.log("Command was NOT successful.");
-                bot.util.endCooldown(bot, cmdStr, message.member, true);
+                bot.util.tryEndCooldown(bot, cmdStr, message.member, true);
             }
             bot.printSpace();
         }

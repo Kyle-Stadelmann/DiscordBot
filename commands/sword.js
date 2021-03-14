@@ -29,7 +29,7 @@ module.exports.run = async (bot, msg, args) => {
 
         msg.channel.send('You have begun sharpening your dull sword.');
         // end zachs cooldown so he can slay someone eventually
-        bot.util.endCooldown(bot, 'sword', sender, true);
+        bot.util.tryEndCooldown(bot, 'sword', sender, true);
 
         sharpeningDate = date.getTime();
 
