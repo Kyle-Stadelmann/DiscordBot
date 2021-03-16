@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const path = require("path");
 
 // Cooldowns are measured in ms
 let cooldownColl = new Discord.Collection();
@@ -33,4 +34,5 @@ module.exports = {
     SUNGLASSES: '😎',
     KHANG_NEKO_EMOJI: 'cat_thonk',
     NUM_CHANNELS_WHIPPED: 10,
+    COOLDOWN_JSON_LOC: path.resolve("./database/cooldowns.json"),
 }

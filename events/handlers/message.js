@@ -1,4 +1,5 @@
 const discord = require('discord.js');
+const { writeCooldowns } = require('../../util/cooldown.js');
 
 // Listener event: runs whenever a message is received
 module.exports = async (bot, message) => {
@@ -58,12 +59,13 @@ module.exports = async (bot, message) => {
         }
 
         bot.util.cooldown(bot, cmdStr, message.member);
-        // Command handling
+        // Command handling - if we got here, cooldown is over
         if (cmd) {
             if (await cmd.run(bot, message, args)) {
                 console.log("Command was successful.");
             } else {
                 console.log("Command was NOT successful.");
+                // command failed, reset cooldown by giving it forceCooldownEnd = true
                 bot.util.tryEndCooldown(bot, cmdStr, message.member, true);
             }
             bot.printSpace();

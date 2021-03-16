@@ -3,19 +3,24 @@ require('dotenv').config()
 
 const Discord = require("discord.js");
 const bot = new Discord.Client();
-bot.util = new Discord.Collection();
 bot.commands = new Discord.Collection();
-bot.events = new Discord.Collection();
 bot.cooldowns = new Discord.Collection();
+bot.events = new Discord.Collection();
 bot.schedules = new Discord.Collection();
+
+// Bind all util functions to bot.util
+bot.util = require("./util");
+// Bind all constants to bot.constants
+bot.constants = require("./constants.js");
+// Load in the cooldowns from disk into bot.cooldowns
+bot.util.readDiskCooldowns(bot);
+
 
 bot.printSpace = () => {
     console.log();
     console.log("--------------------------------------------------------------");
     console.log();
 }
-
-bot.constants = require("./constants.js");
 
 // Load all commands into our bot.commands collection
 require("fs").readdir("./commands/", (err, files) => {
@@ -71,9 +76,6 @@ require("fs").readdir("./events/handlers/", (err, files) => {
     });
     bot.printSpace();
 });
-
-// Bind all util functions to the bot.util collection
-bot.util = require("./util");
 
 // Login to the correct bot token
 bot.login(process.env.BOT_TOKEN);
