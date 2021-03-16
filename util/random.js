@@ -1,4 +1,4 @@
-// Likelihood/possibilities chance to spawn a true return value
+// Random chance to return a true value
 // Input: Percentage (can be non-int) of returning true.
 // Output: returns true/false
 module.exports.random = (chance) => {
