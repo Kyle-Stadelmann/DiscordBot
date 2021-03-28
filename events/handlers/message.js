@@ -9,21 +9,18 @@ module.exports = async (bot, message) => {
         return;
     }
 
-    // Command processing
+    // Command processing, check if message is a commandd
     if (message.content.indexOf(bot.constants.PREFIX) == 0) {
-        if (message.channel.type === "dm") return;
+        //if (message.channel.type === "dm") return;
 
-        // Messsage is a command, continue to parse cmd
+        let cmdArgs = parseArgs(message.content.toLowerCase());
+        let cmdStr = cmdArgs[0].slice(bot.constants.PREFIX.length);
 
-        let messageArray = message.content.toLowerCase().split(" ");
-        // Cmd String
-        let cmdStr = messageArray[0].slice(bot.constants.PREFIX.length);
-        // Args String array
-        let args = messageArray.slice(1);
+        // Args String array, get rid of command string
+        let args = cmdArgs.slice(1);
 
         // Grab actual command from collection
         let cmd = bot.commands.get(cmdStr);
-
         // test if the command actually exists
         if (cmd == null) return;
 
@@ -101,3 +98,31 @@ module.exports = async (bot, message) => {
     //Epic sunglasses event
     require("../lib/epic.js")(bot,message);
 };
+
+// Taken from GAwesomeBot's great parser
+function parseArgs(content, delim = " ") {
+	if (delim === "") return [content];
+
+	const args = [];
+	let current = "";
+	let open = false;
+
+	for (let i = 0; i < content.length; i++) {
+		if (!open && content.slice(i, i + delim.length) === delim) {
+			if (current !== "") args.push(current);
+			current = "";
+			i += delim.length - 1;
+			continue;
+		}
+		if (content[i] === '"') {
+			open = !open;
+			if (current !== "") args.push(current);
+			current = "";
+			continue;
+		}
+	    current += content[i];
+	}
+	if (current !== "") args.push(current);
+
+	return args.length === 1 && args[0] === "" ? [] : args.filter(a => a !== delim && a !== " ");
+}
