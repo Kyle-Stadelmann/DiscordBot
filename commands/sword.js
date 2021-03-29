@@ -2,7 +2,7 @@ module.exports.help = {
     commandName: "sword",
     description: "Exclusive command to Zach. Once a week he can begin sharpening his sword. He can sharpen it for up to a week before attempting to annihilate someone. The longer the sharpening time, the higher the potency!",
     usage: `sword @victim`,
-    example: 'sword @Dualkim'
+    examples: ['sword @Dualkim']
 }
 
 module.exports.disabled = true;

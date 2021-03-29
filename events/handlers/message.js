@@ -26,21 +26,7 @@ module.exports = async (bot, message) => {
 
         // If help command was triggered
         if (args[0] != null && args[0].toLowerCase() === "help") {
-            console.log(`Help for the ${cmd.help.commandName} command detected by: ${message.author.username}`);
-
-            let helpStr = new discord.MessageEmbed()
-                .addField("Command", `\`${cmd.help.commandName}\``, true)
-                .addField("Description", cmd.help.description)
-                .addField("Usage", `\`${bot.constants.PREFIX}${cmd.help.usage}\``)
-                .setColor(0x0)
-
-            if (cmd.help.example != null) {
-                helpStr.addField("Example", `\`${bot.constants.PREFIX}${cmd.help.example}\``);
-            }
-
-            message.channel.send(helpStr);
-            console.log("Help was successful.");
-            bot.printSpace();
+            handleHelpCmd(bot, message, cmd);
             return;
         }
 
@@ -99,7 +85,7 @@ module.exports = async (bot, message) => {
     require("../lib/epic.js")(bot,message);
 };
 
-// Taken from GAwesomeBot's great parser
+// From GAwesomeBot's parser
 function parseArgs(content, delim = " ") {
 	if (delim === "") return [content];
 
@@ -125,4 +111,28 @@ function parseArgs(content, delim = " ") {
 	if (current !== "") args.push(current);
 
 	return args.length === 1 && args[0] === "" ? [] : args.filter(a => a !== delim && a !== " ");
+}
+
+function handleHelpCmd(bot, message, cmd) {
+    console.log(`Help for the ${cmd.help.commandName} command detected by: ${message.author.username}`);
+
+    let helpStr = new discord.MessageEmbed()
+        .addField("Command", `\`${cmd.help.commandName}\``, true)
+        .addField("Description", cmd.help.description)
+        .addField("Usage", `\`${bot.constants.PREFIX}${cmd.help.usage}\``)
+        .setColor(0x0)
+
+    let examples = cmd.help.examples;
+    if (examples != null && examples.length) {
+        let examplesStr = "";
+        for (let i = 0; i < examples.length; i++) {
+            examplesStr += `\`${bot.constants.PREFIX}${examples[i]}\``;
+            if (i !== examples.length-1) examplesStr += "\n";
+        }
+        helpStr.addField("Examples", examplesStr);
+    }
+
+    message.channel.send(helpStr);
+    console.log("Help was successful.");
+    bot.printSpace();
 }

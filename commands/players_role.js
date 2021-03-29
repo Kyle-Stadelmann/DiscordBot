@@ -2,7 +2,7 @@ module.exports.help = {
     commandName: "role",
     description: "Assigns 1 'players role.' Use the listRoles command to display the avaliable player roles.",
     usage: `role <player role without the Players part>`,
-    example: "role CS:GO",
+    examples: ["role CS:GO"],
 }
 
 module.exports.disabled = true;

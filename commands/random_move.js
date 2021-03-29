@@ -4,7 +4,7 @@ module.exports.help = {
     commandName: "randommove",
     description: "Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time.",
     usage: `randomMove @admin`,
-    example: "randomMove @Dualkim",
+    examples: ["randomMove @Dualkim"],
 }
 
 module.exports.disabled = false;
