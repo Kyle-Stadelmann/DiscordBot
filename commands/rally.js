@@ -12,6 +12,7 @@ module.exports.run = async (bot, message, args) => {
     let voiceChannel = message.member.voice.channel; // User's voice channel
     // Confirm that user called from a voice channel
     if(!voiceChannel) {
+		message.channel.send("Rally failed because you are not in a valid voice channel! Brigitte would be sad...");
         return false;
     }
 

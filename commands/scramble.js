@@ -30,8 +30,8 @@ module.exports.run = async (bot, msg, args) => {
 	});
 
     // Test if there exists valid channels
-    if (validChannels.array().length <= 0) {
-        msg.channel.send("Scramble failed because there are not valid voice channels");
+    if (validChannels.array().length === 0) {
+        msg.channel.send("Scramble failed because there are no valid voice channels");
         return false;
     }
 
