@@ -2,6 +2,8 @@
 require('dotenv').config()
 
 const Discord = require("discord.js");
+const fs = require('fs');
+
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 bot.cooldowns = new Discord.Collection();
@@ -14,6 +16,8 @@ bot.util = require("./util");
 bot.constants = require("./constants.js");
 // Load in the cooldowns from disk into bot.cooldowns
 bot.util.readDiskCooldowns(bot);
+// Load all event percentages
+bot.event_percentages = require("./events/event_percentages.js");
 
 
 bot.printSpace = () => {
@@ -23,26 +27,26 @@ bot.printSpace = () => {
 }
 
 // Load all commands into our bot.commands collection
-require("fs").readdir("./commands/", (err, files) => {
+fs.readdir("./commands/", (err, files) => {
     bot.printSpace();
-    if (err) return console.error(`ERROR: ${err}`);
+    if (err) return console.error(err);
 
     let jsfiles = files.filter(f => f.split(".").pop() === "js");
-    if (jsfiles.length <= 0) {
+    if (jsfiles.length === 0) {
         console.log("No commands to load!");
         return;
     }
 
     console.log(`Loading commands...`);
 
-    let i = 0;
+    let i = 1;
     jsfiles.forEach((f) => {
         // Load command file
         let props = require(`./commands/${f}`);
 
         // only load command if its not disabled
         if (!props.disabled) {
-            console.log(`${++i}: ${f} loaded!`);
+            console.log(`${i++}: ${f} loaded!`);
             bot.commands.set(props.help.commandName, props);
         }
     });
@@ -50,12 +54,12 @@ require("fs").readdir("./commands/", (err, files) => {
 
 
 // Bind all tracked events to our event objects
-require("fs").readdir("./events/handlers/", (err, files) => {
+fs.readdir("./events/handlers/", (err, files) => {
     bot.printSpace();
-    if (err) return console.error(`ERROR: ${err}`);
+    if (err) return console.error(err);
 
     let jsfiles = files.filter(f => f.split(".").pop() === "js");
-    if (jsfiles.length <= 0) {
+    if (jsfiles.length === 0) {
         console.log("No events to load!");
         return;
     }
@@ -76,6 +80,11 @@ require("fs").readdir("./events/handlers/", (err, files) => {
     });
     bot.printSpace();
 });
+
+// Bind all tracked event helpers to bot.events_lib
+// each event type gets its own object of helpers
+// ex: bot.events_lib.eventName.helperName()
+bot.events_lib = require('./events/lib')(bot);
 
 // Login to the correct bot token
 bot.login(process.env.BOT_TOKEN);

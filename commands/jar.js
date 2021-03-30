@@ -13,9 +13,10 @@ module.exports.help = {
          `jar remove "BD4 movies" "Superman: Red Son"`,
          `jar pull "BD4 movies"`,
          `jar list "BD4 movies"`
-    ]
+    ],
 }
 
+module.exports.dmAllow = true;
 module.exports.disabled = true;
 
 module.exports.run = async (bot, msg, args) => {

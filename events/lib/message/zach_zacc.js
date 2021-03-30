@@ -1,8 +1,8 @@
 module.exports = async (bot, message) => {
-    // Don't activate for bot messages
-    if (message.author.bot) return;
+    // Only continue if "zach" is found in a message
+    if (!message.content.toLowerCase().includes("zach")) return;
 
-    if (bot.util.random(require("../event_percentages.js").ZACC_CHANCE)){
+    if (bot.util.random(bot.event_percentages.ZACC_CHANCE)){
         let newString = "";
         // loop through until message has no more "zach"'s
         let msg = message.content;

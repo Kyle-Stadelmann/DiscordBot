@@ -1,7 +1,7 @@
 module.exports.help = {
     commandName: "move",
     description: "Exclusive command for Daniel/Carter to send the other to AFK (where they RIGHTFULLY BELONG).",
-    usage: `move`
+    usage: `move`,
 }
 
 module.exports.disabled = true;

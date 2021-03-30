@@ -2,7 +2,7 @@
 var functions = {};
 
 // Load all our util functions into our bot.util collection
-let files = require("fs").readdirSync("./util/");
+let files = require("fs").readdirSync(process.cwd() + "/util/");
 
 //if (err) return console.error(`ERROR: ${err}`);
 

@@ -3,9 +3,10 @@ const discord = require('discord.js');
 module.exports.help = {
     commandName: "bipen",
     description: "Sends an important Bipen quote.",
-    usage: `bipen`
+    usage: `bipen`,
 }
 
+module.exports.dmAllow = true;
 module.exports.disabled = false;
 
 module.exports.run = async (bot, msg, args) => {

@@ -1,4 +1,7 @@
 module.exports = async (bot, message) => {
+    // Only continue if Daniel sent the message
+    if (message.author.id !== bot.constants.DANIEL_ID) return;
+
     // Reads variations of "thank you bot" from daniel in chat and replys with "you're welcome dualkim"
     if (message.content.toLowerCase().includes("thank") && message.content.toLowerCase().includes("bot")) {
         message.channel.send("You're welcome DualKim! :)");
