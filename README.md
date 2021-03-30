@@ -1,5 +1,5 @@
 # Custom DiscordBot
-Custom DiscordBot made for my private, personal Discord server. This is just a fun project a couple teammates and I work on occasionally in our free time. This is currently only available to those on the server, however a deployable version for anyone to use is planned.
+Custom DiscordBot made for our private, personal Discord server. This is just a fun project several teammates work on occasionally in our free time. This is currently only available to those on the server, however a deployable version for anyone to use is planned.
 
 Current commands
 -----------------------------------------------------------------------
