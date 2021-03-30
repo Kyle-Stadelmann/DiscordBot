@@ -9,13 +9,13 @@ module.exports.help = {
 module.exports.disabled = false;
 
 module.exports.run = async (bot, message, args) => {
-    let voiceChannel = message.member.voice.channel;
-    let validChannels = new discord.Collection();
-    let memberCounter = 0;
-    let pullToHidden = false;
-    let publicChannel = voiceChannel.permissionsFor(message.guild.roles.everyone).has("VIEW_CHANNEL");
-    let roleCall = message.mentions.roles.first();
+    let voiceChannel = message.member.voice.channel; // User's voice channel
+    let validChannels = new discord.Collection(); // List of channels that can be taken from
+    let pullToHidden = false; // Pull to hidden channels or not
+    let publicChannel = voiceChannel.permissionsFor(message.guild.roles.everyone).has("VIEW_CHANNEL"); // Whether or not user's channel is public
+    let rolesToCall = message.mentions.roles; // Role getting pulled
 
+    // Rally to me! (pull into a non-public channel)
     if (args[0] === "to" && args[1] === "me") {
         pullToHidden = true;
     } 
@@ -38,24 +38,28 @@ module.exports.run = async (bot, message, args) => {
         }
     });
 
-    // Invalid rally checks
+    // Check for a valid channel
     if (validChannels.array().length <= 0) {
         message.channel.send("Rally failed because there are no valid voice channels.");
         return false;
     }
 
-    validChannels.forEach(vChannel => {
-        vChannel.members.forEach(validMember => {
-            if (!(roleCall && !validMember.roles.cache.get(roleCall.id))) {
-                memberCounter++;
-            }
+    // Check for a valid member (rally is successful as long as there is one member in one valid channel)
+    let areValidMembers = !(validChannels.some(vChannel => {
+        return vChannel.members.some(member => {
+            if(rolesToCall.size === 0) return true;
+
+            return rolesToCall.some(membRole => {
+                return member.roles.cache.has(membRole.id);
+            });
         });
-    });
-    if (memberCounter <= 0) {
+    }));
+    if(areValidMembers) {
         message.channel.send("Rally failed because there are no users to Rally with. Nice solo ult...");
         return false;
     }
 
+    // Don't broadcast if target channel is hidden
     if (!pullToHidden) {
         message.channel.send(`Initiating rally on ${voiceChannel.name}.`);
     }
@@ -63,7 +67,9 @@ module.exports.run = async (bot, message, args) => {
     // Move all valid users to caller's voice channel
     validChannels.forEach(userChannel => {
         userChannel.members.forEach(member => {
-            if (!(roleCall && !member.roles.cache.get(roleCall.id))) {
+            // kyle made this logic and he is a GENIUS (actually mindblowing)
+            // size of roles list && whether any entry in roles list overlaps with user's roles
+            if (!((rolesToCall.size > 0) && !rolesToCall.some(userRole => member.roles.cache.has(userRole.id)))) {
                 console.log("Moving user with ID: " + member.id);
                 member.edit({channel: message.member.voice.channel})
                     .catch((error) => {
@@ -73,6 +79,7 @@ module.exports.run = async (bot, message, args) => {
             });
     });
 
+    // yay
     message.channel.send("Rally completed!");
 
     return true;
