@@ -9,16 +9,22 @@ module.exports.help = {
 module.exports.disabled = false;
 
 module.exports.run = async (bot, message, args) => {
-    let voiceChannel = message.member.voice.channel; // User's voice channel
+    // User's voice channel
+    let voiceChannel = message.member.voice.channel;
+
     // Confirm that user called from a voice channel
     if(!voiceChannel) {
         return false;
     }
 
-    let validChannels = new discord.Collection(); // List of channels that can be taken from
-    let pullToHidden = false; // Pull to hidden channels or not
-    let publicChannel = voiceChannel.permissionsFor(message.guild.roles.everyone).has("VIEW_CHANNEL"); // Whether or not user's channel is public
-    let rolesToCall = message.mentions.roles; // Role getting pulled
+    // List of channels that can be taken from
+    let validChannels = new discord.Collection(); 
+    // Pull to hidden channels or not
+    let pullToHidden = false;
+    // Whether or not user's channel is public
+    let publicChannel = voiceChannel.permissionsFor(message.guild.roles.everyone).has("VIEW_CHANNEL"); 
+    // Role(s) getting pulled (empty collection if none specified)
+    let rolesToCall = message.mentions.roles; 
 
     // Rally to me! (pull into a non-public channel)
     if (args[0] === "to" && args[1] === "me") {
