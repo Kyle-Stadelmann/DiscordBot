@@ -1,6 +1,6 @@
 // Runs all the libs/helpers for a certain event.
 // Input: Bot client (that has the lib functions we will run), the eventName
-// that we are running the helper functions for, and the options object that we
+// that we are running the helper functions for, and the options array that we
 // will take and pass in each argument of.
 module.exports.runEventLibs = (bot, eventName, opts) => {
     const eventLibs = bot.events_lib[eventName];

@@ -2,7 +2,7 @@ const discord = require('discord.js');
 
 module.exports.help = {
     commandName: "connect",
-	description: "BD4 Bot connects to the user's voice channel",
+	description: "BD4 Bot connects to the user's voice channel.",
     usage: `connect`,
 }
 

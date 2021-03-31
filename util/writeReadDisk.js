@@ -3,10 +3,14 @@ const { Collection } = require("discord.js");
 const v8 = require('v8');
 const path = require('path');
 
+// To eliminate race conditions when writing/reading to a file that is currently being
+// written/read from. Why doesn't node do this....
+let mutex = new Collection();
+
 // Writes some data of any type (Object, Map, Collection, etc.) to the file that corresponds
 // to the filePath.
 // Input: Data to write, filePath to write to
-module.exports.writeDisk = (data, filePath) => {
+module.exports.writeDisk = async (bot, data, filePath) => {
     // Gets a deep copy of our data, but Collections will be converted to Maps
     // This is important as JSON.stringify doesn't support Collections but it does support Maps
     let dataCopy = v8.deserialize(v8.serialize(data));
@@ -17,12 +21,17 @@ module.exports.writeDisk = (data, filePath) => {
         // if err, that means we need to create the directory/file structure
         if (err) {
             await fs.mkdir(dirPath, {recursive: true}, (err) => {
-                if (err) console.log(err);
+                if (err) console.error(err);
             });
         }
 
+        while (mutex.has(filePath)) {
+            await bot.util.sleep(250);
+        }
+        mutex.set(filePath, true);
         fs.writeFile(filePath, dataStr, (err) => {
-            if (err) console.log(err);
+            mutex.delete(filePath);
+            if (err) console.error(err);
         });
     });
 }
@@ -31,9 +40,12 @@ module.exports.writeDisk = (data, filePath) => {
 // to the fileName and returns it.
 // Input: fileName to read from, callback function to call on the err and data we'll get from
 // reading or parsing.
-module.exports.readDisk = async (fileName, callback) => {
+module.exports.readDisk = async (bot, fileName, callback) => {
     fs.readFile(fileName, 'utf8', (err, data) => {
-        if (err) callback(err);
+        if (err) { 
+            callback(err);
+            return;
+        }
 
         try {
             // Parses the read in data using the reviver to restore the maps
