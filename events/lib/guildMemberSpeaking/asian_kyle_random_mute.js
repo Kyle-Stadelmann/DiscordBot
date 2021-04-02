@@ -1,8 +1,7 @@
 
 module.exports = async (bot, member, speakingState) => {
-    if (member.id !== bot.constants.ASIAN_KYLE_ID ||
-        member.voice.speaking !== true) {
-        return;
+    // member.id !== bot.constants.ASIAN_KYLE_ID <-- replace the true with this
+    if (true && bot.util.random(bot.event_percentages.MUTE_CHANCE)) {
+        member.edit({ mute: true });
     }
-    member.edit({ deaf: true });
 }

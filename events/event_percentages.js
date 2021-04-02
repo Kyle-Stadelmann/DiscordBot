@@ -9,6 +9,7 @@ module.exports = {
     EPIC_SUNGLASSES_CHANCE: 100,
     SUNGLASSES_EPIC_CHANCE: 100,
     ZACC_CHANCE: 5,
+    MUTE_CHANCE: .1,
 }
 
 function daniel_wpm_chance_function(numWords) {
