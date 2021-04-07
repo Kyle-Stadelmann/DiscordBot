@@ -2,20 +2,20 @@
 // Input: Percentage (can be non-int) of returning true.
 // Output: returns true/false
 module.exports.random = (chance) => {
-
-    let ourChance = chance;
+    let numerator = chance;
     // Default val is 100 assuming we are using int percentages
-    let possibilities = 100;
+    let denominator = 100;
 
-    // Convert our number into an int
-    while (ourChance % 1 != 0) {
-        possibilities *= 10;
-        ourChance *= 10;
+    // Convert our numerator into an int
+    // while doing so, also raise the denominator
+    while (numerator % 1 != 0) {
+        denominator *= 10;
+        numerator *= 10;
     }
 
-    // Random num from 1 to possibilities
-    randomVal = (Math.random() * possibilities) + 1;
-    if (randomVal <= ourChance) {
+    // Random num (0, denominator]
+    const randomVal = Math.random() * denominator;
+    if (randomVal <= numerator) {
         return true;
     } else {
         return false;
