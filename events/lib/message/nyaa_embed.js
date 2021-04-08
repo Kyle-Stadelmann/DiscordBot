@@ -9,6 +9,8 @@ const FULL_IMG_REGEX =  /!\[.*](.*)/g;
 const COMMENT_PANEL_DIV_REGEX = /<div class="panel panel-default comment-panel" id="com-.+">/g;
 const COMMENT_REGEX = /class="comment-content" id="torrent-comment[0-9]*">/g;
 
+const TARGET_SITE_ICON = "https://nyaa.si/static/img/avatar/default.png";
+
 module.exports = async (bot, message) => {
     if (!message.content.includes(TARGET_SITE)) return;
 
@@ -62,16 +64,29 @@ module.exports = async (bot, message) => {
         rowansComment = comments[0].split(COMMENT_REGEX)[1].split("</div>\n")[0];
     }
 
+    let seeders = mainPanel[mainPanel.findIndex(str=> str === 'Seeders:') + 1];
+    let leechers = mainPanel[mainPanel.findIndex(str=> str === 'Leechers:') + 1];
+    let completed = mainPanel[mainPanel.findIndex(str=> str === 'Completed:') + 1];
+    let fileSize = mainPanel[mainPanel.findIndex(str=> str === 'File size:') + 1];
+
     let embed = new discord.MessageEmbed()
         .setTitle(title)
-        .setAuthor(author)
+        .setURL(url)
+        .setAuthor(author, TARGET_SITE_ICON)
         .setTimestamp(date)
         .setThumbnail(img)
+        .addFields(
+            { name: "Seeders", value: "```diff\n+" + seeders + "\n```", inline: true},
+            { name: "Leechers", value: "```diff\n-" + leechers + "\n```", inline: true},
+            { name: "Completed", value: "```diff\n" + completed + "\n```", inline: true},
+            { name: "File Size", value: fileSize},
+        )
 
-    if (isRowanHere)
+    if (isRowanHere) {
         embed.addField("Rowan's Take", rowansComment);
-    else
+    } else {
         embed.setFooter("Rowan was not here :(");
+    }
 
     message.channel.send(embed);
 }
