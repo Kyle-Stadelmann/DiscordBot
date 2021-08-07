@@ -43,24 +43,32 @@ async function processCmd(bot, message) {
     console.log(`${cmd.help.commandName} command detected by: ${message.author.username}`);
 
     // Check if cooldown is over
-    if (!bot.util.tryEndCooldown(bot, cmdStr, message.member)) {
+    if (bot.util.isOnCooldown(bot, cmdStr, message.member)) {
         console.log("Command was NOT successful, member is on cooldown.")
         message.channel.send("Command was NOT successful, you are on cooldown for this command.");
         bot.printSpace();
         return;
     }
-
-    bot.util.cooldown(bot, cmdStr, message.member);
+    
+    // Whether we will activate the cooldown after executing it or not
+    // (If cmd fails, will be set to false)
+    let activateCooldown;
     // Command handling - if we got here, cooldown is over
     if (cmd) {
         if (await cmd.run(bot, message, args)) {
             console.log("Command was successful.");
+            // Command succeeded, set cooldown afterwards
+            activateCooldown = true;
         } else {
             console.log("Command was NOT successful.");
-            // command failed, reset cooldown by giving it forceCooldownEnd = true
-            bot.util.tryEndCooldown(bot, cmdStr, message.member, true);
+            // Command failed, don't activate cooldown since cmd wasn't activated
+            activateCooldown = false;
         }
         bot.printSpace();
+    }
+
+    if (activateCooldown) {
+        bot.util.activateCooldown(bot, cmdStr, message.member);
     }
 }
 

@@ -18,7 +18,8 @@ bot.constants = require(`${__dirname}/constants.js`);
 bot.util.readDiskCooldowns(bot);
 // Load all event percentages
 bot.event_percentages = require(`${__dirname}/events/event_percentages.js`);
-
+// Load bot settings
+bot.settings = require(`${__dirname}/settings.js`);
 
 bot.printSpace = () => {
     console.log();
@@ -87,4 +88,8 @@ fs.readdir(`${__dirname}/events/handlers/`, (err, files) => {
 bot.events_lib = require(`${__dirname}/events/lib`)(bot);
 
 // Login to the correct bot token
-bot.login(process.env.BOT_TOKEN);
+if (bot.settings.botMode === bot.settings.botModeEnum.DEV) {
+    bot.login(process.env.DEV_BOT_TOKEN);
+} else {
+    bot.login(process.env.BOT_TOKEN);
+}
