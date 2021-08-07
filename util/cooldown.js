@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 // Add a command to cooldown
 // Input: The discord client (contains cooldown collection), command name we
 // are putting a cooldown on, and the member that we are putting on cooldown.
-module.exports.cooldown = (bot, cmdName, member) => {
+module.exports.activateCooldown = (bot, cmdName, member) => {
     if (!member) return;
 
     // If command doesn't have a cooldown, return early
@@ -25,37 +25,55 @@ module.exports.cooldown = (bot, cmdName, member) => {
     bot.util.writeDisk(bot, bot.cooldowns, bot.constants.COOLDOWN_JSON_LOC);
 }
 
-// Check if we can take a command off cooldown
+// Take a command off cooldown
 // Input: The discord client (contains cooldown collection), command name we
 // are ending the cooldown of, the member that we are determining if they
-// are on cooldown, and whether or not we want to force the end of the cooldown
-// Output: Returns T/F, whether or not the command had its cooldown ended.
-// (Also removes the command from the cooldown collection if returned true)
-module.exports.tryEndCooldown = (bot, cmdName, member, forceEndCooldown = false) => {
+// are on cooldown.
+module.exports.endCooldown = (bot, cmdName, member) => {
     // If member doesn't exist... no cooldown
-    if (!member) return true;
-    
+    if (!member) return;
+
     let cmdCooldownColl = bot.cooldowns.get(cmdName);
     // Test if there are no cooldowns active for this command
-    if (!cmdCooldownColl) return true;
+    if (!cmdCooldownColl) return;
 
     let cooldownTimer = cmdCooldownColl.get(member.id);
     // Test if member isn't on cooldown
-    if (!cooldownTimer) return true;
+    if (!cooldownTimer) return;
+
+    cmdCooldownColl.delete(member.id);
+    // since we deleted a cooldown, update the disk
+    bot.util.writeDisk(bot, bot.cooldowns, bot.constants.COOLDOWN_JSON_LOC);
+}
+
+// Check if a member is on cooldown
+// Input: The discord client (contains cooldown collection), command name we
+// are ending the cooldown of, the member that we are determining if they
+// are on cooldown.
+// Output: Returns T/F, whether the command is on cooldown or not
+module.exports.isOnCooldown = (bot, cmdName, member) => {
+    // If member doesn't exist... no cooldown
+    if (!member) return false;
+    
+    let cmdCooldownColl = bot.cooldowns.get(cmdName);
+    // Test if there are no cooldowns active for this command
+    if (!cmdCooldownColl) return false;
+
+    let cooldownTimer = cmdCooldownColl.get(member.id);
+    // Test if member isn't on cooldown
+    if (!cooldownTimer) return false;
 
     let coolTime = bot.constants.cooldownTimes.get(cmdName);
     if (!coolTime) coolTime = 0;
 
     let date = new Date();
-    if (cooldownTimer + coolTime <= date.getTime() || forceEndCooldown) {
-        cmdCooldownColl.delete(member.id);
-        // since we actually deleted a cooldown, update the disk
-        bot.util.writeDisk(bot, bot.cooldowns, bot.constants.COOLDOWN_JSON_LOC);
+    if (cooldownTimer + coolTime > date.getTime()) {
+        // Cooldown is still active
         return true;
+    } else {
+        // Cooldown is not active anymore
+        return false;
     }
-
-    // cooldown isn't over yet
-    return false;
 }
 
 // Sets bot.cooldowns to either an empty collection or the collection stored on disk.
