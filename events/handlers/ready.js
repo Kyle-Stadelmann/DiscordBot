@@ -4,7 +4,7 @@ module.exports = async (bot) => {
     bot.printSpace();
 
     // Status rotation
-    var statusMessages = require("../status_messages.js");
+    var statusMessages = require(`${__dirname}/../status_messages.js`);
     var possibleStatuses = statusMessages.length;
     var i = Math.floor(Math.random() * possibleStatuses);
     bot.user.setActivity(statusMessages[i]);
