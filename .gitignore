@@ -1,6 +1,7 @@
 # General file types
 *.lnk
 *.bat
+*.sh
 
 # Specific files/directories
 /node_modules
