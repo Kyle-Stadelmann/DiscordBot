@@ -17,8 +17,8 @@ How to use
 -----------------------------------------------------------------------
 `>help` lists the commands and gives a tip on how to use other commands.
 
-![Image of help command](/images/help1.png)
+![Image of help command](https://i.imgur.com/IzrwXuS.png)
 
 To understand how a certain command works use `>commandName help` to get meaningful information about the command.
 
-![Image of command help command](/images/help2.png)
+![Image of command help command](https://i.imgur.com/XhlapRM.png)
