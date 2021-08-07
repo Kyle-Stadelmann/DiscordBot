@@ -1,16 +1,15 @@
 const fs = require('fs');
 
 module.exports = (bot) => {
-    const libDir = process.cwd() + "/events/lib/";
-    let libFiles = fs.readdirSync(libDir);
-    let libDirs = libFiles.filter((file) => fs.lstatSync(libDir + file).isDirectory());
+    let libFiles = fs.readdirSync(__dirname);
+    let libDirs = libFiles.filter((file) => fs.lstatSync(`${__dirname}/${file}`).isDirectory());
 
     let libs = {};
     libDirs.forEach((dir) => {
         let thisEventLibs = {};
 
         // Bind all event helpers for this event to thisEventLibs
-        fs.readdir(process.cwd() + `/events/lib/${dir}`, (err, files) => {
+        fs.readdir(`${__dirname}/${dir}`, (err, files) => {
             if (err) return console.error(err);
 
             let jsfiles = files.filter(f => f.split(".").pop() === "js");
@@ -23,7 +22,7 @@ module.exports = (bot) => {
 
             jsfiles.forEach((f, i) => {
                 // Load event helper file
-                let props = require(process.cwd() + `/events/lib/${dir}/${f}`);
+                let props = require(`${__dirname}/${dir}/${f}`);
 
                 console.log(`${i + 1}: ${f} loaded!`);
                 thisEventLibs[f] = props;

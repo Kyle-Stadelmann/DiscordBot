@@ -2,7 +2,7 @@
 var functions = {};
 
 // Load all our util functions into our bot.util collection
-let files = require("fs").readdirSync(process.cwd() + "/util/");
+let files = require("fs").readdirSync(__dirname);
 
 //if (err) return console.error(`ERROR: ${err}`);
 
@@ -19,7 +19,7 @@ if (jsfiles.length <= 0) {
 
 jsfiles.forEach((f) => {
     // Put our util function into our functions object
-    let bufferFunction = (require(`./${f}`));
+    let bufferFunction = (require(`${__dirname}/${f}`));
 
     let functionKeys = Object.keys(bufferFunction);
     let functionValues = Object.values(bufferFunction);

@@ -31,5 +31,5 @@ module.exports = {
     SUNGLASSES: '😎',
     KHANG_NEKO_EMOJI: 'cat_thonk',
     NUM_CHANNELS_WHIPPED: 10,
-    COOLDOWN_JSON_LOC: path.resolve("./database/cooldowns.json"),
+    COOLDOWN_JSON_LOC: path.resolve(`${__dirname}/database/cooldowns.json`),
 }

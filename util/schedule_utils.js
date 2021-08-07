@@ -5,7 +5,7 @@ const fs = require('fs')
 // Output: Bool of whether or not this was successful.
 module.exports.load_schedules = (bot) => {
     // Read file in with 'a+'; meaning we read file in but create it if it doesn't exist
-    let schedule_json = JSON.parse(fs.readFileSync('../database/schedules.json'), 'a+')
+    let schedule_json = JSON.parse(fs.readFileSync(`${__dirname}/../database/schedules.json`), 'a+')
 }
 
 // Checks if the time on a schedule has been reached

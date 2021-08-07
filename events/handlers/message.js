@@ -1,5 +1,4 @@
 const discord = require('discord.js');
-const { writeCooldowns } = require('../../util/cooldown.js');
 
 // Listener event: runs whenever a message is received
 module.exports = async (bot, message) => {
