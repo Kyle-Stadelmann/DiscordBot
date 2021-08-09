@@ -8,6 +8,10 @@ module.exports = async (bot, message) => {
         return;
     }
 
+    if (bot.settings.botMode === bot.settings.botModeEnum.DEV) {
+        bot.util.reInitBot(bot);
+    }
+
     // Command processing, check if message is a commandd
     if (message.content.indexOf(bot.constants.PREFIX) == 0) {
         await processCmd(bot, message);
@@ -43,7 +47,8 @@ async function processCmd(bot, message) {
     console.log(`${cmd.help.commandName} command detected by: ${message.author.username}`);
 
     // Check if cooldown is over
-    if (bot.util.isOnCooldown(bot, cmdStr, message.member)) {
+    // If we are in DEV mode ignore this, as there are no cooldowns in DEV mode
+    if (bot.util.isOnCooldown(bot, cmdStr, message.member) && bot.settings.botMode !== bot.settings.botModeEnum.DEV) {
         console.log("Command was NOT successful, member is on cooldown.")
         message.channel.send("Command was NOT successful, you are on cooldown for this command.");
         bot.printSpace();
@@ -67,7 +72,8 @@ async function processCmd(bot, message) {
         bot.printSpace();
     }
 
-    if (activateCooldown) {
+    // Activate cooldown if necessary, don't bother if DEV mode
+    if (activateCooldown && bot.settings.botMode !== bot.settings.botModeEnum.DEV) {
         bot.util.activateCooldown(bot, cmdStr, message.member);
     }
 }
@@ -123,5 +129,62 @@ function handleHelpCmd(bot, message, cmd) {
 
     message.channel.send(helpStr);
     console.log("Help was successful.");
+    bot.printSpace();
+}
+
+// Re-init's the bot (only used in dev mode) so we can dynamically change/test
+// functions as they are changed in real time.
+function reInitBot(bot) {
+    const fs = require('fs');
+
+    let rootPath = __dirname + "/../../";
+
+    // Bind all util functions to bot.util
+    bot.util = require(`${rootPath}/util`);
+
+    // Bind all constants to bot.constants
+    delete require.cache[require.resolve(`${rootPath}/constants.js`)];
+    bot.constants = require(`${rootPath}/constants.js`);
+    // Load all event percentages
+    delete require.cache[require.resolve(`${rootPath}/events/event_percentages.js`)];
+    bot.event_percentages = require(`${rootPath}/events/event_percentages.js`);
+    // Load bot settings
+    delete require.cache[require.resolve(`${rootPath}/settings.js`)];
+    bot.settings = require(`${rootPath}/settings.js`);
+
+    // Load all commands into our bot.commands collection
+    fs.readdir(`${rootPath}/commands/`, (err, files) => {
+        bot.printSpace();
+        if (err) return console.error(err);
+
+        let jsfiles = files.filter(f => f.split(".").pop() === "js");
+        if (jsfiles.length === 0) {
+            console.log("No commands to load!");
+            return;
+        }
+
+        console.log(`Loading commands...`);
+
+        let i = 1;
+        jsfiles.forEach((f) => {
+            delete require.cache[require.resolve(`${rootPath}/commands/${f}`)];
+            // Load command file
+            let props = require(`${rootPath}/commands/${f}`);
+
+            // only load command if its not disabled
+            // But if DEV mode is activated, load disabled commands
+            if (!props.disabled || bot.settings.botMode === bot.settings.botModeEnum.DEV) {
+                console.log(`${i++}: ${f} loaded!`);
+                
+                bot.commands.set(props.help.commandName, props);
+            }
+        });
+    });
+    bot.printSpace();
+
+    // Bind all tracked event helpers to bot.events_lib
+    // each event type gets its own object of helpers
+    // ex: bot.events_lib.eventName.helperName()
+    bot.events_lib = require(`${rootPath}/events/lib`)(bot);
     bot.printSpace();
 }
