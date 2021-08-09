@@ -46,7 +46,8 @@ fs.readdir(`${__dirname}/commands/`, (err, files) => {
         let props = require(`${__dirname}/commands/${f}`);
 
         // only load command if its not disabled
-        if (!props.disabled) {
+        // But if DEV mode is activated, load disabled commands
+        if (!props.disabled || bot.settings.botMode === bot.settings.botModeEnum.DEV) {
             console.log(`${i++}: ${f} loaded!`);
             bot.commands.set(props.help.commandName, props);
         }
@@ -86,6 +87,11 @@ fs.readdir(`${__dirname}/events/handlers/`, (err, files) => {
 // each event type gets its own object of helpers
 // ex: bot.events_lib.eventName.helperName()
 bot.events_lib = require(`${__dirname}/events/lib`)(bot);
+
+// If in bot mode, watch files that change in order to reload them without restarting bot
+if (bot.settings.botMode === bot.settings.botModeEnum.DEV) {
+    bot.util.watchBotFiles(bot);
+}
 
 // Login to the correct bot token
 if (bot.settings.botMode === bot.settings.botModeEnum.DEV) {
