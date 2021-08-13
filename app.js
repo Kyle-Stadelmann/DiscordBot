@@ -1,14 +1,18 @@
 // import .env file variables (for BOT_TOKEN)
 require('dotenv').config({path: `${__dirname}/.env`})
 
-const Discord = require("discord.js");
+const {Client, Intents, Collection} = require("discord.js");
 const fs = require('fs');
 
-const bot = new Discord.Client();
-bot.commands = new Discord.Collection();
-bot.cooldowns = new Discord.Collection();
-bot.events = new Discord.Collection();
-bot.schedules = new Discord.Collection();
+// Enable all intents for now even though it's bad practice oops
+let myIntents = []; 
+for (intent in Intents.FLAGS) myIntents.push(intent);
+const bot = new Client({intents: myIntents});
+bot.commands = new Collection();
+bot.cooldowns = new Collection();
+bot.events = new Collection();
+bot.schedules = new Collection();
+bot.typingTimestamps = new Collection().set("250076166323568640", null);
 
 // Bind all util functions to bot.util
 bot.util = require(`${__dirname}/util`);
