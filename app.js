@@ -8,6 +8,7 @@ const fs = require('fs');
 let myIntents = []; 
 for (intent in Intents.FLAGS) myIntents.push(intent);
 const bot = new Client({intents: myIntents});
+
 bot.commands = new Collection();
 bot.cooldowns = new Collection();
 bot.events = new Collection();
