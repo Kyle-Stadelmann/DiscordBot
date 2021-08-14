@@ -1,5 +1,5 @@
 function countWords(str) {
-    return str.trim().split(/\s+/).length;
+    return (str) ? str.trim().split(/\s+/).length : 0;
 }
 
 module.exports = async (bot, message) => {
