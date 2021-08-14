@@ -7,7 +7,9 @@ module.exports = async (bot, message) => {
     if (true && bot.typingTimestamps.has(message.author.id) && bot.typingTimestamps.get(message.author.id)) {
         // Time spent typing message in seconds
         let typingTime = (message.createdTimestamp - bot.typingTimestamps.get(message.author.id))/1000;
-        let wpm = countWords(message.content)/typingTime * 60;
+        let wordCount = countWords(message.content);
+        if (wordCount == 0) return;
+        let wpm = (wordCount / typingTime) * 60;
 
         console.log(`Reporting a typing time of: ${typingTime} with WPM of ${wpm} for user: ${message.author.id}`);
         message.channel.send(`That message took approximately ${typingTime} seconds, with a WPM of ${wpm}`);
