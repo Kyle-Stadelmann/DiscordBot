@@ -7,6 +7,6 @@ module.exports = async (bot, message) => {
         let embed = new Discord.MessageEmbed()
             .setImage(bot.constants.QUESTION_MARK_URL)
 
-        message.channel.send(embed);
+        message.channel.send({embeds: [embed]});
     }
 }

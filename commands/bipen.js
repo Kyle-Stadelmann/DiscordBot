@@ -14,10 +14,10 @@ module.exports.run = async (bot, msg, args) => {
 
     let embed = new discord.MessageEmbed()
         .addField("Bipen", message)
-        .setThumbnail(bot.constants.BIPEN_IMG_URL)
+        .setImage(bot.constants.BIPEN_IMG_URL)
         .setFooter(`R.I.P. Bipen 08/2012`)
         .setColor(0x0)
 
-    msg.channel.send(embed);
+    msg.channel.send({embeds: [embed]});
     return true;
 }

@@ -127,7 +127,7 @@ function handleHelpCmd(bot, message, cmd) {
         helpStr.addField("Examples", examplesStr);
     }
 
-    message.channel.send(helpStr);
+    message.channel.send({embeds: [helpStr]});
     console.log("Help was successful.");
     bot.printSpace();
 }

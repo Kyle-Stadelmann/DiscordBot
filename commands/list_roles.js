@@ -51,7 +51,7 @@ module.exports.run = async (bot, msg, args) => {
         .setThumbnail(bot.guilds.get(bot.constants.BD4_ID).iconURL)
         .setColor(0x0)
 
-    msg.channel.send(roleInfo);
+    msg.channel.send({embeds: [roleInfo]});
 
     return true;
 }

@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+const {Collection} = require("discord.js");
 const path = require("path");
 
 // Cooldowns are measured in ms
-let cooldownColl = new Discord.Collection();
+let cooldownColl = new Collection();
 cooldownColl.set("move", 5 * 60 * 1000);
 cooldownColl.set("listroles", 0);
 cooldownColl.set("randommove", 10 * 60 * 1000);

@@ -98,14 +98,6 @@ if (bot.settings.botMode === bot.settings.botModeEnum.DEV) {
     bot.util.watchBotFiles(bot);
 }
 
-function debugLoop() {
-    setTimeout(function () {
-        console.log(new Date())
-        debugLoop();
-    }, 1000)
-}
-debugLoop();
-
 // Login to the correct bot token
 if (bot.settings.botMode === bot.settings.botModeEnum.DEV) {
     bot.login(process.env.DEV_BOT_TOKEN);
