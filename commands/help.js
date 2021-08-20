@@ -22,7 +22,7 @@ module.exports.run = (bot, msg, args) => {
         .setFooter(`Use '${bot.constants.PREFIX}commandName help' to recieve instructions on how to use any command.`)
         .setColor(0x0)
 
-    msg.channel.send(roleInfo);
+    msg.channel.send({embeds: [roleInfo]});
 
     return true;
 }

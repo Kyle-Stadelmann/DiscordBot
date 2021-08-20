@@ -88,5 +88,5 @@ module.exports = async (bot, message) => {
         embed.setFooter("Rowan was not here :(");
     }
 
-    message.channel.send(embed);
+    message.channel.send({embeds: [embed]});
 }
