@@ -8,7 +8,7 @@ module.exports = async (bot, message) => {
     let wordCount = countWords(message.content);
     if (wordCount == 0) return;
 
-    if (bot.event_percentages.DANIEL_WPM_CHANCE_FUNCTION(wordCount)) {
+    if (bot.util.random(bot.event_percentages.DANIEL_WPM_CHANCE_FUNCTION(wordCount))) {
         // Time spent typing message in seconds
         let typingTime = (message.createdTimestamp - bot.typingTimestamps.get(message.author.id))/1000;
         let wpm = (wordCount / typingTime) * 60;
