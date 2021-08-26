@@ -15,8 +15,10 @@ module.exports = async (bot, message) => {
 
         console.log(`Reporting a typing time of: ${typingTime} with WPM of ${wpm} for user: ${message.author.id}`);
         message.channel.send(`That message took approximately ${typingTime} seconds, with a WPM of ${wpm}`);
-        bot.typingTimestamps.set(message.author.id, null);
 
         bot.printSpace();
     }
+
+    // Regardless if we sent the type speed or not, reset the timestamp for this user
+    bot.typingTimestamps.set(message.author.id, null);
 }

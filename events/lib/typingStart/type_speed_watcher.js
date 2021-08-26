@@ -1,5 +1,9 @@
 module.exports = async (bot, typingState) => {
-    if (bot.typingTimestamps.has(typingState.user.id) && bot.typingTimestamps.get(typingState.user.id) === null) {
+    // Only watch people in the typingTimestamps collection
+    if (!bot.typingTimestamps.has(typingState.user.id)) return;
+    
+    let timestamp = bot.typingTimestamps.get(typingState.user.id);
+    if (timestamp === null || timestamp + bot.constants.TYPE_SPEED_RESET_TIME < new Date().getTime()) {
         console.log("Watching: " + typingState.user.id);
         bot.typingTimestamps.set(typingState.user.id, typingState.startedTimestamp);
     }

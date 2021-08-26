@@ -32,4 +32,5 @@ module.exports = {
     KHANG_NEKO_EMOJI: 'cat_thonk',
     NUM_CHANNELS_WHIPPED: 10,
     COOLDOWN_JSON_LOC: path.resolve(`${__dirname}/database/cooldowns.json`),
+    TYPE_SPEED_RESET_TIME: 30*1000,  // milliseconds
 }
