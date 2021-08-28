@@ -9,6 +9,7 @@ module.exports.disabled = false;
 module.exports.run = async (bot, msg, args) => {
     let sender = msg.member;
     let victim = msg.mentions.members.first();
+    let permissions = sender.permissionsIn(sender.voice.channel);
 
     if (victim == null) {
         msg.channel.send('Command was NOT successful, you must specify an victim.');
@@ -16,7 +17,7 @@ module.exports.run = async (bot, msg, args) => {
     }
 
     // If sender isn't an admin, ignore this event
-    if (!sender.hasPermission("ADMINISTRATOR")) {
+    if (!permissions.has("ADMINISTRATOR")) {
         msg.channel.send('Command was NOT successful, Brigitte only lends her flail to admins.');
         return false;
     }
@@ -35,7 +36,8 @@ module.exports.run = async (bot, msg, args) => {
     let voiceChannels = msg.guild.channels.cache
         .filter(channel => {
             let notAfkChannel = msg.guild.afkChannel !== channel;
-            let visibleToAll = channel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL");
+            let everyonePermissions = (msg.guild.roles.everyone).permissionsIn(channel);
+            let visibleToAll = everyonePermissions.has("VIEW_CHANNEL");
 
             // filter out channels that arent voice channels, have lower position,
             // are afk channels, or are hidden channels
