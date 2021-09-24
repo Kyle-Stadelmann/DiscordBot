@@ -1,4 +1,4 @@
-import {Client} from '@typeit/discord';
+import {Client} from 'discord.js';
 import { Intents, Collection } from 'discord.js';
 import {readDiskCooldowns, watchBotFiles} from './util';
 const fs = require('fs');
@@ -11,10 +11,8 @@ let myIntents: Intents[] = [];
 // TODO: TS migration
 for (let intent in Intents.FLAGS) myIntents.push(intent as any);
 const bot = new Client({
-    classes: [],
-    variablesChar: ":",
     // TODO: TS migration
-    // intents: myIntents
+    intents: myIntents
 });
 
 // TODO: TS migration

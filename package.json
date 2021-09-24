@@ -9,7 +9,6 @@
   "author": "Kyle Stadelmann",
   "license": "ISC",
   "dependencies": {
-    "@typeit/discord": "^4.0.10",
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.10",
     "discord.js": "^13.1.0",

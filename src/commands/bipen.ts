@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { Client, Message, MessageEmbed } from 'discord.js';
 import Constants from '../constants';
 
 export const help = {
@@ -10,9 +10,9 @@ export const help = {
 export const dmAllow = true;
 export const disabled = false;
 
-export const run = async (bot, msg, args) => {
+export const run = async (bot : Client, msg : Message, args) => {
     let message = "I'm a dragon, Rob! ~ *Bipen*";
-
+    
     let embed = new MessageEmbed()
         .addField("Bipen", message)
         .setImage(Constants.BIPEN_IMG_URL)
