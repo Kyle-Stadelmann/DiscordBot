@@ -1,4 +1,3 @@
-
 export interface CommandOptions {
     name: string;
     description: string;
@@ -6,7 +5,7 @@ export interface CommandOptions {
     category: string;
     cooldown: number;
     examples?: string[];
-    dmAllow?: boolean;
+    allowInDM?: boolean;
     aliases?: string[];
     disabled?: boolean;
     permissions?: any;

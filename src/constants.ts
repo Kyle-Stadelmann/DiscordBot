@@ -10,29 +10,25 @@ cooldownColl.set("sword", 7 * 24 * 60 * 60 * 1000);
 cooldownColl.set("scramble", 60 * 60 * 1000);
 cooldownColl.set("whip", 60 * 60 * 1000);
 
-
-export default {
-    // TODO: TypeScript migration
-    AFK_CHANNEL_ID: "temp",
-    PREFIX: ">",
-    cooldownTimes: cooldownColl,
-    DANIEL_ID: "250076166323568640",
-    CARTER_ID: "186540977610031104",
-    BOT_STUFF_CHANNEL_ID: "217149187207200769",
-    KHANG_ID: "123260646576881679",
-    ALLEN_ID: "145042861451116545",
-    BD4_ID: "191318875667824650",
-    BIPEN_IMG_URL: "https://i.imgur.com/cIoLOxW.jpg",
-    ZACH_ID: '95734974409351168',
-    MIN_SHARPEN_TIME: 30 * 60 * 1000,
-    BD4_BOT_ID: '480909013593227277',
-    HEAVY_DOLLAR_SIGN: '💲',
-    DANIEL_WPM: "48",
-    ASIAN_KYLE_ID: "191266619387936770",
-    QUESTION_MARK_URL: "https://media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG",
-    SUNGLASSES: '😎',
-    KHANG_NEKO_EMOJI: 'cat_thonk',
-    NUM_CHANNELS_WHIPPED: 10,
-    COOLDOWN_JSON_LOC: path.resolve(`${__dirname}/database/cooldowns.json`),
-    TYPE_SPEED_RESET_TIME: 30*1000,  // milliseconds
-}
+export const AFK_CHANNEL_ID =  "temp";
+export const PREFIX = ">";
+export const cooldownTimes = cooldownColl;
+export const DANIEL_ID = "250076166323568640";
+export const CARTER_ID = "186540977610031104";
+export const BOT_STUFF_CHANNEL_ID = "217149187207200769";
+export const KHANG_ID = "123260646576881679";
+export const ALLEN_ID = "145042861451116545";
+export const BD4_ID = "191318875667824650";
+export const BIPEN_IMG_URL = "https =//i.imgur.com/cIoLOxW.jpg";
+export const ZACH_ID = '95734974409351168';
+export const MIN_SHARPEN_TIME = 30 * 60 * 1000;
+export const BD4_BOT_ID = '480909013593227277';
+export const HEAVY_DOLLAR_SIGN = '💲';
+export const DANIEL_WPM = "48";
+export const ASIAN_KYLE_ID = "191266619387936770";
+export const QUESTION_MARK_URL = "https =//media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG";
+export const SUNGLASSES = '😎';
+export const KHANG_NEKO_EMOJI = 'cat_thonk';
+export const NUM_CHANNELS_WHIPPED = 10;
+export const COOLDOWN_JSON_LOC = path.resolve(`${__dirname}/database/cooldowns.json`);
+export const TYPE_SPEED_RESET_TIME = 30*1000;
