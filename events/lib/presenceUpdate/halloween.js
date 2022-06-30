@@ -1,16 +1,11 @@
 module.exports = async (bot, oldPresence, newPresence) => {
-    //console.log("Test")
-    //await bot.util.sleep(1000)
-    console.log(`old: ${oldPresence} , new: ${newPresence}`);
-    console.log("old: " + JSON.stringify(oldPresence) + ", new: " + JSON.stringify(newPresence));
-
-    console.log(oldPresence === null || newPresence === null ||
-        oldPresence.guild.id !== bot.constants.BD5_ID || 
-        newPresence.guild.id !== bot.constants.BD5_ID)
-    if (oldPresence === null || newPresence === null ||
-        oldPresence.guild.id !== bot.constants.BD5_ID || 
-        newPresence.guild.id !== bot.constants.BD5_ID) return;
-
-    console.log("old2: " + oldPresence.status + " , new2: " + newPresence.status)
-
+    if (!oldPresence || !newPresence) return;
+    if (oldPresence.guild.id !== bot.constants.DEV_SERVER_ID || 
+        newPresence.guild.id !== bot.constants.DEV_SERVER_ID) return;
+    // Only activate in October
+    if (new Date().getMonth() !== 9) return;
+    // Only activate if user went from an offline->online or an online->offline state
+    // meaning, either old or new presence needs to be offline, but the other can't be as well
+    if ((oldPresence.status === "offline") === (newPresence.status === "offline")) return;
+    //console.log("test")
 }
