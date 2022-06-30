@@ -4,7 +4,11 @@
   "description": "BD4 Discord Bot",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "build": "tsc -p tsconfig.json",
+    "start": "ts-node app.ts",
+    "format": "npx prettier src/ --write",
+    "lint": "npx eslint src/",
+    "dev": "nodemon"
   },
   "author": "Kyle Stadelmann",
   "license": "ISC",
@@ -13,13 +17,20 @@
     "cheerio": "^1.0.0-rc.10",
     "discord.js": "^13.1.0",
     "dotenv": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
     "lowdb": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^16.7.4",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "nodemon": "^2.0.18",
     "ts-jest": "^27.0.5",
-    "ts-node": "^10.2.1",
+    "ts-node": "^10.8.1",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.2"
+    "typescript": "^4.7.4"
   }
 }
