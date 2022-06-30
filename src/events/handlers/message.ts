@@ -58,7 +58,7 @@ async function processCmd(bot, message) {
     
     // Whether we will activate the cooldown after executing it or not
     // (If cmd fails, will be set to false)
-    let activateCooldown;
+    let activateCooldown = false;
     // Command handling - if we got here, cooldown is over
     if (cmd) {
         if (await cmd.run(bot, message, args)) {
@@ -67,8 +67,6 @@ async function processCmd(bot, message) {
             activateCooldown = true;
         } else {
             console.log("Command was NOT successful.");
-            // Command failed, don't activate cooldown since cmd wasn't activated
-            activateCooldown = false;
         }
         bot.printSpace();
     }
