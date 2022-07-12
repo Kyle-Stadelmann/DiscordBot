@@ -1,5 +1,5 @@
 import path from "path";
-import { GuildMember, Message } from "discord.js";
+import { GuildMember, Message, MessageEmbed, TextBasedChannels } from "discord.js";
 import { CommandConfig } from "../types/types";
 import { Cooldowns } from "./cooldown";
 
@@ -49,6 +49,18 @@ export abstract class Command {
 
 	public async endCooldown(member: GuildMember) {
 		return this.cooldowns.endCooldown(member);
+	}
+
+	public sendErrorMessage(channel: TextBasedChannels, msg: string): Promise<Message> {
+		return channel.send(msg);
+	}
+
+	public sendMessage(channel: TextBasedChannels, msg: string): Promise<Message> {
+		return channel.send(msg);
+	}
+
+	public sendEmbeds(channel: TextBasedChannels, embeds: MessageEmbed[], text?: string): Promise<Message> {
+		return channel.send({embeds, content: text});
 	}
 
 	// Uses parent directory to return command category enum
