@@ -1,6 +1,6 @@
 import { GuildMember, Snowflake } from "discord.js";
-import { COOLDOWN_JSON_LOC } from "../constants";
 import { Low, JSONFile } from "lowdb";
+import { COOLDOWN_JSON_LOC } from "../constants";
 
 export class Cooldowns {
 	private cooldowns: Map<Snowflake, Date> = new Map();
@@ -9,6 +9,9 @@ export class Cooldowns {
 	constructor(private cooldownTime: number, private cooldownName: string) {
 		const adapter = new JSONFile(COOLDOWN_JSON_LOC);
 		this.db = new Low(adapter);
+
+		// Sync execution of async function, dangerous but won't cause realistic issues here for the current scope of this bot
+		this.initCooldowns();
 	}
 
 	public isOnCooldown(member: GuildMember): boolean {
@@ -18,6 +21,7 @@ export class Cooldowns {
 
 		const endCooldownTime = this.cooldowns.get(memberId);
 		if (endCooldownTime > new Date()) return true;
+		return false;
 	}
 
 	public async putOnCooldown(member: GuildMember) {
@@ -38,11 +42,15 @@ export class Cooldowns {
 	private async updateDb() {
 		await this.db.read();
 
-		const thisCooldownProperty = {};
-		// Produces { commandName: cooldownMap }
-		thisCooldownProperty[this.cooldownName] = this.cooldowns;
-		this.db.data ||= thisCooldownProperty;
+		// Produces { commandName: cooldowns }
+		this.db.data[this.cooldownName] = this.cooldowns;
 
 		await this.db.write();
+	}
+
+	private async initCooldowns() {
+		await this.db.read();
+
+		this.cooldowns = this.db.data[`${this.cooldownName}`] as Map<Snowflake, Date>;
 	}
 }
