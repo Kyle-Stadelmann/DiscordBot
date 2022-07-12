@@ -12,14 +12,18 @@ const cmdConfig: CommandConfig = {
 class DisconnectCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const connection = getVoiceConnection(msg.guildId);
+		const textChannel = msg.channel;
 
 		if (!connection) {
-			msg.channel.send("I am not currently connected to a voice channel!");
+			await this.sendErrorMessage(
+				textChannel, "I am not currently connected to a voice channel!"
+			);
 			return false;
 		}
 
 		connection.destroy();
-		msg.channel.send("Successfully disconnected!");
+
+		await this.sendMessage(textChannel, "Successfully disconnected!");
 
 		return true;
 	}

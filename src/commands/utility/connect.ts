@@ -13,13 +13,18 @@ class ConnectCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		// User's voice channel
 		const voiceChannel = msg.member.voice.channel;
+		const textChannel = msg.channel;
 
 		if (!voiceChannel || voiceChannel === msg.guild.afkChannel) {
-			msg.channel.send("You are not connected to a valid voice channel!");
+			await this.sendErrorMessage(
+				textChannel, "You are not connected to a valid voice channel!"
+			);
 			return false;
 		}
 
-		msg.channel.send(`Connecting to ${voiceChannel.name}`);
+		await this.sendMessage(
+			textChannel, `Connecting to ${voiceChannel.name}`
+		);
 
 		joinVoiceChannel({
 			channelId: voiceChannel.id,

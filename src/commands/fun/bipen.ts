@@ -19,7 +19,7 @@ class BipenCommand extends Command {
 			.setFooter(`R.I.P. Bipen 08/2012`)
 			.setColor(0x0);
 	
-		await msg.channel.send({ embeds: [embed] });
+		await this.sendEmbeds(msg.channel, [embed]);
 		return true;
 	}
 }
