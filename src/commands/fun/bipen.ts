@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { BIPEN_IMG_URL } from "../../constants";
-import { Command, CommandCategory } from "../../interfaces/command";
+import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
 
 const cmdConfig: CommandConfig = {
@@ -10,20 +10,18 @@ const cmdConfig: CommandConfig = {
 };
 
 class BipenCommand extends Command {
-	run = run;
+	public async run(msg: Message): Promise<boolean> {
+		const message = "I'm a dragon, Rob! ~ *Bipen*";
+	
+		const embed = new MessageEmbed()
+			.addField("Bipen", message)
+			.setImage(BIPEN_IMG_URL)
+			.setFooter(`R.I.P. Bipen 08/2012`)
+			.setColor(0x0);
+	
+		await msg.channel.send({ embeds: [embed] });
+		return true;
+	}
 }
 
-export default new BipenCommand(config);
-
-async function run(msg: Message, args: string[]): Promise<boolean> {
-	let message = "I'm a dragon, Rob! ~ *Bipen*";
-
-	let embed = new MessageEmbed()
-		.addField("Bipen", message)
-		.setImage(BIPEN_IMG_URL)
-		.setFooter(`R.I.P. Bipen 08/2012`)
-		.setColor(0x0);
-
-	await msg.channel.send({ embeds: [embed] });
-	return true;
-}
+export default new BipenCommand(cmdConfig);

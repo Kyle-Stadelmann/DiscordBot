@@ -1,33 +1,34 @@
+import { joinVoiceChannel } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { Command, CommandCategory } from "../interfaces/command";
+import { Command } from "../../interfaces/command";
+import { CommandConfig } from "../../types/types";
 
-export const cmd: Command = {
+const cmdConfig: CommandConfig = {
 	name: "connect",
 	description: "BD4 Bot connects to the user's voice channel.",
 	usage: "connect",
-	examples: [],
-	allowInDM: false,
-	aliases: [],
-	category: CommandCategory.Utility,
-	disabled: false,
-	cooldownTime: 0.5 * 1000,
-	cooldowns: new Map(),
-	permissions: [],
-	run: run,
 };
 
-async function run(msg: Message, args: string[]): Promise<boolean> {
-	// User's voice channel
-	let voiceChannel = message.member.voice.channel;
+class ConnectCommand extends Command {
+	public async run(msg: Message): Promise<boolean> {
+		// User's voice channel
+		const voiceChannel = msg.member.voice.channel;
 
-	// Error checking
-	if (!voiceChannel || voiceChannel === message.guild.afkChannel) {
-		message.channel.send("You are not connected to a valid voice channel!");
-		return false;
+		if (!voiceChannel || voiceChannel === msg.guild.afkChannel) {
+			msg.channel.send("You are not connected to a valid voice channel!");
+			return false;
+		}
+
+		msg.channel.send(`Connecting to ${voiceChannel.name}`);
+
+		joinVoiceChannel({
+			channelId: voiceChannel.id,
+			guildId: voiceChannel.guildId,
+			adapterCreator: null
+		});
+
+		return true;
 	}
-
-	message.channel.send(`Connecting to ${voiceChannel.name}`);
-	message.member.voice.channel.join();
-
-	return true;
 }
+
+export default new ConnectCommand(cmdConfig);

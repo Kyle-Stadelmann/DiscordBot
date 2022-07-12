@@ -1,6 +1,6 @@
-import { GuildMember, Message, Snowflake } from "discord.js";
-import { CommandConfig } from "../types/types";
 import path from "path";
+import { GuildMember, Message } from "discord.js";
+import { CommandConfig } from "../types/types";
 import { Cooldowns } from "./cooldown";
 
 export enum CommandCategory {
@@ -22,7 +22,7 @@ export abstract class Command {
 
 	private cooldowns: Cooldowns;
 
-	abstract run(msg: Message, args: string[]): Promise<boolean>;
+	public abstract run(msg: Message, args: string[]): Promise<boolean>;
 
 	constructor(options: CommandConfig) {
 		this.name = options.name;
@@ -36,7 +36,7 @@ export abstract class Command {
 		this.permissions = options.permissions ?? [];
 
 		this.cooldowns = new Cooldowns(this.cooldownTime, this.name);
-		this.category = this.getCategoryName();
+		this.category = Command.getCategoryName();
 	}
 
 	public isOnCooldown(member: GuildMember): boolean {
@@ -44,15 +44,15 @@ export abstract class Command {
 	}
 
 	public async putOnCooldown(member: GuildMember) {
-		return await this.cooldowns.putOnCooldown(member);
+		return this.cooldowns.putOnCooldown(member);
 	}
 
 	public async endCooldown(member: GuildMember) {
-		return await this.cooldowns.endCooldown(member);
+		return this.cooldowns.endCooldown(member);
 	}
 
 	// Uses parent directory to return command category enum
-	private getCategoryName(): CommandCategory {
+	private static getCategoryName(): CommandCategory {
 		const parentDirName = path.basename(path.dirname(__filename));
 		const firstLetterUppercase = parentDirName.charAt(0).toUpperCase();
 		const categoryStr = firstLetterUppercase + parentDirName.substring(1);

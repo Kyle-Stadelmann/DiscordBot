@@ -12,5 +12,11 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json'
   },
-  ignorePatterns: ['.eslintrc.js']
+  ignorePatterns: ['.eslintrc.cjs'],
+  rules: {
+    "class-methods-use-this": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
+    "guard-for-in": "off",
+    "import/prefer-default-export": "off"
+  }
 };
