@@ -18,6 +18,7 @@ module.exports = {
     "@typescript-eslint/lines-between-class-members": "off",
     "guard-for-in": "off",
     "import/prefer-default-export": "off",
-    '@typescript-eslint/no-floating-promises': ['warn']
+    '@typescript-eslint/no-floating-promises': ['warn'],
+    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"]
   }
 };

@@ -7,7 +7,7 @@ const cmdConfig: CommandConfig = {
 	description: "Sends pong! for testing purposes.",
 	usage: `ping`,
 	allowInDM: true,
-}
+};
 
 class PingCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
