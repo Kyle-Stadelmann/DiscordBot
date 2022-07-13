@@ -1,8 +1,8 @@
 /* eslint-disable no-await-in-loop */
-import { Collection, Guild, GuildMember, Message, TextBasedChannels, TextChannel, VoiceChannel } from "discord.js";
-import { Command } from "../interfaces/command";
-import { CommandConfig } from "../types/types";
-import { getRandomElement, random, sleep } from "../util";
+import { Collection, Guild, GuildMember, Message, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
+import { Command } from "../../interfaces/command";
+import { CommandConfig } from "../../types/types";
+import { getRandomElement, random, sleep } from "../../util";
 
 const cmdConfig: CommandConfig = {
 	name: "randommove",
@@ -18,33 +18,21 @@ class RandomMoveCommand extends Command {
 		const textChannel = msg.channel;
 		const sender = msg.member;
 	
-		const error = await this.errorCheck(victim, textChannel, sender);
+		const error = await this.errorCheck(victim, textChannel, sender, msg.guild);
 		if (error) return false;
 	
 		await this.sendMessage(textChannel, "Initiating start of randomMove...");
 	
 		const validChannels = this.getValidChannels(msg.guild, victim);
 	
-		let chanceToMove = 100;
-		while (random(chanceToMove)) {
-			// Sleep for 5 minutes
-			await sleep(5 * 60 * 1000);
-	
-			const randomChannel = getRandomElement(validChannels);
-	
-			if (victim.voice.channel == null) {
-				await victim.edit({ channel: randomChannel });
-				await this.sendMessage(textChannel, `${victim} has been banished!`);
-				chanceToMove /= 2;
-			}
-		}
+		await this.performRandomMoves(validChannels, victim, textChannel);
 	
 		await this.sendMessage(textChannel, `Fear not ${victim}, your randomMove has completed.`);
 	
 		return true;
 	}
 
-	private async errorCheck(victim: GuildMember, textChannel: TextBasedChannels, sender: GuildMember) {
+	private async errorCheck(victim: GuildMember, textChannel: TextBasedChannel, sender: GuildMember, guild: Guild) {
 		if (victim == null) {
 			await this.sendErrorMessage(textChannel, "Command was NOT successful, you must specify an admin on the server.");
 			return true;
@@ -57,7 +45,7 @@ class RandomMoveCommand extends Command {
 		}
 	
 		// If sender isnt in a channel
-		if (sender.voice.channel == null || sender.voice.channel === msg.guild.afkChannel) {
+		if (sender.voice.channel == null || sender.voice.channel === guild.afkChannel) {
 			await this.sendErrorMessage(textChannel, "Command was NOT successful, you must be in a non-AFK channel.");
 			return true;
 		}
@@ -73,12 +61,28 @@ class RandomMoveCommand extends Command {
 
 	// Gets all valid channels
 	// (that are voice, another channel than current)
-	private getValidChannels(guild: Guild, victim: GuildMember) {
-		const validChannels = 
-			guild.channels.cache.filter((channel) => 
-					(channel.isVoice() && channel.id !== victim.voice.channel.id));
+	private getValidChannels(guild: Guild, victim: GuildMember): (VoiceChannel | StageChannel)[] {
+		const validChannels = guild.channels.cache.filter((channel) => 
+			(channel.isVoice() && channel.id !== victim.voice.channel.id)) as Collection<string, VoiceChannel | StageChannel>;
 
 		return validChannels.toJSON();
+	}
+
+	// This function will take many minutes to complete
+	private async performRandomMoves(validChannels: (VoiceChannel | StageChannel)[], victim: GuildMember, textChannel: TextBasedChannel) {
+		let chanceToMove = 100;
+		while (random(chanceToMove)) {
+			// Sleep for 5 minutes
+			await sleep(5 * 60 * 1000);
+	
+			const randomChannel = getRandomElement(validChannels);
+	
+			if (victim.voice.channel == null) {
+				await victim.edit({ channel: randomChannel });
+				await this.sendMessage(textChannel, `${victim} has been banished!`);
+				chanceToMove /= 2;
+			}
+		}
 	}
 }
 

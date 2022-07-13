@@ -1,6 +1,6 @@
 // Awaits in loops are critical to the functionality of this command
 /* eslint-disable no-await-in-loop */
-import { Guild, GuildChannel, GuildMember, Message, StageChannel, TextBasedChannels, VoiceChannel } from "discord.js";
+import { Guild, GuildMember, Message, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
 import { sleep } from "../../util/sleep";
@@ -97,7 +97,7 @@ class FlailCommand extends Command {
 		return validChannels as IterableIterator<VoiceChannel | StageChannel>;
 	}
 
-	private async errorCheck(victim: GuildMember, sender: GuildMember, channel: TextBasedChannels): Promise<boolean> {
+	private async errorCheck(victim: GuildMember, sender: GuildMember, channel: TextBasedChannel): Promise<boolean> {
 		if (victim == null) {
 			await this.sendErrorMessage(channel, "Command was NOT successful, you must specify an victim.");
 			return true;
