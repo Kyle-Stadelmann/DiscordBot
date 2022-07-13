@@ -10,7 +10,8 @@ export class Cooldowns {
 		const adapter = new JSONFile(COOLDOWN_JSON_LOC);
 		this.db = new Low(adapter);
 
-		// Sync execution of async function, dangerous but won't cause realistic issues here for the current scope of this bot
+		// Sync execution of async function, but won't cause realistic issues here for the current scope of this bot
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		this.initCooldowns();
 	}
 

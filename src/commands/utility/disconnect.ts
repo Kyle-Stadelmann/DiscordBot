@@ -7,7 +7,7 @@ const cmdConfig: CommandConfig = {
 	name: "disconnect",
 	description: "BD4 Bot disconnects from its current voice channel.",
 	usage: `disconnect`,
-}
+};
 
 class DisconnectCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {

@@ -1,5 +1,5 @@
 import path from "path";
-import { GuildMember, Message, MessageEmbed, TextBasedChannels } from "discord.js";
+import { GuildMember, Message, MessageEmbed, TextBasedChannels, VoiceChannel } from "discord.js";
 import { CommandConfig } from "../types/types";
 import { Cooldowns } from "./cooldown";
 
@@ -61,6 +61,14 @@ export abstract class Command {
 
 	public sendEmbeds(channel: TextBasedChannels, embeds: MessageEmbed[], text?: string): Promise<Message> {
 		return channel.send({embeds, content: text});
+	}
+
+	// Special helper function to absolutely ensure we aren't deleting important channel
+	public async deleteVoiceChannel(channel: VoiceChannel) {
+		// TODO: add additional check against critical channel ids (paranoid about deleting general lol)
+		if (channel.isVoice()) {
+			await channel.delete();
+		}
 	}
 
 	// Uses parent directory to return command category enum

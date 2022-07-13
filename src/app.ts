@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { Client, Intents } from "discord.js";
+import { Client, Collection, Intents } from "discord.js";
 import fs from "fs";
 import { CommandLoader } from "./commands";
 
