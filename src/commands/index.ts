@@ -2,7 +2,7 @@ import { glob } from "glob";
 import { parse } from "path";
 import { Command } from "../interfaces/command";
 import * as settings from "../settings";
-import printSpace from "../util/printSpace";
+import { printSpace } from "../util";
 
 const baseFileName = parse(__filename).base;
 

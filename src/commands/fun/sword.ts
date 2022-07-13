@@ -1,4 +1,4 @@
-import { GuildMember, Message, TextBasedChannels } from "discord.js";
+import { GuildMember, Message, TextBasedChannel } from "discord.js";
 import { BD4_BOT_ID, ZACH_ID } from "../../constants";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
@@ -48,7 +48,7 @@ class SwordCommand extends Command {
 		return true;
 	}
 
-	private async beginSharpening(channel: TextBasedChannels, sender: GuildMember): Promise<boolean> {
+	private async beginSharpening(channel: TextBasedChannel, sender: GuildMember): Promise<boolean> {
 		if (this.sharpeningDate !== null) {
 			await this.sendErrorMessage(channel, "Easy soldier, you are already sharpening your sword.");
 			return false;

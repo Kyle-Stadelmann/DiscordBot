@@ -1,5 +1,5 @@
 import path from "path";
-import { GuildMember, Message, MessageEmbed, TextBasedChannels, VoiceChannel } from "discord.js";
+import { GuildMember, Message, MessageEmbed, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
 import { CommandConfig } from "../types/types";
 import { Cooldowns } from "./cooldown";
 
@@ -51,20 +51,20 @@ export abstract class Command {
 		return this.cooldowns.endCooldown(member);
 	}
 
-	public sendErrorMessage(channel: TextBasedChannels, msg: string): Promise<Message> {
+	public sendErrorMessage(channel: TextBasedChannel, msg: string): Promise<Message> {
 		return channel.send(msg);
 	}
 
-	public sendMessage(channel: TextBasedChannels, msg: string): Promise<Message> {
+	public sendMessage(channel: TextBasedChannel, msg: string): Promise<Message> {
 		return channel.send(msg);
 	}
 
-	public sendEmbeds(channel: TextBasedChannels, embeds: MessageEmbed[], text?: string): Promise<Message> {
+	public sendEmbeds(channel: TextBasedChannel, embeds: MessageEmbed[], text?: string): Promise<Message> {
 		return channel.send({embeds, content: text});
 	}
 
 	// Special helper function to absolutely ensure we aren't deleting important channel
-	public async deleteVoiceChannel(channel: VoiceChannel) {
+	public async deleteVoiceChannel(channel: VoiceChannel | StageChannel) {
 		// TODO: add additional check against critical channel ids (paranoid about deleting general lol)
 		if (channel.isVoice()) {
 			await channel.delete();
