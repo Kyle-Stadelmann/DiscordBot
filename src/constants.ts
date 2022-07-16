@@ -1,5 +1,6 @@
+import * as path from 'path';
+
 const { Collection } = require("discord.js");
-const path = require("path");
 
 // Cooldowns are measured in ms
 const cooldownColl = new Collection();
@@ -30,5 +31,6 @@ export const QUESTION_MARK_URL =
 export const SUNGLASSES = "😎";
 export const KHANG_NEKO_EMOJI = "cat_thonk";
 // TODO: Standardize paths
+export const SRC_DIR = path.resolve(`${__dirname}`);
 export const COOLDOWN_JSON_LOC = path.resolve(`${__dirname}/../database/cooldowns.json`);
 export const TYPE_SPEED_RESET_TIME = 30 * 1000;
