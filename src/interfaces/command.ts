@@ -1,7 +1,7 @@
 import path from "path";
 import { GuildMember, Message, MessageEmbed, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
 import { CommandConfig } from "../types/types";
-import { Cooldowns } from "./cooldown";
+import { CooldownContainer } from "../containers/cooldown_container";
 
 export enum CommandCategory {
 	Fun,
@@ -20,7 +20,7 @@ export abstract class Command {
 	public permissions: any[]; // TODO: Expand on this
 	public category: CommandCategory;
 
-	private cooldowns: Cooldowns;
+	private cooldowns: CooldownContainer;
 
 	public abstract run(msg: Message, args: string[]): Promise<boolean>;
 
@@ -35,7 +35,7 @@ export abstract class Command {
 		this.cooldownTime = options.cooldownTime ?? 0.5 * 1000;
 		this.permissions = options.permissions ?? [];
 
-		this.cooldowns = new Cooldowns(this.cooldownTime, this.name);
+		this.cooldowns = new CooldownContainer(this.cooldownTime, this.name);
 		this.category = Command.getCategoryName();
 	}
 

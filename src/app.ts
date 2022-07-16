@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { Client, Collection, Intents } from "discord.js";
 import fs from "fs";
-import { CommandLoader } from "./commands";
+import { CommandContainer } from "./commands";
 
 // Import .env file variables (for BOT_TOKEN)
 require("dotenv").config({ path: `${__dirname}/.env` });
@@ -16,8 +16,7 @@ const bot = new Client({
 // TODO: TS migration
 const banana: any = {};
 
-const commandLoader = new CommandLoader();
-banana.commands = commandLoader.loadCommandMap();
+banana.commands = new CommandContainer().loadCommandMap();
 banana.cooldowns = new Collection();
 banana.events = new Collection();
 banana.schedules = new Collection();

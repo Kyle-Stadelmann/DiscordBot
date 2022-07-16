@@ -2,7 +2,7 @@ import { GuildMember, Snowflake } from "discord.js";
 import { Low, JSONFile } from "lowdb";
 import { COOLDOWN_JSON_LOC } from "../constants";
 
-export class Cooldowns {
+export class CooldownContainer {
 	private cooldowns: Map<Snowflake, Date> = new Map();
 	private db: Low;
 
@@ -31,12 +31,14 @@ export class Cooldowns {
 
 		this.cooldowns.set(member.id, endCooldownDate);
 
+		// TODO: Maybe remove the await on this (doubt it will slow command handling realistically though)
 		await this.updateDb();
 	}
 
 	public async endCooldown(member: GuildMember) {
 		this.cooldowns.delete(member.id);
 
+		// TODO: Maybe remove the await on this (doubt it will slow command handling realistically though)
 		await this.updateDb();
 	}
 

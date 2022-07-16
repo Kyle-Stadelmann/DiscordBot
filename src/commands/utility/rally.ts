@@ -1,6 +1,6 @@
 import { Collection, Message, StageChannel, VoiceChannel } from "discord.js";
-import { Command } from "../interfaces/command";
-import { CommandConfig } from "../types/types";
+import { Command } from "../../interfaces/command";
+import { CommandConfig } from "../../types/types";
 
 const cmdConfig: CommandConfig = {
 	name: "rally",
