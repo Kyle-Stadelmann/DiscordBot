@@ -1,8 +1,8 @@
 import { Message, MessageEmbed } from "discord.js";
-import { bdbot } from "../../app";
-import { PREFIX } from "../../constants";
-import { Command, CommandConfig } from "../../types/command";
-import { sendEmbeds } from "../../util";
+import { bdbot } from "../../app.js";
+import { PREFIX } from "../../constants.js";
+import { Command, CommandConfig } from "../../types/command.js";
+import { sendEmbeds } from "../../util/message_channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "help",
@@ -16,7 +16,7 @@ class HelpCommand extends Command {
 		let cmds = bdbot.commandContainer.commands;
 
 		if (msg.channel.type === "DM") {
-			cmds = cmds.filter(cmd => cmd.allowInDM);
+			cmds = cmds.filter((cmd) => cmd.allowInDM);
 		}
 
 		let cmdStr = "";

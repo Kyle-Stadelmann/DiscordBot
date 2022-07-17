@@ -1,7 +1,7 @@
 import { getVoiceConnection } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { Command, CommandConfig } from "../../types/command";
-import { sendErrorMessage, sendMessage } from "../../util";
+import { Command, CommandConfig } from "../../types/command.js";
+import { sendErrorMessage, sendMessage } from "../../util/message_channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "disconnect",

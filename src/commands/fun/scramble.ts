@@ -1,6 +1,7 @@
 import { Guild, Message, StageChannel, VoiceChannel } from "discord.js";
-import { Command, CommandConfig } from "../../types/command";
-import { getRandomElement, sendErrorMessage, sendMessage } from "../../util";
+import { CommandConfig, Command } from "../../types/command.js";
+import { sendErrorMessage, sendMessage } from "../../util/message_channel.js";
+import { getRandomElement } from "../../util/random.js";
 
 const cmdConfig: CommandConfig = {
 	name: "scramble",

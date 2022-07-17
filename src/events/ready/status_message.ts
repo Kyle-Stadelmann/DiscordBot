@@ -1,6 +1,8 @@
 import { Discord, On } from "discordx";
 import { client } from "../../app";
-import { getRandomElement, printSpace, sleep } from "../../util";
+import { printSpace } from "../../util/print_space.js";
+import { getRandomElement } from "../../util/random.js";
+import { sleep } from "../../util/sleep.js";
 
 const STATUS_ROTATION_TIME = 5 * 60 * 1000;
 

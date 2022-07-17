@@ -1,8 +1,8 @@
 import { Message } from "discord.js";
 import { Discord, On } from "discordx";
-import { client } from "../../app";
-import { KHANG_NEKO_EMOJI_ID, KHANG_ID } from "../../constants";
-import { random } from "../../util";
+import { client } from "../../app.js";
+import { KHANG_ID, KHANG_NEKO_EMOJI_ID } from "../../constants.js";
+import { random } from "../../util/random.js";
 
 const KHANG_NEKO_CHANCE = 5;
 

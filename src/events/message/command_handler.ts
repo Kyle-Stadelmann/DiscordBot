@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { Discord, On } from "discordx";
-import { bdbot } from "../../app";
-import { PREFIX } from "../../constants";
+import { bdbot } from "../../app.js";
+import { PREFIX } from "../../constants.js";
 
 // From GAwesomeBot's parser
 function parseArgs(content: string, delim: string = " "): string[] {

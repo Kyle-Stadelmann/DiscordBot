@@ -1,7 +1,7 @@
 import { VoiceState } from "discord.js";
 import { Discord, On } from "discordx";
 import { ASIAN_KYLE_ID } from "../../constants";
-import { random } from "../../util";
+import { random } from "../../util/random.js";
 
 const MUTE_ASIAN_KYLE_CHANCE = 0.1;
 

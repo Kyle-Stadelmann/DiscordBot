@@ -1,6 +1,6 @@
 import path from "path";
 import { GuildMember, Message } from "discord.js";
-import { CooldownContainer } from "./containers/cooldown_container";
+import { CooldownContainer } from "./containers/cooldown_container.js";
 
 export enum CommandCategory {
 	Fun,

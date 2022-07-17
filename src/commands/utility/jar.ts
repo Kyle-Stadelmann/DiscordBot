@@ -1,4 +1,4 @@
-import { Command, CommandConfig } from "../../types/command";
+import { CommandConfig, Command } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
 	name: "jar",

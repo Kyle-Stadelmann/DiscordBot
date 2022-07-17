@@ -1,7 +1,7 @@
 import { Typing } from "discord.js";
 import { Discord, On } from "discordx";
-import { bdbot } from "../../app";
-import { TYPE_SPEED_RESET_TIME } from "../../constants";
+import { bdbot } from "../../app.js";
+import { TYPE_SPEED_RESET_TIME } from "../../constants.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

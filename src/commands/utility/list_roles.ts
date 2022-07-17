@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
-import { Command, CommandConfig } from "../../types/command";
-import { sendEmbeds } from "../../util";
+import { CommandConfig, Command } from "../../types/command.js";
+import { sendEmbeds } from "../../util/message_channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "listroles",
