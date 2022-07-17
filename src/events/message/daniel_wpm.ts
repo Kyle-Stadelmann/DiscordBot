@@ -17,6 +17,10 @@ export function danielWPMChanceFunction(numWords: number): number {
 	return chance;
 }
 
+export function countWords(str: string) {
+	return str ? str.trim().split(/\s+/).length : 0;
+}
+
 // Calculates words per minutes (in seconds)
 function wordsPerMinute(wpm, numWords) {
 	return (numWords / wpm) * 60;
@@ -32,7 +36,7 @@ abstract class DanielWPM {
 		// ignore commands for this event
 		if (msg.content.startsWith(PREFIX)) return;
 
-		const numWords = msg.content.split(" ").length;
+		const numWords = countWords(msg.content);
 		if (danielWPMChanceFunction(numWords)) {
 			await sendMessage(
 				msg.channel,

@@ -2,11 +2,7 @@ import { Message } from "discord.js";
 import { Discord, On } from "discordx";
 import { bdbot } from "../../app";
 import { random, sendMessage, printSpace } from "../../util";
-import { danielWPMChanceFunction } from "./daniel_wpm";
-
-function countWords(str) {
-	return str ? str.trim().split(/\s+/).length : 0;
-}
+import { countWords, danielWPMChanceFunction } from "./daniel_wpm";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,16 +1,17 @@
 import { Message, MessageEmbed } from "discord.js";
 import path from "path";
 import fg from "fast-glob";
-import { PREFIX, SRC_DIR } from "../constants";
-import { Command } from "../interfaces/command";
-import { isDevMode, printSpace, sendEmbeds, sendErrorMessage } from "../util";
+import { PREFIX, SRC_DIR } from "../../constants";
+import { Command } from "../command";
+import { isDevMode, printSpace, sendEmbeds, sendErrorMessage } from "../../util";
 
 const commandsDir = path.join(`${SRC_DIR}`, "commands");
 
 export class CommandContainer {
 	public commands: Map<string, Command> = new Map();
 	constructor() {
-		this.loadCommandMap();
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		this.loadCommandMap().catch(console.error);
 	}
 
 	private async loadCommandFile(file: string) {

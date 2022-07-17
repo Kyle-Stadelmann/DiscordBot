@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { Collection, Guild, GuildMember, Message, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
-import { Command } from "../../interfaces/command";
-import { CommandConfig } from "../../types/types";
+import { Command, CommandConfig } from "../../types/command";
 import { getRandomElement, random, sendErrorMessage, sendMessage, sleep } from "../../util";
 
 const cmdConfig: CommandConfig = {

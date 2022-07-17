@@ -1,6 +1,5 @@
 import { Message, Role } from "discord.js";
-import { Command } from "../../interfaces/command";
-import { CommandConfig } from "../../types/types";
+import { Command, CommandConfig } from "../../types/command";
 import { sendErrorMessage, sendMessage } from "../../util";
 
 const cmdConfig: CommandConfig = {
