@@ -1,6 +1,6 @@
 {
   "name": "bd4discordbot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "BD4 Discord Bot",
   "main": "app.js",
   "scripts": {

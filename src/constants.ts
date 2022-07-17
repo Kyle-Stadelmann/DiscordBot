@@ -20,3 +20,4 @@ export const KHANG_NEKO_EMOJI_ID = "cat_thonk";
 export const SRC_DIR = path.resolve(`${__dirname}`);
 export const COOLDOWN_JSON_LOC = path.resolve(`${__dirname}/../database/cooldowns.json`);
 export const TYPE_SPEED_RESET_TIME = 30 * 1000;
+export const TYPESCRIPT_URL = "https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
