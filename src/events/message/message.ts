@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
+import { Discord, On } from "discordx";
 import { bdbot } from "../../app";
 import { PREFIX } from "../../constants";
-import { isDevMode, reInitBot, runEventLibs } from "../../util";
 
 // From GAwesomeBot's parser
 function parseArgs(content: string, delim: string = " "): string[] {
@@ -50,19 +50,19 @@ async function processCmd(msg: Message) {
 	}
 }
 
-// Listener event: runs whenever a message is received
-export default async (msg: Message) => {
-	// If message comes from a bot, don't perform any of the below events
-	// (to stop bd4 bot from triggering other bots events)
-	if (msg.author.bot) {
-		return;
-	}
+@Discord()
+abstract class CommandHandler {
+	@On("message")
+	private async handleCommand(msg: Message) {
+		// If message comes from a bot, don't perform any of the below events
+		// (to stop bd4 bot from triggering other bots events)
+		if (msg.author.bot) {
+			return;
+		}
 
-	// Command processing, check if message is a command
-	if (msg.content.indexOf(PREFIX) === 0) {
-		await processCmd(msg);
+		// Command processing, check if message is a command
+		if (msg.content.indexOf(PREFIX) === 0) {
+			await processCmd(msg);
+		}
 	}
-
-	// Run all the event libs (epic, khang_neko, zach_zacc, etc.)
-	runEventLibs(bot, "message", [msg]);
-};
+}

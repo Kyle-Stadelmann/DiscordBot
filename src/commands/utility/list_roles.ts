@@ -1,6 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
+import { sendEmbeds } from "../../util";
 
 const cmdConfig: CommandConfig = {
 	name: "listroles",
@@ -47,7 +48,7 @@ class ListRolesCommand extends Command {
 			.setThumbnail(msg.guild.iconURL())
 			.setColor(0x0);
 	
-		await this.sendEmbeds(msg.channel, [roleInfo]);
+		await sendEmbeds(msg.channel, [roleInfo]);
 	
 		return true;
 	}
