@@ -2,7 +2,7 @@
 import { Collection, Guild, GuildMember, Message, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
-import { getRandomElement, random, sleep } from "../../util";
+import { getRandomElement, random, sendErrorMessage, sendMessage, sleep } from "../../util";
 
 const cmdConfig: CommandConfig = {
 	name: "randommove",
@@ -10,6 +10,7 @@ const cmdConfig: CommandConfig = {
 		"Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time.",
 	usage: `randomMove @admin`,
 	examples: ["randomMove @Dualkim"],
+	cooldownTime: 10 * 60 * 1000
 };
 
 class RandomMoveCommand extends Command {
@@ -21,38 +22,38 @@ class RandomMoveCommand extends Command {
 		const error = await this.errorCheck(victim, textChannel, sender, msg.guild);
 		if (error) return false;
 	
-		await this.sendMessage(textChannel, "Initiating start of randomMove...");
+		await sendMessage(textChannel, "Initiating start of randomMove...");
 	
 		const validChannels = this.getValidChannels(msg.guild, victim);
 	
 		await this.performRandomMoves(validChannels, victim, textChannel);
 	
-		await this.sendMessage(textChannel, `Fear not ${victim}, your randomMove has completed.`);
+		await sendMessage(textChannel, `Fear not ${victim}, your randomMove has completed.`);
 	
 		return true;
 	}
 
 	private async errorCheck(victim: GuildMember, textChannel: TextBasedChannel, sender: GuildMember, guild: Guild) {
 		if (victim == null) {
-			await this.sendErrorMessage(textChannel, "Command was NOT successful, you must specify an admin on the server.");
+			await sendErrorMessage(textChannel, "Command was NOT successful, you must specify an admin on the server.");
 			return true;
 		}
 	
 		// If sender or victim isn't an admin, ignore this event
 		if (!sender.permissions.has("ADMINISTRATOR") || !victim.permissions.has("ADMINISTRATOR")) {
-			await this.sendErrorMessage(textChannel, "Command was NOT successful, you or your victim are not an admin.");
+			await sendErrorMessage(textChannel, "Command was NOT successful, you or your victim are not an admin.");
 			return true;
 		}
 	
 		// If sender isnt in a channel
 		if (sender.voice.channel == null || sender.voice.channel === guild.afkChannel) {
-			await this.sendErrorMessage(textChannel, "Command was NOT successful, you must be in a non-AFK channel.");
+			await sendErrorMessage(textChannel, "Command was NOT successful, you must be in a non-AFK channel.");
 			return true;
 		}
 	
 		// Test if victim is in a channel or not
 		if (victim.voice.channel == null) {
-			await this.sendErrorMessage(textChannel, "Command was NOT successful, your victim isn't in a channel.");
+			await sendErrorMessage(textChannel, "Command was NOT successful, your victim isn't in a channel.");
 			return true;
 		}
 
@@ -79,7 +80,7 @@ class RandomMoveCommand extends Command {
 	
 			if (victim.voice.channel == null) {
 				await victim.edit({ channel: randomChannel });
-				await this.sendMessage(textChannel, `${victim} has been banished!`);
+				await sendMessage(textChannel, `${victim} has been banished!`);
 				chanceToMove /= 2;
 			}
 		}

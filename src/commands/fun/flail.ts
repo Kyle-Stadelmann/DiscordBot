@@ -3,7 +3,7 @@
 import { Guild, GuildMember, Message, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
-import { sleep } from "../../util/sleep";
+import { deleteVoiceChannel, sendErrorMessage, sleep } from "../../util";
 
 const NUM_CHANNELS_FLAILED = 10;
 
@@ -11,6 +11,7 @@ const cmdConfig: CommandConfig = {
 	name: "flail",
 	description: "Brigitte lends you her flail to hit your target a large amount of channels down",
 	usage: `flail @user`,
+	cooldownTime: 60 * 60 * 1000
 };
 
 class FlailCommand extends Command {
@@ -41,7 +42,7 @@ class FlailCommand extends Command {
 		if (tempChannels.includes(victimChannel) && originalChannel.isVoice()) {
 			await victim.voice.setChannel(originalChannel);
 		}
-		tempChannels.forEach((channel) => this.deleteVoiceChannel(channel));
+		tempChannels.forEach((channel) => deleteVoiceChannel(channel));
 	}
 
 	private async flail(voiceChannels: IterableIterator<VoiceChannel | StageChannel>, victim: GuildMember, guild: Guild): Promise<VoiceChannel[]> {
@@ -99,19 +100,19 @@ class FlailCommand extends Command {
 
 	private async errorCheck(victim: GuildMember, sender: GuildMember, channel: TextBasedChannel): Promise<boolean> {
 		if (victim == null) {
-			await this.sendErrorMessage(channel, "Command was NOT successful, you must specify an victim.");
+			await sendErrorMessage(channel, "Command was NOT successful, you must specify an victim.");
 			return true;
 		}
 	
 		const permissions = sender.permissionsIn(sender.voice.channel);
 		// If sender isn't an admin, ignore this event
 		if (!permissions.has("ADMINISTRATOR")) {
-			await this.sendErrorMessage(channel, "Command was NOT successful, Brigitte only lends her flail to admins.");
+			await sendErrorMessage(channel, "Command was NOT successful, Brigitte only lends her flail to admins.");
 			return true;
 		}
 	
 		if (sender.voice.channel == null || sender.voice.channelId !== victim.voice.channelId) {
-			await this.sendErrorMessage(
+			await sendErrorMessage(
 				channel, "Command was NOT successful, your target isn't close enough (not in the same voice channel as you)"
 			);
 			return true;

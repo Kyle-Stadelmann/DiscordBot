@@ -2,6 +2,7 @@ import { getVoiceConnection } from "@discordjs/voice";
 import { Message } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
+import { sendErrorMessage, sendMessage } from "../../util";
 
 const cmdConfig: CommandConfig = {
 	name: "disconnect",
@@ -15,7 +16,7 @@ class DisconnectCommand extends Command {
 		const textChannel = msg.channel;
 
 		if (!connection) {
-			await this.sendErrorMessage(
+			await sendErrorMessage(
 				textChannel, "I am not currently connected to a voice channel!"
 			);
 			return false;
@@ -23,7 +24,7 @@ class DisconnectCommand extends Command {
 
 		connection.destroy();
 
-		await this.sendMessage(textChannel, "Successfully disconnected!");
+		await sendMessage(textChannel, "Successfully disconnected!");
 
 		return true;
 	}

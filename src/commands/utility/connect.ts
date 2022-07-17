@@ -2,6 +2,7 @@ import { joinVoiceChannel } from "@discordjs/voice";
 import { Message } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
+import { sendErrorMessage, sendMessage } from "../../util";
 
 const cmdConfig: CommandConfig = {
 	name: "connect",
@@ -16,13 +17,13 @@ class ConnectCommand extends Command {
 		const textChannel = msg.channel;
 
 		if (!voiceChannel || voiceChannel === msg.guild.afkChannel) {
-			await this.sendErrorMessage(
+			await sendErrorMessage(
 				textChannel, "You are not connected to a valid voice channel!"
 			);
 			return false;
 		}
 
-		await this.sendMessage(
+		await sendMessage(
 			textChannel, `Connecting to ${voiceChannel.name}`
 		);
 

@@ -1,6 +1,7 @@
 import { Collection, Message, StageChannel, VoiceChannel } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
+import { sendErrorMessage, sendMessage } from "../../util";
 
 const cmdConfig: CommandConfig = {
 	name: "rally",
@@ -15,7 +16,7 @@ class RallyCommand extends Command {
 
 		// Confirm that user called from a voice channel
 		if (!voiceChannel) {
-			await this.sendErrorMessage(textChannel, "Rally failed because you are not in a valid voice channel! Brigitte would be sad...");
+			await sendErrorMessage(textChannel, "Rally failed because you are not in a valid voice channel! Brigitte would be sad...");
 			return false;
 		}
 
@@ -35,7 +36,7 @@ class RallyCommand extends Command {
 
 		// Check if called from valid voice channel
 		if (voiceChannel === msg.guild.afkChannel || (!publicChannel && !pullToHidden)) {
-			await this.sendErrorMessage(textChannel, "Rally failed because you are not in a valid voice channel! Brigitte would be sad...");
+			await sendErrorMessage(textChannel, "Rally failed because you are not in a valid voice channel! Brigitte would be sad...");
 			return false;
 		}
 
@@ -54,7 +55,7 @@ class RallyCommand extends Command {
 
 		// Check for a valid channel
 		if (validChannels.size <= 0) {
-			await this.sendErrorMessage(textChannel, "Rally failed because there are no valid voice channels.");
+			await sendErrorMessage(textChannel, "Rally failed because there are no valid voice channels.");
 			return false;
 		}
 
@@ -66,13 +67,13 @@ class RallyCommand extends Command {
 			}));
 
 		if (areValidMembers) {
-			await this.sendErrorMessage(textChannel, "Rally failed because there are no users to Rally with. Nice solo ult...");
+			await sendErrorMessage(textChannel, "Rally failed because there are no users to Rally with. Nice solo ult...");
 			return false;
 		}
 
 		// Don't broadcast if target channel is hidden
 		if (!pullToHidden) {
-			await this.sendMessage(textChannel, `Initiating rally on ${voiceChannel.name}.`);
+			await sendMessage(textChannel, `Initiating rally on ${voiceChannel.name}.`);
 		}
 
 		// Move all valid users to caller's voice channel
@@ -90,7 +91,7 @@ class RallyCommand extends Command {
 		});
 
 		// yay
-		await this.sendMessage(textChannel, "Rally completed!");
+		await sendMessage(textChannel, "Rally completed!");
 
 		return true;
 	}

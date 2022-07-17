@@ -2,6 +2,7 @@ import { GuildMember, Message, TextBasedChannel } from "discord.js";
 import { BD4_BOT_ID, ZACH_ID } from "../../constants";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
+import { sendErrorMessage, sendMessage } from "../../util";
 
 const MIN_SHARPEN_TIME = 30 * 60 * 1000;
 
@@ -12,6 +13,7 @@ const cmdConfig: CommandConfig = {
 	usage: `sword @victim`,
 	examples: ["sword @Dualkim"],
 	disabled: true,
+	cooldownTime: 7 * 24 * 60 * 60 * 1000
 };
 
 class SwordCommand extends Command {
@@ -26,7 +28,7 @@ class SwordCommand extends Command {
 		const date = new Date();
 	
 		if (sender.id !== ZACH_ID) {
-			await this.sendErrorMessage(channel, "Alas, only zach can sharpen his sword.");
+			await sendErrorMessage(channel, "Alas, only zach can sharpen his sword.");
 			return false;
 		}
 	
@@ -36,12 +38,12 @@ class SwordCommand extends Command {
 	
 		// Make sure he sharpened for enough time
 		if (this.sharpeningDate == null || this.sharpeningDate.getTime() + MIN_SHARPEN_TIME > date.getTime()) {
-			await this.sendErrorMessage(channel, "Remain patient soldier, your sword is too dull!");
+			await sendErrorMessage(channel, "Remain patient soldier, your sword is too dull!");
 			return false;
 		}
 	
 		if (!victim.kickable || victim.id === BD4_BOT_ID) {
-			await this.sendErrorMessage(channel, "You decided against it, you fear your victim's strength completely eclipses yours.");
+			await sendErrorMessage(channel, "You decided against it, you fear your victim's strength completely eclipses yours.");
 			return false;
 		}
 	
@@ -50,11 +52,11 @@ class SwordCommand extends Command {
 
 	private async beginSharpening(channel: TextBasedChannel, sender: GuildMember): Promise<boolean> {
 		if (this.sharpeningDate !== null) {
-			await this.sendErrorMessage(channel, "Easy soldier, you are already sharpening your sword.");
+			await sendErrorMessage(channel, "Easy soldier, you are already sharpening your sword.");
 			return false;
 		}
 
-		await this.sendMessage(channel, "You have begun sharpening your dull sword.");
+		await sendMessage(channel, "You have begun sharpening your dull sword.");
 		// Force end zach's cooldown so he can slay someone eventually
 		await this.endCooldown(sender);
 

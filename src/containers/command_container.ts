@@ -3,7 +3,7 @@ import path from "path";
 import fg from "fast-glob";
 import { PREFIX, SRC_DIR } from "../constants";
 import { Command } from "../interfaces/command";
-import { isDevMode, printSpace } from "../util";
+import { isDevMode, printSpace, sendEmbeds, sendErrorMessage } from "../util";
 
 const commandsDir = path.join(`${SRC_DIR}`, "commands");
 
@@ -50,7 +50,7 @@ export class CommandContainer {
         
         if (cmd.isOnCooldown(member)) {
 		    console.log("Command was NOT successful, member is on cooldown.");
-            await cmd.sendErrorMessage(channel, "Command was NOT successful, you are on cooldown for this command.");
+            await sendErrorMessage(channel, "Command was NOT successful, you are on cooldown for this command.");
             printSpace();
             return false;
         }
@@ -83,7 +83,7 @@ export class CommandContainer {
             helpStr.addField("Examples", examplesStr);
         }
 
-        await cmd.sendEmbeds(msg.channel, [helpStr ]);
+        await sendEmbeds(msg.channel, [helpStr ]);
         console.log("Help was successful.");
         printSpace();
     }

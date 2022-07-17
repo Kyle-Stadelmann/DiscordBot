@@ -3,6 +3,7 @@ import { bdbot } from "../../app";
 import { PREFIX } from "../../constants";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
+import { sendEmbeds } from "../../util";
 
 const cmdConfig: CommandConfig = {
 	name: "help",
@@ -25,7 +26,7 @@ class HelpCommand extends Command {
 			.setFooter(`Use '${PREFIX}commandName help' to recieve instructions on how to use any command.`)
 			.setColor(0x0);
 	
-		await this.sendEmbeds(msg.channel, [roleInfo]);
+		await sendEmbeds(msg.channel, [roleInfo]);
 		
 		return true;
 	}

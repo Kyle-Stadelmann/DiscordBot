@@ -2,6 +2,7 @@ import { Message, MessageEmbed } from "discord.js";
 import { BIPEN_IMG_URL } from "../../constants";
 import { Command } from "../../interfaces/command";
 import { CommandConfig } from "../../types/types";
+import { sendEmbeds } from "../../util";
 
 const cmdConfig: CommandConfig = {
 	name: "bipen",
@@ -19,7 +20,7 @@ class BipenCommand extends Command {
 			.setFooter(`R.I.P. Bipen 08/2012`)
 			.setColor(0x0);
 	
-		await this.sendEmbeds(msg.channel, [embed]);
+		await sendEmbeds(msg.channel, [embed]);
 		return true;
 	}
 }
