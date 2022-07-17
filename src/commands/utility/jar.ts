@@ -3,8 +3,7 @@ import { CommandConfig } from "../../types/types";
 
 const cmdConfig: CommandConfig = {
 	name: "jar",
-	description:
-		"Create a jar based on a certain topic. Users can then add entires and pull a random entry.",
+	description: "Create a jar based on a certain topic. Users can then add entires and pull a random entry.",
 	usage: `jar [Action] [Category]`,
 	// extras: {
 	// 	Subcommands: [],
@@ -17,7 +16,7 @@ const cmdConfig: CommandConfig = {
 		`jar list "BD4 movies"`,
 	],
 	allowInDM: true,
-	disabled: true
+	disabled: true,
 };
 
 class JarCommand extends Command {

@@ -11,7 +11,7 @@ export function danielWPMChanceFunction(numWords: number): number {
 	if (numWords < MIN_WORDS) return 0;
 
 	// Chance equation (exponential)
-	let chance = (numWords ** 1.7) * 0.1;
+	let chance = numWords ** 1.7 * 0.1;
 	if (chance > MAX_CHANCE) chance = MAX_CHANCE;
 
 	return chance;
@@ -34,11 +34,13 @@ abstract class DanielWPM {
 
 		const numWords = msg.content.split(" ").length;
 		if (danielWPMChanceFunction(numWords)) {
-			await sendMessage(msg.channel, `It took Daniel approximately ${ 
-				wordsPerMinute(DANIEL_WPM, numWords) 
-				} seconds to type that assuming he types at ${ 
-				DANIEL_WPM 
-				} words per minute.`);
+			await sendMessage(
+				msg.channel,
+				`It took Daniel approximately ${wordsPerMinute(
+					DANIEL_WPM,
+					numWords
+				)} seconds to type that assuming he types at ${DANIEL_WPM} words per minute.`
+			);
 		}
 	}
 }

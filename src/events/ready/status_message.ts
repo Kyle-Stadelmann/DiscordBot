@@ -24,13 +24,12 @@ abstract class StatusMessage {
 	private async handleStatusRotation() {
 		console.log("Bot starting up...");
 		printSpace();
-	
+
 		while (true) {
 			const randomStatus = getRandomElement(statuses);
-			client.user.setActivity({name: randomStatus});
+			client.user.setActivity({ name: randomStatus });
 			// eslint-disable-next-line no-await-in-loop
 			await sleep(STATUS_ROTATION_TIME);
 		}
 	}
 }
-

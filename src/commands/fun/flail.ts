@@ -11,14 +11,14 @@ const cmdConfig: CommandConfig = {
 	name: "flail",
 	description: "Brigitte lends you her flail to hit your target a large amount of channels down",
 	usage: `flail @user`,
-	cooldownTime: 60 * 60 * 1000
+	cooldownTime: 60 * 60 * 1000,
 };
 
 class FlailCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const victim = msg.mentions.members.first();
-		const {guild} = msg;
-		
+		const { guild } = msg;
+
 		const error = await this.errorCheck(victim, msg.member, msg.channel);
 		if (error) return false;
 
@@ -28,16 +28,20 @@ class FlailCommand extends Command {
 
 		// Perform flail, gather temp channels to be deleted
 		const tempChannels = await this.flail(voiceChannels, victim, guild);
-	
+
 		// Some time for everyone to comprehend what happened to this poor soul
 		await sleep(20000);
-	
+
 		await this.cleanup(victim, tempChannels, originalChannel);
 
 		return true;
 	}
 
-	private async cleanup(victim: GuildMember, tempChannels: (VoiceChannel | StageChannel)[], originalChannel: VoiceChannel | StageChannel) {
+	private async cleanup(
+		victim: GuildMember,
+		tempChannels: (VoiceChannel | StageChannel)[],
+		originalChannel: VoiceChannel | StageChannel
+	) {
 		const victimChannel = victim.voice.channel;
 		if (tempChannels.includes(victimChannel) && originalChannel.isVoice()) {
 			await victim.voice.setChannel(originalChannel);
@@ -45,27 +49,31 @@ class FlailCommand extends Command {
 		tempChannels.forEach((channel) => deleteVoiceChannel(channel));
 	}
 
-	private async flail(voiceChannels: IterableIterator<VoiceChannel | StageChannel>, victim: GuildMember, guild: Guild): Promise<VoiceChannel[]> {
+	private async flail(
+		voiceChannels: IterableIterator<VoiceChannel | StageChannel>,
+		victim: GuildMember,
+		guild: Guild
+	): Promise<VoiceChannel[]> {
 		const tempChannels: VoiceChannel[] = [];
 
-		for (let i = 0; i < NUM_CHANNELS_FLAILED; i+=1) {
+		for (let i = 0; i < NUM_CHANNELS_FLAILED; i += 1) {
 			// Next channel to move victim to is the next available channel below current one in guild
 			const nextIterator = voiceChannels.next();
 			let nextChannel = nextIterator.value;
-	
+
 			const victimChannel = victim.voice.channel;
 			// Check to make sure victim hasn't left channel while moving was happening
 			if (victimChannel === null) break;
 
 			// If there are no available channels, create a new temp one
 			if (nextIterator.done) {
-				nextChannel = await guild.channels.create(
-					"rekt", 
-					{ type: "GUILD_VOICE", position: victimChannel.position + 1 }
-				);
+				nextChannel = await guild.channels.create("rekt", {
+					type: "GUILD_VOICE",
+					position: victimChannel.position + 1,
+				});
 				tempChannels.push(nextChannel);
 			}
-	
+
 			try {
 				if (victim.voice.channel === null) break;
 				await victim.voice.setChannel(nextChannel);
@@ -82,18 +90,22 @@ class FlailCommand extends Command {
 	private getValidVoiceChannels(guild: Guild, victim: GuildMember): IterableIterator<VoiceChannel | StageChannel> {
 		const currPos = victim.voice.channel.position;
 
-		const validChannels = guild.channels.cache.filter((channel) => {
-			if (!channel.isVoice()) return false;
-			if (guild.afkChannel === channel) return false;
+		const validChannels = guild.channels.cache
+			.filter((channel) => {
+				if (!channel.isVoice()) return false;
+				if (guild.afkChannel === channel) return false;
 
-			const everyonePermissions = guild.roles.everyone.permissionsIn(channel);
-			const visibleToAll = everyonePermissions.has("VIEW_CHANNEL");
+				const everyonePermissions = guild.roles.everyone.permissionsIn(channel);
+				const visibleToAll = everyonePermissions.has("VIEW_CHANNEL");
 
-			// Only capture visible, higher position channels
-			return channel.position > currPos && visibleToAll;
-		})
-		.sort((ch1, ch2) => (ch1 as VoiceChannel | StageChannel).position - (ch2 as VoiceChannel | StageChannel).position)
-		.values();
+				// Only capture visible, higher position channels
+				return channel.position > currPos && visibleToAll;
+			})
+			.sort(
+				(ch1, ch2) =>
+					(ch1 as VoiceChannel | StageChannel).position - (ch2 as VoiceChannel | StageChannel).position
+			)
+			.values();
 
 		return validChannels as IterableIterator<VoiceChannel | StageChannel>;
 	}
@@ -103,17 +115,18 @@ class FlailCommand extends Command {
 			await sendErrorMessage(channel, "Command was NOT successful, you must specify an victim.");
 			return true;
 		}
-	
+
 		const permissions = sender.permissionsIn(sender.voice.channel);
 		// If sender isn't an admin, ignore this event
 		if (!permissions.has("ADMINISTRATOR")) {
 			await sendErrorMessage(channel, "Command was NOT successful, Brigitte only lends her flail to admins.");
 			return true;
 		}
-	
+
 		if (sender.voice.channel == null || sender.voice.channelId !== victim.voice.channelId) {
 			await sendErrorMessage(
-				channel, "Command was NOT successful, your target isn't close enough (not in the same voice channel as you)"
+				channel,
+				"Command was NOT successful, your target isn't close enough (not in the same voice channel as you)"
 			);
 			return true;
 		}

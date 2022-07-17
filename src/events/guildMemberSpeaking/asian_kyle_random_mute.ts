@@ -3,7 +3,7 @@ import { Discord, On } from "discordx";
 import { ASIAN_KYLE_ID } from "../../constants";
 import { random } from "../../util";
 
-const MUTE_ASIAN_KYLE_CHANCE = 0.1
+const MUTE_ASIAN_KYLE_CHANCE = 0.1;
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

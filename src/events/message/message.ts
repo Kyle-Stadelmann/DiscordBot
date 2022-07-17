@@ -11,7 +11,7 @@ function parseArgs(content: string, delim: string = " "): string[] {
 	let current = "";
 	let open = false;
 
-	for (let i = 0; i < content.length; i+=1) {
+	for (let i = 0; i < content.length; i += 1) {
 		if (!open && content.slice(i, i + delim.length) === delim) {
 			if (current !== "") args.push(current);
 			current = "";

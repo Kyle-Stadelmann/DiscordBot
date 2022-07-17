@@ -17,9 +17,9 @@ export function random(chance: number) {
 	const randomVal = Math.random() * denominator;
 	if (randomVal <= numerator) {
 		return true;
-	} 
+	}
 	return false;
-};
+}
 
 export function getRandomElement<T>(arr: T[]): T {
 	const randomIndex = Math.floor(Math.random() * arr.length);

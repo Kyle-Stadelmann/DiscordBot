@@ -8,9 +8,11 @@ require("dotenv").config({ path: `${__dirname}/.env` });
 
 // Enable all intents for now; private server support only atm
 let myIntents: Intents;
-for (const intent in Intents.FLAGS) { myIntents.add(+intent); }
+for (const intent in Intents.FLAGS) {
+	myIntents.add(+intent);
+}
 export const client = new Client({
-	intents: myIntents
+	intents: myIntents,
 });
 
 // Bot state

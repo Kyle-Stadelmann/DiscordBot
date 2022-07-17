@@ -6,7 +6,7 @@ const cmdConfig: CommandConfig = {
 	description: "",
 	usage: `schedule`,
 	allowInDM: true,
-	disabled: true
+	disabled: true,
 };
 
 class ScheduleCommand extends Command {

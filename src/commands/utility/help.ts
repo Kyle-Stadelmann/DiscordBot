@@ -9,8 +9,8 @@ const cmdConfig: CommandConfig = {
 	name: "help",
 	description: "Lists all commands that this bot currently has to offer.",
 	usage: `help`,
-	allowInDM: true
-}
+	allowInDM: true,
+};
 
 class HelpCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
@@ -19,15 +19,15 @@ class HelpCommand extends Command {
 		cmds.forEach((cmd) => {
 			cmdStr += `${cmd.name}\n`;
 		});
-	
+
 		const roleInfo = new MessageEmbed()
 			.addField("All Commands", cmdStr)
 			.setThumbnail(msg.guild ? msg.guild.iconURL() : "")
 			.setFooter(`Use '${PREFIX}commandName help' to recieve instructions on how to use any command.`)
 			.setColor(0x0);
-	
+
 		await sendEmbeds(msg.channel, [roleInfo]);
-		
+
 		return true;
 	}
 }

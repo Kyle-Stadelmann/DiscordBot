@@ -13,7 +13,7 @@ const cmdConfig: CommandConfig = {
 	usage: `sword @victim`,
 	examples: ["sword @Dualkim"],
 	disabled: true,
-	cooldownTime: 7 * 24 * 60 * 60 * 1000
+	cooldownTime: 7 * 24 * 60 * 60 * 1000,
 };
 
 class SwordCommand extends Command {
@@ -21,32 +21,35 @@ class SwordCommand extends Command {
 	private sharpeningDate: Date = null;
 
 	public async run(msg: Message): Promise<boolean> {
-		const {channel} = msg;
+		const { channel } = msg;
 		const sender = msg.member;
 		const victim = msg.mentions.members.first();
-	
+
 		const date = new Date();
-	
+
 		if (sender.id !== ZACH_ID) {
 			await sendErrorMessage(channel, "Alas, only zach can sharpen his sword.");
 			return false;
 		}
-	
+
 		if (victim === null) {
 			return this.beginSharpening(channel, sender);
 		}
-	
+
 		// Make sure he sharpened for enough time
 		if (this.sharpeningDate == null || this.sharpeningDate.getTime() + MIN_SHARPEN_TIME > date.getTime()) {
 			await sendErrorMessage(channel, "Remain patient soldier, your sword is too dull!");
 			return false;
 		}
-	
+
 		if (!victim.kickable || victim.id === BD4_BOT_ID) {
-			await sendErrorMessage(channel, "You decided against it, you fear your victim's strength completely eclipses yours.");
+			await sendErrorMessage(
+				channel,
+				"You decided against it, you fear your victim's strength completely eclipses yours."
+			);
 			return false;
 		}
-	
+
 		return true;
 	}
 
@@ -67,4 +70,3 @@ class SwordCommand extends Command {
 }
 
 export default new SwordCommand(cmdConfig);
-

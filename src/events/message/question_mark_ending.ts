@@ -14,7 +14,7 @@ abstract class QuestionMarkEnding {
 
 		if (random(QUESTION_MARK_CHANCE)) {
 			const embed = new MessageEmbed().setImage(QUESTION_MARK_URL);
-	
+
 			await sendEmbeds(msg.channel, [embed]);
 		}
 	}

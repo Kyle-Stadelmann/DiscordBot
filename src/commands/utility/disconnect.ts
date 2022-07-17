@@ -16,9 +16,7 @@ class DisconnectCommand extends Command {
 		const textChannel = msg.channel;
 
 		if (!connection) {
-			await sendErrorMessage(
-				textChannel, "I am not currently connected to a voice channel!"
-			);
+			await sendErrorMessage(textChannel, "I am not currently connected to a voice channel!");
 			return false;
 		}
 
