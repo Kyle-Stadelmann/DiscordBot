@@ -7,7 +7,7 @@ const cmdConfig: CommandConfig = {
 	name: "rally",
 	description: "Brings all users connected to voice to the voice channel that the user is in.",
 	usage: `rally`,
-}
+};
 
 class RallyCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
@@ -16,7 +16,10 @@ class RallyCommand extends Command {
 
 		// Confirm that user called from a voice channel
 		if (!voiceChannel) {
-			await sendErrorMessage(textChannel, "Rally failed because you are not in a valid voice channel! Brigitte would be sad...");
+			await sendErrorMessage(
+				textChannel,
+				"Rally failed because you are not in a valid voice channel! Brigitte would be sad..."
+			);
 			return false;
 		}
 
@@ -36,7 +39,10 @@ class RallyCommand extends Command {
 
 		// Check if called from valid voice channel
 		if (voiceChannel === msg.guild.afkChannel || (!publicChannel && !pullToHidden)) {
-			await sendErrorMessage(textChannel, "Rally failed because you are not in a valid voice channel! Brigitte would be sad...");
+			await sendErrorMessage(
+				textChannel,
+				"Rally failed because you are not in a valid voice channel! Brigitte would be sad..."
+			);
 			return false;
 		}
 
@@ -60,14 +66,19 @@ class RallyCommand extends Command {
 		}
 
 		// Check for a valid member (rally is successful as long as there is one member in one valid channel)
-		const areValidMembers = !validChannels.some((vChannel) => vChannel.members.some((member) => {
+		const areValidMembers = !validChannels.some((vChannel) =>
+			vChannel.members.some((member) => {
 				if (rolesToCall.size === 0) return true;
 
 				return rolesToCall.some((membRole) => member.roles.cache.has(membRole.id));
-			}));
+			})
+		);
 
 		if (areValidMembers) {
-			await sendErrorMessage(textChannel, "Rally failed because there are no users to Rally with. Nice solo ult...");
+			await sendErrorMessage(
+				textChannel,
+				"Rally failed because there are no users to Rally with. Nice solo ult..."
+			);
 			return false;
 		}
 
@@ -82,7 +93,7 @@ class RallyCommand extends Command {
 				// kyle made this logic and he is a GENIUS (actually mindblowing)
 				// size of roles list && whether any entry in roles list overlaps with user's roles
 				if (!(rolesToCall.size > 0 && !rolesToCall.some((userRole) => member.roles.cache.has(userRole.id)))) {
-					console.log(`Moving user with ID: ${  member.id}`);
+					console.log(`Moving user with ID: ${member.id}`);
 					member.edit({ channel: msg.member.voice.channel }).catch((error) => {
 						console.error(error);
 					});

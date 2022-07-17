@@ -8,7 +8,7 @@ import { sendMessage } from "../../util";
 abstract class DanielTy {
 	@On("message")
 	private async handleDanielTy(msg: Message) {
-		const {channel} = msg;
+		const { channel } = msg;
 		const content = msg.content.toLowerCase();
 		// Only continue if Daniel sent the message
 		if (msg.author.id !== DANIEL_ID) return;

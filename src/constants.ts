@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from "path";
 
 export const AFK_CHANNEL_ID = "temp";
 export const PREFIX = ">";

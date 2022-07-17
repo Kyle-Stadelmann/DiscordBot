@@ -12,18 +12,12 @@ abstract class Epic {
 	@On("message")
 	private async handleEpic(msg: Message) {
 		// Reads "epic" from chat and reacts with sunglasses emoji
-		if (
-			msg.content.toLowerCase().includes("epic") &&
-			random(EPIC_SUNGLASSES_CHANCE)
-		) {
+		if (msg.content.toLowerCase().includes("epic") && random(EPIC_SUNGLASSES_CHANCE)) {
 			await msg.react(SUNGLASSES);
 		}
 
 		// Reads sunglasses emoji from chat and reacts with E, P, I, C
-		if (
-			msg.content.includes(SUNGLASSES) &&
-			random(SUNGLASSES_EPIC_CHANCE)
-		) {
+		if (msg.content.includes(SUNGLASSES) && random(SUNGLASSES_EPIC_CHANCE)) {
 			await msg.react("🇪");
 			await msg.react("🇵");
 			await msg.react("🇮");

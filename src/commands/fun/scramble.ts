@@ -7,7 +7,7 @@ const cmdConfig: CommandConfig = {
 	name: "scramble",
 	description: "Sends everyone in your channel to a random channel.",
 	usage: `scramble`,
-	cooldownTime: 60 * 60 * 1000
+	cooldownTime: 60 * 60 * 1000,
 };
 
 class ScrambleCommand extends Command {
@@ -35,10 +35,13 @@ class ScrambleCommand extends Command {
 		return true;
 	}
 
-	private async moveChannelMembers(startChannel: VoiceChannel | StageChannel, destinationChannels: (VoiceChannel | StageChannel)[]) {
+	private async moveChannelMembers(
+		startChannel: VoiceChannel | StageChannel,
+		destinationChannels: (VoiceChannel | StageChannel)[]
+	) {
 		const channelMembers = startChannel.members.toJSON();
 
-		const promises = channelMembers.flatMap(victim => {
+		const promises = channelMembers.flatMap((victim) => {
 			const randomChannel = getRandomElement(destinationChannels);
 			if (victim.voice.channel) {
 				return [victim.edit({ channel: randomChannel })];
