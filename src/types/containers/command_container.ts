@@ -9,18 +9,19 @@ import { Command } from "../command.js";
 export class CommandContainer {
 	public commands = new Collection<string, Command>();
 
-	private async loadCommandFile(commands: Collection<string, Command>, file: string) {
-		const cmd = (await import(`file://${file}`)) as Command;
+	private async loadCommandFile(file: string): Promise<Command> {
+		const cmd = ((await import(`file://${file}`)).default) as Command;
 
 		// Only load command if its not disabled
 		// But if DEV mode is activated, load disabled commands
 		if (!cmd.disabled || isDevMode()) {
 			console.log(`${file} loaded!`);
-			commands.set(cmd.name, cmd);
+			return cmd;
 		}
+		return null;
 	}
 
-	private async loadCommandFiles(files: string[]) {
+	private async loadCommandFiles(files: string[]): Promise<Command[]> {
 		if (files.length === 0) {
 			console.log("No commands to load!");
 			return;
@@ -28,13 +29,20 @@ export class CommandContainer {
 
 		console.log(`Loading commands...`);
 
-		const loadCmdPromises = files.map(file => this.loadCommandFile(this.commands, file));
-		await Promise.all(loadCmdPromises);
+		const loadCmdPromises = files
+			.map(file => this.loadCommandFile(file));
+		
+		const cmds = await Promise.all(loadCmdPromises);
+		// loadCommandFile can return null, filter those out
+		const validCmds = cmds.filter(cmd => cmd);
+		// eslint-disable-next-line consistent-return
+		return validCmds;
 	}
 
 	public async loadCommandMap() {
 		const cmdFiles = await fg(`src/commands/**/*`, {absolute: true});
-		await this.loadCommandFiles(cmdFiles);
+		const cmds = await this.loadCommandFiles(cmdFiles);
+		cmds.forEach(cmd => this.commands.set(cmd.name, cmd));
 	}
 
 	private async checkCanRunCmd(cmd: Command, msg: Message): Promise<boolean> {

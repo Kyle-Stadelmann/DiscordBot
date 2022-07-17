@@ -1,5 +1,5 @@
 import { Discord, On } from "discordx";
-import { client } from "../../app";
+import { client } from "../../app.js";
 import { printSpace } from "../../util/print_space.js";
 import { getRandomElement } from "../../util/random.js";
 import { sleep } from "../../util/sleep.js";

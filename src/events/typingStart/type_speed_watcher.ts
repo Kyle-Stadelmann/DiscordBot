@@ -1,5 +1,4 @@
-import { Typing } from "discord.js";
-import { Discord, On } from "discordx";
+import { ArgsOf, Discord, On } from "discordx";
 import { bdbot } from "../../app.js";
 import { TYPE_SPEED_RESET_TIME } from "../../constants.js";
 
@@ -7,7 +6,7 @@ import { TYPE_SPEED_RESET_TIME } from "../../constants.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class TypeSpeedWatcher {
 	@On("typingStart")
-	private async watchTypeState(typingState: Typing) {
+	private async watchTypeState([typingState] : ArgsOf<"typingStart">) {
 		const userId = typingState.user.id;
 		// Only watch people in the typingTimestamps collection
 		if (!bdbot.typingTimestamps.has(userId)) return;

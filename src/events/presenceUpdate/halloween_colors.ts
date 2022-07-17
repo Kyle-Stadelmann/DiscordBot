@@ -1,12 +1,11 @@
-import { Presence } from "discord.js";
-import { Discord, On } from "discordx";
+import { ArgsOf, Discord, On } from "discordx";
 import { BD5_ID } from "../../constants.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class HalloweenColors {
 	@On("presenceUpdate")
-	private async updateHalloweenColors(oldPresence: Presence, newPresence: Presence) {
+	private async updateHalloweenColors([oldPresence, newPresence] : ArgsOf<"presenceUpdate">) {
 		if (!oldPresence || !newPresence) return;
 		if (oldPresence.guild.id !== BD5_ID) return;
 		// Only activate in October

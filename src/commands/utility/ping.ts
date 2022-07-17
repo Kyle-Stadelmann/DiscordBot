@@ -1,4 +1,5 @@
 import { Message, MessageEmbed } from "discord.js";
+import { client } from "../../app.js";
 import { TYPESCRIPT_URL } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { sendEmbeds } from "../../util/message_channel.js";
@@ -16,10 +17,10 @@ const cmdConfig: CommandConfig = {
 class PingCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const embed = new MessageEmbed()
-			// .setImage(client.user.avatarURL())
-			.setThumbnail(TYPESCRIPT_URL)
-			.setFooter(`version ${version}`);
-		await sendEmbeds(msg.channel, [embed], "pong!");
+			.setImage(client.user.avatarURL())
+			.setTitle("pong!")
+			.setFooter({text: `version ${version}`, iconURL: TYPESCRIPT_URL});
+		await sendEmbeds(msg.channel, [embed]);
 		return true;
 	}
 }

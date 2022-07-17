@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { Message, MessageEmbed } from "discord.js";
-import { Discord, On } from "discordx";
+import { MessageEmbed } from "discord.js";
+import { ArgsOf, Discord, On } from "discordx";
 import * as cheerio from "cheerio";
 import { sendEmbeds } from "../../util/message_channel.js";
 
@@ -16,8 +16,8 @@ const TARGET_SITE_ICON = "https://nyaa.si/static/img/avatar/default.png";
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class NyaaEmbed {
-	@On("message")
-	private async tryNyaaEmbed(msg: Message) {
+	@On("messageCreate")
+	private async tryNyaaEmbed([msg]: ArgsOf<"messageCreate">) {
 		// TODO: only do embed if discord doens't do it after a certain amt of time?
 		return;
 		if (!msg.content.includes(TARGET_SITE)) return;
