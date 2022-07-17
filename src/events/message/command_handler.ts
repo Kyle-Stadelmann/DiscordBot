@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { Discord, On } from "discordx";
+import { ArgsOf, Discord, On } from "discordx";
 import { bdbot } from "../../app.js";
 import { PREFIX } from "../../constants.js";
 
@@ -53,8 +53,9 @@ async function processCmd(msg: Message) {
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class CommandHandler {
-	@On("message")
-	private async handleCommand(msg: Message) {
+	@On("messageCreate")
+	private async onMessageCreate([msg]: ArgsOf<"messageCreate">) {
+		console.log("hello")
 		// If message comes from a bot, don't perform any of the below events
 		// (to stop bd4 bot from triggering other bots events)
 		if (msg.author.bot) {

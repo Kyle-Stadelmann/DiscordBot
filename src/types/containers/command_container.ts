@@ -1,18 +1,22 @@
 import { Collection, Message, MessageEmbed } from "discord.js";
 import fg from "fast-glob";
+import { PREFIX } from "../../constants.js";
+import { isDevMode } from "../../util/is_dev_mode.js";
+import { sendErrorMessage, sendEmbeds } from "../../util/message_channel.js";
+import { printSpace } from "../../util/print_space.js";
 import { Command } from "../command.js";
 
 export class CommandContainer {
-	public commands: Collection<string, Command> = new Collection();
+	public commands = new Collection<string, Command>();
 
-	private async loadCommandFile(file: string) {
-		const cmd = (await import(file)) as Command;
+	private async loadCommandFile(commands: Collection<string, Command>, file: string) {
+		const cmd = (await import(`file://${file}`)) as Command;
 
 		// Only load command if its not disabled
 		// But if DEV mode is activated, load disabled commands
 		if (!cmd.disabled || isDevMode()) {
-			console.log(`${this.commands.size + 1}: ${file} loaded!`);
-			this.commands.set(file, cmd);
+			console.log(`${file} loaded!`);
+			commands.set(cmd.name, cmd);
 		}
 	}
 
@@ -24,7 +28,7 @@ export class CommandContainer {
 
 		console.log(`Loading commands...`);
 
-		const loadCmdPromises = files.map(this.loadCommandFile);
+		const loadCmdPromises = files.map(file => this.loadCommandFile(this.commands, file));
 		await Promise.all(loadCmdPromises);
 	}
 

@@ -1,5 +1,6 @@
 import path from "path";
 import { GuildMember, Message } from "discord.js";
+import { fileURLToPath } from "url";
 import { CooldownContainer } from "./containers/cooldown_container.js";
 
 export enum CommandCategory {
@@ -52,7 +53,8 @@ export abstract class Command {
 
 	// Uses parent directory to return command category enum
 	private static getCategoryName(): CommandCategory {
-		const parentDirName = path.basename(path.dirname(__filename));
+		const filename = fileURLToPath(import.meta.url);
+		const parentDirName = path.basename(path.dirname(filename));
 		const firstLetterUppercase = parentDirName.charAt(0).toUpperCase();
 		const categoryStr = firstLetterUppercase + parentDirName.substring(1);
 
