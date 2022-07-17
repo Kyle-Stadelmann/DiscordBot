@@ -1,7 +1,6 @@
 import { GuildMember, Message, TextBasedChannel } from "discord.js";
 import { BD4_BOT_ID, ZACH_ID } from "../../constants";
-import { Command } from "../../interfaces/command";
-import { CommandConfig } from "../../types/types";
+import { Command, CommandConfig } from "../../types/command";
 import { sendErrorMessage, sendMessage } from "../../util";
 
 const MIN_SHARPEN_TIME = 30 * 60 * 1000;

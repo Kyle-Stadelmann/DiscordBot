@@ -1,8 +1,7 @@
 // Awaits in loops are critical to the functionality of this command
 /* eslint-disable no-await-in-loop */
 import { Guild, GuildMember, Message, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
-import { Command } from "../../interfaces/command";
-import { CommandConfig } from "../../types/types";
+import { Command, CommandConfig } from "../../types/command";
 import { deleteVoiceChannel, sendErrorMessage, sleep } from "../../util";
 
 const NUM_CHANNELS_FLAILED = 10;

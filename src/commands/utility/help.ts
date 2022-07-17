@@ -1,8 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
 import { bdbot } from "../../app";
 import { PREFIX } from "../../constants";
-import { Command } from "../../interfaces/command";
-import { CommandConfig } from "../../types/types";
+import { Command, CommandConfig } from "../../types/command";
 import { sendEmbeds } from "../../util";
 
 const cmdConfig: CommandConfig = {

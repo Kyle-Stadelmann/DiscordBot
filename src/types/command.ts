@@ -1,7 +1,6 @@
 import path from "path";
 import { GuildMember, Message } from "discord.js";
-import { CommandConfig } from "../types/types";
-import { CooldownContainer } from "../containers/cooldown_container";
+import { CooldownContainer } from "./containers/cooldown_container";
 
 export enum CommandCategory {
 	Fun,
@@ -59,4 +58,16 @@ export abstract class Command {
 
 		return CommandCategory[categoryStr];
 	}
+}
+
+export interface CommandConfig {
+	name: string;
+	description: string;
+	usage: string;
+	cooldownTime?: number;
+	examples?: string[];
+	allowInDM?: boolean;
+	aliases?: string[];
+	disabled?: boolean;
+	permissions?: any[];
 }

@@ -1,4 +1,4 @@
-import { DANIEL_ID } from "../constants";
+import { DANIEL_ID } from "../../constants";
 import { CommandContainer } from "./command_container";
 
 export class BDBot {
