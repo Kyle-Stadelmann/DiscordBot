@@ -1,7 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import { Client, Collection, Intents } from "discord.js";
 import fs from "fs";
-import { CommandContainer } from "./commands";
+import { BDBot } from "./containers/bot_container";
+import { isDevMode } from "./util";
 
 // Import .env file variables (for BOT_TOKEN)
 require("dotenv").config({ path: `${__dirname}/.env` });
@@ -13,22 +14,17 @@ const bot = new Client({
 	intents: myIntents
 });
 
+// Bot state
+export const bdbot = new BDBot();
+
 // TODO: TS migration
 const banana: any = {};
 
-banana.commands = new CommandContainer().loadCommandMap();
-banana.cooldowns = new Collection();
 banana.events = new Collection();
-banana.schedules = new Collection();
 banana.typingTimestamps = new Collection().set("250076166323568640", null);
 
-// Load in the cooldowns from disk into banana.cooldowns
-readDiskCooldowns(bot);
 // Load all event percentages
 banana.event_percentages = require(`${__dirname}/events/event_percentages.js`);
-// Load bot settings
-banana.settings = require(`${__dirname}/settings.js`);
-
 
 // Bind all tracked events to our event objects
 fs.readdir(`${__dirname}/events/handlers/`, (err, files) => {
@@ -63,13 +59,7 @@ fs.readdir(`${__dirname}/events/handlers/`, (err, files) => {
 // ex: banana.events_lib.eventName.helperName()
 banana.events_lib = require(`${__dirname}/events/lib`)(bot);
 
-// If in bot mode, watch files that change in order to reload them without restarting bot
-if (banana.settings.botMode === banana.settings.botModeEnum.DEV) {
-	watchBotFiles(bot);
-}
-
-// Login to the correct bot token
-if (banana.settings.botMode === banana.settings.botModeEnum.DEV) {
+if (isDevMode()) {
 	bot.login(process.env.DEV_BOT_TOKEN);
 } else {
 	bot.login(process.env.BOT_TOKEN);
