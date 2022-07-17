@@ -51,6 +51,7 @@ async function processCmd(msg: Message) {
 }
 
 @Discord()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class CommandHandler {
 	@On("message")
 	private async handleCommand(msg: Message) {

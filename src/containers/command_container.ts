@@ -107,7 +107,7 @@ export class CommandContainer {
 			result = await cmd.run(msg, args);
 		} catch (error) {
 			result = false;
-			const errorOutput = { error: error, msg: msg, args: args };
+			const errorOutput = { error, msg, args };
 			console.error(`Error when executing command ${cmdStr}\n ${errorOutput}`);
 			printSpace();
 		}
