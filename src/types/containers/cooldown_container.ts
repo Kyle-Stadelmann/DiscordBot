@@ -1,14 +1,15 @@
-import { GuildMember, Snowflake } from "discord.js";
+import { GuildMember } from "discord.js";
 import { Low, JSONFile } from "lowdb";
 import { COOLDOWN_JSON_LOC } from "../../constants.js";
 
 export class CooldownContainer {
-	private cooldowns: Map<Snowflake, Date> = new Map();
+	private cooldowns: Map<string, Date>;
 	private db: Low;
 
 	constructor(private cooldownTime: number, private cooldownName: string) {
 		const adapter = new JSONFile(COOLDOWN_JSON_LOC);
 		this.db = new Low(adapter);
+		this.cooldowns = new Map<string, Date>();
 
 		// Sync execution of async function, but won't cause realistic issues here for the current scope of this bot
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -53,7 +54,10 @@ export class CooldownContainer {
 
 	private async initCooldowns() {
 		await this.db.read();
-
-		this.cooldowns = this.db.data[`${this.cooldownName}`] as Map<Snowflake, Date>;
+		if (this.db.data && this.db.data[`${this.cooldownName}`]) {
+			this.cooldowns = this.db.data[`${this.cooldownName}`] as Map<string, Date>;
+		} else {
+			this.cooldowns = new Map<string, Date>();
+		}
 	}
 }

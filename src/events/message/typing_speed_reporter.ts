@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import { Discord, On } from "discordx";
+import { ArgsOf, Discord, On } from "discordx";
 import { bdbot } from "../../app.js";
 import { sendMessage } from "../../util/message_channel.js";
 import { printSpace } from "../../util/print_space.js";
@@ -9,8 +8,8 @@ import { countWords, danielWPMChanceFunction } from "./daniel_wpm.js";
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class TypingSpeedReporter {
-	@On("message")
-	private async tryReportTypingSpeed(msg: Message) {
+	@On("messageCreate")
+	private async tryReportTypingSpeed([msg]: ArgsOf<"messageCreate">) {
 		const userId = msg.author.id;
 		const { channel } = msg;
 

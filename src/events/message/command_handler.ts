@@ -44,18 +44,17 @@ async function processCmd(msg: Message) {
 
 	const result = await bdbot.commandContainer.tryRunCommand(cmdStr, msg, args);
 	if (result) {
-		console.error(`${cmdStr} was NOT successful`);
-	} else {
 		console.log(`${cmdStr} was successful`);
+	} else {
+		console.error(`${cmdStr} was NOT successful`);
 	}
 }
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-abstract class CommandHandler {
+export abstract class CommandHandler {
 	@On("messageCreate")
-	private async onMessageCreate([msg]: ArgsOf<"messageCreate">) {
-		console.log("hello")
+	private async handleMessage([msg]: ArgsOf<"messageCreate">) {
 		// If message comes from a bot, don't perform any of the below events
 		// (to stop bd4 bot from triggering other bots events)
 		if (msg.author.bot) {

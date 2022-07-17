@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import { Discord, On } from "discordx";
+import { ArgsOf, Discord, On } from "discordx";
 import { SUNGLASSES } from "../../constants.js";
 import { random } from "../../util/random.js";
 
@@ -9,8 +8,8 @@ const SUNGLASSES_EPIC_CHANCE = 100;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class Epic {
-	@On("message")
-	private async handleEpic(msg: Message) {
+	@On("messageCreate")
+	private async handleEpic([msg]: ArgsOf<"messageCreate">) {
 		// Reads "epic" from chat and reacts with sunglasses emoji
 		if (msg.content.toLowerCase().includes("epic") && random(EPIC_SUNGLASSES_CHANCE)) {
 			await msg.react(SUNGLASSES);

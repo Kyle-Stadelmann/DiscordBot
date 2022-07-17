@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import { Discord, On } from "discordx";
+import { ArgsOf, Discord, On } from "discordx";
 import { DANIEL_ID, PREFIX, DANIEL_WPM } from "../../constants.js";
 import { sendMessage } from "../../util/message_channel.js";
 
@@ -29,8 +28,8 @@ function wordsPerMinute(wpm, numWords) {
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class DanielWPM {
-	@On("message")
-	private async tryDanielWPM(msg: Message) {
+	@On("messageCreate")
+	private async tryDanielWPM([msg]: ArgsOf<"messageCreate">) {
 		// Only continue if Daniel sent the message
 		if (msg.author.id !== DANIEL_ID) return;
 		// ignore commands for this event
