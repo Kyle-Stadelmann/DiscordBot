@@ -3,7 +3,8 @@ import { TYPESCRIPT_URL } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { sendEmbeds } from "../../util/message_channel.js";
 
-const { version } = require("../../../package.json");
+// Probably won't work in pm2
+const version = process.env.npm_package_version;
 
 const cmdConfig: CommandConfig = {
 	name: "ping",

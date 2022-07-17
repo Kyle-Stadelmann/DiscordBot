@@ -13,7 +13,8 @@
       "importHelpers": true,
       "forceConsistentCasingInFileNames": true,
       "moduleResolution": "node",
-      "esModuleInterop": true
+      "esModuleInterop": true,
+      "resolveJsonModule": true
     },
     "exclude": [
       "dist",

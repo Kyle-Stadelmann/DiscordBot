@@ -1,10 +1,13 @@
 import { Client, Intents } from "discord.js";
+import * as dotenv from "dotenv"
 import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot_container.js";
 import { isDevMode } from "./util/is_dev_mode.js";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import * as command_handler from "./events/message/command_handler.js";
 
 // Import .env file variables (for BOT_TOKEN)
-require("dotenv").config({ path: `${SRC_DIR}/../.env`});
+dotenv.config({path: `${SRC_DIR}/../.env`});
 
 // Enable all intents for now; private server support only atm
 const myIntents = new Intents();

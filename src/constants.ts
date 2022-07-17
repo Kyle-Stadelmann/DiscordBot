@@ -1,4 +1,8 @@
 import path from "path";
+import { fileURLToPath } from 'url';
+
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 export const AFK_CHANNEL_ID = "temp";
 export const PREFIX = ">";
@@ -19,8 +23,8 @@ export const QUESTION_MARK_URL =
 export const SUNGLASSES = "😎";
 export const KHANG_NEKO_EMOJI_ID = "cat_thonk";
 // TODO: Standardize paths
-export const SRC_DIR = path.resolve(`${__dirname}`);
-export const COOLDOWN_JSON_LOC = path.resolve(`${__dirname}/../database/cooldowns.json`);
+export const SRC_DIR = path.resolve(`${dirname}`);
+export const COOLDOWN_JSON_LOC = path.resolve(`${dirname}/../database/cooldowns.json`);
 export const TYPE_SPEED_RESET_TIME = 30 * 1000;
 export const TYPESCRIPT_URL = "https://static.npmjs.com/255a118f56f5346b97e56325a1217a16.svg";
 export const DEV_SERVER_GROUP_1_ID = "894353801086124082";
