@@ -3,13 +3,12 @@ import path from "path";
 import fg from "fast-glob";
 import { PREFIX, SRC_DIR } from "../constants";
 import { Command } from "../interfaces/command";
-import * as settings from "../settings";
-import { printSpace } from "../util";
+import { isDevMode, printSpace } from "../util";
 
 const commandsDir = path.join(`${SRC_DIR}`, "commands");
 
 export class CommandContainer {
-    private commands: Map<string, Command> = new Map();
+    public commands: Map<string, Command> = new Map();
     constructor() {
         this.loadCommandMap();
     }
@@ -19,7 +18,7 @@ export class CommandContainer {
     
         // Only load command if its not disabled
         // But if DEV mode is activated, load disabled commands
-        if (!cmd.disabled || settings.botMode === settings.BotModeEnum.DEV) {
+        if (!cmd.disabled || isDevMode()) {
             console.log(`${this.commands.size+1}: ${file} loaded!`);
             this.commands.set(file, cmd);
         }
@@ -37,7 +36,7 @@ export class CommandContainer {
         await Promise.all(loadCmdPromises);
     }
 
-    public async loadCommandMap() {
+    private async loadCommandMap() {
         const cmdFiles = await fg(`${commandsDir}/*`);
         await this.loadCommandFiles(cmdFiles);
     }
@@ -114,7 +113,7 @@ export class CommandContainer {
         }
 
         // If cmd successful, put on cooldown. No cooldowns in dev mode though
-        if (result && settings.botMode !== settings.BotModeEnum.DEV) {
+        if (result && isDevMode()) {
             await cmd.putOnCooldown(msg.member);
         }
 

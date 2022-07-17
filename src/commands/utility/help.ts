@@ -1,7 +1,8 @@
 import { Message, MessageEmbed } from "discord.js";
-import { PREFIX } from "../constants";
-import { Command } from "../interfaces/command";
-import { CommandConfig } from "../types/types";
+import { bdbot } from "../../app";
+import { PREFIX } from "../../constants";
+import { Command } from "../../interfaces/command";
+import { CommandConfig } from "../../types/types";
 
 const cmdConfig: CommandConfig = {
 	name: "help",
@@ -12,10 +13,10 @@ const cmdConfig: CommandConfig = {
 
 class HelpCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
+		const cmds = bdbot.commandContainer.commands;
 		let cmdStr = "";
-
-		bot.commands.forEach((value) => {
-			cmdStr += value.help.commandName + "\n";
+		cmds.forEach((cmd) => {
+			cmdStr += `${cmd.name}\n`;
 		});
 	
 		const roleInfo = new MessageEmbed()
@@ -24,8 +25,8 @@ class HelpCommand extends Command {
 			.setFooter(`Use '${PREFIX}commandName help' to recieve instructions on how to use any command.`)
 			.setColor(0x0);
 	
-		msg.channel.send({ embeds: [roleInfo] });
-	
+		await this.sendEmbeds(msg.channel, [roleInfo]);
+		
 		return true;
 	}
 }

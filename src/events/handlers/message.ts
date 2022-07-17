@@ -1,8 +1,7 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Message } from "discord.js";
+import { bdbot } from "../../app";
 import { PREFIX } from "../../constants";
-import { Command } from "../../interfaces/command";
-import { botMode, BotModeEnum } from "../../settings";
-import { printSpace, reInitBot, runEventLibs } from "../../util";
+import { isDevMode, reInitBot, runEventLibs } from "../../util";
 
 // From GAwesomeBot's parser
 function parseArgs(content: string, delim: string = " "): string[] {
@@ -34,8 +33,6 @@ function parseArgs(content: string, delim: string = " "): string[] {
 	return args.length === 1 && args[0] === "" ? [] : args.filter((a) => a !== delim && a !== " ");
 }
 
-
-
 async function processCmd(msg: Message) {
 	const cmdArgs = parseArgs(msg.content.toLowerCase());
 	const cmdStr = cmdArgs[0].slice(PREFIX.length);
@@ -45,7 +42,7 @@ async function processCmd(msg: Message) {
 
 	console.log(`${cmdStr} command detected by: ${msg.author.username}`);
 
-	const result = await tryRunCommand(cmdStr, msg, args);
+	const result = await bdbot.commandContainer.tryRunCommand(cmdStr, msg, args);
 	if (result) {
 		console.error(`${cmdStr} was NOT successful`);
 	} else {
@@ -55,17 +52,13 @@ async function processCmd(msg: Message) {
 
 // Listener event: runs whenever a message is received
 export default async (msg: Message) => {
-	// if message comes from a bot, don't perform any of the below events
+	// If message comes from a bot, don't perform any of the below events
 	// (to stop bd4 bot from triggering other bots events)
 	if (msg.author.bot) {
 		return;
 	}
 
-	if (botMode === BotModeEnum.DEV) {
-		reInitBot(bot);
-	}
-
-	// Command processing, check if message is a commandd
+	// Command processing, check if message is a command
 	if (msg.content.indexOf(PREFIX) === 0) {
 		await processCmd(msg);
 	}
