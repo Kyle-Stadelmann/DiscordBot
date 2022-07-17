@@ -1,15 +1,17 @@
 import { Client, Intents } from "discord.js";
-import { BDBot } from "./types/containers/bot_container";
-import { isDevMode } from "./util";
+import { SRC_DIR } from "./constants.js";
+import { BDBot } from "./types/containers/bot_container.js";
+import { isDevMode } from "./util/is_dev_mode.js";
 
 // Import .env file variables (for BOT_TOKEN)
-require("dotenv").config({ path: `${__dirname}/.env` });
+require("dotenv").config({ path: `${SRC_DIR}/../.env`});
 
 // Enable all intents for now; private server support only atm
-let myIntents: Intents;
+const myIntents = new Intents();
 // eslint-disable-next-line no-restricted-syntax
-for (const intent in Intents.FLAGS) {
-	myIntents.add(+intent);
+for (const flag in Intents.FLAGS) {
+	const bitfield = Intents.FLAGS[flag];
+	myIntents.add(bitfield);
 }
 export const client = new Client({
 	intents: myIntents,
@@ -18,10 +20,15 @@ export const client = new Client({
 // Bot state
 export const bdbot = new BDBot();
 
-if (isDevMode()) {
-	// eslint-disable-next-line @typescript-eslint/no-floating-promises
-	client.login(process.env.DEV_BOT_TOKEN);
-} else {
-	// eslint-disable-next-line @typescript-eslint/no-floating-promises
-	client.login(process.env.BOT_TOKEN);
+async function startup() {
+	if (isDevMode()) {
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		await client.login(process.env.DEV_BOT_TOKEN);
+	} else {
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		await client.login(process.env.BOT_TOKEN);
+	}
+	await bdbot.loadCommands();
 }
+
+startup().catch(console.error);

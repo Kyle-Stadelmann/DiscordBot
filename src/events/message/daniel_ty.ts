@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { Discord, On } from "discordx";
-import { DANIEL_ID } from "../../constants";
-import { sendMessage } from "../../util";
+import { DANIEL_ID } from "../../constants.js";
+import { sendMessage } from "../../util/message_channel.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

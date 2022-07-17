@@ -1,7 +1,9 @@
 /* eslint-disable no-await-in-loop */
 import { Collection, Guild, GuildMember, Message, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
-import { Command, CommandConfig } from "../../types/command";
-import { getRandomElement, random, sendErrorMessage, sendMessage, sleep } from "../../util";
+import { CommandConfig, Command } from "../../types/command.js";
+import { sendErrorMessage, sendMessage } from "../../util/message_channel.js";
+import { random, getRandomElement } from "../../util/random.js";
+import { sleep } from "../../util/sleep.js";
 
 const cmdConfig: CommandConfig = {
 	name: "randommove",

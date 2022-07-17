@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { Discord, On } from "discordx";
 import { HEAVY_DOLLAR_SIGN } from "../../constants";
-import { random } from "../../util";
+import { random } from "../../util/random.js";
 
 const HEAVY_DOLLAR_SIGN_CHANCE = 0.5;
 

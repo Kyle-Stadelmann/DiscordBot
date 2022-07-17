@@ -1,6 +1,6 @@
 import { GuildMember, Snowflake } from "discord.js";
 import { Low, JSONFile } from "lowdb";
-import { COOLDOWN_JSON_LOC } from "../../constants";
+import { COOLDOWN_JSON_LOC } from "../../constants.js";
 
 export class CooldownContainer {
 	private cooldowns: Map<Snowflake, Date> = new Map();

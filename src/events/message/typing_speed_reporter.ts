@@ -1,8 +1,10 @@
 import { Message } from "discord.js";
 import { Discord, On } from "discordx";
-import { bdbot } from "../../app";
-import { random, sendMessage, printSpace } from "../../util";
-import { countWords, danielWPMChanceFunction } from "./daniel_wpm";
+import { bdbot } from "../../app.js";
+import { sendMessage } from "../../util/message_channel.js";
+import { printSpace } from "../../util/print_space.js";
+import { random } from "../../util/random.js";
+import { countWords, danielWPMChanceFunction } from "./daniel_wpm.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

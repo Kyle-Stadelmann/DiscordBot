@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { Discord, On } from "discordx";
-import { DANIEL_ID, PREFIX, DANIEL_WPM } from "../../constants";
-import { sendMessage } from "../../util";
+import { DANIEL_ID, PREFIX, DANIEL_WPM } from "../../constants.js";
+import { sendMessage } from "../../util/message_channel.js";
 
 export function danielWPMChanceFunction(numWords: number): number {
 	const MIN_WORDS = 8;

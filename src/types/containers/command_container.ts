@@ -1,18 +1,9 @@
 import { Collection, Message, MessageEmbed } from "discord.js";
-import path from "path";
 import fg from "fast-glob";
-import { PREFIX, SRC_DIR } from "../../constants";
-import { Command } from "../command";
-import { isDevMode, printSpace, sendEmbeds, sendErrorMessage } from "../../util";
-
-const commandsDir = path.join(`${SRC_DIR}`, "commands");
+import { Command } from "../command.js";
 
 export class CommandContainer {
 	public commands: Collection<string, Command> = new Collection();
-	constructor() {
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		this.loadCommandMap().catch(console.error);
-	}
 
 	private async loadCommandFile(file: string) {
 		const cmd = (await import(file)) as Command;
@@ -37,8 +28,8 @@ export class CommandContainer {
 		await Promise.all(loadCmdPromises);
 	}
 
-	private async loadCommandMap() {
-		const cmdFiles = await fg(`${commandsDir}/*`);
+	public async loadCommandMap() {
+		const cmdFiles = await fg(`src/commands/**/*`, {absolute: true});
 		await this.loadCommandFiles(cmdFiles);
 	}
 
