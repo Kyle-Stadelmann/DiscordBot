@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Collection, Message, MessageEmbed } from "discord.js";
 import path from "path";
 import fg from "fast-glob";
 import { PREFIX, SRC_DIR } from "../../constants";
@@ -8,7 +8,7 @@ import { isDevMode, printSpace, sendEmbeds, sendErrorMessage } from "../../util"
 const commandsDir = path.join(`${SRC_DIR}`, "commands");
 
 export class CommandContainer {
-	public commands: Map<string, Command> = new Map();
+	public commands: Collection<string, Command> = new Collection();
 	constructor() {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		this.loadCommandMap().catch(console.error);
