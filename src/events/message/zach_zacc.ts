@@ -1,6 +1,5 @@
 import { ArgsOf, Discord, On } from "discordx";
-import { sendMessage } from "../../util/message_channel.js";
-import { random } from "../../util/random.js";
+import { random, sendMessage } from "../../util/index.js";
 
 const ZACC_CHANCE = 5;
 
