@@ -39,6 +39,10 @@ export abstract class Command {
 		this.category = Command.getCategoryName();
 	}
 
+	public async initCmd() {
+		await this.cooldowns.initContainer();
+	}
+
 	public isOnCooldown(member: GuildMember): boolean {
 		return this.cooldowns.isOnCooldown(member);
 	}
