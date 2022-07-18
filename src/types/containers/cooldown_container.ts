@@ -18,8 +18,7 @@ export class CooldownContainer {
 	}
 
 	public isOnCooldown(member: GuildMember): boolean {
-		const memberId = member.id;
-		const cooldownDate = this.cooldowns[`${memberId}`];
+		const cooldownDate = this.getCooldownDate(member);
 
 		if (!cooldownDate) return false;
 
@@ -31,29 +30,43 @@ export class CooldownContainer {
 		const endCooldownEpoch = new Date().valueOf() + this.cooldownTime;
 		const endCooldownDate = new Date(endCooldownEpoch);
 		
-		this.cooldowns[`${member.id}`] = endCooldownDate;
-		// TODO: Maybe remove the await on this (doubt it will slow command handling realistically though)
+		this.setCooldownDate(member, endCooldownDate);
 		await this.updateDb();
 	}
 
 	public async endCooldown(member: GuildMember) {
-		delete this.cooldowns[`${member.id}`]
+		delete this.cooldowns[`${member.id}`];
 
-		// TODO: Maybe remove the await on this (doubt it will slow command handling realistically though)
 		await this.updateDb();
 	}
 
 	private async updateDb() {
 		await this.db.read();
 
-		this.db.data[`${this.cooldownName}`] = this.cooldowns;
+		this.setDbBufferCooldown(this.cooldowns);
 		
 		await this.db.write();
 	}
 
 	private async initCooldowns() {
 		await this.db.read();
-		const existingCd = this.db.data[`${this.cooldownName}`]
+		const existingCd = this.getDbBufferCooldown();
 		this.cooldowns = existingCd ?? {};
+	}
+
+	private getCooldownDate(member: GuildMember): Date {
+		return this.cooldowns[`${member.id}`];
+	}
+
+	private setCooldownDate(member: GuildMember, date: Date) {
+		this.cooldowns[`${member.id}`] = date;
+	}
+
+	private getDbBufferCooldown(): Cooldown {
+		return this.db.data[`${this.cooldownName}`];
+	}
+
+	private setDbBufferCooldown(cd: Cooldown) {
+		this.db.data[`${this.cooldownName}`] = cd;
 	}
 }
