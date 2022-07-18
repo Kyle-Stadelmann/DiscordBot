@@ -7,7 +7,15 @@ const fsPromises = fs.promises;
 export async function touchJSONCooldownFile() {
 	const file = await fsPromises.open(COOLDOWN_JSON_LOC, "a");
 	if ((await file.stat()).size === 0) {
-		await file.writeFile("{}");
+		await file.appendFile("{}");
 	}
 	await file.close();
+}
+
+export interface CooldownFile  {
+	[name: string]: Cooldown;
+}
+
+export interface Cooldown {
+	[id: string]: Date;
 }
