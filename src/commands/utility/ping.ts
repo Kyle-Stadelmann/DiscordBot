@@ -19,7 +19,10 @@ class PingCommand extends Command {
 		const embed = new MessageEmbed()
 			.setImage(client.user.avatarURL())
 			.setTitle("pong!")
-			.setFooter({text: `version ${version}`, iconURL: TYPESCRIPT_URL});
+			.setFooter({ text: `version ${version}`, iconURL: TYPESCRIPT_URL })
+			// TODO: set this to avg pixel color of image?
+			.setColor(0x0);
+
 		await sendEmbeds(msg.channel, [embed]);
 		return true;
 	}

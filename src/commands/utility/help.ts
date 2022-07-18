@@ -21,7 +21,9 @@ class HelpCommand extends Command {
 
 		let cmdStr = "";
 		cmds.forEach((cmd) => {
-			cmdStr += `${cmd.name}\n`;
+			if (!cmd.disabled) {
+				cmdStr += `${cmd.name}\n`;
+			}
 		});
 
 		const roleInfo = new MessageEmbed()

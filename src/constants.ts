@@ -1,5 +1,5 @@
 import path from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -12,14 +12,14 @@ export const KHANG_ID = "123260646576881679";
 export const BD4_ID = "191318875667824650";
 export const BD5_ID = "505214234393706499";
 export const DEV_SERVER_ID = "723147134605590598";
-export const BIPEN_IMG_URL = "https =//i.imgur.com/cIoLOxW.jpg";
+export const BIPEN_IMG_URL = "https://i.imgur.com/cIoLOxW.jpg";
 export const ZACH_ID = "95734974409351168";
 export const BD4_BOT_ID = "480909013593227277";
 export const HEAVY_DOLLAR_SIGN = "💲";
 export const DANIEL_WPM = "48";
 export const ASIAN_KYLE_ID = "191266619387936770";
 export const QUESTION_MARK_URL =
-	"https =//media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG";
+	"https://media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG";
 export const SUNGLASSES = "😎";
 export const KHANG_NEKO_EMOJI_ID = "cat_thonk";
 // TODO: Standardize paths

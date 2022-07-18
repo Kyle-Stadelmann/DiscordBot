@@ -5,7 +5,7 @@ import { BD5_ID } from "../../constants.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class HalloweenColors {
 	@On("presenceUpdate")
-	private async updateHalloweenColors([oldPresence, newPresence] : ArgsOf<"presenceUpdate">) {
+	private async updateHalloweenColors([oldPresence, newPresence]: ArgsOf<"presenceUpdate">) {
 		if (!oldPresence || !newPresence) return;
 		if (oldPresence.guild.id !== BD5_ID) return;
 		// Only activate in October
