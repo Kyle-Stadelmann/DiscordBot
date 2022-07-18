@@ -6,3 +6,4 @@ export * from "./message_channel.js";
 export * from "./delete_voice_channel.js";
 export * from "./cooldown_helpers.js";
 export * from "./embed_helpers.js";
+export * from "./command_helper.js";
