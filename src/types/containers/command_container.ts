@@ -10,7 +10,7 @@ export class CommandContainer {
 	public commands = new Collection<string, Command>();
 
 	private async loadCommandFile(file: string): Promise<Command> {
-		const cmd = ((await import(`file://${file}`)).default) as Command;
+		const cmd = (await import(`file://${file}`)).default as Command;
 
 		// Only load command if its not disabled
 		// But if DEV mode is activated, load disabled commands
@@ -29,20 +29,19 @@ export class CommandContainer {
 
 		console.log(`Loading commands...`);
 
-		const loadCmdPromises = files
-			.map(file => this.loadCommandFile(file));
-		
+		const loadCmdPromises = files.map((file) => this.loadCommandFile(file));
+
 		const cmds = await Promise.all(loadCmdPromises);
 		// loadCommandFile can return null, filter those out
-		const validCmds = cmds.filter(cmd => cmd);
+		const validCmds = cmds.filter((cmd) => cmd);
 		// eslint-disable-next-line consistent-return
 		return validCmds;
 	}
 
 	public async loadCommandMap() {
-		const cmdFiles = await fg(`src/commands/**/*`, {absolute: true});
+		const cmdFiles = await fg(`src/commands/**/*`, { absolute: true });
 		const cmds = await this.loadCommandFiles(cmdFiles);
-		cmds.forEach(cmd => this.commands.set(cmd.name, cmd));
+		cmds.forEach((cmd) => this.commands.set(cmd.name, cmd));
 	}
 
 	private async checkCanRunCmd(cmd: Command, msg: Message): Promise<boolean> {
@@ -51,6 +50,9 @@ export class CommandContainer {
 		// Make sure if we're in a dm to check if this cmd is allowed in a dm
 		// fail quietly (this cmd shouldn't be visible at all to them)
 		if (channel.type === "DM" && !cmd.allowInDM) return false;
+
+		// TODO: Cooldowns are disabled in DMs atm
+		if (channel.type === "DM") return true;
 
 		if (cmd.isOnCooldown(member)) {
 			console.log("Command was NOT successful, member is on cooldown.");
@@ -111,14 +113,17 @@ export class CommandContainer {
 			result = await cmd.run(msg, args);
 		} catch (error) {
 			result = false;
-			const errorOutput = { error, msg, args };
-			console.error(`Error when executing command ${cmdStr}\n ${errorOutput}`);
+			console.error(`Error when executing command ${cmdStr}\nerror: ${JSON.stringify(error)}`);
+			console.error(`msg: ${JSON.stringify(msg)}`);
+			console.error(`args: ${JSON.stringify(args)}`);
 			printSpace();
 		}
 
 		// If cmd successful, put on cooldown. No cooldowns in dev mode though
 		if (result && isDevMode()) {
-			await cmd.putOnCooldown(msg.member);
+			// TODO: Cooldowns are disabled in DMs atm
+			if (msg.channel.type !== "DM") 
+				await cmd.putOnCooldown(msg.member);
 		}
 
 		return result;

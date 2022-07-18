@@ -8,7 +8,7 @@ const MUTE_ASIAN_KYLE_CHANCE = 0.1;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class AsianKyleRandomMute {
 	@On("voiceStateUpdate")
-	private async tryMute([oldState, newState] : ArgsOf<"voiceStateUpdate">) {
+	private async tryMute([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
 		const memberId = oldState.member.id;
 		if (memberId === ASIAN_KYLE_ID && random(MUTE_ASIAN_KYLE_CHANCE)) {
 			console.log(`Server muting member: ${memberId}`);
