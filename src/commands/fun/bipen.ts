@@ -7,7 +7,7 @@ const cmdConfig: CommandConfig = {
 	name: "bipen",
 	description: "Sends an important Bipen quote.",
 	usage: "bipen",
-	allowInDM: true
+	allowInDM: true,
 };
 
 class BipenCommand extends Command {
@@ -17,7 +17,7 @@ class BipenCommand extends Command {
 		const embed = new MessageEmbed()
 			.addField("Bipen", message)
 			.setImage(BIPEN_IMG_URL)
-			.setFooter({text: `R.I.P. Bipen 08/2012`})
+			.setFooter({ text: `R.I.P. Bipen 08/2012` })
 			.setColor(0x0);
 
 		await sendEmbeds(msg.channel, [embed]);

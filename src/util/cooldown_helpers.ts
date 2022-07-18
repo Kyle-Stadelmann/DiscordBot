@@ -12,7 +12,7 @@ export async function touchJSONCooldownFile() {
 	await file.close();
 }
 
-export interface CooldownFile  {
+export interface CooldownFile {
 	[name: string]: Cooldown;
 }
 
