@@ -29,7 +29,7 @@ class HelpCommand extends Command {
 		const roleInfo = new MessageEmbed()
 			.addField("All Commands", cmdStr)
 			.setThumbnail(msg.guild ? msg.guild.iconURL() : "")
-			.setFooter(`Use '${PREFIX}commandName help' to recieve instructions on how to use any command.`)
+			.setFooter({text: `Use '${PREFIX}commandName help' to recieve instructions on how to use any command.`})
 			.setColor(0x0);
 
 		await sendEmbeds(msg.channel, [roleInfo]);
