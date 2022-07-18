@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "declaration": true,
+      "noImplicitAny": false,
+      "sourceMap": true,
+      "rootDir": "./src",
+      "outDir": "./dist",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "importHelpers": true,
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "resolveJsonModule": true
+    },
+    "exclude": [
+      "dist",
+      "node_modules"
+    ]
+  }
