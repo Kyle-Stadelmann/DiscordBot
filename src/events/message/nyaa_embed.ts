@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { MessageEmbed } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import * as cheerio from "cheerio";
-import { sendEmbeds } from "../../util/message_channel.js";
+import { sendEmbeds } from "../../util/index.js";
 
 const TARGET_SITE = "https://nyaa.si/view/";
 const IMG_DESCRIPTION_REGEX = /!\[.*?]/g;

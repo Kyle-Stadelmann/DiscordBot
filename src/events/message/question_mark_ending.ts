@@ -1,8 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import { QUESTION_MARK_URL } from "../../constants.js";
-import { sendEmbeds } from "../../util/message_channel.js";
-import { random } from "../../util/random.js";
+import { random, sendEmbeds } from "../../util/index.js";
 
 const QUESTION_MARK_CHANCE = 5;
 

@@ -2,7 +2,7 @@ import { Message, MessageEmbed } from "discord.js";
 import { bdbot } from "../../app.js";
 import { PREFIX } from "../../constants.js";
 import { Command, CommandConfig } from "../../types/command.js";
-import { sendEmbeds } from "../../util/message_channel.js";
+import { sendEmbeds } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "help",

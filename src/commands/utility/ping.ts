@@ -2,8 +2,7 @@ import { Message, MessageEmbed } from "discord.js";
 import { client } from "../../app.js";
 import { TYPESCRIPT_URL } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { getRandomHexStr } from "../../util/embed_helpers.js";
-import { sendEmbeds } from "../../util/message_channel.js";
+import { getRandomHexStr, sendEmbeds } from "../../util/index.js";
 
 // Probably won't work in pm2
 const version = process.env.npm_package_version;

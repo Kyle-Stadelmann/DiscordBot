@@ -1,7 +1,7 @@
 import { GuildMember } from "discord.js";
 import { Low, JSONFile } from "lowdb";
 import { COOLDOWN_JSON_LOC } from "../../constants.js";
-import { Cooldown, CooldownFile } from "../../util/cooldown_helpers.js";
+import { Cooldown, CooldownFile } from "../../util/index.js";
 
 export class CooldownContainer {
 	private cooldowns: Cooldown;
