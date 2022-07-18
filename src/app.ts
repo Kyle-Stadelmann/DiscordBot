@@ -6,7 +6,7 @@ import { dirname, importx } from "@discordx/importer";
 import { Client } from "discordx";
 import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot_container.js";
-import { isDevMode, touchJSONCooldownFile } from "./util/index.js";
+import { isDevMode } from "./util/index.js";
 
 // Import .env file variables (for BOT_TOKEN)
 dotenv.config({ path: `${SRC_DIR}/../.env` });
@@ -37,9 +37,8 @@ async function startup() {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		await client.login(process.env.BOT_TOKEN);
 	}
-	// Init command cooldown file
-	await touchJSONCooldownFile();
-	await bdbot.loadCommands();
+
+	await bdbot.initContainter();
 }
 
 startup().catch(console.error);

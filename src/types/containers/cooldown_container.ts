@@ -1,7 +1,7 @@
 import { GuildMember } from "discord.js";
 import { Low, JSONFile } from "lowdb";
 import { COOLDOWN_JSON_LOC } from "../../constants.js";
-import { Cooldown, CooldownFile } from "../../util/index.js";
+import { Cooldown, CooldownFile } from "../cooldown.js";
 
 export class CooldownContainer {
 	private cooldowns: Cooldown;
@@ -11,10 +11,12 @@ export class CooldownContainer {
 		const adapter = new JSONFile<CooldownFile>(COOLDOWN_JSON_LOC);
 		this.db = new Low(adapter);
 		this.cooldowns = {};
+	}
 
-		// Sync execution of async function, but won't cause realistic issues here for the current scope of this bot
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		this.initCooldowns();
+	public async initContainer() {
+		await this.db.read();
+		const existingCd = this.getDbBufferCooldown();
+		this.cooldowns = existingCd ?? {};
 	}
 
 	public isOnCooldown(member: GuildMember): boolean {
@@ -46,12 +48,6 @@ export class CooldownContainer {
 		this.setDbBufferCooldown(this.cooldowns);
 
 		await this.db.write();
-	}
-
-	private async initCooldowns() {
-		await this.db.read();
-		const existingCd = this.getDbBufferCooldown();
-		this.cooldowns = existingCd ?? {};
 	}
 
 	private getCooldownDate(member: GuildMember): Date {
