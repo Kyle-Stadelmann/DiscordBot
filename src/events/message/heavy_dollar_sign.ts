@@ -1,6 +1,6 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { HEAVY_DOLLAR_SIGN } from "../../constants.js";
-import { random } from "../../util/random.js";
+import { random } from "../../util/index.js";
 
 const HEAVY_DOLLAR_SIGN_CHANCE = 0.5;
 

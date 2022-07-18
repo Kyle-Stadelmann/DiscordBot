@@ -1,9 +1,7 @@
 import { Collection, Message, MessageEmbed } from "discord.js";
 import fg from "fast-glob";
 import { PREFIX } from "../../constants.js";
-import { isDevMode } from "../../util/is_dev_mode.js";
-import { sendErrorMessage, sendEmbeds } from "../../util/message_channel.js";
-import { printSpace } from "../../util/print_space.js";
+import { isDevMode, printSpace, sendEmbeds, sendErrorMessage } from "../../util/index.js";
 import { Command } from "../command.js";
 
 export class CommandContainer {

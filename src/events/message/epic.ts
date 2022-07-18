@@ -1,6 +1,6 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { SUNGLASSES } from "../../constants.js";
-import { random } from "../../util/random.js";
+import { random } from "../../util/index.js";
 
 const EPIC_SUNGLASSES_CHANCE = 100;
 const SUNGLASSES_EPIC_CHANCE = 100;

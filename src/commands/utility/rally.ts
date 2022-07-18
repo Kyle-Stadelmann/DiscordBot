@@ -1,6 +1,6 @@
 import { Collection, Message, StageChannel, VoiceChannel } from "discord.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/message_channel.js";
+import { sendErrorMessage, sendMessage } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "rally",

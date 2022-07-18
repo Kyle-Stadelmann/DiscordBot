@@ -6,8 +6,7 @@ import { dirname, importx } from "@discordx/importer";
 import { Client } from "discordx";
 import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot_container.js";
-import { isDevMode } from "./util/is_dev_mode.js";
-import { touchJSONCooldownFile } from "./util/cooldown_helpers.js";
+import { isDevMode, touchJSONCooldownFile } from "./util/index.js";
 
 // Import .env file variables (for BOT_TOKEN)
 dotenv.config({ path: `${SRC_DIR}/../.env` });

@@ -1,7 +1,7 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { client } from "../../app.js";
 import { KHANG_ID, KHANG_NEKO_EMOJI_ID } from "../../constants.js";
-import { random } from "../../util/random.js";
+import { random } from "../../util/index.js";
 
 const KHANG_NEKO_CHANCE = 5;
 

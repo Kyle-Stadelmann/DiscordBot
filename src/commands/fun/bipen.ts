@@ -1,7 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
 import { BIPEN_IMG_URL } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { sendEmbeds } from "../../util/message_channel.js";
+import { sendEmbeds } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "bipen",
