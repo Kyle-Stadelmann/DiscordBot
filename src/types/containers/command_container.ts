@@ -1,7 +1,7 @@
 import { Collection, Message, MessageEmbed } from "discord.js";
 import fg from "fast-glob";
 import { PREFIX } from "../../constants.js";
-import { isDevMode, printSpace, sendEmbeds, sendErrorMessage } from "../../util/index.js";
+import { isDevMode, printSpace, sendEmbeds, sendErrorDebug, sendErrorMessage } from "../../util/index.js";
 import { Command } from "../command.js";
 
 export class CommandContainer {
@@ -111,10 +111,10 @@ export class CommandContainer {
 			result = await cmd.run(msg, args);
 		} catch (error) {
 			result = false;
-			console.error(`Error when executing command ${cmdStr}\nerror: ${JSON.stringify(error)}`);
-			console.error(`msg: ${JSON.stringify(msg)}`);
-			console.error(`args: ${JSON.stringify(args)}`);
+			const errStr = this.createCmdErrorStr(cmdStr, error, msg, args);
+			console.error(errStr);
 			printSpace();
+			await sendErrorDebug(errStr);
 		}
 
 		// If cmd successful, put on cooldown. No cooldowns in dev mode though
@@ -129,5 +129,13 @@ export class CommandContainer {
 	public getCommand(cmdStr: string): Command | undefined {
 		if (!this.commands.has(cmdStr)) return undefined;
 		return this.commands.get(cmdStr);
+	}
+
+	private createCmdErrorStr(cmdStr: string, error: any, msg: Message, args: string[]): string {
+		let errStr = `Error when executing command ${cmdStr}\n`;
+		errStr += `msg: ${JSON.stringify(msg)}\n`;
+		errStr += `args: ${JSON.stringify(args)}\n`;
+		errStr += `error: ${JSON.stringify(error)}\n`;
+		return errStr;
 	}
 }
