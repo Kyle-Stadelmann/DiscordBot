@@ -2,6 +2,7 @@ import { Message, MessageEmbed } from "discord.js";
 import { client } from "../../app.js";
 import { TYPESCRIPT_URL } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
+import { getRandomHexStr } from "../../util/embed_helpers.js";
 import { sendEmbeds } from "../../util/message_channel.js";
 
 // Probably won't work in pm2
@@ -21,7 +22,7 @@ class PingCommand extends Command {
 			.setTitle("pong!")
 			.setFooter({ text: `version ${version}`, iconURL: TYPESCRIPT_URL })
 			// TODO: set this to avg pixel color of image?
-			.setColor(0x0);
+			.setColor(getRandomHexStr());
 
 		await sendEmbeds(msg.channel, [embed]);
 		return true;
