@@ -22,7 +22,7 @@ for (const flag in Intents.FLAGS) {
 export const client = new Client({
 	// botGuilds: [(myClient) => myClient.guilds.cache.map((guild) => guild.id)],
 	intents: myIntents,
-	partials: ["CHANNEL"]
+	partials: ["CHANNEL"],
 });
 
 // Bot state

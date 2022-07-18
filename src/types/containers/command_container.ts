@@ -122,8 +122,7 @@ export class CommandContainer {
 		// If cmd successful, put on cooldown. No cooldowns in dev mode though
 		if (result && isDevMode()) {
 			// TODO: Cooldowns are disabled in DMs atm
-			if (msg.channel.type !== "DM") 
-				await cmd.putOnCooldown(msg.member);
+			if (msg.channel.type !== "DM") await cmd.putOnCooldown(msg.member);
 		}
 
 		return result;

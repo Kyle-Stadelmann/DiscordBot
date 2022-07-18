@@ -29,7 +29,7 @@ export class CooldownContainer {
 	public async putOnCooldown(member: GuildMember) {
 		const endCooldownEpoch = new Date().valueOf() + this.cooldownTime;
 		const endCooldownDate = new Date(endCooldownEpoch);
-		
+
 		this.setCooldownDate(member, endCooldownDate);
 		await this.updateDb();
 	}
@@ -44,7 +44,7 @@ export class CooldownContainer {
 		await this.db.read();
 
 		this.setDbBufferCooldown(this.cooldowns);
-		
+
 		await this.db.write();
 	}
 
