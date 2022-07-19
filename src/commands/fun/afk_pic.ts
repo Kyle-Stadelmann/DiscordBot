@@ -1,18 +1,20 @@
+/* eslint-disable max-classes-per-file */
 import { Message, MessageEmbed } from "discord.js";
 import { bdbot } from "../../app.js";
 import { AfkPic } from "../../types/afk_pic.js";
 import { Command, CommandConfig } from "../../types/command.js";
+import { ParentCommand, ParentCommandConfig } from "../../types/parent_command.js";
 import { sendEmbeds } from "../../util/message_channel.js";
 
-const cmdConfig: CommandConfig = {
-    name: "afkpic",
+const afkpicGetConfig: CommandConfig = {
+    name: "get",
     description: "Sends an AFK Pic of a random (or given) user",
-    usage: "afkpic [@user]",
-    examples: ["afkpic", "afkpic @Dualkim"],
+    usage: "afkpic [get] [@user]",
+    examples: ["afkpic get", "afkpic get @Baconsunset", "afkpic", "afkpic @Meow"],
     allowInDM: true,
 }
 
-class AfkPicCommand extends Command {
+class AfkPicGetCommand extends Command {
     public async run(msg: Message, args: string[]): Promise<boolean> {
         const {afkPicContainer} = bdbot;
         const { channel } = msg;
@@ -34,9 +36,26 @@ class AfkPicCommand extends Command {
 
         const embed = new MessageEmbed().setImage(afkPic.url);
         await sendEmbeds(channel, [embed]);
-
+        
         return true;
     }
 }
 
-export default new AfkPicCommand(cmdConfig);
+const afkpicConfig: ParentCommandConfig = {
+    name: "afkpic",
+    description: "Sends an AFK Pic of a random (or given) user",
+    shareCooldownMap: false
+}
+
+class AfkPicCommand extends ParentCommand {
+    constructor(options: ParentCommandConfig) {
+        super(options);
+
+        const getCmd = new AfkPicGetCommand(afkpicGetConfig);
+        this.subCommands.push(getCmd);
+
+        this.defaultCmd = getCmd;
+    }
+}
+
+export default new AfkPicCommand(afkpicConfig);

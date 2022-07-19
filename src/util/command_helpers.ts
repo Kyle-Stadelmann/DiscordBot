@@ -1,9 +1,10 @@
-import { Message, MessageEmbed } from "discord.js";
+import {  Message, MessageEmbed } from "discord.js";
 import { bdbot } from "../app.js";
 import { PREFIX } from "../constants.js";
 import { Command } from "../types/command.js";
+import { ParentCommand } from "../types/parent_command.js";
 import { isDevMode } from "./is_dev_mode.js";
-import { sendErrorMessage, sendEmbeds } from "./message_channel.js";
+import { sendEmbeds } from "./message_channel.js";
 import { printSpace } from "./print_space.js";
 
 // From GAwesomeBot's parser
@@ -69,7 +70,7 @@ export async function loadCommandFile(file: string): Promise<Command> {
 export async function loadCommandFiles(files: string[]): Promise<Command[]> {
 	if (files.length === 0) {
 		console.log("No commands to load!");
-		return;
+		return [];
 	}
 
 	console.log(`Loading commands...`);
@@ -79,40 +80,15 @@ export async function loadCommandFiles(files: string[]): Promise<Command[]> {
 	const cmds = await Promise.all(loadCmdPromises);
 	// loadCommandFile can return null, filter those out
 	const validCmds = cmds.filter((cmd) => cmd);
-	// eslint-disable-next-line consistent-return
 	return validCmds;
-}
-
-export async function checkCanRunCmd(cmd: Command, msg: Message): Promise<boolean> {
-	const { member, channel } = msg;
-
-	// Make sure if we're in a dm to check if this cmd is allowed in a dm
-	// fail quietly (this cmd shouldn't be visible at all to them)
-	if (channel.type === "DM" && !cmd.allowInDM) return false;
-
-	// TODO: Cooldowns are disabled in DMs atm
-	if (channel.type === "DM") return true;
-
-	if (cmd.isOnCooldown(member)) {
-		console.log("Command was NOT successful, member is on cooldown.");
-		await sendErrorMessage(channel, "Command was NOT successful, you are on cooldown for this command.");
-		printSpace();
-		return false;
-	}
-
-	return true;
 }
 
 export function isHelpCmd(args: string[]): boolean {
 	return args.length > 0 && args[0].toLowerCase() === "help";
 }
 
-// Handles the help call for a specific command
-// called when for ex: '>rally help' is sent
-export async function handleHelpCmd(msg: Message, cmd: Command) {
-	console.log(`Help for the ${cmd.name} command detected by: ${msg.author.username}`);
-
-	const helpStr = new MessageEmbed()
+function buildNormalCmdHelpEmbed(cmd: Command): MessageEmbed {
+	const helpEmbed = new MessageEmbed()
 		.addField("Command", `\`${cmd.name}\``, true)
 		.addField("Description", cmd.description)
 		.addField("Usage", `\`${PREFIX}${cmd.usage}\``)
@@ -125,10 +101,42 @@ export async function handleHelpCmd(msg: Message, cmd: Command) {
 			examplesStr += `\`${PREFIX}${examples[i]}\``;
 			if (i !== examples.length - 1) examplesStr += "\n";
 		}
-		helpStr.addField("Examples", examplesStr);
+		helpEmbed.addField("Examples", examplesStr);
 	}
 
-	await sendEmbeds(msg.channel, [helpStr]);
+	return helpEmbed;
+}
+
+// TODO: Finish full parent/subcmds embed
+function buildParentCmdHelpEmbed(cmd: ParentCommand): MessageEmbed {
+	const helpEmbed = new MessageEmbed()
+		.addField("Command", `\`${cmd.name}\``, true)
+		.addField("Description", cmd.description)
+		.setColor(0x0);
+
+	const examples = cmd.getExamples();
+	if (examples != null && examples.length > 0) {
+		let examplesStr = "";
+		for (let i = 0; i < examples.length; i += 1) {
+			examplesStr += `\`${PREFIX}${examples[i]}\``;
+			if (i !== examples.length - 1) examplesStr += "\n";
+		}
+		helpEmbed.addField("Examples", examplesStr);
+	}
+
+	return helpEmbed;
+}
+
+// Handles the help call for a specific command
+// called when for ex: '>rally help' is sent
+export async function handleHelpCmd(msg: Message, cmd: Command) {
+	console.log(`Help for the ${cmd.name} command detected by: ${msg.author.username}`);
+
+	const helpEmbed = (cmd instanceof ParentCommand) 
+		? buildParentCmdHelpEmbed(cmd)
+		: buildNormalCmdHelpEmbed(cmd);
+
+	await sendEmbeds(msg.channel, [helpEmbed]);
 	console.log("Help was successful.");
 	printSpace();
 }
