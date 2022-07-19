@@ -1,6 +1,6 @@
 import { Collection, Message } from "discord.js";
 import fg from "fast-glob";
-import { checkCanRunCmd, createCmdErrorStr, handleHelpCmd, isDevMode, isHelpCmd, loadCommandFiles, printSpace, sendErrorDebug } from "../../util/index.js";
+import { createCmdErrorStr, handleHelpCmd, isDevMode, isHelpCmd, loadCommandFiles, printSpace, sendErrorDebug } from "../../util/index.js";
 import { Command } from "../command.js";
 
 export class CommandContainer {
@@ -18,7 +18,7 @@ export class CommandContainer {
 
 		const cmd = this.commands.get(cmdStr);
 
-		const canRunCmd = await checkCanRunCmd(cmd, msg);
+		const canRunCmd = await cmd.validateCommand(msg, args);
 		if (!canRunCmd) return false;
 
 		if (isHelpCmd(args)) {
