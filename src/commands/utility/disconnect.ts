@@ -15,13 +15,18 @@ class DisconnectCommand extends Command {
 		const textChannel = msg.channel;
 
 		if (!connection) {
-			await sendErrorMessage(textChannel, "I am not currently connected to a voice channel!");
+			await sendErrorMessage(textChannel, "Not currently connected");
 			return false;
 		}
 
 		connection.destroy();
 
-		await sendMessage(textChannel, "Successfully disconnected!");
+		// get current channel
+		const vc = msg.guild.channels.cache.get(connection.joinConfig.channelId)
+		
+		if (vc.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
+			await sendMessage(textChannel, "Disconnect successful");
+		}
 
 		return true;
 	}
