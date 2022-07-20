@@ -131,16 +131,17 @@ export class AfkPicContainer {
 
         for (const picFile of allPicFiles) {
             const picFileName = path.basename(picFile);
-            const afkPic = new AfkPic(new Set(), null, picFile);
-
+            const membersSet = new Set<string>();
+            
             for (const [code, userId] of afkPicCodeMap) {
                 if (picFileName.includes(code)) {
-                    afkPic.users.add(userId);
+                    membersSet.add(userId);
                 }
             }
 
+            const afkPic = new AfkPic(Array.from(membersSet), null, picFile);
             // Only collect afk pic if it had a relevant user
-            if (afkPic.users.size > 0) {
+            if (membersSet.size > 0) {
                 this.filePicsMap.set(picFile, afkPic);
             }
         }
