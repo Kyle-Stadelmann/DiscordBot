@@ -1,4 +1,5 @@
 import {  Message, MessageEmbed } from "discord.js";
+import path from "path";
 import { PREFIX } from "../constants.js";
 import { Command } from "../types/command.js";
 import { ParentCommand } from "../types/parent_command.js";
@@ -43,7 +44,7 @@ export async function loadCommandFile(file: string): Promise<Command> {
 	// Only load command if its not disabled
 	// But if DEV mode is activated, load disabled commands
 	if (!cmd.disabled || isDevMode()) {
-		console.log(`${file} loaded!`);
+		console.log(`${path.basename(file)} loaded!`);
 		return cmd;
 	}
 	return null;
