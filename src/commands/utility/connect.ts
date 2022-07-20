@@ -16,17 +16,21 @@ class ConnectCommand extends Command {
 		const textChannel = msg.channel;
 
 		if (!voiceChannel || voiceChannel === msg.guild.afkChannel) {
-			await sendErrorMessage(textChannel, "You are not connected to a valid voice channel!");
+			await sendErrorMessage(textChannel, "Caller is not connected to a valid voice channel");
 			return false;
 		}
-
-		await sendMessage(textChannel, `Connecting to ${voiceChannel.name}`);
 
 		joinVoiceChannel({
 			channelId: voiceChannel.id,
 			guildId: voiceChannel.guildId,
-			adapterCreator: null,
+			selfDeaf: true,
+
+			adapterCreator: msg.guild.voiceAdapterCreator,
 		});
+
+		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
+			await sendMessage(textChannel, `Connected to ${voiceChannel.name}`);
+		}
 
 		return true;
 	}
