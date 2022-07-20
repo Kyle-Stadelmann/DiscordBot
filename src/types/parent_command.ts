@@ -8,21 +8,21 @@ export abstract class ParentCommand extends Command {
 
 	protected subCommands: Command[];
     protected defaultCmd?: Command;
-    
+    protected defaultCmdStr?: string;
+
     // Maybe questionable but it works
     constructor(options: ParentCommandConfig) {
         const config: CommandConfig = {
             name: options.name,
             description: options.description,
             usage: "", // Unused
-            examples: [], // Unused
             aliases: options.aliases,
             disabled: options.disabled,
-            category: Command.getCategoryName()
         }
         super(config);
         this.subCommands = [];
         this.shareCooldownMap = options.shareCooldownMap;
+        this.defaultCmdStr = options.defaultCmdStr;
     }
 
     // Default behavior, try to find sub command to run, slice first "sub command" arg, and run
@@ -45,7 +45,7 @@ export abstract class ParentCommand extends Command {
     // [prefix][parentCommandName] [subCommandName] ex: '>afkpic add'
     // Override for more complex sub command resolving
     public resolveSubCommand(args: string[]): Command | undefined {
-        if (args.length === 0) return this.defaultCmd;
+        if (!args || args.length === 0) return this.defaultCmd;
         const subCmd = this.subCommands.find((cmd => cmd.name === args[0]));
         // If no subcmd was found, try the default cmd
         return subCmd ?? this.defaultCmd;
@@ -61,6 +61,24 @@ export abstract class ParentCommand extends Command {
         const cmd = this.resolveSubCommand(args);
         return cmd?.isOnCooldown(member, args);
     }
+
+    public override putOnCooldown(member: GuildMember, args?: string[]) {
+        if (this.shareCooldownMap) {
+            return this.cooldowns.putOnCooldown(member);
+        }
+
+        const cmd = this.resolveSubCommand(args);
+        return cmd?.putOnCooldown(member, args);
+    }
+
+    public override endCooldown(member: GuildMember, args?: string[]) {
+        if (this.shareCooldownMap) {
+            return this.cooldowns.endCooldown(member);
+        }
+
+        const cmd = this.resolveSubCommand(args);
+        return cmd?.endCooldown(member, args);
+	}
 
     // This is very unintuitive. TODO: Add proper getter/setters if we want to fix this
     public getExamples(): string[] {
@@ -83,12 +101,26 @@ export abstract class ParentCommand extends Command {
     
         return this.validateCooldown(msg, args);
     }
+
+    protected async addSubCommand(CmdType: new (options: CommandConfig) => Command, subCmdConfig: CommandConfig) {
+        // eslint-disable-next-line no-param-reassign
+        subCmdConfig.cooldown_name = `${this.name}_${subCmdConfig.name}`;
+        const cmd = new CmdType(subCmdConfig);
+        await cmd.initCmd();
+        this.subCommands.push(cmd);
+
+        if (this.defaultCmdStr && cmd.name === this.defaultCmdStr) {
+            this.defaultCmd = cmd;
+        }
+    }
 }
 
-export interface ParentCommandConfig {
+
+export interface ParentCommandConfig extends CommandConfig {
 	name: string;
 	description: string; // Description of overall command (all subcommands)
-    shareCooldownMap: boolean;
+    shareCooldownMap: boolean; // Do all subcommands share the same cooldown?
 	aliases?: string[];
 	disabled?: boolean;
+    defaultCmdStr?: string;
 }
