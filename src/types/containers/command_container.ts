@@ -1,6 +1,6 @@
 import { Collection, Message } from "discord.js";
 import fg from "fast-glob";
-import { createCmdErrorStr, handleHelpCmd, isDevMode, isHelpCmd, loadCommandFiles, printSpace, sendErrorDebug } from "../../util/index.js";
+import { createCmdErrorStr, handleHelpCmd, isDevMode, isHelpCmd, isProdMode, loadCommandFiles, printSpace, sendErrorToDiscordChannel } from "../../util/index.js";
 import { Command } from "../command.js";
 
 export class CommandContainer {
@@ -34,7 +34,9 @@ export class CommandContainer {
 			const errStr = createCmdErrorStr(cmdStr, error, msg, args);
 			console.error(errStr);
 			printSpace();
-			await sendErrorDebug(errStr);
+			if (isProdMode()) {
+				await sendErrorToDiscordChannel(errStr);
+			}
 		}
 
 		// If cmd successful, put on cooldown. No cooldowns in dev mode though
