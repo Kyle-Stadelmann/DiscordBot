@@ -28,7 +28,7 @@ export const TWEED_ID = "250368865089880067";
 export const NATHAN_P_ID = "164893909741338625";
 export const NATHAN_L_ID = "605626870301458433";
 
-// JSON Locations
+// JSON File Locations
 export const COOLDOWN_JSON_LOC = path.resolve(`${dirname}/../database/cooldowns.json`);
 export const AFKPIC_JSON_LOC = path.resolve(`${dirname}/../database/afk_pic.json`);
 
@@ -36,7 +36,6 @@ export const BD4_ID = "191318875667824650";
 export const BD5_ID = "505214234393706499";
 export const DEV_BOT_ID = "873375752408694855";
 export const DEV_SERVER_ID = "723147134605590598";
-export const BIPEN_IMG_URL = "https://i.imgur.com/cIoLOxW.jpg";
 export const BD4_BOT_ID = "480909013593227277";
 export const HEAVY_DOLLAR_SIGN = "💲";
 export const DANIEL_WPM = "48";

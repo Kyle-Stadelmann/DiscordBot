@@ -28,17 +28,18 @@ export abstract class Command {
 	constructor(options: CommandConfig) {
 		this.name = options.name;
 		this.description = options.description;
-		this.usage = options.usage;
+		this.usage = options.usage ?? "";
 		this.examples = options.examples ?? [];
 		this.allowInDM = options.allowInDM ?? false;
 		this.aliases = options.aliases ?? [];
 		this.disabled = options.disabled ?? false;
 		this.cooldownTime = options.cooldownTime ?? 0.5 * 1000;
 		this.permissions = options.permissions ?? [];
-		this.cooldowns = options.cooldowns ?? new CooldownContainer(this.cooldownTime, this.name);
-		this.category = options.category ?? Command.getCategoryName();
+		this.cooldowns = new CooldownContainer(this.cooldownTime, options.cooldown_name ?? this.name);
+		this.category = Command.getCategoryName();
 	}
 
+	// Must call after constructor unfortunately
 	public async initCmd() {
 		await this.cooldowns.initContainer();
 	}
@@ -47,11 +48,11 @@ export abstract class Command {
 		return this.cooldowns.isOnCooldown(member);
 	}
 
-	public async putOnCooldown(member: GuildMember, args?: string[]) {
+	public putOnCooldown(member: GuildMember, args?: string[]): Promise<void> {
 		return this.cooldowns.putOnCooldown(member);
 	}
 
-	public async endCooldown(member: GuildMember, args?: string[]) {
+	public endCooldown(member: GuildMember, args?: string[]): Promise<void> {
 		return this.cooldowns.endCooldown(member);
 	}
 
@@ -95,17 +96,12 @@ export abstract class Command {
 export interface CommandConfig {
 	name: string;
 	description: string;
-	usage: string;
+	usage?: string;
 	cooldownTime?: number;
 	examples?: string[];
 	allowInDM?: boolean;
 	aliases?: string[];
 	disabled?: boolean;
 	permissions?: any[];
-	category?: CommandCategory; // This will be grabbed from filepath if not specified
-	cooldowns?: CooldownContainer; // New cooldown container will be created if not specified
+	cooldown_name?: string;
 }
-function validateCooldown(cmd: any, msg: Message<boolean>, args: string[]): boolean | PromiseLike<boolean> {
-	throw new Error("Function not implemented.");
-}
-

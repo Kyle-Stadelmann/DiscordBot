@@ -1,7 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
-import { BIPEN_IMG_URL } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { sendEmbeds } from "../../util/index.js";
+import { random, sendEmbeds } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "bipen",
@@ -10,13 +9,22 @@ const cmdConfig: CommandConfig = {
 	allowInDM: true,
 };
 
+const BIPEN_IMG_URL = "https://i.imgur.com/cIoLOxW.jpg";
+const SHINY_BIPEN_IMG_URL = "https://i.imgur.com/E8KOiTT.png";
+// const SHINY_POKEMON_CHANCE = 1/8192;
+const SHINY_BIPEN_CHANCE = 1/4000;
+
 class BipenCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const message = "I'm a dragon, Rob! ~ *Bipen*";
 
+		const bipenPicUrl = (random(SHINY_BIPEN_CHANCE)) 
+			? SHINY_BIPEN_IMG_URL 
+			: BIPEN_IMG_URL;
+
 		const embed = new MessageEmbed()
 			.addField("Bipen", message)
-			.setImage(BIPEN_IMG_URL)
+			.setImage(bipenPicUrl)
 			.setFooter({ text: `R.I.P. Bipen 08/2012` })
 			.setColor(0x0);
 
