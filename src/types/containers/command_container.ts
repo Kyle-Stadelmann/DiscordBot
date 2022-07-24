@@ -4,7 +4,7 @@ import { createCmdErrorStr, handleHelpCmd, isDevMode, isHelpCmd, isProdMode, loa
 import { Command } from "../command.js";
 
 export class CommandContainer {
-	public commands = new Collection<string, Command>();
+	public readonly commands = new Collection<string, Command>();
 
 	public async initContainer() {
 		const cmdFiles = await fg(`src/commands/**/*`, { absolute: true });

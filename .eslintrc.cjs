@@ -20,6 +20,7 @@ module.exports = {
     "import/prefer-default-export": "off",
     '@typescript-eslint/no-floating-promises': ['warn'],
     "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
-    "prefer-destructuring": ["error", {"object": true, "array": false}]
+    "prefer-destructuring": ["error", {"object": true, "array": false}],
+    "no-underscore-dangle": "off"
   }
 };

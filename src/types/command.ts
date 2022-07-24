@@ -11,17 +11,17 @@ export enum CommandCategory {
 }
 
 export abstract class Command {
-	public name: string;
-	public description: string;
-	public usage: string;
-	public examples: string[];
-	public allowInDM: boolean;
-	public aliases: string[];
-	public disabled: boolean;
-	public cooldownTime: number;
-	public permissions: any[]; // TODO: Expand on this
-	public category: CommandCategory;
-	protected cooldowns: CooldownContainer;
+	public readonly name: string;
+	public readonly description: string;
+	public readonly usage: string;
+	private readonly _examples: string[];
+	public readonly allowInDM: boolean;
+	public readonly aliases: string[];
+	public readonly disabled: boolean;
+	public readonly cooldownTime: number;
+	public readonly permissions: any[]; // TODO: Expand on this
+	public readonly category: CommandCategory;
+	protected readonly cooldowns: CooldownContainer;
 
 	public abstract run(msg: Message, args: string[]): Promise<boolean>;
 
@@ -29,7 +29,7 @@ export abstract class Command {
 		this.name = options.name;
 		this.description = options.description;
 		this.usage = options.usage ?? "";
-		this.examples = options.examples ?? [];
+		this._examples = options.examples ?? [];
 		this.allowInDM = options.allowInDM ?? false;
 		this.aliases = options.aliases ?? [];
 		this.disabled = options.disabled ?? false;
@@ -64,6 +64,10 @@ export abstract class Command {
 		if (channel.type === "DM" && !this.allowInDM) return false;
 	
 		return this.validateCooldown(msg, args);
+	}
+
+	get examples(): string[] {
+		return this._examples;
 	}
 
 	protected async validateCooldown(msg: Message, args: string[]): Promise<boolean> {
@@ -103,5 +107,5 @@ export interface CommandConfig {
 	aliases?: string[];
 	disabled?: boolean;
 	permissions?: any[];
-	cooldown_name?: string;
+	cooldown_name?: string; // Will be set for you
 }

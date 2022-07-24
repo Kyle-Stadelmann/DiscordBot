@@ -3,7 +3,7 @@ import FastGlob from "fast-glob";
 import path from "path";
 import { Low, JSONFile } from "lowdb";
 import { client } from "../../app.js";
-import { AFKPIC_JSON_LOC, ALAN_ID, ANISH_ID, ASIAN_KYLE_ID, DANIEL_ID, DEV_SERVER_TESTING_CHANNEL_1_ID, ERIC_ID, GARY_ID, JASON_ID, JOHNNY_ID, JUSTIN_M_ID, KEISI_ID, KHANG_ID, MEGU_ID, NATHAN_P_ID, NAT_ID, SWISS_KYLE_ID, TWEED_ID, ZACH_ID } from "../../constants.js";
+import { ALAN_ID, ANISH_ID, ASIAN_KYLE_ID, DANIEL_ID, DEV_SERVER_TESTING_CHANNEL_1_ID, ERIC_ID, GARY_ID, JASON_ID, JOHNNY_ID, JUSTIN_M_ID, KEISI_ID, KHANG_ID, MEGU_ID, NATHAN_P_ID, NAT_ID, SWISS_KYLE_ID, TWEED_ID, ZACH_ID } from "../../constants.js";
 import { AfkPic, AfkPicFile } from "../afk_pic.js";
 import { sleep } from '../../util/sleep.js';
 import { getRandomElement } from "../../util/random.js";
@@ -29,17 +29,19 @@ afkPicCodeMap.set("NP", NATHAN_P_ID);
 afkPicCodeMap.set("ZT", ZACH_ID);
 
 export class AfkPicContainer {
+    private pics: AfkPic[] = [];
     // File path -> afk pic 
     // This is parsed from the local files
-    private filePicsMap = new Collection<string, AfkPic>();
+    private readonly filePicsMap = new Collection<string, AfkPic>();
     // User id -> afk pic 
     // This is filled after parsing/db initalizing 
-    private userPicsMap = new Collection<string, AfkPic[]>();
+    private readonly userPicsMap = new Collection<string, AfkPic[]>();
 
-    private db: Low<AfkPicFile>;
+    private readonly db: Low<AfkPicFile>;
 
-    constructor() {
-        const adapter = new JSONFile<AfkPicFile>(AFKPIC_JSON_LOC);
+    // json location, and local files location (note: fastglob path, not a full path)
+    constructor(afkPicJSONLocation: string, private localPicsFGLocation: string) {
+        const adapter = new JSONFile<AfkPicFile>(afkPicJSONLocation);
 		this.db = new Low(adapter);
     }
 
@@ -52,7 +54,10 @@ export class AfkPicContainer {
         // For pics that still don't have url, upload pic to discord servers and get that url
         await this.enrichPicUrl();
 
-        this.db.data = [...this.filePicsMap.values()];
+        // Remove afk pics that don't have a url by this point
+        this.pics = this.pics.filter(pic => pic.url);
+
+        this.db.data = this.pics;
         
         await this.db.write();
 
@@ -63,17 +68,39 @@ export class AfkPicContainer {
         return this.userPicsMap.has(userId);
     }
 
+    public hasPics(): boolean {
+        return this.pics.length > 0;
+    }
+
     public getPic(userId?: string): AfkPic {
         return (userId) 
             ? getRandomElement(this.userPicsMap.get(userId))
-            : this.filePicsMap.random();
+            : getRandomElement(this.pics);
+    }
+
+    public doesPicAlreadyExist(picUrl: string) {
+        return this.pics.some(afkpic => afkpic.url === picUrl);
+    }
+
+    public addPics(picUrls: string[]): boolean {
+        picUrls.forEach(this.pics)
+    }
+
+    public getAllPics(): AfkPic[] {
+        return this.pics;
+    }
+
+    public getUserPics(userId: string): AfkPic[] {
+        const userPics = this.userPicsMap.get(userId);
+        return userPics || [];
     }
 
     private async enrichPicUrl() {
-        const filePicsMapWithoutUrl = this.filePicsMap.filter((pic) => !pic.url);
+        const filePicsWithoutUrl = this.pics.filter((pic) => !pic.url);
         const devChannel = client.channels.resolve(DEV_SERVER_TESTING_CHANNEL_1_ID) as TextChannel;
 
-        for (const [picPath, pic] of filePicsMapWithoutUrl) {
+        for (const pic of filePicsWithoutUrl) {
+            const picPath = pic.filePath;
             console.log(`Uploading afk pic: ${picPath}`);
             let msg: Message;
             try {
@@ -87,13 +114,11 @@ export class AfkPicContainer {
                 const attachments = [...msg.attachments.values()]
                 pic.url = attachments[0].url;
 
-                this.db.data = [...this.filePicsMap.values()];
+                this.db.data = this.pics;
                 // eslint-disable-next-line no-await-in-loop
                 await this.db.write();
-            }catch(error) {
+            } catch(error) {
                 console.error(error);
-                // Failed to upload afk pic, delete from map
-                this.filePicsMap.delete(picPath);
             }
         }
     }
@@ -127,7 +152,7 @@ export class AfkPicContainer {
 
     private async parseFiles() {
         console.log("Loading AFK pics...")
-        const allPicFiles = await FastGlob(`pics/AFK_PICS/*.{jpg,png,JPG,PNG}`, {absolute: true});
+        const allPicFiles = await FastGlob(`${this.localPicsFGLocation}/*.{jpg,png,JPG,PNG}`, {absolute: true});
 
         for (const picFile of allPicFiles) {
             const picFileName = path.basename(picFile);
