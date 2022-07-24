@@ -4,11 +4,11 @@ import { sendErrorMessage } from "../util/index.js";
 import { Command, CommandConfig } from "./command.js";
 
 export abstract class ParentCommand extends Command {
-    public shareCooldownMap: boolean;
+    public readonly shareCooldownMap: boolean;
 
-	protected subCommands: Command[];
+	protected readonly subCommands: Command[];
+    protected readonly defaultCmdStr?: string;
     protected defaultCmd?: Command;
-    protected defaultCmdStr?: string;
 
     // Maybe questionable but it works
     constructor(options: ParentCommandConfig) {
@@ -80,8 +80,7 @@ export abstract class ParentCommand extends Command {
         return cmd?.endCooldown(member, args);
 	}
 
-    // This is very unintuitive. TODO: Add proper getter/setters if we want to fix this
-    public getExamples(): string[] {
+    override get examples(): string[] {
         return this.subCommands.flatMap(cmd => cmd.examples);
     }
 

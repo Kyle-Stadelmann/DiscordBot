@@ -20,7 +20,7 @@ class PingCommand extends Command {
 			.setImage(client.user.avatarURL())
 			.setTitle("pong!")
 			.setFooter({ text: `version ${version}`, iconURL: TYPESCRIPT_URL })
-			// TODO: set this to avg pixel color of image?
+			// TODO: set this to avg pixel color of avatar?
 			.setColor(getRandomHexStr());
 
 		await sendEmbeds(msg.channel, [embed]);

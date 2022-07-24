@@ -5,7 +5,7 @@ import { Cooldown, CooldownFile } from "../cooldown.js";
 
 export class CooldownContainer {
 	private cooldowns: Cooldown;
-	private db: Low<CooldownFile>;
+	private readonly db: Low<CooldownFile>;
 
 	constructor(private cooldownTime: number, private cooldownName: string) {
 		const adapter = new JSONFile<CooldownFile>(COOLDOWN_JSON_LOC);

@@ -77,7 +77,7 @@ function buildNormalCmdHelpEmbed(cmd: Command): MessageEmbed {
 		.addField("Usage", `\`${PREFIX}${cmd.usage}\``)
 		.setColor(0x0);
 
-	const { examples } = cmd;
+	const {examples} = cmd;
 	if (examples != null && examples.length > 0) {
 		let examplesStr = "";
 		for (let i = 0; i < examples.length; i += 1) {
@@ -97,7 +97,7 @@ function buildParentCmdHelpEmbed(cmd: ParentCommand): MessageEmbed {
 		.addField("Description", cmd.description)
 		.setColor(0x0);
 
-	const examples = cmd.getExamples();
+	const {examples} = cmd;
 	if (examples != null && examples.length > 0) {
 		let examplesStr = "";
 		for (let i = 0; i < examples.length; i += 1) {

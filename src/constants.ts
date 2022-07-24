@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-export const AFK_CHANNEL_ID = "temp";
 export const PREFIX = ">";
 export const BOT_STUFF_CHANNEL_ID = "217149187207200769";
 
@@ -31,6 +30,11 @@ export const NATHAN_L_ID = "605626870301458433";
 // JSON File Locations
 export const COOLDOWN_JSON_LOC = path.resolve(`${dirname}/../database/cooldowns.json`);
 export const AFKPIC_JSON_LOC = path.resolve(`${dirname}/../database/afk_pic.json`);
+export const STAGING_AFKPIC_JSON_LOC = path.resolve(`${dirname}/../database/staging_afk_pic.json`);
+
+// Note: not a full path
+export const AFKPIC_FG_LOC = "pics/AFK_PICS";
+export const STAGING_AFKPIC_FG_LOC = "pics/STAGING_AFK_PICS";
 
 export const BD4_ID = "191318875667824650";
 export const BD5_ID = "505214234393706499";
