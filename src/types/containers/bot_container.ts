@@ -1,7 +1,6 @@
 import { AFKPIC_FG_LOC, AFKPIC_JSON_LOC, COOLDOWN_JSON_LOC, DANIEL_ID, STAGING_AFKPIC_FG_LOC, STAGING_AFKPIC_JSON_LOC } from "../../constants.js";
-import { touchJSONFile } from "../../util/db_helper.js";
 import { getRandomElement } from "../../util/random.js";
-import { AfkPic } from "../afk_pic.js";
+import { AfkPic } from "../data_access/afk_pic.js";
 import { AfkPicContainer } from "./afk_pic_container.js";
 import { CommandContainer } from "./command_container.js";
 
@@ -9,9 +8,9 @@ import { CommandContainer } from "./command_container.js";
 export class BDBot {
 	// Global state
 	public readonly commandContainer = new CommandContainer();
-	private readonly afkPicContainer = new AfkPicContainer(AFKPIC_JSON_LOC, AFKPIC_FG_LOC);
+	private readonly afkPicContainer = new AfkPicContainer();
 	// Newly added pictures will go in here, will be confirmed later and added to afk pic collection
-	private readonly stagingAfkPicContainer = new AfkPicContainer(STAGING_AFKPIC_JSON_LOC, STAGING_AFKPIC_FG_LOC);
+	private readonly stagingAfkPicContainer = new AfkPicContainer();
 
 	public readonly typingTimestamps = new Map<string, number>().set(DANIEL_ID, null);
 

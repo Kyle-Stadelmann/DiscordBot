@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Message, MessageEmbed } from "discord.js";
 import { bdbot } from "../../app.js";
-import { AfkPic } from "../../types/afk_pic.js";
+import { AfkPic } from "../../types/data_access/afk_pic.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { ParentCommand, ParentCommandConfig } from "../../types/parent_command.js";
 import { sendEmbeds, sendErrorMessage, sendMessage } from "../../util/message_channel.js";

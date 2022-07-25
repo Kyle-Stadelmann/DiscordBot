@@ -1,12 +1,17 @@
-import * as fs from 'fs';
+import dynamoose from "dynamoose";
+import * as dotenv from "dotenv";
+import { SRC_DIR } from "../constants.js";
 
-const fsPromises = fs.promises;
+const aws = dynamoose.aws.sdk;
+const {Credentials} = aws;
 
-// If file exists, do nothing. Otherwise create empty json file "{}"
-export async function touchJSONFile(filepath: string, defaultValue: string = "{}") {
-	const file = await fsPromises.open(filepath, "a");
-	if ((await file.stat()).size === 0) {
-		await file.appendFile(defaultValue);
-	}
-	await file.close();
+export function initDb() {
+	// Import .env file variables (for BOT_TOKEN)
+	dotenv.config({ path: `${SRC_DIR}/../.env` });
+
+	// Init db
+	aws.config.update({
+		"credentials": new Credentials({"accessKeyId": process.env.DYNAMO_ACCESS_KEY_ID, "secretAccessKey": process.env.DYNAMO_SECRET_ACCESS_KEY}),
+		"region": "us-west-1"
+	});
 }
