@@ -1,6 +1,6 @@
 import { getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { WHITE_CHECK_MARK, X } from "../../constants.js";
+import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
@@ -21,7 +21,7 @@ class ConnectCommand extends Command {
 
 		if (!voiceChannel || voiceChannel === msg.guild.afkChannel) {
 			console.log(`${msg.author.username} is not connected to a valid voice channel`);
-			await msg.react(X);
+			await msg.react(X_MARK);
 			return false;
 		}
 

@@ -8,6 +8,7 @@ import { printSpace, sendErrorMessage } from "../util/index.js";
 export enum CommandCategory {
 	Fun,
 	Utility,
+	Music,
 }
 
 export abstract class Command {
