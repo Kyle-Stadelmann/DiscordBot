@@ -11,7 +11,7 @@ const cmdConfig: CommandConfig = {
 	description: "Brigitte lends you her flail to hit your target a large amount of channels down",
 	usage: `flail @user`,
 	cooldownTime: 60 * 60 * 1000,
-	aliases: ["whip"]
+	aliases: ["whip"],
 };
 
 class FlailCommand extends Command {

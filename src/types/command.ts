@@ -63,7 +63,7 @@ export abstract class Command {
 		// Make sure if we're in a dm to check if this cmd is allowed in a dm
 		// fail quietly (this cmd shouldn't be visible at all to them)
 		if (channel.type === "DM" && !this.allowInDM) return false;
-	
+
 		return this.validateCooldown(msg, args);
 	}
 
@@ -73,17 +73,17 @@ export abstract class Command {
 
 	protected async validateCooldown(msg: Message, args: string[]): Promise<boolean> {
 		const { member, channel } = msg;
-	
+
 		// TODO: Cooldowns are disabled in DMs atm
 		if (channel.type === "DM") return true;
-	
+
 		if (this.isOnCooldown(member, args)) {
 			console.log("Command was NOT successful, member is on cooldown.");
 			await sendErrorMessage(channel, "Command was NOT successful, you are on cooldown for this command.");
 			printSpace();
 			return false;
 		}
-	
+
 		return true;
 	}
 

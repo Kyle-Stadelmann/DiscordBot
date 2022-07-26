@@ -33,7 +33,7 @@ class ConnectCommand extends Command {
 			adapterCreator: msg.guild.voiceAdapterCreator,
 		});
 		console.log(`Connected to ${voiceChannel.name}`);
-		
+
 		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
 			await msg.react(WHITE_CHECK_MARK);
 		}
