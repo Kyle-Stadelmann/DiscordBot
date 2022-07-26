@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { Message, MessageEmbed } from "discord.js";
 import { bdbot } from "../../app.js";
-import { UserAfkPic } from "../../types/data_access/afk_pic.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { ParentCommand, ParentCommandConfig } from "../../types/parent_command.js";
 import { sendEmbeds, sendErrorMessage, sendMessage } from "../../util/message_channel.js";
@@ -20,12 +20,13 @@ class AfkPicGetCommand extends Command {
 
         if (!bdbot.hasAfkPics()) {
             await sendMessage(channel, "Sorry, there are no AFK pics loaded.");
+            return false;
         }
 
-        let afkPic = this.getCorrespondingAfkPic(msg, args);
+        const afkPicUrl = this.getCorrespondingAfkPicUrl(msg, args);
 
-        if (afkPic?.url) {
-            const embed = new MessageEmbed().setImage(afkPic.url);
+        if (afkPicUrl) {
+            const embed = new MessageEmbed().setImage(afkPicUrl);
             await sendEmbeds(channel, [embed]);
             return true;
         } 
@@ -34,21 +35,21 @@ class AfkPicGetCommand extends Command {
         return false;
     }
 
-    private getCorrespondingAfkPic(msg: Message, args: string[]): UserAfkPic | undefined {
-        let afkPic: UserAfkPic;
+    private getCorrespondingAfkPicUrl(msg: Message, args: string[]): string | undefined {
+        let url: string;
         // Allow use of userId passed in arg too
-        // Make sure passed in arg isn't unreasonbly large
+        // Make sure passed in arg isn't unreasonbly large (idk if this really helps with security though)
         if (args.length > 0 && args[0].length < 20 && bdbot.hasUser(args[0])) {
-            afkPic = bdbot.getRandomAfkPicByUser(args[0]);
+            url = bdbot.getRandomAfkPicUrlByUser(args[0]);
         } else if (msg.mentions.users.size === 0) { 
-            afkPic = bdbot.getRandomAfkPic();
+            url = bdbot.getRandomAfkPicUrl();
         } else {
             const firstMentionId = msg.mentions.users?.first()?.id;
             if (firstMentionId && bdbot.hasUser(firstMentionId)) {
-                afkPic = bdbot.getRandomAfkPicByUser(firstMentionId);
+                url = bdbot.getRandomAfkPicUrlByUser(firstMentionId);
             }
         }
-        return afkPic;
+        return url;
     }
 }
 
@@ -62,19 +63,28 @@ const afkpicAddConfig: CommandConfig = {
 }
 
 class AfkPicAddCommand extends Command {
-    public async run(msg: Message, args: string[]): Promise<boolean> {
-        const { attachments } = msg;
-        if (!this.validate(msg)) return false;
-        bdbot.afkPicContainer.
+    public async run(msg: Message): Promise<boolean> {
+        const { attachments, channel } = msg;
+        if (!await this.validate(msg)) return false;
+        const afkPicUrls = attachments.map(attch => sanitizeUrl(attch.url));
+        
+        const result = await bdbot.tryAddAfkPics(afkPicUrls, msg.author.id);
+        if (result) {
+            await sendMessage(channel, "AFK Picture(s) added. Thank you for your *generous donation*!");
+        } else {
+            await sendErrorMessage(channel, "Failed to add AFK Pictures. This picture **may** exist already.");
+        }
+        return result;
     }
 
     private async validate(msg: Message): Promise<boolean> {
         const { attachments } = msg;
         
         if (attachments.size === 0) {
-            await sendErrorMessage(msg.channel, "Couldn't find an attachment to add");
+            await sendErrorMessage(msg.channel, "Couldn't find an afk pic to add.");
             return false;
         }
+        return true;
     }
 }
 

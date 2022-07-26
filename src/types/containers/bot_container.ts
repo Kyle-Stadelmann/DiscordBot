@@ -1,6 +1,4 @@
-import { MessageAttachment } from "discord.js";
 import { DANIEL_ID } from "../../constants.js";
-import { UserAfkPic } from "../data_access/afk_pic.js";
 import { AfkPicContainer } from "./afk_pic_container.js";
 import { CommandContainer } from "./command_container.js";
 
@@ -23,23 +21,26 @@ export class BDBot {
 		return this.afkPicContainer.hasPics();
 	}
 
-	// Check hasAfkPics first
-	// Retrieves an afk pic from one of the afk pic containers
-	public getRandomAfkPic(): UserAfkPic {
-		return this.afkPicContainer.getRandomUserPicUrl();
+	// Can return undefined if there are no pics. Can use hasAfkPics first
+	public getRandomAfkPicUrl(): string | undefined {
+		return this.afkPicContainer.getRandomPicUrl();
 	}
 
 	public hasUser(userId: string): boolean {
 		return this.afkPicContainer.hasUser(userId);
 	}
 
-	// Check userhasAfkPic first
-	// Retrieves an afk pic from one of the afk pic containers
-	public getRandomAfkPicByUser(userId: string): UserAfkPic {
+	// Can return undefined if there are no pics for this user. Can use hasUser first
+	public getRandomAfkPicUrlByUser(userId: string): string | undefined {
 		return this.afkPicContainer.getRandomUserPicUrl(userId);
 	}
 
-	public async tryAddAfkPics(attachments: MessageAttachment[], picUrls: string[]): Promise<boolean> {
-		
+	public async tryAddAfkPics(picUrls: string[], submitterUserId: string): Promise<boolean> {
+		try {
+			return await this.afkPicContainer.tryAddAfkPics(picUrls, submitterUserId);
+		} catch (error) {
+			console.error(error);
+			return false;
+		}
 	}
 }

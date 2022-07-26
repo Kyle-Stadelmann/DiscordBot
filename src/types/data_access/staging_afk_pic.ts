@@ -4,9 +4,13 @@ import { Document } from "dynamoose/dist/Document";
 const stagingAfkPicSchema = new dynamoose.Schema({
     "url": {
         "type": String,
-        "index": true
+        "index": true,
+        "required": true
     },
-    "submitterUserId": String
+    "submitterUserId": {
+        "type": String,
+        "required": true
+    }
 }, {
     "timestamps": true
 });

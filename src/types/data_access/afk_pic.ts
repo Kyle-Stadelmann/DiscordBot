@@ -4,19 +4,21 @@ import { Document } from "dynamoose/dist/Document";
 const afkPicSchema = new dynamoose.Schema({
     "filename": {
         "type": String,
+        "required": true,
         "index": {
             "rangeKey": "userId"
         }
     },
-    "url": String,
+    "url": {
+        "type": String,
+        "required": true
+    },
     "userId": {
         "type": String,
+        "required": true,
         "index": {global: true}
     },
-    "submitterUserId": {
-        "type": String,
-        "required": false
-    }
+    "submitterUserId": String
 }, {
     "timestamps": true
 });
