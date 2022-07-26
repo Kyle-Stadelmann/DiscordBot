@@ -1,5 +1,6 @@
 import { Collection, Message } from "discord.js";
 import fg from "fast-glob";
+import { COMMAND_FG_LOC } from "../../constants.js";
 import { createCmdErrorStr, handleHelpCmd, isDevMode, isHelpCmd, isProdMode, loadCommandFiles, printSpace, sendErrorToDiscordChannel } from "../../util/index.js";
 import { Command } from "../command.js";
 
@@ -7,9 +8,10 @@ export class CommandContainer {
 	public readonly commands = new Collection<string, Command>();
 
 	public async initContainer() {
-		const cmdFiles = await fg(`src/commands/**/*`, { absolute: true });
+		const cmdFiles = await fg(COMMAND_FG_LOC, { absolute: true });
 		const cmds = await loadCommandFiles(cmdFiles);
 		cmds.forEach((cmd) => this.commands.set(cmd.name, cmd));
+		printSpace();
 	}
 
 	// Returns whether or not the command (or help command) was successful

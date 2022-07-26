@@ -5,9 +5,7 @@ const afkPicSchema = new dynamoose.Schema({
     "filename": {
         "type": String,
         "required": true,
-        "index": {
-            "rangeKey": "userId"
-        }
+        "hashKey": true,
     },
     "url": {
         "type": String,
@@ -16,6 +14,7 @@ const afkPicSchema = new dynamoose.Schema({
     "userId": {
         "type": String,
         "required": true,
+        "rangeKey": true,
         "index": {global: true}
     },
     "submitterUserId": String
@@ -38,7 +37,8 @@ export const UserAfkPicTypedModel = dynamoose.model<UserAfkPic>("user-afk-pic", 
 // TODO: should we catch them or let it blow up?
 export async function doesAfkPicExist(filename: string): Promise<boolean> {
     const response = await UserAfkPicTypedModel
-        .query(filename)
+        .query("filename")
+        .eq(filename)
         .exec();
     return response.count > 0;
 }
@@ -48,6 +48,7 @@ export async function getAllPicsForUser(userId: string): Promise<UserAfkPic[]> {
         const response = await UserAfkPicTypedModel
             .query("userId")
             .eq(userId)
+            .all()
             .exec();
         return response;
     } catch (error) {

@@ -25,6 +25,7 @@ abstract class StatusMessage {
 		console.log("Bot starting up...");
 		printSpace();
 
+		// eslint-disable-next-line no-constant-condition
 		while (true) {
 			const randomStatus = getRandomElement(statuses);
 			client.user.setActivity({ name: randomStatus });
