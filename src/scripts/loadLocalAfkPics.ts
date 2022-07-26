@@ -5,9 +5,8 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import { AFKPIC_FG_LOC, DEV_SERVER_TESTING_CHANNEL_1_ID } from "../constants.js";
 import { AfkPicCodeMap } from "../types/containers/afk_pic_container.js";
 import { UserAfkPic, UserAfkPicTypedModel, doesAfkPicExist } from "../types/data_access/afk_pic.js";
-import { initDb } from "../util/db_helper.js";
 import { client } from "../app.js";
-import { sleep } from "../util/sleep.js";
+import { initDb, sleep } from "../util/index.js";
 
 initDb();
 
@@ -26,9 +25,8 @@ async function uploadPics(picPaths: string[]): Promise<Map<string, string>> {
             // Waiting extra time between uploading images, do not want to get smited by the discord gods
             // eslint-disable-next-line no-await-in-loop
             await sleep(5000);
-
-            const attachments = [...msg.attachments.values()]
-            const url = sanitizeUrl(attachments[0].url);
+            
+            const url = sanitizeUrl(msg.attachments.first().url);
             picPathUrlMap.set(picPath, url);
         } catch(error) {
             console.error(error);
@@ -41,22 +39,19 @@ async function uploadPics(picPaths: string[]): Promise<Map<string, string>> {
 async function parseFiles() {
     console.log("Loading local AFK pics...")
 
-    // Absolute file paths for validated pictures to add to db
-    const filePathsToAdd: string[] = [];
-
     const allPicFiles = await FastGlob(`${AFKPIC_FG_LOC}/*.{jpg,png,JPG,PNG}`, {absolute: true});
 
-    const validatePicPromises = allPicFiles.map(async (filePath) => {
+    const validatePicPromises = allPicFiles.flatMap(async (filePath) => {
         const picFileName = path.basename(filePath);
 
-        if (!await doesAfkPicExist(picFileName)) {
-            filePathsToAdd.push(filePath);
-        }
+        return (await doesAfkPicExist(picFileName)) 
+            ? []
+            : [filePath];
     });
+    // Absolute file paths for validated pictures to add to db
+    const filePathsToAdd = (await Promise.all(validatePicPromises)).flat();
 
-    await Promise.all(validatePicPromises);
-
-    const picPathUrlMap = await uploadPics(Array.from(filePathsToAdd));
+    const picPathUrlMap = await uploadPics(filePathsToAdd);
 
     const createPromises: Promise<UserAfkPic>[] = [];
     for (const [picPath, url] of picPathUrlMap) {

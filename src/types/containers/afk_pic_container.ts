@@ -1,11 +1,8 @@
-import { Collection, MessageAttachment } from "discord.js";
-import fs from "fs/promises";
+import { Collection } from "discord.js";
 import { ALAN_ID, ANISH_ID, ASIAN_KYLE_ID, DANIEL_ID, ERIC_ID, GARY_ID, JASON_ID, JOHNNY_ID, JUSTIN_M_ID, KEISI_ID, KHANG_ID, MEGU_ID, NATHAN_P_ID, NAT_ID, SWISS_KYLE_ID, TWEED_ID, ZACH_ID } from "../../constants.js";
-import { UserAfkPic, UserAfkPicTypedModel, getAllPicsForUser } from "../data_access/afk_pic.js";
+import { UserAfkPic, getAllPicsForUser } from "../data_access/afk_pic.js";
 import { getRandomElement, random } from "../../util/random.js";
-import fetch from "node-fetch";
-import { sanitizeUrl } from "@braintree/sanitize-url";
-import { getAllStagingPics, StagingAfkPic } from "../data_access/staging_afk_pic.js";
+import { getAllStagingPics, StagingAfkPic, StagingAfkPicTypedModel } from "../data_access/staging_afk_pic.js";
 
 // User id to afk pic code
 export const AfkPicCodeMap = new Collection<string, string>();
@@ -51,22 +48,23 @@ export class AfkPicContainer {
     }
 
     public getRandomUserPicUrl(userId: string): string | undefined {
-        if (!this.hasUser(userId)) return;
+        if (!this.hasUser(userId)) return undefined;
         return getRandomElement(this.userPicsMap.get(userId)).url;
     }
 
     public getRandomPicUrl(): string | undefined {
         const totalPicLength = this.allPics.length + this.stagingPics.length;
 
-        if (totalPicLength === 0) return;
+        if (totalPicLength === 0) return undefined;
 
         return random(this.allPics.length / totalPicLength)
             ? getRandomElement(this.allPics).url
             : getRandomElement(this.stagingPics).url;
     }
 
-    public doesPicUrlAlreadyExist(url: string) {
-        return this.allPics.some(afkpic => afkpic.url === url);
+    public doesPicUrlAlreadyExist(url: string): boolean {
+        return this.allPics.some(afkpic => afkpic.url === url) ||
+            this.stagingPics.some(afkpic => afkpic.url === url);
     }
 
     public getAllPics(): UserAfkPic[] {
@@ -79,21 +77,14 @@ export class AfkPicContainer {
     }
 
     // TODO: 8mb limit before compressing? Compressing would break hashing consistency
-    public async tryAddAfkPics(attachments: MessageAttachment[], picUrls: string[]): Promise<boolean> {
+    public async tryAddAfkPics(picUrls: string[], submitterUserId: string): Promise<boolean> {
 		if (picUrls.some(this.doesPicUrlAlreadyExist)) {
 			return false;
 		}
-		const attch = attachments[0];
-        const url = sanitizeUrl(attch.url);
 
-        const res = await fetch(attch.url);
-        (await res.arrayBuffer()).
-
-        fs.readFile(attch.attachment) 
-        UserAfkPicTypedModel.create({"id": })
-
-		// TODO
-		return false;
+        const createPromises = picUrls.map(url => StagingAfkPicTypedModel.create({"url": url, submitterUserId}));
+        await Promise.all(createPromises);
+        return true;
     }
 
     private async populateUserPicsMap() {
@@ -112,7 +103,7 @@ export class AfkPicContainer {
         this.allPics = Array.from(pics);
     }
 
-    private populateStagingPics() {
+    private async populateStagingPics() {
         this.stagingPics = (await getAllStagingPics()) || [];
     }
 }
