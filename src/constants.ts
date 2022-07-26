@@ -46,6 +46,8 @@ export const QUESTION_MARK_URL =
 	"https://media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG";
 export const SUNGLASSES = "😎";
 export const KHANG_NEKO_EMOJI_ID = "cat_thonk";
+export const WHITE_CHECK_MARK = "✅";
+export const X = "❌";
 // TODO: Standardize paths
 export const SRC_DIR = path.resolve(`${dirname}`);
 

@@ -1,7 +1,7 @@
 import { getVoiceConnection } from "@discordjs/voice";
 import { Message } from "discord.js";
+import { WHITE_CHECK_MARK, X } from "../../constants.js";
 import { Command, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "disconnect",
@@ -12,10 +12,10 @@ const cmdConfig: CommandConfig = {
 class DisconnectCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const connection = getVoiceConnection(msg.guildId);
-		const textChannel = msg.channel;
 
 		if (!connection) {
-			await sendErrorMessage(textChannel, "Not currently connected");
+			console.log(`Bot is not in a voice channel`);
+			await msg.react(X);
 			return false;
 		}
 
@@ -25,7 +25,7 @@ class DisconnectCommand extends Command {
 		const vc = msg.guild.channels.cache.get(connection.joinConfig.channelId)
 		
 		if (vc.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
-			await sendMessage(textChannel, "Disconnect successful");
+			await msg.react(WHITE_CHECK_MARK);
 		}
 
 		return true;

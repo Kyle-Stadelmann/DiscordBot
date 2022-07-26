@@ -1,7 +1,7 @@
-import { joinVoiceChannel } from "@discordjs/voice";
+import { getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
 import { Message } from "discord.js";
+import { WHITE_CHECK_MARK, X } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "connect",
@@ -11,12 +11,17 @@ const cmdConfig: CommandConfig = {
 
 class ConnectCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
+		if (getVoiceConnection(msg.guildId)) {
+			console.log("Bot already connected");
+			return false;
+		}
+
 		// User's voice channel
 		const voiceChannel = msg.member.voice.channel;
-		const textChannel = msg.channel;
 
 		if (!voiceChannel || voiceChannel === msg.guild.afkChannel) {
-			await sendErrorMessage(textChannel, "Caller is not connected to a valid voice channel");
+			console.log(`${msg.author.username} is not connected to a valid voice channel`);
+			await msg.react(X);
 			return false;
 		}
 
@@ -27,9 +32,10 @@ class ConnectCommand extends Command {
 
 			adapterCreator: msg.guild.voiceAdapterCreator,
 		});
-
+		console.log(`Connected to ${voiceChannel.name}`);
+		
 		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
-			await sendMessage(textChannel, `Connected to ${voiceChannel.name}`);
+			await msg.react(WHITE_CHECK_MARK);
 		}
 
 		return true;
