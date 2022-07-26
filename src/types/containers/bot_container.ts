@@ -1,14 +1,16 @@
 import { DANIEL_ID } from "../../constants.js";
 import { AfkPicContainer } from "./afk_pic_container.js";
 import { CommandContainer } from "./command_container.js";
+import { Player } from "discord-player";
+import { client } from "../../app.js";
 
 // Global state and functions that read/write global state
 export class BDBot {
 	// Global state
 	public readonly commandContainer = new CommandContainer();
 	private readonly afkPicContainer = new AfkPicContainer();
-
 	public readonly typingTimestamps = new Map<string, number>().set(DANIEL_ID, null);
+	public readonly player = new Player(client);
 
 	public async initContainter() {
 		const cmdContainerPromise = this.commandContainer.initContainer();
