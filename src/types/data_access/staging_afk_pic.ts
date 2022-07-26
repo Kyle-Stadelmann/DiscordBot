@@ -4,7 +4,7 @@ import { Document } from "dynamoose/dist/Document";
 const stagingAfkPicSchema = new dynamoose.Schema({
     "url": {
         "type": String,
-        "index": true,
+        "hashKey": true,
         "required": true
     },
     "submitterUserId": {
@@ -24,5 +24,6 @@ export const StagingAfkPicTypedModel = dynamoose.model<StagingAfkPic>("staging-a
 export function getAllStagingPics(): Promise<StagingAfkPic[]> {
     return StagingAfkPicTypedModel
         .scan()
+        .all()
         .exec();
 }

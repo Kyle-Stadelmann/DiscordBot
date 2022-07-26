@@ -6,9 +6,7 @@ import { AFKPIC_FG_LOC, DEV_SERVER_TESTING_CHANNEL_1_ID } from "../constants.js"
 import { AfkPicCodeMap } from "../types/containers/afk_pic_container.js";
 import { UserAfkPic, UserAfkPicTypedModel, doesAfkPicExist } from "../types/data_access/afk_pic.js";
 import { client } from "../app.js";
-import { initDb, sleep } from "../util/index.js";
-
-initDb();
+import { printSpace, sleep } from "../util/index.js";
 
 // Returns map: pic path -> url
 async function uploadPics(picPaths: string[]): Promise<Map<string, string>> {
@@ -36,15 +34,25 @@ async function uploadPics(picPaths: string[]): Promise<Map<string, string>> {
     return picPathUrlMap;
 }
 
-async function parseFiles() {
+function doesPicHaveValidUsers(fileName: string): boolean {
+    return AfkPicCodeMap.some((userId,code) => fileName.includes(code));
+}
+
+export async function parseFiles() {
     console.log("Loading local AFK pics...")
 
     const allPicFiles = await FastGlob(`${AFKPIC_FG_LOC}/*.{jpg,png,JPG,PNG}`, {absolute: true});
 
+    if (allPicFiles.length === 0) {
+        console.log(`Loaded 0 total pics.`);
+        printSpace();
+        return;
+    }
+
     const validatePicPromises = allPicFiles.flatMap(async (filePath) => {
         const picFileName = path.basename(filePath);
 
-        return (await doesAfkPicExist(picFileName)) 
+        return (await doesAfkPicExist(picFileName) || !doesPicHaveValidUsers(picFileName)) 
             ? []
             : [filePath];
     });
@@ -66,7 +74,6 @@ async function parseFiles() {
 
     await Promise.all(createPromises);
 
-    console.log(`Loaded ${allPicFiles.length} total pics ${picPathUrlMap.size} of which were added to the afk pic table.`);
+    console.log(`Loaded ${allPicFiles.length} total pics, ${picPathUrlMap.size} of which were added to the afk pic table.`);
+    printSpace();
 }
-
-parseFiles().catch(console.error)

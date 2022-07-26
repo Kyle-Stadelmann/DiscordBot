@@ -29,7 +29,7 @@ export const client = new Client({
 // Bot state
 export const bdbot = new BDBot();
 
-async function startup() {
+export async function startup() {
 	await importx(`${dirname(import.meta.url)}/events/**/*.{ts,js}`);
 
 	if (isDevMode()) {

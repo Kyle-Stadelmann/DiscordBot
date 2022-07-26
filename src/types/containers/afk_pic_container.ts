@@ -57,11 +57,14 @@ export class AfkPicContainer {
 
         if (totalPicLength === 0) return undefined;
 
-        return random(this.allPics.length / totalPicLength)
+        // Random uses percentages
+        return random(this.allPics.length / totalPicLength * 100)
             ? getRandomElement(this.allPics).url
             : getRandomElement(this.stagingPics).url;
     }
 
+    // Note: Each time a picture is uploaded to discords CDN, it has a different url
+    // this means duplicate afk pics can be added to staging.
     public doesPicUrlAlreadyExist(url: string): boolean {
         return this.allPics.some(afkpic => afkpic.url === url) ||
             this.stagingPics.some(afkpic => afkpic.url === url);
@@ -76,13 +79,15 @@ export class AfkPicContainer {
         return userPics || [];
     }
 
-    // TODO: 8mb limit before compressing? Compressing would break hashing consistency
     public async tryAddAfkPics(picUrls: string[], submitterUserId: string): Promise<boolean> {
-		if (picUrls.some(this.doesPicUrlAlreadyExist)) {
+		if (picUrls.some(picUrl => this.doesPicUrlAlreadyExist(picUrl))) {
 			return false;
 		}
 
-        const createPromises = picUrls.map(url => StagingAfkPicTypedModel.create({"url": url, submitterUserId}));
+        const createPromises = picUrls.map(async url => { 
+            const stagingPic = await StagingAfkPicTypedModel.create({"url": url, submitterUserId});
+            this.stagingPics.push(stagingPic);
+        });
         await Promise.all(createPromises);
         return true;
     }
@@ -99,7 +104,7 @@ export class AfkPicContainer {
         const pics = new Set<UserAfkPic>();
         Array.from(this.userPicsMap.values())
             .flatMap(userPics => userPics)
-            .forEach(pics.add);
+            .forEach(pic => pics.add(pic));
         this.allPics = Array.from(pics);
     }
 

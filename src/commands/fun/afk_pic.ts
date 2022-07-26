@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { Message, MessageEmbed } from "discord.js";
+import fetch from "node-fetch";
 import { bdbot } from "../../app.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { ParentCommand, ParentCommandConfig } from "../../types/parent_command.js";
@@ -19,7 +20,7 @@ class AfkPicGetCommand extends Command {
         const { channel } = msg;
 
         if (!bdbot.hasAfkPics()) {
-            await sendMessage(channel, "Sorry, there are no AFK pics loaded.");
+            await sendMessage(channel, "Sorry, there are no AFK Pics loaded.");
             return false;
         }
 
@@ -31,7 +32,7 @@ class AfkPicGetCommand extends Command {
             return true;
         } 
 
-        await sendErrorMessage(channel, "Sorry, no afk pic located.");
+        await sendErrorMessage(channel, "Sorry, no AFK Pic located.");
         return false;
     }
 
@@ -53,38 +54,62 @@ class AfkPicGetCommand extends Command {
     }
 }
 
+const discordRegex = /(https?:)?\/\/cdn\.discordapp\.com\/attachments\/(\d*)\/(\d*)\/(\S*)(\.(png|jpeg|jpg))/m;
+const allowedImageRegex = [discordRegex, /(https?:)?\/\/(\w+\.)?imgur\.com\/(\S*)(\.(png|jpeg|jpg))/m];
 
 const afkpicAddConfig: CommandConfig = {
     name: "add",
-    description: "Adds AFK Pic(s) to the afk pic collection",
+    description: "Adds AFK Pic(s) to the AFK Pic collection. (Supports local uploads, discord image links, i.imgur)",
     usage: "afkpic add [image or image link]",
     examples: ["afkpic add **nathan.jpg**", "afkpic add https://i.imgur.com/wSkz6em.jpeg", "afkpic add **eric.jpg** **zach.png**"],
     allowInDM: true,
 }
 
 class AfkPicAddCommand extends Command {
-    public async run(msg: Message): Promise<boolean> {
+    public async run(msg: Message, args: string[]): Promise<boolean> {
         const { attachments, channel } = msg;
-        if (!await this.validate(msg)) return false;
-        const afkPicUrls = attachments.map(attch => sanitizeUrl(attch.url));
         
+        if (!await this.validate(msg, args)) return false;
+
+        let afkPicUrls: string[] = [];
+        afkPicUrls = afkPicUrls.concat(attachments.map(attch => attch.url));
+        afkPicUrls = afkPicUrls.concat(args.filter(arg => this.isAllowedSite(arg)));
+        afkPicUrls = afkPicUrls.map(url => sanitizeUrl(url));
+
         const result = await bdbot.tryAddAfkPics(afkPicUrls, msg.author.id);
-        if (result) {
-            await sendMessage(channel, "AFK Picture(s) added. Thank you for your *generous donation*!");
-        } else {
-            await sendErrorMessage(channel, "Failed to add AFK Pictures. This picture **may** exist already.");
+        if (result && afkPicUrls.length > 0) {
+            // TODO: Leaderboard for who submits most afk pics
+            await sendMessage(channel, `AFK Pic${(afkPicUrls.length > 1) ? "s" : ""} added. Thank you for your *generous donation*!`);
+            return true;
         }
-        return result;
+        await sendErrorMessage(channel, "Failed to add any AFK Pics. This picture **may** exist already or is from an unsupported image source.");
+        return false;
     }
 
-    private async validate(msg: Message): Promise<boolean> {
+    private async validate(msg: Message, args: string[]): Promise<boolean> {
         const { attachments } = msg;
-        
-        if (attachments.size === 0) {
-            await sendErrorMessage(msg.channel, "Couldn't find an afk pic to add.");
+        if (attachments.size === 0 && !(await this.hasAllowedSite(args))) {
+            await sendErrorMessage(msg.channel, "Couldn't find a valid AFK Pic to add.");
             return false;
         }
         return true;
+    }
+
+    private async hasAllowedSite(args: string[]): Promise<boolean> {
+        const isAllowedArray = await Promise.all(args.map(arg => this.isAllowedSite(arg)));
+        return isAllowedArray.some(isAllowed => isAllowed);
+    }
+
+    private async isAllowedSite(url: string): Promise<boolean> {
+        const cleanUrl = sanitizeUrl(url);
+        const isUrlAllowed = allowedImageRegex.some(regex => regex.test(cleanUrl));
+        if (!isUrlAllowed) {
+            return false;
+        }
+        // Discord cdn files can't be fetched (error 403 Forbidden). So assume link has valid pic
+        return discordRegex.test(cleanUrl)
+            ? true
+            : (await fetch(cleanUrl)).ok;
     }
 }
 
