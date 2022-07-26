@@ -4,9 +4,8 @@ import { fileURLToPath } from "url";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-export const AFK_CHANNEL_ID = "temp";
 export const PREFIX = ">";
-export const BOT_STUFF_CHANNEL_ID = "217149187207200769";
+export const BD5_BOT_STUFF_CHANNEL_ID = "732739176285470942";
 
 export const DANIEL_ID = "250076166323568640";
 export const KHANG_ID = "123260646576881679";
@@ -44,7 +43,7 @@ export const QUESTION_MARK_URL =
 export const SUNGLASSES = "😎";
 export const KHANG_NEKO_EMOJI_ID = "cat_thonk";
 export const WHITE_CHECK_MARK = "✅";
-export const X = "❌";
+export const X_MARK = "❌";
 // TODO: Standardize paths
 export const SRC_DIR = path.resolve(`${dirname}`);
 
