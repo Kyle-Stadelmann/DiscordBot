@@ -22,8 +22,8 @@ export abstract class CommandHandler {
 	}
 
 	private async processCmd(msg: Message) {
-		const cmdArgs = parseArgs(msg.content.toLowerCase());
-		const cmdStr = cmdArgs[0].slice(PREFIX.length);
+		const cmdArgs = parseArgs(msg.content);
+		const cmdStr = cmdArgs[0].slice(PREFIX.length).toLowerCase();
 	
 		// Args String array, get rid of command string
 		const args = cmdArgs.slice(1);
