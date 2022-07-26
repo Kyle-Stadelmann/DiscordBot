@@ -1,11 +1,10 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { ASIAN_KYLE_ID, BD4_BOT_ID, ZACH_ID } from "../../constants.js";
 import { random, sleep } from "../../util/index.js";
-import { joinVoiceChannel, getVoiceConnection } from "@discordjs/voice";
 import { Player } from "discord-player";
 import { client } from "../../app.js";
 
-const L_THEME_CHANCE = 15;
+const L_THEME_CHANCE = 100;
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -21,14 +20,6 @@ abstract class AsianKyleLTheme {
             newState.channel !== null &&
             random(L_THEME_CHANCE)) {
 
-			joinVoiceChannel({
-                channelId: newState.channelId,
-                guildId: newState.channel.guildId,
-                selfDeaf: true,
-    
-                adapterCreator: newState.guild.voiceAdapterCreator,
-            });
-
             console.log(`Playing L's Theme: ${memberId}`);
             // TODO: move queue creation to initial bot loading so that the music
             // can play instantly, create constant for url, etc etc
@@ -36,8 +27,11 @@ abstract class AsianKyleLTheme {
             // https://discord-player.js.org/docs/main/master/general/welcome
             const player = new Player(client);
             const queue = player.createQueue(newState.channel.guild, {
-                metadata: {
-                    channel: newState.channel
+                metadata: { channel: newState.channel },
+                ytdlOptions: {
+                    filter: 'audioonly',
+                    highWaterMark: 1 << 30,
+                    dlChunkSize: 0,
                 }
             });
             try {
@@ -53,7 +47,7 @@ abstract class AsianKyleLTheme {
 
             // disconnect after 10 seconds
             await sleep(10000);
-            getVoiceConnection(newState.channel.guildId).destroy();
+            queue.destroy(true);
             console.log(`Exiting L's Theme (no music yet): ${memberId}`);
 		}
 
