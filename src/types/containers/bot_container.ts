@@ -1,11 +1,13 @@
+import { Message } from "discord.js";
 import { DANIEL_ID } from "../../constants.js";
+import { Command } from "../command.js";
 import { AfkPicContainer } from "./afk_pic_container.js";
 import { CommandContainer } from "./command_container.js";
 
 // Global state and functions that read/write global state
 export class BDBot {
 	// Global state
-	public readonly commandContainer = new CommandContainer();
+	private readonly commandContainer = new CommandContainer();
 	private readonly afkPicContainer = new AfkPicContainer();
 
 	public readonly typingTimestamps = new Map<string, number>().set(DANIEL_ID, null);
@@ -42,5 +44,15 @@ export class BDBot {
 			console.error(error);
 			return false;
 		}
+	}
+
+	public tryRunCommand(cmdStr: string, msg: Message, args: string[]): Promise<boolean> {
+		return this.commandContainer.tryRunCommand(cmdStr, msg, args);
+	}
+
+	// Returns all unique commands (this.commandContainer.commands)
+	public getAllCommands(): Command[] {
+		const cmds = this.commandContainer.commands.values();
+		return [...new Set(cmds)];
 	}
 }

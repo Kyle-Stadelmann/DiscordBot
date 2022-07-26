@@ -65,6 +65,7 @@ const afkpicAddConfig: CommandConfig = {
     allowInDM: true,
 }
 
+// TODO: Make admin only
 class AfkPicAddCommand extends Command {
     public async run(msg: Message, args: string[]): Promise<boolean> {
         const { attachments, channel } = msg;
@@ -118,7 +119,8 @@ const afkpicConfig: ParentCommandConfig = {
     name: "afkpic",
     description: "Sends an AFK Pic of a random (or given) user",
     shareCooldownMap: false,
-    defaultCmdStr: "get"
+    defaultCmdStr: "get",
+    aliases: ["pic"]
 }
 
 class AfkPicCommand extends ParentCommand {

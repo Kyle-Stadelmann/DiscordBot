@@ -47,7 +47,7 @@ export abstract class ParentCommand extends Command {
     public resolveSubCommand(args: string[]): Command | undefined {
         if (!args || args.length === 0) return this.defaultCmd;
         const subCmdStr = args[0].toLowerCase();
-        const subCmd = this.subCommands.find((cmd => cmd.name === subCmdStr));
+        const subCmd = this.subCommands.find(cmd => cmd.name === subCmdStr || cmd.aliases.includes(subCmdStr));
         // If no subcmd was found, try the default cmd
         return subCmd ?? this.defaultCmd;
     }

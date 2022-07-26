@@ -102,10 +102,10 @@ export class AfkPicContainer {
 
     private populatePics() {
         const pics = new Set<UserAfkPic>();
-        Array.from(this.userPicsMap.values())
+        [...this.userPicsMap.values()]
             .flatMap(userPics => userPics)
             .forEach(pic => pics.add(pic));
-        this.allPics = Array.from(pics);
+        this.allPics = [...pics];
     }
 
     private async populateStagingPics() {

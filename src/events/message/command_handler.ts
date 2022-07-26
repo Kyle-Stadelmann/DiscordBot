@@ -30,7 +30,7 @@ export abstract class CommandHandler {
 	
 		console.log(`${cmdStr} command detected by: ${msg.author.username}`);
 	
-		const result = await bdbot.commandContainer.tryRunCommand(cmdStr, msg, args);
+		const result = await bdbot.tryRunCommand(cmdStr, msg, args);
 		if (result) {
 			console.log(`${cmdStr} was successful`);
 		} else {
