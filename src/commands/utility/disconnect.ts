@@ -1,6 +1,7 @@
 import { getVoiceConnection } from "@discordjs/voice";
 import { Message } from "discord.js";
-import { WHITE_CHECK_MARK, X } from "../../constants.js";
+import { bdbot } from "../../app.js";
+import { X_MARK } from "../../constants.js";
 import { Command, CommandConfig } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
@@ -12,21 +13,16 @@ const cmdConfig: CommandConfig = {
 class DisconnectCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const connection = getVoiceConnection(msg.guildId);
+		let musicConn = bdbot.player.getQueue(msg.guildId);
 
-		if (!connection) {
+		if (!connection && !musicConn) {
 			console.log(`Bot is not in a voice channel`);
-			await msg.react(X);
+			await msg.react(X_MARK);
 			return false;
 		}
 
-		connection.destroy();
-
-		// get current channel
-		const vc = msg.guild.channels.cache.get(connection.joinConfig.channelId)
-		
-		if (vc.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
-			await msg.react(WHITE_CHECK_MARK);
-		}
+		if (connection) connection.destroy();
+		if (musicConn) musicConn.destroy();
 
 		return true;
 	}
