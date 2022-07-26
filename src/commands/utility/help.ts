@@ -13,7 +13,7 @@ const cmdConfig: CommandConfig = {
 
 class HelpCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
-		let cmds = bdbot.commandContainer.commands;
+		let cmds = bdbot.getAllCommands();
 
 		if (msg.channel.type === "DM") {
 			cmds = cmds.filter((cmd) => cmd.allowInDM);
