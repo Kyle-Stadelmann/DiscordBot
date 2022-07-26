@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Message, MessageEmbed } from "discord.js";
 import { bdbot } from "../../app.js";
-import { AfkPic } from "../../types/data_access/afk_pic.js";
+import { UserAfkPic } from "../../types/data_access/afk_pic.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { ParentCommand, ParentCommandConfig } from "../../types/parent_command.js";
 import { sendEmbeds, sendErrorMessage, sendMessage } from "../../util/message_channel.js";
@@ -34,17 +34,17 @@ class AfkPicGetCommand extends Command {
         return false;
     }
 
-    private getCorrespondingAfkPic(msg: Message, args: string[]): AfkPic | undefined {
-        let afkPic: AfkPic;
+    private getCorrespondingAfkPic(msg: Message, args: string[]): UserAfkPic | undefined {
+        let afkPic: UserAfkPic;
         // Allow use of userId passed in arg too
         // Make sure passed in arg isn't unreasonbly large
-        if (args.length > 0 && args[0].length < 20 && bdbot.userHasAfkPic(args[0])) {
+        if (args.length > 0 && args[0].length < 20 && bdbot.hasUser(args[0])) {
             afkPic = bdbot.getRandomAfkPicByUser(args[0]);
         } else if (msg.mentions.users.size === 0) { 
             afkPic = bdbot.getRandomAfkPic();
         } else {
             const firstMentionId = msg.mentions.users?.first()?.id;
-            if (firstMentionId && bdbot.userHasAfkPic(firstMentionId)) {
+            if (firstMentionId && bdbot.hasUser(firstMentionId)) {
                 afkPic = bdbot.getRandomAfkPicByUser(firstMentionId);
             }
         }
