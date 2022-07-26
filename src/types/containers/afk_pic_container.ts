@@ -1,7 +1,11 @@
-import { Collection } from "discord.js";
+import { Collection, MessageAttachment } from "discord.js";
+import fs from "fs/promises";
 import { ALAN_ID, ANISH_ID, ASIAN_KYLE_ID, DANIEL_ID, ERIC_ID, GARY_ID, JASON_ID, JOHNNY_ID, JUSTIN_M_ID, KEISI_ID, KHANG_ID, MEGU_ID, NATHAN_P_ID, NAT_ID, SWISS_KYLE_ID, TWEED_ID, ZACH_ID } from "../../constants.js";
-import { AfkPic, getAllPicsForUser } from "../data_access/afk_pic.js";
-import { getRandomElement } from "../../util/random.js";
+import { UserAfkPic, UserAfkPicTypedModel, getAllPicsForUser } from "../data_access/afk_pic.js";
+import { getRandomElement, random } from "../../util/random.js";
+import fetch from "node-fetch";
+import { sanitizeUrl } from "@braintree/sanitize-url";
+import { getAllStagingPics, StagingAfkPic } from "../data_access/staging_afk_pic.js";
 
 // User id to afk pic code
 export const AfkPicCodeMap = new Collection<string, string>();
@@ -24,14 +28,16 @@ AfkPicCodeMap.set("NP", NATHAN_P_ID);
 AfkPicCodeMap.set("ZT", ZACH_ID);
 
 export class AfkPicContainer {
-    // All pics (no duplicates)
-    private pics: AfkPic[];
+    // TODO: Refactor into generic AfkPic type
+    // All non-staging pics (no duplicates per user)
+    private allPics: UserAfkPic[];
+    private stagingPics: StagingAfkPic[];
     // User id -> afk pic 
     // This is filled after parsing/db initalizing 
-    private readonly userPicsMap = new Collection<string, AfkPic[]>();
+    private readonly userPicsMap = new Collection<string, UserAfkPic[]>();
 
     public async initContainer() {
-        await this.populateUserPicsMap();
+        await Promise.all([this.populateUserPicsMap(), this.populateStagingPics()]);
 
         this.populatePics();
     }
@@ -41,26 +47,53 @@ export class AfkPicContainer {
     }
 
     public hasPics(): boolean {
-        return this.pics.length > 0;
+        return this.allPics.length > 0 || this.stagingPics.length > 0;
     }
 
-    public getPic(userId?: string): AfkPic {
-        return (userId) 
-            ? getRandomElement(this.userPicsMap.get(userId))
-            : getRandomElement(this.pics);
+    public getRandomUserPicUrl(userId: string): string | undefined {
+        if (!this.hasUser(userId)) return;
+        return getRandomElement(this.userPicsMap.get(userId)).url;
     }
 
-    public doesPicAlreadyExist(picUrl: string) {
-        return this.pics.some(afkpic => afkpic.url === picUrl);
+    public getRandomPicUrl(): string | undefined {
+        const totalPicLength = this.allPics.length + this.stagingPics.length;
+
+        if (totalPicLength === 0) return;
+
+        return random(this.allPics.length / totalPicLength)
+            ? getRandomElement(this.allPics).url
+            : getRandomElement(this.stagingPics).url;
     }
 
-    public getAllPics(): AfkPic[] {
-        return this.pics;
+    public doesPicUrlAlreadyExist(url: string) {
+        return this.allPics.some(afkpic => afkpic.url === url);
     }
 
-    public getUserPics(userId: string): AfkPic[] {
+    public getAllPics(): UserAfkPic[] {
+        return this.allPics;
+    }
+
+    public getUserPics(userId: string): UserAfkPic[] {
         const userPics = this.userPicsMap.get(userId);
         return userPics || [];
+    }
+
+    // TODO: 8mb limit before compressing? Compressing would break hashing consistency
+    public async tryAddAfkPics(attachments: MessageAttachment[], picUrls: string[]): Promise<boolean> {
+		if (picUrls.some(this.doesPicUrlAlreadyExist)) {
+			return false;
+		}
+		const attch = attachments[0];
+        const url = sanitizeUrl(attch.url);
+
+        const res = await fetch(attch.url);
+        (await res.arrayBuffer()).
+
+        fs.readFile(attch.attachment) 
+        UserAfkPicTypedModel.create({"id": })
+
+		// TODO
+		return false;
     }
 
     private async populateUserPicsMap() {
@@ -72,10 +105,14 @@ export class AfkPicContainer {
     }
 
     private populatePics() {
-        const pics = new Set<AfkPic>();
+        const pics = new Set<UserAfkPic>();
         Array.from(this.userPicsMap.values())
             .flatMap(userPics => userPics)
             .forEach(pics.add);
-        this.pics = Array.from(pics);
+        this.allPics = Array.from(pics);
+    }
+
+    private populateStagingPics() {
+        this.stagingPics = (await getAllStagingPics()) || [];
     }
 }
