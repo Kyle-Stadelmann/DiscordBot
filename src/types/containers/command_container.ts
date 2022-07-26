@@ -1,7 +1,16 @@
 import { Collection, Message } from "discord.js";
 import fg from "fast-glob";
 import { COMMAND_FG_LOC } from "../../constants.js";
-import { createCmdErrorStr, handleHelpCmd, isDevMode, isHelpCmd, isProdMode, loadCommandFiles, printSpace, sendErrorToDiscordChannel } from "../../util/index.js";
+import {
+	createCmdErrorStr,
+	handleHelpCmd,
+	isDevMode,
+	isHelpCmd,
+	isProdMode,
+	loadCommandFiles,
+	printSpace,
+	sendErrorToDiscordChannel,
+} from "../../util/index.js";
 import { Command } from "../command.js";
 
 export class CommandContainer {
@@ -12,7 +21,7 @@ export class CommandContainer {
 		const cmds = await loadCommandFiles(cmdFiles);
 		cmds.forEach((cmd) => {
 			this.commands.set(cmd.name, cmd);
-			cmd.aliases.forEach(alias => this.commands.set(alias, cmd));
+			cmd.aliases.forEach((alias) => this.commands.set(alias, cmd));
 		});
 		printSpace();
 	}

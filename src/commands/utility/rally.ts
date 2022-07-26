@@ -15,10 +15,7 @@ class RallyCommand extends Command {
 
 		// Confirm that user called from a voice channel
 		if (!voiceChannel) {
-			await sendErrorMessage(
-				textChannel,
-				"Rally failed, caller is not in a valid voice channel"
-			);
+			await sendErrorMessage(textChannel, "Rally failed, caller is not in a valid voice channel");
 			return false;
 		}
 
@@ -38,10 +35,7 @@ class RallyCommand extends Command {
 
 		// Check if called from valid voice channel
 		if (voiceChannel === msg.guild.afkChannel || (!publicChannel && !pullToHidden)) {
-			await sendErrorMessage(
-				textChannel,
-				"Rally failed, caller is not in a valid voice channel"
-			);
+			await sendErrorMessage(textChannel, "Rally failed, caller is not in a valid voice channel");
 			return false;
 		}
 
@@ -74,10 +68,7 @@ class RallyCommand extends Command {
 		);
 
 		if (areValidMembers) {
-			await sendErrorMessage(
-				textChannel,
-				"Rally failed, no users to Rally with"
-			);
+			await sendErrorMessage(textChannel, "Rally failed, no users to Rally with");
 			return false;
 		}
 

@@ -24,12 +24,12 @@ export abstract class CommandHandler {
 	private async processCmd(msg: Message) {
 		const cmdArgs = parseArgs(msg.content);
 		const cmdStr = cmdArgs[0].slice(PREFIX.length).toLowerCase();
-	
+
 		// Args String array, get rid of command string
 		const args = cmdArgs.slice(1);
-	
+
 		console.log(`${cmdStr} command detected by: ${msg.author.username}`);
-	
+
 		const result = await bdbot.tryRunCommand(cmdStr, msg, args);
 		if (result) {
 			console.log(`${cmdStr} was successful`);

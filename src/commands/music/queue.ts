@@ -12,26 +12,26 @@ const cmdConfig: CommandConfig = {
 class QueueCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
-        if (!queue || queue.destroyed || !queue.connection) return false;
+		if (!queue || queue.destroyed || !queue.connection) return false;
 
-        let counter = 1;
-        let tracks = "```";
-        let np = queue.nowPlaying();
+		let counter = 1;
+		let tracks = "```";
+		let np = queue.nowPlaying();
 
-        if (np) {
-            tracks += `Currently Playing: ${np.title} by ${np.author}\n`;
-            tracks += `-----------------------------------------------\n`;
-        }
-        queue.tracks.forEach(track => {
-            tracks += `(${counter}): ${track.title} by ${track.author}\n`;
-            counter++;
-        })
-        tracks += "```";
+		if (np) {
+			tracks += `Currently Playing: ${np.title} by ${np.author}\n`;
+			tracks += `-----------------------------------------------\n`;
+		}
+		queue.tracks.forEach((track) => {
+			tracks += `(${counter}): ${track.title} by ${track.author}\n`;
+			counter++;
+		});
+		tracks += "```";
 
-        // daniel got this case to happen but it was a bug with play
-        if (tracks === "``````") tracks = "Queue is empty";
+		// daniel got this case to happen but it was a bug with play
+		if (tracks === "``````") tracks = "Queue is empty";
 
-        sendMessage(msg.channel, tracks);
+		sendMessage(msg.channel, tracks);
 		return true;
 	}
 }
