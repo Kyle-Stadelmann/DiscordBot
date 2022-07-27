@@ -1,4 +1,4 @@
-import {  Message, MessageEmbed } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import path from "path";
 import { PREFIX } from "../constants.js";
 import { Command } from "../types/command.js";
@@ -77,7 +77,7 @@ function buildNormalCmdHelpEmbed(cmd: Command): MessageEmbed {
 		.addField("Usage", `\`${PREFIX}${cmd.usage}\``)
 		.setColor(0x0);
 
-	const {examples} = cmd;
+	const { examples } = cmd;
 	if (examples != null && examples.length > 0) {
 		let examplesStr = "";
 		for (let i = 0; i < examples.length; i += 1) {
@@ -97,7 +97,7 @@ function buildParentCmdHelpEmbed(cmd: ParentCommand): MessageEmbed {
 		.addField("Description", cmd.description)
 		.setColor(0x0);
 
-	const {examples} = cmd;
+	const { examples } = cmd;
 	if (examples != null && examples.length > 0) {
 		let examplesStr = "";
 		for (let i = 0; i < examples.length; i += 1) {
@@ -115,9 +115,7 @@ function buildParentCmdHelpEmbed(cmd: ParentCommand): MessageEmbed {
 export async function handleHelpCmd(msg: Message, cmd: Command) {
 	console.log(`Help for the ${cmd.name} command detected by: ${msg.author.username}`);
 
-	const helpEmbed = (cmd instanceof ParentCommand) 
-		? buildParentCmdHelpEmbed(cmd)
-		: buildNormalCmdHelpEmbed(cmd);
+	const helpEmbed = cmd instanceof ParentCommand ? buildParentCmdHelpEmbed(cmd) : buildNormalCmdHelpEmbed(cmd);
 
 	await sendEmbeds(msg.channel, [helpEmbed]);
 	console.log("Help was successful.");

@@ -16,6 +16,6 @@ export function sendEmbeds(channel: TextBasedChannel, embeds: MessageEmbed[], te
 
 export function sendErrorToDiscordChannel(errStr: string) {
 	const debugChannel = client.channels.resolve(DEV_SERVER_ERROR_CHANNEL) as TextBasedChannel;
-	const errEmbed = new MessageEmbed({description: errStr});
-	return debugChannel.send({embeds: [errEmbed]});
+	const errEmbed = new MessageEmbed({ description: errStr });
+	return debugChannel.send({ embeds: [errEmbed] });
 }

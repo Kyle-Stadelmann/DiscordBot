@@ -44,14 +44,14 @@ abstract class AsianKyleLTheme {
             const track = await player.search("https://www.youtube.com/watch?v=qR6dzwQahOM", {
                 requestedBy: newState.guild.members.cache.get(ASIAN_KYLE_ID)
             }).then(x => x.tracks[0]);
-            queue.play(track);
+            await queue.play(track);
 
             // disconnect after 10 seconds
             await sleep(10000);
             queue.destroy(true);
-            console.log(`Exiting L's Theme (no music yet): ${memberId}`);
+            console.log(`Exiting L's Theme: ${memberId}`);
 		}
 
-        return true;
+		return true;
 	}
 }
