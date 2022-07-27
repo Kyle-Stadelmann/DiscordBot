@@ -28,6 +28,7 @@ class PlayCommand extends Command {
             metadata: { channel: msg.channel },
             ytdlOptions: {
                 filter: 'audioonly',
+                // eslint-disable-next-line no-bitwise
                 highWaterMark: 1 << 30,
                 dlChunkSize: 0,
             }
@@ -65,7 +66,8 @@ class PlayCommand extends Command {
         if (queue.nowPlaying()) {
             queue.addTrack(track);
         } else { 
-            queue.play(track); }
+            queue.play(track);
+        }
 
 		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
 			await msg.react(WHITE_CHECK_MARK);
