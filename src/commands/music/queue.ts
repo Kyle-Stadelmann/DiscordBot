@@ -14,9 +14,9 @@ class QueueCommand extends Command {
 		const queue = bdbot.player.getQueue(msg.guildId);
         if (!queue || queue.destroyed || !queue.connection) return false;
 
+        const np = queue.nowPlaying();
         let counter = 1;
         let tracks = "```";
-        let np = queue.nowPlaying();
 
         if (np) {
             tracks += `Currently Playing: ${np.title} by ${np.author}\n`;
@@ -24,7 +24,7 @@ class QueueCommand extends Command {
         }
         queue.tracks.forEach(track => {
             tracks += `(${counter}): ${track.title} by ${track.author}\n`;
-            counter++;
+            counter += 1;
         })
         tracks += "```";
 

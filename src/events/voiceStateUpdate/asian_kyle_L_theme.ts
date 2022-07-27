@@ -1,7 +1,7 @@
 import { ArgsOf, Discord, On } from "discordx";
+import { Player } from "discord-player";
 import { ASIAN_KYLE_ID, BD4_BOT_ID, ZACH_ID } from "../../constants.js";
 import { random, sleep } from "../../util/index.js";
-import { Player } from "discord-player";
 import { client } from "../../app.js";
 
 const L_THEME_CHANCE = 100;
@@ -30,6 +30,7 @@ abstract class AsianKyleLTheme {
                 metadata: { channel: newState.channel },
                 ytdlOptions: {
                     filter: 'audioonly',
+                    // eslint-disable-next-line no-bitwise
                     highWaterMark: 1 << 30,
                     dlChunkSize: 0,
                 }
