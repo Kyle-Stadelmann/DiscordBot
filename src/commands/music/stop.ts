@@ -11,7 +11,7 @@ const cmdConfig: CommandConfig = {
 class StopCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
-        if (queue) queue.destroy(true);
+		if (queue) queue.destroy(true);
 		return true;
 	}
 }
