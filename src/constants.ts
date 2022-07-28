@@ -48,6 +48,8 @@ export const SUNGLASSES = "😎";
 export const KHANG_NEKO_EMOJI_ID = "cat_thonk";
 export const WHITE_CHECK_MARK = "✅";
 export const X_MARK = "❌";
+export const MUSICAL_NOTES = "🎶";
+export const L_THEME_URL = "https://www.youtube.com/watch?v=qR6dzwQahOM";
 // TODO: Standardize paths
 export const SRC_DIR = path.resolve(`${dirname}`);
 
