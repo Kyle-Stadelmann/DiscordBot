@@ -1,19 +1,10 @@
-<<<<<<< HEAD
-import { Message } from "discord.js";
-import { Player } from "discord-player";
-=======
 import { Message, TextChannel } from "discord.js";
 import { Player, Queue, Track } from "discord-player";
->>>>>>> skip
 import { DANIEL_ID } from "../../constants.js";
 import { Command } from "../command.js";
 import { AfkPicContainer } from "./afk_pic_container.js";
 import { CommandContainer } from "./command_container.js";
-<<<<<<< HEAD
-import { client } from "../../app.js";
-=======
 import { bdbot, client } from "../../app.js";
->>>>>>> skip
 
 // Global state and functions that read/write global state
 export class BDBot {
