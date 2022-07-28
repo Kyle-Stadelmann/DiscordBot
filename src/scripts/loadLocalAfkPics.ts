@@ -65,7 +65,7 @@ export async function parseFiles() {
 
 		for (const [code, userId] of AfkPicCodeMap) {
 			if (picFileName.includes(code)) {
-				createPromises.push(UserAfkPicTypedModel.create({ filename: picFileName, url: url, userId: userId }));
+				createPromises.push(UserAfkPicTypedModel.create({ filename: picFileName, url, userId }));
 			}
 		}
 	}

@@ -104,7 +104,7 @@ export class AfkPicContainer {
 		}
 
 		const createPromises = picUrls.map(async (url) => {
-			const stagingPic = await StagingAfkPicTypedModel.create({ url: url, submitterUserId });
+			const stagingPic = await StagingAfkPicTypedModel.create({ url, submitterUserId });
 			this.stagingPics.push(stagingPic);
 		});
 		await Promise.all(createPromises);
