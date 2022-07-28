@@ -13,7 +13,7 @@ export class CooldownContainer {
 	public async putOnCooldown(person: GuildMember | User) {
 		const endCooldownEpoch = new Date().valueOf() + this.cooldownTime;
 		const endCooldownDate = new Date(endCooldownEpoch);
-		
+
 		let cd = await this.getCooldown(person.id);
 
 		if (cd) {

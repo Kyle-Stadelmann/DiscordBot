@@ -17,7 +17,9 @@ export class BDBot {
 	public async initContainter() {
 		const cmdContainerPromise = this.commandContainer.initContainer();
 		const afkPicContainerPromise = this.afkPicContainer.initContainer();
-		bdbot.player.on("trackStart", (queue: Queue<{ channel: TextChannel }>, track: Track) => queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`));
+		bdbot.player.on("trackStart", (queue: Queue<{ channel: TextChannel }>, track: Track) =>
+			queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`)
+		);
 
 		await Promise.all([cmdContainerPromise, afkPicContainerPromise]);
 	}
