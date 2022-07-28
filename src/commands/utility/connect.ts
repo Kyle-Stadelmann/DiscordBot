@@ -9,6 +9,7 @@ const cmdConfig: CommandConfig = {
 	usage: "connect",
 };
 
+// TODO: make it so that this doesn't break music functions
 class ConnectCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		if (getVoiceConnection(msg.guildId)) {
