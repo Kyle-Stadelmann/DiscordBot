@@ -131,10 +131,10 @@ const afkpicConfig: ParentCommandConfig = {
 };
 
 class AfkPicCommand extends ParentCommand {
-	public override async initCmd() {
-		await super.initCmd();
-		await this.addSubCommand(AfkPicGetCommand, afkpicGetConfig);
-		await this.addSubCommand(AfkPicAddCommand, afkpicAddConfig);
+	constructor(options: ParentCommandConfig) {
+		super(options);
+		this.addSubCommand(AfkPicGetCommand, afkpicGetConfig);
+		this.addSubCommand(AfkPicAddCommand, afkpicAddConfig);
 	}
 }
 

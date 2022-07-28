@@ -8,7 +8,6 @@ import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot_container.js";
 import { initDb, isDevMode } from "./util/index.js";
 
-// Import .env file variables (for BOT_TOKEN)
 dotenv.config({ path: `${SRC_DIR}/../.env` });
 
 initDb();

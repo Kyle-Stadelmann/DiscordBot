@@ -1,4 +1,4 @@
-import { GuildMember, Message } from "discord.js";
+import { GuildMember, Message, User } from "discord.js";
 import { PREFIX } from "../constants.js";
 import { sendErrorMessage } from "../util/index.js";
 import { Command, CommandConfig } from "./command.js";
@@ -52,31 +52,31 @@ export abstract class ParentCommand extends Command {
 
 	// Note: returns undefined if can't resolve args to sub command
 	// must check this first.
-	public override isOnCooldown(member: GuildMember, args: string[]): boolean {
+	public override isOnCooldown(person: GuildMember | User, args: string[]): Promise<boolean> {
 		if (this.shareCooldownMap) {
-			return this.cooldowns.isOnCooldown(member);
+			return this.cooldowns.isOnCooldown(person);
 		}
 
 		const cmd = this.resolveSubCommand(args);
-		return cmd?.isOnCooldown(member, args);
+		return cmd?.isOnCooldown(person, args);
 	}
 
-	public override putOnCooldown(member: GuildMember, args?: string[]) {
+	public override putOnCooldown(person: GuildMember | User, args?: string[]) {
 		if (this.shareCooldownMap) {
-			return this.cooldowns.putOnCooldown(member);
+			return this.cooldowns.putOnCooldown(person);
 		}
 
 		const cmd = this.resolveSubCommand(args);
-		return cmd?.putOnCooldown(member, args);
+		return cmd?.putOnCooldown(person, args);
 	}
 
-	public override endCooldown(member: GuildMember, args?: string[]) {
+	public override endCooldown(person: GuildMember | User, args?: string[]) {
 		if (this.shareCooldownMap) {
-			return this.cooldowns.endCooldown(member);
+			return this.cooldowns.endCooldown(person);
 		}
 
 		const cmd = this.resolveSubCommand(args);
-		return cmd?.endCooldown(member, args);
+		return cmd?.endCooldown(person, args);
 	}
 
 	override get examples(): string[] {
@@ -100,11 +100,10 @@ export abstract class ParentCommand extends Command {
 		return this.validateCooldown(msg, args);
 	}
 
-	protected async addSubCommand(CmdType: new (options: CommandConfig) => Command, subCmdConfig: CommandConfig) {
+	protected addSubCommand(CmdType: new (options: CommandConfig) => Command, subCmdConfig: CommandConfig) {
 		// eslint-disable-next-line no-param-reassign
 		subCmdConfig.cooldown_name = `${this.name}_${subCmdConfig.name}`;
 		const cmd = new CmdType(subCmdConfig);
-		await cmd.initCmd();
 		this.subCommands.push(cmd);
 
 		if (this.defaultCmdStr && cmd.name === this.defaultCmdStr) {

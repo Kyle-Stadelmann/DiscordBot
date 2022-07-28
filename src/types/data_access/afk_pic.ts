@@ -24,6 +24,7 @@ const afkPicSchema = new dynamoose.Schema(
 		timestamps: true,
 	}
 );
+export const userIdIndex = "userIdGlobalIndex";
 
 // Note: some afk pics have multiple users in them.
 // These pictures have one record *per user*
@@ -45,7 +46,7 @@ export async function doesAfkPicExist(filename: string): Promise<boolean> {
 
 export async function getAllPicsForUser(userId: string): Promise<UserAfkPic[]> {
 	try {
-		const response = await UserAfkPicTypedModel.query("userId").eq(userId).all().exec();
+		const response = await UserAfkPicTypedModel.query("userId").eq(userId).using(userIdIndex).all().exec();
 		return response;
 	} catch (error) {
 		console.error(error);

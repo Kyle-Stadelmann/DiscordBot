@@ -22,17 +22,17 @@ class PlayCommand extends Command {
 			return false;
 		}
 
-        // Create/check for Queue
-        // https://discord-player.js.org/docs/main/master/general/welcome
-        const queue = bdbot.player.createQueue(msg.channel.guild, {
-            metadata: { channel: msg.channel },
-            ytdlOptions: {
-                filter: 'audioonly',
-                // eslint-disable-next-line no-bitwise
-                highWaterMark: 1 << 30,
-                dlChunkSize: 0,
-            }
-        });
+		// Create/check for Queue
+		// https://discord-player.js.org/docs/main/master/general/welcome
+		const queue = bdbot.player.createQueue(msg.channel.guild, {
+			metadata: { channel: msg.channel },
+			ytdlOptions: {
+				filter: "audioonly",
+				// eslint-disable-next-line no-bitwise
+				highWaterMark: 1 << 30,
+				dlChunkSize: 0,
+			},
+		});
 
 		// Join/verify voice connection
 		try {
@@ -62,13 +62,13 @@ class PlayCommand extends Command {
 			})
 			.then((x) => x.tracks[0]);
 
-        // if currently playing, else not playing
-        // not 100% how nowPlaying works, may need to check for paused track (once pause is implemented)
-        if (queue.nowPlaying()) {
-            queue.addTrack(track);
-        } else { 
-            await queue.play(track);
-        }
+		// if currently playing, else not playing
+		// not 100% how nowPlaying works, may need to check for paused track (once pause is implemented)
+		if (queue.nowPlaying()) {
+			queue.addTrack(track);
+		} else {
+			await queue.play(track);
+		}
 
 		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
 			await msg.react(WHITE_CHECK_MARK);
