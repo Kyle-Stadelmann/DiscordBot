@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
+import { MUSICAL_NOTES } from "../../constants.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { sendMessage } from "../../util/index.js";
 
@@ -9,27 +10,34 @@ const cmdConfig: CommandConfig = {
 	usage: "queue",
 };
 
+// There may be a way to completely rework this command so that you can see
+// all the songs in the queue, but that'll require a lot of brain power
+
+// could potentially renovate to add a command where you jump to the index
+// of a specific track which also works with previous tracks
 class QueueCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
 		if (!queue || queue.destroyed || !queue.connection) return false;
 
-		const np = queue.nowPlaying();
-		let counter = 1;
-		let tracks = "```";
+        const np = queue.nowPlaying();
+        if (!np) {
+            await sendMessage(msg.channel, `No tracks in the queue`);
+            return false;
+        }
 
-		if (np) {
-			tracks += `Currently Playing: ${np.title} by ${np.author}\n`;
-			tracks += `-----------------------------------------------\n`;
-		}
-		queue.tracks.forEach((track) => {
-			tracks += `(${counter}): ${track.title} by ${track.author}\n`;
-			counter += 1;
-		});
-		tracks += "```";
+        const ptlen = Math.trunc(queue.previousTracks.length/2);
+        let tracks = "```";
 
-		// daniel got this case to happen but it was a bug with play
-		if (tracks === "``````") tracks = "Queue is empty";
+        tracks += `[${MUSICAL_NOTES}] (${ptlen + 1}) ${np.title} - `;
+        tracks += `requested by ${np.requestedBy.username}\n`;
+
+        for (let i = 0; i < queue.tracks.length && i < 9; i += 1) {
+            tracks += `(${ptlen + 2 + i}) ${queue.tracks[i].title} - `;
+            tracks += `requested by ${queue.tracks[i].requestedBy.username}\n`;
+        }
+
+        tracks += "```";
 
 		await sendMessage(msg.channel, tracks);
 		return true;
