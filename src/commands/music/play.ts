@@ -1,7 +1,8 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
-import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
+import { X_MARK } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
+import { sendMessage } from "../../util/message_channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "play",
@@ -9,6 +10,7 @@ const cmdConfig: CommandConfig = {
 	usage: "play",
 };
 
+// TODO: this breaks if connect was used prior
 class PlayCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		if (msg.channel.type === "DM") return false;
@@ -46,32 +48,66 @@ class PlayCommand extends Command {
 			return false;
 		}
 
+		// argless play (functionally unpause)
+		if (args.length === 0) {
+			queue.setPaused(false);
+			return true;
+		}
+
 		const sites = ["spotify", "youtube", "youtu.be", "soundcloud"];
 		// Find track with args
 		// if link, else search phrase containing all args
 		let search = "";
-		if (args[0].slice(0, 8) === "https://" && sites.some((v) => args[0].includes(v))) {
+		let se = 0;
+		if (args[0].slice(0, 8) === "https://" && 
+		sites.some((site) => args[0].includes(site))) {
 			search = args[0];
+			// may be a cleaner way to do this, brain no worky
+			if (args[0].includes("playlist")) {
+				if (args[0].includes("youtube")) {
+					// YOUTUBE_PLAYLIST = 2
+					se = 2;
+				} else if (args[0].includes("spotify")) {
+					// SPOTIFY_PLAYLIST = 8
+					se = 8;
+				}
+			}
 		} else {
 			search = args.join(" ");
 		}
 
-		const track = await bdbot.player
-			.search(search, {
-				requestedBy: msg.member,
-			})
-			.then((x) => x.tracks[0]);
+		// get track or playlist
+		const playlist = se === 2 || se === 8;
+		const result = await bdbot.player
+		.search(search, {
+			requestedBy: msg.member,
+			searchEngine: se
+		});
+		const track = result.tracks[0];
 
         // if currently playing, else not playing
-        // not 100% how nowPlaying works, may need to check for paused track (once pause is implemented)
-        if (queue.nowPlaying()) {
-            queue.addTrack(track);
-        } else { 
-            await queue.play(track);
-        }
+		if (!playlist) {
+			if (queue.nowPlaying()) {
+				queue.addTrack(track);
+			} else { 
+				await queue.play(track);
+			}
+		} else {
+			// TODO: there may be a way to make this a lot neater
+			if (queue.previousTracks.length === 0) {
+				await queue.play(track);
+				queue.addTracks(result.tracks.slice(1, result.tracks.length));
+			} else {
+				queue.addTracks(result.tracks);
+			}
 
-		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
-			await msg.react(WHITE_CHECK_MARK);
+			await sendMessage(msg.channel,
+				`Added playlist ${result.playlist.title} to the queue`);
+		}
+
+		if (!playlist) {
+			await sendMessage(msg.channel, 
+				`${track.title} by ${track.author} has been added to the queue`);
 		}
 		return true;
 	}
