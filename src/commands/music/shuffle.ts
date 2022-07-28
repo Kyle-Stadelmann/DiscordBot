@@ -12,7 +12,7 @@ class ShuffleCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
 
-        return queue.shuffle();
+		return queue.shuffle();
 	}
 }
 

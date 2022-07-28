@@ -20,24 +20,24 @@ class QueueCommand extends Command {
 		const queue = bdbot.player.getQueue(msg.guildId);
 		if (!queue || queue.destroyed || !queue.connection) return false;
 
-        const np = queue.nowPlaying();
-        if (!np) {
-            await sendMessage(msg.channel, `No tracks in the queue`);
-            return false;
-        }
+		const np = queue.nowPlaying();
+		if (!np) {
+			await sendMessage(msg.channel, `No tracks in the queue`);
+			return false;
+		}
 
-        const ptlen = Math.trunc(queue.previousTracks.length/2);
-        let tracks = "```";
+		const ptlen = Math.trunc(queue.previousTracks.length / 2);
+		let tracks = "```";
 
-        tracks += `[${MUSICAL_NOTES}] (${ptlen + 1}) ${np.title} - `;
-        tracks += `requested by ${np.requestedBy.username}\n`;
+		tracks += `[${MUSICAL_NOTES}] (${ptlen + 1}) ${np.title} - `;
+		tracks += `requested by ${np.requestedBy.username}\n`;
 
-        for (let i = 0; i < queue.tracks.length && i < 9; i += 1) {
-            tracks += `(${ptlen + 2 + i}) ${queue.tracks[i].title} - `;
-            tracks += `requested by ${queue.tracks[i].requestedBy.username}\n`;
-        }
+		for (let i = 0; i < queue.tracks.length && i < 9; i += 1) {
+			tracks += `(${ptlen + 2 + i}) ${queue.tracks[i].title} - `;
+			tracks += `requested by ${queue.tracks[i].requestedBy.username}\n`;
+		}
 
-        tracks += "```";
+		tracks += "```";
 
 		await sendMessage(msg.channel, tracks);
 		return true;
