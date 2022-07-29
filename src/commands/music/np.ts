@@ -5,7 +5,7 @@ import { sendMessage } from "../../util/message_channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "np",
-	description: "shuffles the queue",
+	description: "Shows the currently playing track",
 	usage: "np",
     aliases: [
         "nowplaying"
@@ -16,6 +16,7 @@ class NowPlayingCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
         const np = queue.nowPlaying();
+        const position = Math.round(queue.previousTracks.length/2);
 
         if (!np) {
             await sendMessage(msg.channel, `No track currently playing`);
@@ -23,7 +24,7 @@ class NowPlayingCommand extends Command {
         }
 
         let npmsg = ``;
-        npmsg += `Now Playing: ${np.title} by ${np.author}\n`;
+        npmsg += `Now Playing: (#${position}) ${np.title} by ${np.author}\n`;
         npmsg += `${queue.createProgressBar()}\n`;
         npmsg += `${np.url}\n`;
 

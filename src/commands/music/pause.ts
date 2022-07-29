@@ -4,7 +4,7 @@ import { Command, CommandConfig } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
 	name: "pause",
-	description: "pauses the current track",
+	description: "Pauses the current track",
 	usage: "pause",
 };
 

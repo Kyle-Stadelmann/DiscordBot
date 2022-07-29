@@ -4,7 +4,7 @@ import { Command, CommandConfig } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
 	name: "stop",
-	description: "stops currently playing music and closes the queue",
+	description: "Stops currently playing music and closes the queue",
 	usage: "stop",
 };
 

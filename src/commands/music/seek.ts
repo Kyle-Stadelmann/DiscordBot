@@ -5,7 +5,7 @@ import { sendMessage } from "../../util/message_channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "seek",
-	description: "go to a specified time in the current track",
+	description: "Go to a specified time in the current track",
 	usage: `seek [Time]`,
     examples: [
         `seek 5`,

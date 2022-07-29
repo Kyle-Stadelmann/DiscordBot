@@ -5,7 +5,7 @@ import { sendMessage } from "../../util/message_channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "skip",
-	description: "skips current track",
+	description: "Skips current track",
 	usage: "skip",
 };
 

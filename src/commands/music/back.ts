@@ -5,7 +5,7 @@ import { sendMessage } from "../../util/message_channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "back",
-	description: "plays the previous track",
+	description: "Plays the previous track",
 	usage: "back",
 };
 

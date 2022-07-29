@@ -6,7 +6,7 @@ import { sendMessage } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "queue",
-	description: "shows music queue",
+	description: "Shows the current music queue",
 	usage: "queue",
 };
 
