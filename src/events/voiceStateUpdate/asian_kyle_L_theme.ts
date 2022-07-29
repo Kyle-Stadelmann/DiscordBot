@@ -1,9 +1,9 @@
 import { ArgsOf, Discord, On } from "discordx";
-import { ASIAN_KYLE_ID, BD4_BOT_ID, L_THEME_URL, ZACH_ID } from "../../constants.js";
+import { ASIAN_KYLE_ID, BD4_BOT_ID, L_THEME_URL } from "../../constants.js";
 import { random, sleep } from "../../util/index.js";
 import { bdbot } from "../../app.js";
 
-const L_THEME_CHANCE = 100;
+const L_THEME_CHANCE = 15;
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -14,7 +14,7 @@ abstract class AsianKyleLTheme {
 
         const memberId = oldState.member.id;
 
-        if (memberId === ZACH_ID && oldState.channel === null &&
+        if (memberId === ASIAN_KYLE_ID && oldState.channel === null &&
         newState.channel !== null && random(L_THEME_CHANCE)) {
             // Don't run if a queue currently exists
             // not 100% sure this check does what i want it to
