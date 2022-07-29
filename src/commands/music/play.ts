@@ -24,17 +24,17 @@ class PlayCommand extends Command {
 			return false;
 		}
 
-        // Create/check for Queue
-        // https://discord-player.js.org/docs/main/master/general/welcome
-        const queue = bdbot.player.createQueue(msg.channel.guild, {
-            metadata: { channel: msg.channel },
-            ytdlOptions: {
-                filter: 'audioonly',
-                // eslint-disable-next-line no-bitwise
-                highWaterMark: 1 << 30,
-                dlChunkSize: 0,
-            }
-        });
+		// Create/check for Queue
+		// https://discord-player.js.org/docs/main/master/general/welcome
+		const queue = bdbot.player.createQueue(msg.channel.guild, {
+			metadata: { channel: msg.channel },
+			ytdlOptions: {
+				filter: "audioonly",
+				// eslint-disable-next-line no-bitwise
+				highWaterMark: 1 << 30,
+				dlChunkSize: 0,
+			},
+		});
 
 		// Join/verify voice connection
 		try {
@@ -59,8 +59,7 @@ class PlayCommand extends Command {
 		// if link, else search phrase containing all args
 		let search = "";
 		let se = 0;
-		if (args[0].slice(0, 8) === "https://" && 
-		sites.some((site) => args[0].includes(site))) {
+		if (args[0].slice(0, 8) === "https://" && sites.some((site) => args[0].includes(site))) {
 			search = args[0];
 			// may be a cleaner way to do this, brain no worky
 			if (args[0].includes("playlist")) {
@@ -78,18 +77,17 @@ class PlayCommand extends Command {
 
 		// get track or playlist
 		const playlist = se === 2 || se === 8;
-		const result = await bdbot.player
-		.search(search, {
+		const result = await bdbot.player.search(search, {
 			requestedBy: msg.member,
-			searchEngine: se
+			searchEngine: se,
 		});
 		const track = result.tracks[0];
 
-        // if currently playing, else not playing
+		// if currently playing, else not playing
 		if (!playlist) {
 			if (queue.nowPlaying()) {
 				queue.addTrack(track);
-			} else { 
+			} else {
 				await queue.play(track);
 			}
 		} else {
@@ -101,13 +99,11 @@ class PlayCommand extends Command {
 				queue.addTracks(result.tracks);
 			}
 
-			await sendMessage(msg.channel,
-				`Added playlist ${result.playlist.title} to the queue`);
+			await sendMessage(msg.channel, `Added playlist ${result.playlist.title} to the queue`);
 		}
 
 		if (!playlist) {
-			await sendMessage(msg.channel, 
-				`${track.title} by ${track.author} has been added to the queue`);
+			await sendMessage(msg.channel, `${track.title} by ${track.author} has been added to the queue`);
 		}
 		return true;
 	}

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import path from "path";
-import { GuildMember, Message } from "discord.js";
+import { GuildMember, Message, User } from "discord.js";
 import { fileURLToPath } from "url";
 import { CooldownContainer } from "./containers/cooldown_container.js";
 import { printSpace, sendErrorMessage } from "../util/index.js";
@@ -40,21 +40,16 @@ export abstract class Command {
 		this.category = Command.getCategoryName();
 	}
 
-	// Must call after constructor unfortunately
-	public async initCmd() {
-		await this.cooldowns.initContainer();
+	public isOnCooldown(person: GuildMember | User, args?: string[]): Promise<boolean> {
+		return this.cooldowns.isOnCooldown(person);
 	}
 
-	public isOnCooldown(member: GuildMember, args?: string[]): boolean {
-		return this.cooldowns.isOnCooldown(member);
+	public putOnCooldown(person: GuildMember | User, args?: string[]): Promise<void> {
+		return this.cooldowns.putOnCooldown(person);
 	}
 
-	public putOnCooldown(member: GuildMember, args?: string[]): Promise<void> {
-		return this.cooldowns.putOnCooldown(member);
-	}
-
-	public endCooldown(member: GuildMember, args?: string[]): Promise<void> {
-		return this.cooldowns.endCooldown(member);
+	public endCooldown(person: GuildMember | User, args?: string[]): Promise<void> {
+		return this.cooldowns.endCooldown(person);
 	}
 
 	public async validateCommand(msg: Message, args: string[]): Promise<boolean> {
@@ -72,12 +67,9 @@ export abstract class Command {
 	}
 
 	protected async validateCooldown(msg: Message, args: string[]): Promise<boolean> {
-		const { member, channel } = msg;
+		const { member, channel, author } = msg;
 
-		// TODO: Cooldowns are disabled in DMs atm
-		if (channel.type === "DM") return true;
-
-		if (this.isOnCooldown(member, args)) {
+		if (await this.isOnCooldown(member || author, args)) {
 			console.log("Command was NOT successful, member is on cooldown.");
 			await sendErrorMessage(channel, "Command was NOT successful, you are on cooldown for this command.");
 			printSpace();
@@ -102,7 +94,7 @@ export interface CommandConfig {
 	name: string;
 	description: string;
 	usage?: string;
-	cooldownTime?: number;
+	cooldownTime?: number; // ms
 	examples?: string[];
 	allowInDM?: boolean;
 	aliases?: string[];

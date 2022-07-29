@@ -1,68 +1,37 @@
-import { GuildMember } from "discord.js";
-import { Low, JSONFile } from "lowdb";
-import { COOLDOWN_JSON_LOC } from "../../constants.js";
-import { Cooldown, CooldownFile } from "../cooldown.js";
+import { Collection, GuildMember, User } from "discord.js";
+import { Cooldown, createCooldown, getCooldown } from "../data_access/cooldown.js";
 
 export class CooldownContainer {
-	private cooldowns: Cooldown;
-	private readonly db: Low<CooldownFile>;
+	private cooldowns = new Collection<string, Cooldown>();
+	constructor(private cooldownTime: number, private cooldownName: string) {}
 
-	constructor(private cooldownTime: number, private cooldownName: string) {
-		const adapter = new JSONFile<CooldownFile>(COOLDOWN_JSON_LOC);
-		this.db = new Low(adapter);
-		this.cooldowns = {};
+	public async isOnCooldown(person: GuildMember | User): Promise<boolean> {
+		const cd = await this.getCooldown(person.id);
+		return cd?.date > new Date();
 	}
 
-	public async initContainer() {
-		await this.db.read();
-		const existingCd = this.getDbBufferCooldown();
-		this.cooldowns = existingCd ?? {};
-	}
-
-	public isOnCooldown(member: GuildMember): boolean {
-		const cooldownDate = this.getCooldownDate(member);
-
-		if (!cooldownDate) return false;
-
-		if (cooldownDate > new Date()) return true;
-		return false;
-	}
-
-	public async putOnCooldown(member: GuildMember) {
+	public async putOnCooldown(person: GuildMember | User) {
 		const endCooldownEpoch = new Date().valueOf() + this.cooldownTime;
 		const endCooldownDate = new Date(endCooldownEpoch);
 
-		this.setCooldownDate(member, endCooldownDate);
-		await this.updateDb();
+		let cd = await this.getCooldown(person.id);
+
+		if (cd) {
+			cd.date = endCooldownDate;
+			await cd.save();
+		} else {
+			cd = await createCooldown(person.id, this.cooldownName, endCooldownDate);
+			this.cooldowns.set(person.id, cd);
+		}
 	}
 
-	public async endCooldown(member: GuildMember) {
-		delete this.cooldowns[`${member.id}`];
-
-		await this.updateDb();
+	public async endCooldown(person: GuildMember | User): Promise<void> {
+		const cd = this.cooldowns.get(person.id);
+		cd.date = null;
+		await cd.save();
 	}
 
-	private async updateDb() {
-		await this.db.read();
-
-		this.setDbBufferCooldown(this.cooldowns);
-
-		await this.db.write();
-	}
-
-	private getCooldownDate(member: GuildMember): Date {
-		return this.cooldowns[`${member.id}`];
-	}
-
-	private setCooldownDate(member: GuildMember, date: Date) {
-		this.cooldowns[`${member.id}`] = date;
-	}
-
-	private getDbBufferCooldown(): Cooldown {
-		return this.db.data[`${this.cooldownName}`];
-	}
-
-	private setDbBufferCooldown(cd: Cooldown) {
-		this.db.data[`${this.cooldownName}`] = cd;
+	private async getCooldown(id: string): Promise<Cooldown | undefined> {
+		return this.cooldowns.get(id) || (await getCooldown(id, this.cooldownName));
 	}
 }

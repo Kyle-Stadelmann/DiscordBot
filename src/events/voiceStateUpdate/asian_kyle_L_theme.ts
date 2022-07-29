@@ -12,7 +12,7 @@ abstract class AsianKyleLTheme {
 	private async tryLTheme([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
 		if (oldState.id === BD4_BOT_ID) return false;
 
-        const memberId = oldState.member.id;
+		const memberId = oldState.member.id;
 
         if (memberId === ASIAN_KYLE_ID && oldState.channel === null &&
         newState.channel !== null && random(L_THEME_CHANCE)) {
@@ -23,34 +23,36 @@ abstract class AsianKyleLTheme {
                 return false;
             }
 
-            console.log(`Playing L's Theme: ${memberId}`);
-            // https://discord-player.js.org/docs/main/master/general/welcome
-            const queue = bdbot.player.createQueue(newState.channel.guild, {
-                metadata: { channel: newState.channel },
-                ytdlOptions: {
-                    filter: 'audioonly',
-                    // eslint-disable-next-line no-bitwise
-                    highWaterMark: 1 << 30,
-                    dlChunkSize: 0,
-                }
-            });
-            try {
-                if (!queue.connection) await queue.connect(newState.channel);
-            } catch {
-                queue.destroy();
-                console.log("didnt work ?");
-                return false;
-            }
-            const track = await bdbot.player.search(L_THEME_URL, {
-                requestedBy: newState.guild.members.cache.get(ASIAN_KYLE_ID),
-                searchEngine: 0,
-            }).then(x => x.tracks[0]);
-            await queue.play(track);
+			console.log(`Playing L's Theme: ${memberId}`);
+			// https://discord-player.js.org/docs/main/master/general/welcome
+			const queue = bdbot.player.createQueue(newState.channel.guild, {
+				metadata: { channel: newState.channel },
+				ytdlOptions: {
+					filter: "audioonly",
+					// eslint-disable-next-line no-bitwise
+					highWaterMark: 1 << 30,
+					dlChunkSize: 0,
+				},
+			});
+			try {
+				if (!queue.connection) await queue.connect(newState.channel);
+			} catch {
+				queue.destroy();
+				console.log("didnt work ?");
+				return false;
+			}
+			const track = await bdbot.player
+				.search(L_THEME_URL, {
+					requestedBy: newState.guild.members.cache.get(ASIAN_KYLE_ID),
+					searchEngine: 0,
+				})
+				.then((x) => x.tracks[0]);
+			await queue.play(track);
 
-            // disconnect after 15 seconds
-            await sleep(15000);
-            queue.destroy(true);
-            console.log(`Exiting L's Theme: ${memberId}`);
+			// disconnect after 15 seconds
+			await sleep(15000);
+			queue.destroy(true);
+			console.log(`Exiting L's Theme: ${memberId}`);
 		}
 
 		return true;

@@ -27,9 +27,6 @@ export const TWEED_ID = "250368865089880067";
 export const NATHAN_P_ID = "164893909741338625";
 export const NATHAN_L_ID = "605626870301458433";
 
-// JSON File Locations
-export const COOLDOWN_JSON_LOC = path.resolve(`${dirname}/../database/cooldowns.json`);
-
 // Note: not a full path
 export const AFKPIC_FG_LOC = "pics/AFK_PICS";
 export const STAGING_AFKPIC_FG_LOC = "pics/STAGING_AFK_PICS";
