@@ -39,7 +39,6 @@ export function parseArgs(content: string, delim: string = " "): string[] {
 
 export async function loadCommandFile(file: string): Promise<Command> {
 	const cmd = (await import(`file://${file}`)).default as Command;
-	await cmd.initCmd();
 
 	// Only load command if its not disabled
 	// But if DEV mode is activated, load disabled commands

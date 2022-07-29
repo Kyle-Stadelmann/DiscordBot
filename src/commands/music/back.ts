@@ -12,14 +12,14 @@ const cmdConfig: CommandConfig = {
 class BackCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
-        try {
-            await queue.back();
-        } catch (error) {
-            await sendMessage(msg.channel, "Could not find previous track");
-            return false;
-        }
+		try {
+			await queue.back();
+		} catch (error) {
+			await sendMessage(msg.channel, "Could not find previous track");
+			return false;
+		}
 
-        return true;
+		return true;
 	}
 }
 

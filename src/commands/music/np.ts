@@ -7,9 +7,7 @@ const cmdConfig: CommandConfig = {
 	name: "np",
 	description: "Shows the currently playing track",
 	usage: "np",
-    aliases: [
-        "nowplaying"
-    ],
+	aliases: ["nowplaying"],
 };
 
 class NowPlayingCommand extends Command {
@@ -18,18 +16,18 @@ class NowPlayingCommand extends Command {
         const np = queue.nowPlaying();
         const position = Math.round(queue.previousTracks.length/2);
 
-        if (!np) {
-            await sendMessage(msg.channel, `No track currently playing`);
-            return false;
-        }
+		if (!np) {
+			await sendMessage(msg.channel, `No track currently playing`);
+			return false;
+		}
 
         let npmsg = ``;
         npmsg += `Now Playing: (#${position}) ${np.title} by ${np.author}\n`;
         npmsg += `${queue.createProgressBar()}\n`;
         npmsg += `${np.url}\n`;
 
-        await sendMessage(msg.channel, npmsg);
-        return true;
+		await sendMessage(msg.channel, npmsg);
+		return true;
 	}
 }
 
