@@ -1,4 +1,4 @@
-import { Track } from "discord-player";
+import { Queue, Track } from "discord-player";
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 export function shuffleQueue(tracks: Array<Track>): Array<Track> {
@@ -17,6 +17,10 @@ export function shuffleQueue(tracks: Array<Track>): Array<Track> {
     }
 
     return newTracks;
+}
+
+export function SearchTitle(search: string, queue: Queue): Track {
+    return queue.tracks.find(track => track.title.toLowerCase().includes(search));
 }
 
 // TODO: pretty sure i can take chunks out of play and put them here
