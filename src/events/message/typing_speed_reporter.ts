@@ -20,9 +20,11 @@ abstract class TypingSpeedReporter {
 			// Time spent typing message in seconds
 			const typingTime = (msg.createdTimestamp - bdbot.typingTimestamps.get(userId)) / 1000;
 			const wpm = (wordCount / typingTime) * 60;
+			const typingTimeInt = typingTime.toFixed(0);
+			const wpmInt = wpm.toFixed(0);
 
-			console.log(`Reporting a typing time of: ${typingTime} with WPM of ${wpm} for user: ${userId}`);
-			await sendMessage(channel, `That message took approximately ${typingTime} seconds, with a WPM of ${wpm}`);
+			console.log(`Reporting a typing time of: ${typingTimeInt} with WPM of ${wpmInt} for user: ${userId}`);
+			await sendMessage(channel, `That message took approximately ${typingTimeInt} seconds, with a WPM of ${wpmInt}`);
 			printSpace();
 		}
 
