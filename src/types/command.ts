@@ -56,7 +56,7 @@ export abstract class Command {
 		const { channel } = msg;
 
 		// Make sure if we're in a dm to check if this cmd is allowed in a dm
-		// fail quietly (this cmd shouldn't be visible at all to them)
+		// if so, fail quietly (this cmd shouldn't be visible at all to them)
 		if (channel.type === "DM" && !this.allowInDM) return false;
 
 		return this.validateCooldown(msg, args);

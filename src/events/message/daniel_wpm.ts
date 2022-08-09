@@ -1,6 +1,6 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { DANIEL_ID, PREFIX, DANIEL_WPM } from "../../constants.js";
-import { sendMessage } from "../../util/index.js";
+import { random, sendMessage } from "../../util/index.js";
 
 export function danielWPMChanceFunction(numWords: number): number {
 	const MIN_WORDS = 8;
@@ -8,12 +8,9 @@ export function danielWPMChanceFunction(numWords: number): number {
 
 	// If not enough words, chance is 0%
 	if (numWords < MIN_WORDS) return 0;
-
+	
 	// Chance equation (exponential)
-	let chance = numWords ** 1.7 * 0.1;
-	if (chance > MAX_CHANCE) chance = MAX_CHANCE;
-
-	return chance;
+	return Math.min(numWords ** 1.7 * 0.1, MAX_CHANCE);
 }
 
 export function countWords(str: string) {
@@ -36,7 +33,7 @@ abstract class DanielWPM {
 		if (msg.content.startsWith(PREFIX)) return;
 
 		const numWords = countWords(msg.content);
-		if (danielWPMChanceFunction(numWords)) {
+		if (random(danielWPMChanceFunction(numWords))) {
 			await sendMessage(
 				msg.channel,
 				`It took Daniel approximately ${wordsPerMinute(
