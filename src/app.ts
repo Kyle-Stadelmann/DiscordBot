@@ -28,14 +28,19 @@ export const client = new Client({
 // Bot state
 export const bdbot = new BDBot();
 
+client.on("interactionCreate", (interaction) => {
+	client.executeInteraction(interaction);
+});
+
 export async function startup() {
-	await importx(`${dirname(import.meta.url)}/events/**/*.{ts,js}`);
+	await Promise.all([
+		importx(`${dirname(import.meta.url)}/events/**/*.{ts,js}`),
+		importx(`${dirname(import.meta.url)}/commands/**/*.{js,ts}`)
+	]);
 
 	if (isDevMode()) {
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		await client.login(process.env.DEV_BOT_TOKEN);
 	} else {
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		await client.login(process.env.BOT_TOKEN);
 	}
 
