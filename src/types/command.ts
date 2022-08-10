@@ -55,8 +55,7 @@ export abstract class Command {
 	public async validateCommand(msg: Message, args: string[]): Promise<boolean> {
 		const { channel } = msg;
 
-		// Make sure if we're in a dm to check if this cmd is allowed in a dm
-		// if so, fail quietly (this cmd shouldn't be visible at all to them)
+		// If in DM and allowInDM false, fail quietly (this cmd shouldn't be visible at all to them)
 		if (channel.type === "DM" && !this.allowInDM) return false;
 
 		return this.validateCooldown(msg, args);

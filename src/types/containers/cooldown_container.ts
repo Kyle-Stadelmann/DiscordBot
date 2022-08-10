@@ -2,6 +2,7 @@ import { Collection, GuildMember, User } from "discord.js";
 import { Cooldown, createCooldown, getCooldown } from "../data_access/cooldown.js";
 
 export class CooldownContainer {
+	// Person id -> Cooldown
 	private cooldowns = new Collection<string, Cooldown>();
 	constructor(private cooldownTime: number, private cooldownName: string) {}
 
