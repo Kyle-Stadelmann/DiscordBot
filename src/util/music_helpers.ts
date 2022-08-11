@@ -19,7 +19,7 @@ export function shuffleQueue(tracks: Array<Track>): Array<Track> {
     return newTracks;
 }
 
-export function SearchTitle(search: string, queue: Queue): Track {
+export function searchTitle(search: string, queue: Queue): Track {
     return queue.tracks.find(track => track.title.toLowerCase().includes(search));
 }
 
