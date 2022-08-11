@@ -9,7 +9,7 @@ import {
 	isProdMode,
 	loadCommandFiles,
 	printSpace,
-	sendErrorToDiscordChannel,
+	sendErrorToErrorChannel,
 } from "../../util/index.js";
 import { Command } from "../command.js";
 
@@ -49,7 +49,7 @@ export class CommandContainer {
 			console.error(errStr);
 			printSpace();
 			if (isProdMode()) {
-				await sendErrorToDiscordChannel(errStr);
+				await sendErrorToErrorChannel(errStr);
 			}
 		}
 
