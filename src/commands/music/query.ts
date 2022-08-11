@@ -3,7 +3,7 @@ import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { sendMessage } from "../../util/message_channel.js";
-import { SearchTitle } from "../../util/music_helpers.js";
+import { searchTitle } from "../../util/music_helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "query",
@@ -23,7 +23,7 @@ class QueryCommand extends Command {
         }
 		
         try {
-            queue.jump(SearchTitle(args.join(" "), queue));
+            queue.jump(searchTitle(args.join(" "), queue));
         } catch (error) {
             await sendMessage(msg.channel,
                 `Query failed, ensure your search is part of the track title`);
