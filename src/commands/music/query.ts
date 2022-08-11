@@ -14,23 +14,22 @@ const cmdConfig: CommandConfig = {
 class QueryCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
-        if (!queue || queue.destroyed || !queue.connection) return false;
+		if (!queue || queue.destroyed || !queue.connection) return false;
 
-        const np = queue.nowPlaying();
-        if (!np || !args[0]) {
-            await msg.react(X_MARK);
-            return false;
-        }
-		
-        try {
-            queue.jump(SearchTitle(args.join(" "), queue));
-        } catch (error) {
-            await sendMessage(msg.channel,
-                `Query failed, ensure your search is part of the track title`);
-            return false;
-        }
+		const np = queue.nowPlaying();
+		if (!np || !args[0]) {
+			await msg.react(X_MARK);
+			return false;
+		}
 
-        await msg.react(WHITE_CHECK_MARK);
+		try {
+			queue.jump(SearchTitle(args.join(" "), queue));
+		} catch (error) {
+			await sendMessage(msg.channel, `Query failed, ensure your search is part of the track title`);
+			return false;
+		}
+
+		await msg.react(WHITE_CHECK_MARK);
 		return true;
 	}
 }

@@ -21,5 +21,5 @@ export function sendErrorToErrorChannel(errStr: string) {
 }
 
 export function sendButtons(channel: TextBasedChannel, btns: MessageActionRow[], text?: string): Promise<Message> {
-	return channel.send({components: btns, content: text});
+	return channel.send({ components: btns, content: text });
 }

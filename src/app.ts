@@ -35,7 +35,7 @@ client.on("interactionCreate", (interaction) => {
 export async function startup() {
 	await Promise.all([
 		importx(`${dirname(import.meta.url)}/events/**/*.{ts,js}`),
-		importx(`${dirname(import.meta.url)}/commands/**/*.{js,ts}`)
+		importx(`${dirname(import.meta.url)}/commands/**/*.{js,ts}`),
 	]);
 
 	if (isDevMode()) {

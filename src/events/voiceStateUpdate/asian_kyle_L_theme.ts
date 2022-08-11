@@ -14,14 +14,18 @@ abstract class AsianKyleLTheme {
 
 		const memberId = oldState.member.id;
 
-        if (memberId === ASIAN_KYLE_ID && oldState.channel === null &&
-        newState.channel !== null && random(L_THEME_CHANCE)) {
-            // Don't run if a queue currently exists
-            // not 100% sure this check does what i want it to
-            if (bdbot.player.getQueue(newState.guild)) {
-                console.log("Bot is currently playing music");
-                return false;
-            }
+		if (
+			memberId === ASIAN_KYLE_ID &&
+			oldState.channel === null &&
+			newState.channel !== null &&
+			random(L_THEME_CHANCE)
+		) {
+			// Don't run if a queue currently exists
+			// not 100% sure this check does what i want it to
+			if (bdbot.player.getQueue(newState.guild)) {
+				console.log("Bot is currently playing music");
+				return false;
+			}
 
 			console.log(`Playing L's Theme: ${memberId}`);
 			// https://discord-player.js.org/docs/main/master/general/welcome

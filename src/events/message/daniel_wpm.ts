@@ -8,7 +8,7 @@ export function danielWPMChanceFunction(numWords: number): number {
 
 	// If not enough words, chance is 0%
 	if (numWords < MIN_WORDS) return 0;
-	
+
 	// Chance equation (exponential)
 	return Math.min(numWords ** 1.7 * 0.1, MAX_CHANCE);
 }
