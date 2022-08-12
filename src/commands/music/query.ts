@@ -23,7 +23,8 @@ class QueryCommand extends Command {
         }
 		
         try {
-            queue.jump(searchTitle(args.join(" "), queue));
+            const foundTrack = queue.remove(searchTitle(args.join(" "), queue));
+            queue.tracks.unshift(foundTrack);
         } catch (error) {
             await sendMessage(msg.channel,
                 `Query failed, ensure your search is part of the track title`);
