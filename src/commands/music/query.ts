@@ -8,7 +8,11 @@ import { findTrack } from "../../util/music-helpers.js";
 const cmdConfig: CommandConfig = {
 	name: "query",
 	description: "Moves a track with the specified name to the front of the queue",
-	usage: "query",
+	usage: "query [some part of the track's title]",
+    examples: [
+        ">query Rebecca Black - Friday",
+        ">query friday",
+    ],
 };
 
 class QueryCommand extends Command {
