@@ -1,7 +1,7 @@
 import { PlayerSearchResult, Queue, Track } from "discord-player";
 import { User } from "discord.js";
-import { bdbot } from "../app";
-import { PLAYER_SITES } from "../constants";
+import { bdbot } from "../app.js";
+import { PLAYER_SITES } from "../constants.js";
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 export function shuffleQueue(tracks: Array<Track>): Array<Track> {
