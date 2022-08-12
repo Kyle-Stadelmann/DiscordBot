@@ -3,7 +3,7 @@ import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { sendMessage } from "../../util/message_channel.js";
-import { searchTitle } from "../../util/music_helpers.js";
+import { findTrack } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "query",
@@ -23,7 +23,7 @@ class QueryCommand extends Command {
         }
 		
         try {
-            const foundTrack = queue.remove(searchTitle(args.join(" "), queue));
+            const foundTrack = queue.remove(findTrack(args.join(" "), queue));
             queue.tracks.unshift(foundTrack);
         } catch (error) {
             await sendMessage(msg.channel,

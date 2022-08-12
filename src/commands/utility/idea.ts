@@ -21,7 +21,7 @@ class IdeaCommand extends Command {
         // https://www.youtube.com/watch?v=mScQ38_jffg this is crazy rn
         // i was gonna say something else but i forgot
 
-        if (msg.member.id === BD4_BOT_ID) return false;
+        if (msg.author.id === BD4_BOT_ID) return false;
 
         const ideaBtn = new MessageButton()
             .setLabel("Submit Idea")
@@ -51,7 +51,7 @@ class IdeaButton {
 
         const typeInputComponent = new TextInputComponent()
             .setCustomId("type-field")
-            .setLabel("Type of command (fun/utility/music/general)")
+            .setLabel("Idea Type (fun/utility/music/general)")
             .setStyle("SHORT");
         const ideaInputComponent = new TextInputComponent()
             .setCustomId("idea-field")
@@ -78,7 +78,7 @@ class IdeaButton {
 
         if (!["utility", "fun", "music", "general"].includes(ideaType)) {
             await interaction.reply({
-                content: `${interaction.member.toString()}, please make sure your type `
+                content: `${interaction.user.toString()}, please make sure your type `
                 + "matches one of: `utility | fun | music | general`.\n"
                 + "Here's your idea if you would like to resubmit:\n"
                 + `${idea}`,
@@ -89,7 +89,7 @@ class IdeaButton {
         }
 
         await interaction.reply({
-            content: `${interaction.member.toString()} successfully submitted `
+            content: `${interaction.user.toString()} successfully submitted `
             + `idea: "${idea}" with type "${ideaType}"`,
             ephemeral: true,
         });
