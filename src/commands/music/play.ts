@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
-import { X_MARK } from "../../constants.js";
+import { PLAYER_SITES, X_MARK } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { sendMessage } from "../../util/message_channel.js";
 
@@ -54,12 +54,11 @@ class PlayCommand extends Command {
 			return true;
 		}
 
-		const sites = ["spotify", "youtube", "youtu.be", "soundcloud"];
 		// Find track with args
 		// if link, else search phrase containing all args
 		let search = "";
 		let se = 0;
-		if (args[0].slice(0, 8) === "https://" && sites.some((site) => args[0].includes(site))) {
+		if (args[0].slice(0, 8) === "https://" && PLAYER_SITES.some((site) => args[0].includes(site))) {
 			search = args[0];
 			// may be a cleaner way to do this, brain no worky
 			if (args[0].includes("playlist")) {

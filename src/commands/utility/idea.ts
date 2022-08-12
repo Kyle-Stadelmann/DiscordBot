@@ -101,7 +101,7 @@ class IdeaButton {
             description: idea,
         });
         console.log(`Idea with ID: ${interaction.id} submitted to DB by `
-        + `${interaction.user.toString()}`);
+        + `${interaction.user.username}`);
     }
 }
 

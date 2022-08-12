@@ -27,11 +27,14 @@ class QueueCommand extends Command {
 		}
 
 		const ptlen = Math.trunc(queue.previousTracks.length / 2);
+		const currentPos = ptlen + 1;
 		let tracks = "```";
 
-		tracks += `[${MUSICAL_NOTES}] (${ptlen + 1}) ${np.title} - `;
-		tracks += `requested by ${np.requestedBy.username}`;
-		tracks += ` | Queue length: ${ptlen + 1 + queue.tracks.length}\n`;
+		tracks += `Queue length: ${currentPos + queue.tracks.length}, `
+		+ `Current Position: ${currentPos}\n`
+		+ `----------------------------------------------------------------\n`
+		+ `[${MUSICAL_NOTES}] (${ptlen + 1}) ${np.title} - `
+		+ `requested by ${np.requestedBy.username}\n`;
 
 		for (let i = 0; i < queue.tracks.length && i < 9; i += 1) {
 			tracks += `(${ptlen + 2 + i}) ${queue.tracks[i].title} - `;
