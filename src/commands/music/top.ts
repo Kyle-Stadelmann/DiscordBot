@@ -1,7 +1,8 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
-import { PLAYER_SITES, WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
+import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandConfig } from "../../types/command.js";
+import { getSearchResult } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "top",
@@ -20,14 +21,9 @@ class TopCommand extends Command {
             return false;
         }
 		
-        let search = "";
-        if (args[0].slice(0, 8) === "https://" && PLAYER_SITES.some((site) => args[0].includes(site))) {
-            search = args[0];
-        } else search = args.join(" ");
-
-        const foundTrack = await bdbot.player.search(search, {
-            requestedBy: msg.member,
-        }).then(x => x.tracks[0]);
+        const foundTrack = await getSearchResult(args, msg.author)
+        // TODO: would anyone ever want to top a whole playlist?
+        .then(x => x.tracks[0]);
 
         // dont think this can happen but just to be safe
         if (!foundTrack) return false;
