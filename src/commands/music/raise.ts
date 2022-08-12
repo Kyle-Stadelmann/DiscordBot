@@ -10,6 +10,8 @@ const cmdConfig: CommandConfig = {
 	usage: "raise",
 };
 
+// TODO: Not sure if this should stay a separate command from query
+// could get messy if you try to combine
 class RaiseCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
@@ -22,9 +24,10 @@ class RaiseCommand extends Command {
         }
 		
         const ptlen = Math.trunc(queue.previousTracks.length/2);
-        const index = parseInt(args[0], 10);
         try {
-            queue.jump(queue.getTrackPosition(index - ptlen - 2));
+            const index = parseInt(args[0], 10);
+            const foundTrack = queue.remove(queue.getTrackPosition(index - ptlen - 2));
+            queue.tracks.unshift(foundTrack);
         } catch (error) {
             await sendMessage(msg.channel,
                 `Raise failed, double check provided index`);
