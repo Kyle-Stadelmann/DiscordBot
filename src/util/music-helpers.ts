@@ -50,6 +50,13 @@ export async function getSearchResult(args: string[], user: User): Promise<Playe
         searchEngine: se,
     });
 
+    // this is a bandaid idk if theres a better way
+    if (se === 0 && result.tracks.length > 1) {
+        const newTracks = [];
+        newTracks.push(result.tracks[0]);
+        result.tracks = newTracks;
+    }
+
     return result;
 }
 
