@@ -1,11 +1,13 @@
 // eslint-disable-next-line max-classes-per-file
-import { GuildMember, Interaction, Message, MessageActionRow, MessageButton } from "discord.js";
+import { CacheType, GuildMember, Interaction, Message, MessageActionRow, MessageButton } from "discord.js";
 import type { ButtonInteraction } from "discord.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { OWHEN_ROLE_ID, SKOWHEN_ROLE_ID, VALHEN_ROLE_ID, WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { sendErrorMessage } from "../../util/message_channel.js";
 import { PlayersContainer } from "../../types/containers/players_container.js";
 import { client } from "../../app.js";
+import { ButtonComponent } from "discordx";
+import { Button } from "../../types/button.js";
 
 const cmdConfig: CommandConfig = {
 	name: "hen",
@@ -27,9 +29,8 @@ const joinBtnId = "startBtnJ";
 const leaveBtnId = "startBtnL";
 
 // Keep players state in this file, since it's not needed elsewhere
-// In memory container, not backed by db since its somewhat unnecessary and we
+// In-memory container, not backed by db since its somewhat unnecessary and we
 // have a limited number of tables unfortunately.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const playersContainer = new PlayersContainer();
 
 class StartCommand extends Command {
@@ -94,7 +95,7 @@ function parseBtnId(customId: string): [string, string] {
 	return [parts[1], parts[2]];
 }
 
-async function joinQueue(interaction: ButtonInteraction, guildId: string, userId: string, roleId: string) {
+async function tryJoinQueue(interaction: ButtonInteraction, guildId: string, userId: string, roleId: string) {
 	let players = playersContainer.getPlayers(guildId, roleId);
 	const maxPlayers = playersPerGameMap.get(roleId);
 
@@ -125,40 +126,56 @@ async function joinQueue(interaction: ButtonInteraction, guildId: string, userId
 	}
 }
 
+async function tryLeaveQueue(interaction: ButtonInteraction, guildId: string, userId: string, roleId: string) {
+	// TODO: Hopefully this cast won't be needed in v14 of discord js???
+	const { displayName } = interaction.member as GuildMember;
+	const roleName = client.guilds.resolve(guildId).roles.resolve(roleId).name;
+
+	playersContainer.removePlayer(guildId, userId, roleId);
+
+	const numPlayers = playersContainer.getPlayers(guildId, roleId).length;
+	const maxPlayers = playersPerGameMap.get(roleId);
+
+	await interaction.reply(
+		`${displayName} left the ${roleName} queue. Number of players ${numPlayers}/${maxPlayers}`
+	);
+}
+
+class JoinButton extends Button {
+	public async handle(interaction: ButtonInteraction) {
+		const [guildId, roleId] = parseBtnId(interaction.customId);
+		const userId = interaction.user.id;
+
+		if (playersContainer.hasPlayer(guildId, userId, roleId)) {
+			await interaction.reply({ content: "You've already joined the queue!", ephemeral: true });
+		} else {
+			await tryJoinQueue(interaction, guildId, userId, roleId);
+		}
+	}
+}
+
+class LeaveButton extends Button {
+	public async handle(interaction: ButtonInteraction) {
+		const [guildId, roleId] = parseBtnId(interaction.customId);
+		const userId = interaction.user.id;
+
+		if (playersContainer.hasPlayer(guildId, userId, roleId)) {
+			await tryLeaveQueue(interaction, guildId, userId, roleId);
+		} else {
+			await interaction.reply({ content: "You haven't joined this queue!", ephemeral: true });
+		}
+	}
+}
+
 client.on("interactionCreate", async (interaction: Interaction) => {
 	try {
 		if (!interaction.isButton()) return;
 		const { customId } = interaction;
 
 		if (customId.startsWith(joinBtnId)) {
-			const [guildId, roleId] = parseBtnId(customId);
-			const userId = interaction.user.id;
 
-			if (playersContainer.hasPlayer(guildId, userId, roleId)) {
-				await interaction.reply({ content: "You've already joined the queue!", ephemeral: true });
-			} else {
-				await joinQueue(interaction, guildId, userId, roleId);
-			}
 		} else if (customId.startsWith(leaveBtnId)) {
-			const [guildId, roleId] = parseBtnId(customId);
-			const userId = interaction.user.id;
 
-			// TODO: Hopefully this cast won't be needed in v14 of discord js???
-			const { displayName } = interaction.member as GuildMember;
-			const roleName = client.guilds.resolve(guildId).roles.resolve(roleId).name;
-
-			if (playersContainer.hasPlayer(guildId, userId, roleId)) {
-				playersContainer.removePlayer(guildId, userId, roleId);
-
-				const numPlayers = playersContainer.getPlayers(guildId, roleId).length;
-				const maxPlayers = playersPerGameMap.get(roleId);
-
-				await interaction.reply(
-					`${displayName} left the ${roleName} queue. Number of players ${numPlayers}/${maxPlayers}`
-				);
-			} else {
-				await interaction.reply({ content: "You haven't joined this queue!", ephemeral: true });
-			}
 		}
 	} catch (e) {
 		console.error(e);
@@ -166,3 +183,4 @@ client.on("interactionCreate", async (interaction: Interaction) => {
 });
 
 export default new StartCommand(cmdConfig);
+export default new JoinButton()
