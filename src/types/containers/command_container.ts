@@ -1,6 +1,6 @@
 import { Collection, Message } from "discord.js";
 import fg from "fast-glob";
-import { COMMAND_FG_LOC } from "../../constants.js";
+import { COMMAND_FG_LOC, COMMAND_FG_LOC_PROD } from "../../constants.js";
 import {
 	createCmdErrorStr,
 	handleHelpCmd,
@@ -17,7 +17,9 @@ export class CommandContainer {
 	public readonly commands = new Collection<string, Command>();
 
 	public async initContainer() {
-		const cmdFiles = await fg(COMMAND_FG_LOC, { absolute: true });
+		// TODO: This is currently a little bit janky
+		const cmdFgLoc = isProdMode() ? COMMAND_FG_LOC_PROD : COMMAND_FG_LOC;
+		const cmdFiles = await fg(cmdFgLoc, { absolute: true });
 		const cmds = await loadCommandFiles(cmdFiles);
 		cmds.forEach((cmd) => {
 			this.commands.set(cmd.name, cmd);

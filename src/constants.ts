@@ -31,6 +31,7 @@ export const NATHAN_L_ID = "605626870301458433";
 export const AFKPIC_FG_LOC = "pics/AFK_PICS";
 export const STAGING_AFKPIC_FG_LOC = "pics/STAGING_AFK_PICS";
 export const COMMAND_FG_LOC = "src/commands/**/*";
+export const COMMAND_FG_LOC_PROD = "dist/commands/**/*.js";
 
 export const BD4_ID = "191318875667824650";
 export const BD5_ID = "505214234393706499";

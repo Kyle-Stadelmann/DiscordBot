@@ -6,7 +6,7 @@ import { dirname, importx } from "@discordx/importer";
 import { Client } from "discordx";
 import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot_container.js";
-import { initDb, isDevMode } from "./util/index.js";
+import { initDb, isDevMode, isProdMode } from "./util/index.js";
 
 dotenv.config({ path: `${SRC_DIR}/../.env` });
 
@@ -33,9 +33,10 @@ client.on("interactionCreate", (interaction) => {
 });
 
 export async function startup() {
+	const fileType = isProdMode() ? "js" : "ts";
 	await Promise.all([
-		importx(`${dirname(import.meta.url)}/events/**/*.{ts,js}`),
-		importx(`${dirname(import.meta.url)}/commands/**/*.{js,ts}`)
+		importx(`${dirname(import.meta.url)}/events/**/*.${fileType}`),
+		importx(`${dirname(import.meta.url)}/commands/**/*.${fileType}`)
 	]);
 
 	if (isDevMode()) {
