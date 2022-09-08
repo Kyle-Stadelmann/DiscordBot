@@ -54,7 +54,7 @@ class AfkPicGetCommand extends Command {
 	}
 }
 
-const discordRegex = /(https?:)?\/\/cdn\.discordapp\.com\/attachments\/(\d*)\/(\d*)\/(\S*)(\.(png|jpeg|jpg))/m;
+const discordRegex = /(https?:)?\/\/(cdn|media)\.discordapp\.(com|net)\/attachments\/(\d*)\/(\d*)\/(\S*)(\.(png|jpeg|jpg))(\?width=\d*&height=\d*)?/m;
 const allowedImageRegex = [discordRegex, /(https?:)?\/\/(\w+\.)?imgur\.com\/(\S*)(\.(png|jpeg|jpg))/m];
 
 const afkpicAddConfig: CommandConfig = {
