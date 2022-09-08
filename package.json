@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "ts-node --esm src/app.ts",
+    "start-js": "node dist/app.js",
     "format": "npx prettier src/ --write",
     "lint": "npx eslint src/",
     "dev": "nodemon"
