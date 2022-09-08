@@ -1,11 +1,12 @@
 {
   "name": "bd4discordbot",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "BD4 Discord Bot",
   "main": "app.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "ts-node --esm src/app.ts",
+    "start": "node src/scripts/startBot.js",
+    "start-ts": "ts-node --esm src/app.ts",
     "start-js": "node dist/app.js",
     "format": "npx prettier src/ --write",
     "lint": "npx eslint src/",
