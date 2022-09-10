@@ -129,6 +129,7 @@ const afkpicConfig: ParentCommandConfig = {
 	shareCooldownMap: false,
 	defaultCmdStr: "get",
 	aliases: ["pic"],
+	allowInDM: true,
 };
 
 class AfkPicCommand extends ParentCommand {

@@ -18,6 +18,7 @@ export abstract class ParentCommand extends Command {
 			usage: "", // Unused
 			aliases: options.aliases,
 			disabled: options.disabled,
+			allowInDM: options.allowInDM
 		};
 		super(config);
 		this.subCommands = [];
@@ -119,4 +120,5 @@ export interface ParentCommandConfig extends CommandConfig {
 	aliases?: string[];
 	disabled?: boolean;
 	defaultCmdStr?: string;
+	allowInDM?: boolean;
 }
