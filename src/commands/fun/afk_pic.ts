@@ -76,10 +76,10 @@ class AfkPicAddCommand extends Command {
 
 		if (!(await this.validate(msg, args))) return false;
 
-		let afkPicUrls: string[] = [];
-		afkPicUrls = afkPicUrls.concat(attachments.map((attch) => attch.url));
-		afkPicUrls = afkPicUrls.concat(args.filter((arg) => this.isAllowedSite(arg)));
-		afkPicUrls = afkPicUrls.map((url) => sanitizeUrl(url));
+		let afkPicUrls: string[] = []
+			.concat(attachments.map((attch) => attch.url))
+			.concat(args.filter((arg) => this.isAllowedSite(arg)))
+			.map((url) => sanitizeUrl(url));
 
 		const result = await bdbot.tryAddAfkPics(afkPicUrls, msg.author.id);
 		if (result && afkPicUrls.length > 0) {
