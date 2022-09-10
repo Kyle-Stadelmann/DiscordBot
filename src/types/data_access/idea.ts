@@ -11,16 +11,16 @@ const ideaSchema = new dynamoose.Schema(
 		userId: {
 			type: String,
 			required: true,
-            index: { global: true, rangeKey: "type" },
+			index: { global: true, rangeKey: "type" },
 		},
 		type: {
 			type: String,
 			required: true,
 		},
-        description: {
-            type: String,
-            required: true,
-        },
+		description: {
+			type: String,
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

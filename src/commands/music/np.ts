@@ -13,18 +13,18 @@ const cmdConfig: CommandConfig = {
 class NowPlayingCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const queue = bdbot.player.getQueue(msg.guildId);
-        const np = queue.nowPlaying();
-        const position = Math.round(queue.previousTracks.length/2);
+		const np = queue.nowPlaying();
+		const position = Math.round(queue.previousTracks.length / 2);
 
 		if (!np) {
 			await sendMessage(msg.channel, `No track currently playing`);
 			return false;
 		}
 
-        let npmsg = ``;
-        npmsg += `Now Playing: (#${position}) ${np.title} by ${np.author}\n`;
-        npmsg += `${queue.createProgressBar()}\n`;
-        npmsg += `${np.url}\n`;
+		let npmsg = ``;
+		npmsg += `Now Playing: (#${position}) ${np.title} by ${np.author}\n`;
+		npmsg += `${queue.createProgressBar()}\n`;
+		npmsg += `${np.url}\n`;
 
 		await sendMessage(msg.channel, npmsg);
 		return true;

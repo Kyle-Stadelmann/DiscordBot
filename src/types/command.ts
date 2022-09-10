@@ -99,5 +99,5 @@ export interface CommandConfig {
 	aliases?: string[];
 	disabled?: boolean;
 	permissions?: any[];
-	cooldown_name?: string; // Will be set for you
+	cooldown_name?: string; // Do not manually set
 }

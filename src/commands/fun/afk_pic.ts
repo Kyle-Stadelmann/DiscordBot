@@ -54,7 +54,8 @@ class AfkPicGetCommand extends Command {
 	}
 }
 
-const discordRegex = /(https?:)?\/\/(cdn|media)\.discordapp\.(com|net)\/attachments\/(\d*)\/(\d*)\/(\S*)(\.(png|jpeg|jpg))(\?width=\d*&height=\d*)?/m;
+const discordRegex =
+	/(https?:)?\/\/(cdn|media)\.discordapp\.(com|net)\/attachments\/(\d*)\/(\d*)\/(\S*)(\.(png|jpeg|jpg))(\?width=\d*&height=\d*)?/m;
 const allowedImageRegex = [discordRegex, /(https?:)?\/\/(\w+\.)?imgur\.com\/(\S*)(\.(png|jpeg|jpg))/m];
 
 const afkpicAddConfig: CommandConfig = {
@@ -76,7 +77,7 @@ class AfkPicAddCommand extends Command {
 
 		if (!(await this.validate(msg, args))) return false;
 
-		let afkPicUrls: string[] = []
+		const afkPicUrls: string[] = []
 			.concat(attachments.map((attch) => attch.url))
 			.concat(args.filter((arg) => this.isAllowedSite(arg)))
 			.map((url) => sanitizeUrl(url));
