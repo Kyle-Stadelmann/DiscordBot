@@ -9,11 +9,7 @@ const cmdConfig: CommandConfig = {
 	name: "play",
 	description: "Add a track to the queue or resume the current track",
 	usage: "play",
-	examples: [
-		">play",
-		">play L's theme",
-		">play https://www.youtube.com/watch?v=VKIEzhzV28s",
-	],
+	examples: [">play", ">play L's theme", ">play https://www.youtube.com/watch?v=VKIEzhzV28s"],
 	allowInDM: false,
 };
 
@@ -64,16 +60,14 @@ class PlayCommand extends Command {
 			if (queue.nowPlaying()) queue.addTrack(tracks[0]);
 			else await queue.play(tracks[0]);
 
-			await sendMessage(msg.channel, `${tracks[0].title} by `
-			+ `${tracks[0].author} has been added to the queue`);
+			await sendMessage(msg.channel, `${tracks[0].title} by ${tracks[0].author} has been added to the queue`);
 		} else {
 			if (!queue.nowPlaying()) {
 				await queue.play(tracks[0]);
 				queue.addTracks(tracks.slice(1, tracks.length));
 			} else queue.addTracks(tracks);
 
-			await sendMessage(msg.channel, `Added playlist `
-			+ `${result.playlist.title} to the queue`);
+			await sendMessage(msg.channel, `Added playlist ${result.playlist.title} to the queue`);
 		}
 
 		return true;

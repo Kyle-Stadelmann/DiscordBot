@@ -35,7 +35,7 @@ export async function startup() {
 	const fileType = isProdMode() ? "js" : "ts";
 	await Promise.all([
 		importx(`${dirname(import.meta.url)}/events/**/*.${fileType}`),
-		importx(`${dirname(import.meta.url)}/commands/**/*.${fileType}`)
+		importx(`${dirname(import.meta.url)}/commands/**/*.${fileType}`),
 	]);
 
 	if (isDevMode()) {

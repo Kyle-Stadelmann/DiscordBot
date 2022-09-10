@@ -15,15 +15,15 @@ class ShuffleCommand extends Command {
 		const queue = bdbot.player.getQueue(msg.guildId);
 		if (!queue || queue.destroyed || !queue.connection) return false;
 
-        const np = queue.nowPlaying();
-        if (!np || queue.tracks.length < 3) {
-            await msg.react(X_MARK);
-            return false;
-        }
+		const np = queue.nowPlaying();
+		if (!np || queue.tracks.length < 3) {
+			await msg.react(X_MARK);
+			return false;
+		}
 
 		queue.tracks = shuffleQueue(queue.tracks);
 		await msg.react(WHITE_CHECK_MARK);
-        return true;
+		return true;
 	}
 }
 

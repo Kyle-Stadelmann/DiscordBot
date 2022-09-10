@@ -1,3 +1,5 @@
+// TODO: Fix no typing on settings file
+// eslint-disable-next-line import/extensions
 import * as settings from "../settings.js";
 
 export function isDevMode(): boolean {
