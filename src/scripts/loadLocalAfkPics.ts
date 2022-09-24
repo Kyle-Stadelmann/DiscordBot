@@ -4,7 +4,7 @@ import { Message, TextChannel } from "discord.js";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { AFKPIC_FG_LOC, DEV_SERVER_TESTING_CHANNEL_1_ID } from "../constants.js";
 import { AfkPicCodeMap } from "../types/containers/afk_pic_container.js";
-import { UserAfkPic, UserAfkPicTypedModel, doesAfkPicExist } from "../types/data_access/afk_pic.js";
+import { UserAfkPic, UserAfkPicTypedModel, doesAfkPicExist } from "../types/data_access/afk-pic.js";
 import { client } from "../app.js";
 import { printSpace, sleep } from "../util/index.js";
 

@@ -29,7 +29,7 @@ class SpamCommand extends Command {
 		const spamStr: string = args[1];
 		const moveTimes = args.length > 1 && +args[2] ? +args[2] : 1;
 
-		await sendMessage(channel, `Spamming ${moveTimes} times...`);
+		await sendMessage(channel, `Spamming ${moveTimes} time${moveTimes === 1 ? "" : "s"}...`);
 
 		for (let i = 0; i < moveTimes; i += 1) {
 			for (let s = 0; s < SPAM_AMMOUNT; s += 1) {
