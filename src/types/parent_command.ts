@@ -1,4 +1,4 @@
-import { GuildMember, Message, User } from "discord.js";
+import { Guild, GuildMember, Message, User } from "discord.js";
 import { PREFIX } from "../constants.js";
 import { sendErrorMessage } from "../util/index.js";
 import { Command, CommandConfig } from "./command.js";
@@ -69,6 +69,15 @@ export abstract class ParentCommand extends Command {
 
 		const cmd = this.resolveSubCommand(args);
 		return cmd?.putOnCooldown(person, args);
+	}
+
+	public putOnGuildCooldown(guild: Guild, cooldownTime: number, args?: string[]): Promise<void> {
+		if (this.shareCooldownMap) {
+			return this.cooldowns.putOnGuildCooldown(guild, cooldownTime);
+		}
+
+		const cmd = this.resolveSubCommand(args);
+		return cmd?.putOnGuildCooldown(guild, cooldownTime, args);
 	}
 
 	public override endCooldown(person: GuildMember | User, args?: string[]) {

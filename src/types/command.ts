@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import path from "path";
-import { GuildMember, Message, User } from "discord.js";
+import { Guild, GuildMember, Message, User } from "discord.js";
 import { fileURLToPath } from "url";
 import { CooldownContainer } from "./containers/cooldown_container.js";
 import { printSpace, sendErrorMessage } from "../util/index.js";
@@ -46,6 +46,10 @@ export abstract class Command {
 
 	public putOnCooldown(person: GuildMember | User, args?: string[]): Promise<void> {
 		return this.cooldowns.putOnCooldown(person);
+	}
+
+	public putOnGuildCooldown(guild: Guild, cooldownTime: number, args?: string[]): Promise<void> {
+		return this.cooldowns.putOnGuildCooldown(guild, cooldownTime);
 	}
 
 	public endCooldown(person: GuildMember | User, args?: string[]): Promise<void> {
