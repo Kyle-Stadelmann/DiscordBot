@@ -1,6 +1,6 @@
 // Awaits in loops are critical to the functionality of this command
 /* eslint-disable no-await-in-loop */
-import { Guild, GuildMember, Message, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
+import { ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { deleteVoiceChannel, sendErrorMessage, sleep } from "../../util/index.js";
 
@@ -43,7 +43,7 @@ class FlailCommand extends Command {
 		originalChannel: VoiceChannel | StageChannel
 	) {
 		const victimChannel = victim.voice.channel;
-		if (tempChannels.includes(victimChannel) && originalChannel.isVoice()) {
+		if (tempChannels.includes(victimChannel) && originalChannel.isVoiceBased()) {
 			await victim.voice.setChannel(originalChannel);
 		}
 		tempChannels.forEach((channel) => deleteVoiceChannel(channel));
@@ -67,8 +67,9 @@ class FlailCommand extends Command {
 
 			// If there are no available channels, create a new temp one
 			if (nextIterator.done) {
-				nextChannel = await guild.channels.create("rekt", {
-					type: "GUILD_VOICE",
+				nextChannel = await guild.channels.create({
+					name: "rekt",
+					type: ChannelType.GuildVoice,
 					position: victimChannel.position + 1,
 				});
 				tempChannels.push(nextChannel);
@@ -92,11 +93,11 @@ class FlailCommand extends Command {
 
 		const validChannels = guild.channels.cache
 			.filter((channel) => {
-				if (!channel.isVoice()) return false;
+				if (!channel.isVoiceBased()) return false;
 				if (guild.afkChannel === channel) return false;
 
 				const everyonePermissions = guild.roles.everyone.permissionsIn(channel);
-				const visibleToAll = everyonePermissions.has("VIEW_CHANNEL");
+				const visibleToAll = everyonePermissions.has(PermissionFlagsBits.ViewChannel);
 
 				// Only capture visible, higher position channels
 				return channel.position > currPos && visibleToAll;
@@ -118,7 +119,8 @@ class FlailCommand extends Command {
 
 		const permissions = sender.permissionsIn(sender.voice.channel);
 		// If sender isn't an admin, ignore this event
-		if (!permissions.has("ADMINISTRATOR")) {
+		// TODO: Migrate to command permission check
+		if (!permissions.has(PermissionFlagsBits.Administrator)) {
 			await sendErrorMessage(channel, "Command was NOT successful, Brigitte only lends her flail to admins.");
 			return true;
 		}

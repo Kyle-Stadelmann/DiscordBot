@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
 import { bdbot } from "../../app.js";
 import { Command, CommandConfig } from "../../types/command.js";
-import { ParentCommand, ParentCommandConfig } from "../../types/parent_command.js";
-import { sendEmbeds, sendErrorMessage, sendMessage } from "../../util/message_channel.js";
+import { ParentCommand, ParentCommandConfig } from "../../types/parent-command.js";
+import { sendEmbeds, sendErrorMessage, sendMessage } from "../../util/message-channel.js";
 
 const afkpicGetConfig: CommandConfig = {
 	name: "get",
@@ -27,7 +27,7 @@ class AfkPicGetCommand extends Command {
 		const afkPicUrl = this.getCorrespondingAfkPicUrl(msg, args);
 
 		if (afkPicUrl) {
-			const embed = new MessageEmbed().setImage(afkPicUrl);
+			const embed = new EmbedBuilder().setImage(afkPicUrl);
 			await sendEmbeds(channel, [embed]);
 			return true;
 		}

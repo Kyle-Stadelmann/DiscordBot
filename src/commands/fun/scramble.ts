@@ -1,4 +1,4 @@
-import { Guild, Message, StageChannel, VoiceChannel } from "discord.js";
+import { Guild, Message, PermissionFlagsBits, StageChannel, VoiceChannel } from "discord.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { getRandomElement, sendErrorMessage, sendMessage } from "../../util/index.js";
 
@@ -57,8 +57,8 @@ class ScrambleCommand extends Command {
 
 		guild.channels.cache.forEach((channel) => {
 			const notAfkChannel = guild.afkChannel !== channel;
-			const perm = channel.permissionsFor(guild.roles.everyone).has("VIEW_CHANNEL");
-			if (channel.isVoice() && channel.id !== voiceChannel.id && perm && notAfkChannel) {
+			const perm = channel.permissionsFor(guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
+			if (channel.isVoiceBased() && channel.id !== voiceChannel.id && perm && notAfkChannel) {
 				validChannels.push(channel);
 			}
 		});

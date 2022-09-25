@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line max-classes-per-file
-import { Message, MessageActionRow, MessageButton, Modal } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message} from "discord.js";
 import type { ButtonInteraction } from "discord.js";
 import { ButtonComponent, Discord } from "discordx";
 import { Command, CommandConfig } from "../../types/command.js";
@@ -16,13 +16,13 @@ const cmdConfig: CommandConfig = {
 
 class StartCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
-		const playBtn = new MessageButton()
+		const playBtn = new ButtonBuilder()
 			.setLabel("Join")
 			.setEmoji(WHITE_CHECK_MARK)
-			.setStyle("PRIMARY")
+			.setStyle(ButtonStyle.Primary)
 			.setCustomId("start-btn");
 
-		const msgActionRow = new MessageActionRow().addComponents(playBtn);
+		const msgActionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(playBtn);
 
 		await msg.channel.send({ components: [msgActionRow] });
 
@@ -32,7 +32,7 @@ class StartCommand extends Command {
 
 @Discord()
 class StartBtn {
-	@ButtonComponent("start-btn")
+	@ButtonComponent({id: "start-btn"})
 	private async myBtn(interaction: ButtonInteraction) {
 		await interaction.reply(`hello ${interaction.member}`);
 	}

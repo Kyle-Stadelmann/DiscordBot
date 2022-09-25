@@ -1,4 +1,4 @@
-import { Collection, Message, StageChannel, VoiceChannel } from "discord.js";
+import { Collection, Message, PermissionFlagsBits, StageChannel, VoiceChannel } from "discord.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { sendErrorMessage, sendMessage } from "../../util/index.js";
 
@@ -24,7 +24,7 @@ class RallyCommand extends Command {
 		// Pull to hidden channels or not
 		let pullToHidden = false;
 		// Whether or not user's channel is public
-		const publicChannel = voiceChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL");
+		const publicChannel = voiceChannel.permissionsFor(msg.guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
 		// Role(s) getting pulled (empty collection if none specified)
 		const rolesToCall = msg.mentions.roles;
 
@@ -41,11 +41,11 @@ class RallyCommand extends Command {
 
 		// Go through each voice channel and establish whether or not it's valid
 		msg.guild.channels.cache.forEach((userChannel) => {
-			const perm = userChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL");
+			const perm = userChannel.permissionsFor(msg.guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
 			if (
 				!(msg.guild.afkChannel && userChannel.id === msg.guild.afkChannel.id) &&
 				userChannel.id !== msg.member.voice.channel.id &&
-				userChannel.isVoice() &&
+				userChannel.isVoiceBased() &&
 				perm
 			) {
 				validChannels.set(userChannel.id, userChannel);
