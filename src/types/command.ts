@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import path from "path";
-import { GuildMember, Message, User } from "discord.js";
+import { ChannelType, GuildMember, Message, User } from "discord.js";
 import { fileURLToPath } from "url";
-import { CooldownContainer } from "./containers/cooldown_container.js";
+import { CooldownContainer } from "./containers/cooldown-container.js";
 import { printSpace, sendErrorMessage } from "../util/index.js";
 
 export enum CommandCategory {
@@ -56,7 +56,7 @@ export abstract class Command {
 		const { channel } = msg;
 
 		// If in DM and allowInDM false, fail quietly (this cmd shouldn't be visible at all to them)
-		if (channel.type === "DM" && !this.allowInDM) return false;
+		if (channel.type === ChannelType.DM && !this.allowInDM) return false;
 
 		return this.validateCooldown(msg, args);
 	}

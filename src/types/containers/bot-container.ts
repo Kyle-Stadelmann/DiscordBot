@@ -2,8 +2,8 @@ import { Message, TextChannel } from "discord.js";
 import { Player, Queue, Track } from "discord-player";
 import { DANIEL_ID } from "../../constants.js";
 import { Command } from "../command.js";
-import { AfkPicContainer } from "./afk_pic_container.js";
-import { CommandContainer } from "./command_container.js";
+import { AfkPicContainer } from "./afk-pic-container.js";
+import { CommandContainer } from "./command-container.js";
 import { client } from "../../app.js";
 
 // Global state and functions that read/write global state

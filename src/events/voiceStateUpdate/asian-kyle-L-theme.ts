@@ -8,7 +8,7 @@ const L_THEME_CHANCE = 15;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class AsianKyleLTheme {
-	@On("voiceStateUpdate")
+	@On({event: "voiceStateUpdate"})
 	private async tryLTheme([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
 		if (oldState.id === BD4_BOT_ID) return false;
 

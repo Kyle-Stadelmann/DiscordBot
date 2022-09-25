@@ -2,14 +2,14 @@ import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { X_MARK } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { sendMessage } from "../../util/message_channel.js";
+import { sendMessage } from "../../util/message-channel.js";
 import { getSearchResult, unpause } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "play",
 	description: "Add a track to the queue or resume the current track",
 	usage: "play",
-	examples: [">play", ">play L's theme", ">play https://www.youtube.com/watch?v=VKIEzhzV28s"],
+	examples: ["play", "play L's theme", "play https://www.youtube.com/watch?v=VKIEzhzV28s"],
 	allowInDM: false,
 };
 
@@ -67,7 +67,7 @@ class PlayCommand extends Command {
 				queue.addTracks(tracks.slice(1, tracks.length));
 			} else queue.addTracks(tracks);
 
-			await sendMessage(msg.channel, `Added playlist ${result.playlist.title} to the queue`);
+			await sendMessage(msg.channel, `Added playlist ${result?.playlist?.title} to the queue`);
 		}
 
 		return true;

@@ -1,4 +1,4 @@
-import { GuildMember, Message, User } from "discord.js";
+import { ChannelType, GuildMember, Message, User } from "discord.js";
 import { PREFIX } from "../constants.js";
 import { sendErrorMessage } from "../util/index.js";
 import { Command, CommandConfig } from "./command.js";
@@ -96,7 +96,7 @@ export abstract class ParentCommand extends Command {
 
 		// Make sure if we're in a dm to check if this cmd is allowed in a dm
 		// fail quietly (this cmd shouldn't be visible at all to them)
-		if (channel.type === "DM" && !subcmd.allowInDM) return false;
+		if (channel.type === ChannelType.DM && !subcmd.allowInDM) return false;
 
 		return this.validateCooldown(msg, args);
 	}

@@ -6,7 +6,7 @@ const ZACC_CHANCE = 5;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class ZachZacc {
-	@On("messageCreate")
+	@On({event: "messageCreate"})
 	private async handleZachZacc([msg]: ArgsOf<"messageCreate">) {
 		const content = msg.content.toLowerCase();
 		// Only continue if "zach" is found in a message

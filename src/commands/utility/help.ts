@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder, ChannelType } from "discord.js";
 import { bdbot } from "../../app.js";
 import { PREFIX } from "../../constants.js";
 import { Command, CommandConfig } from "../../types/command.js";
@@ -15,7 +15,7 @@ class HelpCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		let cmds = bdbot.getAllCommands();
 
-		if (msg.channel.type === "DM") {
+		if (msg.channel.type === ChannelType.DM) {
 			cmds = cmds.filter((cmd) => cmd.allowInDM);
 		}
 
@@ -26,8 +26,8 @@ class HelpCommand extends Command {
 			}
 		});
 
-		const roleInfo = new MessageEmbed()
-			.addField("All Commands", cmdStr)
+		const roleInfo = new EmbedBuilder()
+			.addFields({name: "All Commands", value: cmdStr})
 			.setThumbnail(msg.guild ? msg.guild.iconURL() : "")
 			.setFooter({ text: `Use '${PREFIX}commandName help' to recieve instructions on how to use any command.` })
 			.setColor(0x0);
