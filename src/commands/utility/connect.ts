@@ -1,5 +1,5 @@
 import { getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
-import { Message } from "discord.js";
+import { Message, PermissionFlagsBits } from "discord.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
 
@@ -35,7 +35,7 @@ class ConnectCommand extends Command {
 		});
 		console.log(`Connected to ${voiceChannel.name}`);
 
-		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has("VIEW_CHANNEL")) {
+		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has(PermissionFlagsBits.ViewChannel)) {
 			await msg.react(WHITE_CHECK_MARK);
 		}
 

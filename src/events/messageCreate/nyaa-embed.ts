@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import * as cheerio from "cheerio";
 import { sendEmbeds } from "../../util/index.js";
@@ -16,7 +16,7 @@ const TARGET_SITE_ICON = "https://nyaa.si/static/img/avatar/default.png";
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class NyaaEmbed {
-	@On("messageCreate")
+	@On({event: "messageCreate"})
 	private async tryNyaaEmbed([msg]: ArgsOf<"messageCreate">) {
 		// TODO: only do embed if discord doens't do it after a certain amt of time?
 		return;
@@ -53,7 +53,7 @@ abstract class NyaaEmbed {
 
 		// Img isolator
 		const foundImgs = description.match(FULL_IMG_REGEX);
-		let img;
+		let img: string;
 		if (foundImgs != null && foundImgs.length > 0) {
 			// Convert ['![Image Description](imgUrl)'] into ['', '(imgUrl)']
 			img = foundImgs[0].split(IMG_DESCRIPTION_REGEX)[1];
@@ -71,7 +71,7 @@ abstract class NyaaEmbed {
 
 		// Rowan comment isolator
 		const isRowanHere = response.data.includes("/user/Rowan");
-		let rowansComment;
+		let rowansComment: string;
 		if (isRowanHere) {
 			let comments = $("#collapse-comments").html().split(COMMENT_PANEL_DIV_REGEX);
 			comments = comments.filter((html) => html.includes("/user/Rowan"));
@@ -84,10 +84,10 @@ abstract class NyaaEmbed {
 		const completed = mainPanel[mainPanel.findIndex((str) => str === "Completed:") + 1];
 		const fileSize = mainPanel[mainPanel.findIndex((str) => str === "File size:") + 1];
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle(title)
 			.setURL(url)
-			.setAuthor(author, TARGET_SITE_ICON)
+			.setAuthor({name: author, iconURL: TARGET_SITE_ICON})
 			.setTimestamp(new Date(date))
 			.setThumbnail(img)
 			.addFields(
@@ -98,9 +98,9 @@ abstract class NyaaEmbed {
 			);
 
 		if (isRowanHere) {
-			embed.addField("Rowan's Take", rowansComment);
+			embed.addFields({name: "Rowan's Take", value: rowansComment});
 		} else {
-			embed.setFooter("Rowan was not here :(");
+			embed.setFooter({text: "Rowan was not here :("});
 		}
 
 		await sendEmbeds(msg.channel, [embed]);

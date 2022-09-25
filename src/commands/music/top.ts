@@ -8,7 +8,7 @@ const cmdConfig: CommandConfig = {
 	name: "top",
 	description: "Adds a track to the front of queue",
 	usage: "top [link OR search phrase]",
-	examples: [">top https://www.youtube.com/watch?v=dQw4w9WgXcQ", ">top darude sandstorm"],
+	examples: ["top https://www.youtube.com/watch?v=dQw4w9WgXcQ", "top darude sandstorm"],
 };
 
 class TopCommand extends Command {

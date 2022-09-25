@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { sendEmbeds } from "../../util/index.js";
 
@@ -45,9 +45,11 @@ class ListRolesCommand extends Command {
 			playerRoleStr += "\n";
 		});
 
-		const roleInfo = new MessageEmbed()
-			.addField("Main Roles", mainRoleStr)
-			.addField("Player Roles", playerRoleStr)
+		const roleInfo = new EmbedBuilder()
+			.addFields(
+				{name: "Main Roles", value: mainRoleStr},
+				{name: "Player Roles", value: playerRoleStr}
+			)
 			.setThumbnail(msg.guild.iconURL())
 			.setColor(0x0);
 

@@ -1,5 +1,5 @@
 import { Collection, GuildMember, User } from "discord.js";
-import { Cooldown, createCooldown, getCooldown } from "../data_access/cooldown.js";
+import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.js";
 
 export class CooldownContainer {
 	// Person id -> Cooldown
