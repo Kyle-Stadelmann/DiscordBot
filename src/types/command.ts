@@ -56,6 +56,10 @@ export abstract class Command {
 		return this.cooldowns.endCooldown(person);
 	}
 
+	public endGuildCooldown(guild: Guild, args?: string[]): Promise<void> {
+		return this.cooldowns.endGuildCooldown(guild);
+	}
+
 	public async validateCommand(msg: Message, args: string[]): Promise<boolean> {
 		const { channel } = msg;
 

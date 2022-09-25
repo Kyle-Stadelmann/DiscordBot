@@ -71,7 +71,7 @@ export abstract class ParentCommand extends Command {
 		return cmd?.putOnCooldown(person, args);
 	}
 
-	public putOnGuildCooldown(guild: Guild, cooldownTime: number, args?: string[]): Promise<void> {
+	public override putOnGuildCooldown(guild: Guild, cooldownTime: number, args?: string[]): Promise<void> {
 		if (this.shareCooldownMap) {
 			return this.cooldowns.putOnGuildCooldown(guild, cooldownTime);
 		}
@@ -87,6 +87,15 @@ export abstract class ParentCommand extends Command {
 
 		const cmd = this.resolveSubCommand(args);
 		return cmd?.endCooldown(person, args);
+	}
+
+	public override endGuildCooldown(guild: Guild, args?: string[]) {
+		if (this.shareCooldownMap) {
+			return this.cooldowns.endGuildCooldown(guild);
+		}
+
+		const cmd = this.resolveSubCommand(args);
+		return cmd?.endGuildCooldown(guild, args);
 	}
 
 	override get examples(): string[] {

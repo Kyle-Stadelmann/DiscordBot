@@ -71,6 +71,7 @@ class FlailCommand extends Command {
 					name: "rekt",
 					type: ChannelType.GuildVoice,
 					position: victimChannel.position + 1,
+					parent: victimChannel.parent
 				});
 				tempChannels.push(nextChannel);
 			}

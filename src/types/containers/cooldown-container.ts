@@ -5,13 +5,14 @@ import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.j
  * CooldownContainer is managed inside of each command object
  */
 export class CooldownContainer {
+	// Cooldown 'cache'
 	// User/Member/Guild id -> Cooldown
 	private cooldowns = new Collection<string, Cooldown>();
 	constructor(private cooldownTime: number, private cooldownName: string) {}
 
 	public async isOnCooldown(person: GuildMember | User): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown
-		return (person instanceof GuildMember && this.isIdOnCooldown(person.guild.id)) 
+		return (person instanceof GuildMember && await this.isIdOnCooldown(person.guild.id)) 
 			? true
 			: this.isIdOnCooldown(person.id);
 	}
@@ -24,10 +25,12 @@ export class CooldownContainer {
 		await this.putIdOnCooldown(guild.id, cooldownTime);
 	}
 
-	public async endCooldown(person: GuildMember | User): Promise<void> {
-		const cd = await this.getCooldown(person.id);
-		cd.date = null;
-		await cd.save();
+	public async endCooldown(person: GuildMember | User) {
+		await this.endCooldownById(person.id);
+	}
+
+	public async endGuildCooldown(guild: Guild) {
+		await this.endCooldownById(guild.id);
 	}
 
 	private async getCooldown(id: string): Promise<Cooldown | undefined> {
@@ -52,5 +55,11 @@ export class CooldownContainer {
 			cd = await createCooldown(id, this.cooldownName, endCooldownDate);
 			this.cooldowns.set(id, cd);
 		}
+	}
+
+	private async endCooldownById(id: string) {
+		const cd = await this.getCooldown(id);
+		cd.date = null;
+		await cd.save();
 	}
 }

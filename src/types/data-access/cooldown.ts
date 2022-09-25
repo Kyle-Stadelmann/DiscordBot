@@ -12,7 +12,7 @@ const cooldownSchema = new dynamoose.Schema({
 		required: true,
 		rangeKey: true,
 	},
-	date: Date, // Note: required defaulted to false
+	date: Date, // Note: 'required' defaulted to false
 });
 
 export interface Cooldown extends Document {
@@ -23,7 +23,7 @@ export interface Cooldown extends Document {
 export const CooldownTypedModel = dynamoose.model<Cooldown>("cooldown", cooldownSchema);
 
 export function getCooldown(idToCooldown: string, name: string): Promise<Cooldown> {
-	return CooldownTypedModel.get({ personId: idToCooldown, name });
+	return CooldownTypedModel.get({ idToCooldown, name });
 }
 
 export function createCooldown(idToCooldown: string, name: string, cooldownEndDate: Date): Promise<Cooldown> {
