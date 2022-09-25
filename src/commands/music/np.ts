@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { Command, CommandConfig } from "../../types/command.js";
-import { sendMessage } from "../../util/message_channel.js";
+import { sendMessage } from "../../util/message-channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "np",

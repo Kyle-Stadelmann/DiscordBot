@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { random, sendEmbeds } from "../../util/index.js";
 
@@ -20,8 +20,8 @@ class BipenCommand extends Command {
 
 		const bipenPicUrl = random(SHINY_BIPEN_CHANCE) ? SHINY_BIPEN_IMG_URL : BIPEN_IMG_URL;
 
-		const embed = new MessageEmbed()
-			.addField("Bipen", message)
+		const embed = new EmbedBuilder()
+			.addFields({name: "Bipen", value: message})
 			.setImage(bipenPicUrl)
 			.setFooter({ text: `R.I.P. Bipen 08/2012` })
 			.setColor(0x0);

@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 import { client } from "../../app.js";
 import { TYPESCRIPT_URL } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
@@ -16,7 +16,7 @@ const cmdConfig: CommandConfig = {
 
 class PingCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setImage(client.user.avatarURL())
 			.setTitle("pong!")
 			.setFooter({ text: `version ${version}`, iconURL: TYPESCRIPT_URL })

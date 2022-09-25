@@ -15,6 +15,7 @@
       "esModuleInterop": true,
       "resolveJsonModule": true,
       "skipLibCheck": true, // TODO: Maybe should remove this, but this fixes bug with current version of discord.js
+      "allowJs": true
     },
     "exclude": [
       "dist",

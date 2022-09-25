@@ -1,5 +1,5 @@
 import { Collection, Guild, GuildMember, User } from "discord.js";
-import { Cooldown, createCooldown, getCooldown } from "../data_access/cooldown.js";
+import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.js";
 
 /* 
  * CooldownContainer is managed inside of each command object

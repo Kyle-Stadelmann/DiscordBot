@@ -4,7 +4,7 @@ import { BD5_ID } from "../../constants.js";
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class HalloweenColors {
-	@On("presenceUpdate")
+	@On({event: "presenceUpdate"})
 	private async updateHalloweenColors([oldPresence, newPresence]: ArgsOf<"presenceUpdate">) {
 		if (!oldPresence || !newPresence) return;
 		if (oldPresence.guild.id !== BD5_ID) return;

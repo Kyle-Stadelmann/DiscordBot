@@ -1,8 +1,8 @@
 // Critical to functionality of command
 /* eslint-disable no-await-in-loop */
-import { Message } from "discord.js";
+import { ChannelType, Message } from "discord.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/message_channel.js";
+import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
 import { sleep } from "../../util/sleep.js";
 
 const cmdConfig: CommandConfig = {
@@ -38,6 +38,9 @@ class SpamCommand extends Command {
 
 			await sleep(SLEEP_TIME_MS);
 
+			// This command is not allowed in DM so this will never be true.
+			// But this is necessary for the next line to type check
+			if (channel.type === ChannelType.DM) return false;
 			if (channel.messages.cache.some((m) => m.member === victim && m.createdTimestamp > startTs)) {
 				await sendMessage(channel, `Stopping spam since victim has responded.`);
 				return true;

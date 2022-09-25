@@ -18,9 +18,9 @@ import {
 	TWEED_ID,
 	ZACH_ID,
 } from "../../constants.js";
-import { UserAfkPic, getAllPicsForUser } from "../data_access/afk-pic.js";
+import { UserAfkPic, getAllPicsForUser } from "../data-access/afk-pic.js";
 import { getRandomElement, random } from "../../util/random.js";
-import { getAllStagingPics, StagingAfkPic, StagingAfkPicTypedModel } from "../data_access/staging-afk-pic.js";
+import { getAllStagingPics, StagingAfkPic, StagingAfkPicTypedModel } from "../data-access/staging-afk-pic.js";
 
 // User id to afk pic code
 export const AfkPicCodeMap = new Collection<string, string>();

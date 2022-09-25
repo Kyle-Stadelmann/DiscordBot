@@ -1,6 +1,6 @@
 {
   "name": "bd4discordbot",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "BD4 Discord Bot",
   "main": "app.ts",
   "scripts": {
@@ -17,22 +17,23 @@
   "dependencies": {
     "@braintree/sanitize-url": "^6.0.0",
     "@discordjs/opus": "^0.8.0",
-    "@discordjs/voice": "^0.10.0",
+    "@discordjs/voice": "^0.11.0",
     "@discordx/importer": "^1.1.10",
     "@types/glob": "^7.2.0",
     "axios": "^0.21.2",
     "cheerio": "^1.0.0-rc.10",
-    "discord-player": "^5.2.2",
-    "discord.js": "^13.9.0",
-    "discordx": "^9.8.0",
+    "discord-player": "^5.3.1",
+    "discord.js": "^14.4.0",
+    "discordx": "^11.4.0",
     "dotenv": "^8.6.0",
     "dynamoose": "^2.8.6",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
     "fast-glob": "^3.2.11",
-    "ffmpeg-static": "^5.0.2",
+    "ffmpeg-static": "^5.1.0",
     "node-fetch": "^3.2.9",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "ytdl-core": "^4.11.2"
   },
   "devDependencies": {
     "@types/node": "^16.11.45",

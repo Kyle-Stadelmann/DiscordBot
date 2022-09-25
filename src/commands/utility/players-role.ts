@@ -39,7 +39,7 @@ class PlayersRoleCommand extends Command {
 			return false;
 		}
 
-		msg.member.roles.add(targetRole).catch(console.error);
+		await msg.member.roles.add(targetRole);
 
 		await sendMessage(channel, "You have been given the player role specified");
 		return true;
