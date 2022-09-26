@@ -59,7 +59,7 @@ export class CooldownContainer {
 
 	private async endCooldownById(id: string) {
 		const cd = await this.getCooldown(id);
-		cd.date = null;
+		cd.date = undefined;
 		await cd.save();
 	}
 }
