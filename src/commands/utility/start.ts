@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line max-classes-per-file
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message} from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from "discord.js";
 import type { ButtonInteraction } from "discord.js";
 import { ButtonComponent, Discord } from "discordx";
 import { Command, CommandConfig } from "../../types/command.js";
@@ -32,7 +32,7 @@ class StartCommand extends Command {
 
 @Discord()
 class StartBtn {
-	@ButtonComponent({id: "start-btn"})
+	@ButtonComponent({ id: "start-btn" })
 	private async myBtn(interaction: ButtonInteraction) {
 		await interaction.reply(`hello ${interaction.member}`);
 	}

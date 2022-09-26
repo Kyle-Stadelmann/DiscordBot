@@ -1,6 +1,15 @@
 // Awaits in loops are critical to the functionality of this command
 /* eslint-disable no-await-in-loop */
-import { ChannelType, Guild, GuildMember, Message, PermissionFlagsBits, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
+import {
+	ChannelType,
+	Guild,
+	GuildMember,
+	Message,
+	PermissionFlagsBits,
+	StageChannel,
+	TextBasedChannel,
+	VoiceChannel,
+} from "discord.js";
 import { Command, CommandConfig } from "../../types/command.js";
 import { deleteVoiceChannel, sendErrorMessage, sleep } from "../../util/index.js";
 
@@ -71,7 +80,7 @@ class FlailCommand extends Command {
 					name: "rekt",
 					type: ChannelType.GuildVoice,
 					position: victimChannel.position + 1,
-					parent: victimChannel.parent
+					parent: victimChannel.parent,
 				});
 				tempChannels.push(nextChannel);
 			}

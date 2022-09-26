@@ -26,7 +26,7 @@ const myIntents = [
 	GatewayIntentBits.DirectMessageReactions,
 	GatewayIntentBits.DirectMessageTyping,
 	GatewayIntentBits.MessageContent,
-]
+];
 
 export const client = new Client({
 	intents: myIntents,

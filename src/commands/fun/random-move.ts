@@ -1,5 +1,14 @@
 /* eslint-disable no-await-in-loop */
-import { Collection, Guild, GuildMember, Message, PermissionFlagsBits, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
+import {
+	Collection,
+	Guild,
+	GuildMember,
+	Message,
+	PermissionFlagsBits,
+	StageChannel,
+	TextBasedChannel,
+	VoiceChannel,
+} from "discord.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { getRandomElement, random, sendErrorMessage, sendMessage, sleep } from "../../util/index.js";
 
@@ -40,7 +49,10 @@ class RandomMoveCommand extends Command {
 
 		// If sender or victim isn't an admin, ignore this event
 		// TODO: Migrate to command permission check
-		if (!sender.permissions.has(PermissionFlagsBits.Administrator) || !victim.permissions.has(PermissionFlagsBits.Administrator)) {
+		if (
+			!sender.permissions.has(PermissionFlagsBits.Administrator) ||
+			!victim.permissions.has(PermissionFlagsBits.Administrator)
+		) {
 			await sendErrorMessage(textChannel, "Command was NOT successful, you or your victim are not an admin.");
 			return true;
 		}
