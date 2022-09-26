@@ -128,8 +128,8 @@ export async function handleHelpCmd(msg: Message, cmd: Command) {
 
 export function createCmdErrorStr(cmdStr: string, error: Error, msg: Message, args: string[]): string {
 	let errStr = `Error when executing command ${cmdStr}\n`;
-	errStr += `msg: ${JSON.stringify(msg)}\n`;
-	errStr += `args: ${JSON.stringify(args)}\n`;
-	errStr += `error: ${error.stack}\n`;
+	errStr += `**msg**: ${JSON.stringify(msg)}\n\n`;
+	errStr += `**args**: ${JSON.stringify(args)}\n\n`;
+	errStr += `**error**: ${error.stack}\n\n`;
 	return errStr;
 }
