@@ -18,6 +18,7 @@ const cmdConfig: CommandConfig = {
 		"Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time.",
 	usage: `randomMove @admin`,
 	examples: ["randomMove @Dualkim"],
+	aliases: ['move'],
 	cooldownTime: 10 * 60 * 1000,
 };
 
@@ -95,7 +96,7 @@ class RandomMoveCommand extends Command {
 
 			const randomChannel = getRandomElement(validChannels);
 
-			if (victim.voice.channel == null) {
+			if (victim.voice.channel !== null) {
 				await victim.edit({ channel: randomChannel });
 				await sendMessage(textChannel, `${victim} has been banished!`);
 				chanceToMove /= 2;

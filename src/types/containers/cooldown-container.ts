@@ -59,6 +59,8 @@ export class CooldownContainer {
 
 	private async endCooldownById(id: string) {
 		const cd = await this.getCooldown(id);
+		if (!cd) return;
+
 		cd.date = undefined;
 		await cd.save();
 	}
