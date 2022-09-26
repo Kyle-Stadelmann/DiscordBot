@@ -19,13 +19,13 @@ const MAX_TITLE_CHARS = 68;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class NyaaEmbed {
-	@On({event: "messageCreate"})
+	@On({ event: "messageCreate" })
 	private async tryNyaaEmbed([msg]: ArgsOf<"messageCreate">) {
 		if (!msg.content.includes(TARGET_SITE)) return;
 
 		// Wait for discord embed, if it doesn't happen, we'll do the embed ourselves
 		await sleep(3000);
-		if (msg.embeds?.length > 0) { 
+		if (msg.embeds?.length > 0) {
 			return;
 		}
 
@@ -72,7 +72,7 @@ abstract class NyaaEmbed {
 			embed = new EmbedBuilder()
 				.setTitle(title)
 				.setURL(url)
-				.setAuthor({name: author, iconURL: TARGET_SITE_ICON})
+				.setAuthor({ name: author, iconURL: TARGET_SITE_ICON })
 				.setTimestamp(new Date(date))
 				.setThumbnail(image)
 				.addFields(
@@ -84,9 +84,9 @@ abstract class NyaaEmbed {
 
 			const rowansComment = this.tryGetRowanComment(data, $);
 			if (rowansComment) {
-				embed.addFields({name: "Rowan's Take", value: rowansComment});
+				embed.addFields({ name: "Rowan's Take", value: rowansComment });
 			} else {
-				embed.setFooter({text: "Rowan was not here :("});
+				embed.setFooter({ text: "Rowan was not here :(" });
 			}
 		} catch (err) {
 			// Possible errors from invalid image can crash bot
@@ -98,11 +98,11 @@ abstract class NyaaEmbed {
 
 	private getMainPanel($: cheerio.CheerioAPI): string[] {
 		return $(".panel-body")
-		.first()
-		.text()
-		.split("\n")
-		.map((str) => str.trim())
-		.filter((str) => str !== "");
+			.first()
+			.text()
+			.split("\n")
+			.map((str) => str.trim())
+			.filter((str) => str !== "");
 	}
 
 	private getImage($: cheerio.CheerioAPI): string | undefined {
@@ -127,7 +127,7 @@ abstract class NyaaEmbed {
 			if (img.includes(".JPG")) index = img.indexOf(".JPG");
 			if (img.includes(".png")) index = img.indexOf(".png");
 			if (img.includes(".PNG")) index = img.indexOf(".PNG");
-			img = img.substring(0, index+4);
+			img = img.substring(0, index + 4);
 		}
 		return img;
 	}

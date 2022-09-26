@@ -8,7 +8,7 @@ const SUNGLASSES_EPIC_CHANCE = 100;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class Epic {
-	@On({event: "messageCreate"})
+	@On({ event: "messageCreate" })
 	private async handleEpic([msg]: ArgsOf<"messageCreate">) {
 		// Reads "epic" from chat and reacts with sunglasses emoji
 		if (msg.content.toLowerCase().includes("epic") && random(EPIC_SUNGLASSES_CHANCE)) {

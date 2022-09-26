@@ -5,7 +5,7 @@ import { sendMessage } from "../../util/index.js";
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class DanielTy {
-	@On({event: "messageCreate"})
+	@On({ event: "messageCreate" })
 	private async handleDanielTy([msg]: ArgsOf<"messageCreate">) {
 		const { channel } = msg;
 		const content = msg.content.toLowerCase();

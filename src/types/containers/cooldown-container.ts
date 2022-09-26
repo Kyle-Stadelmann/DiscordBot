@@ -1,7 +1,7 @@
 import { Collection, Guild, GuildMember, User } from "discord.js";
 import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.js";
 
-/* 
+/*
  * CooldownContainer is managed inside of each command object
  */
 export class CooldownContainer {
@@ -12,7 +12,7 @@ export class CooldownContainer {
 
 	public async isOnCooldown(person: GuildMember | User): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown
-		return (person instanceof GuildMember && await this.isIdOnCooldown(person.guild.id)) 
+		return person instanceof GuildMember && (await this.isIdOnCooldown(person.guild.id))
 			? true
 			: this.isIdOnCooldown(person.id);
 	}

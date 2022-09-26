@@ -52,12 +52,10 @@ class IdeaCommand extends Command {
 
 @Discord()
 class IdeaButton {
-	@ButtonComponent({id: "submit-btn"})
+	@ButtonComponent({ id: "submit-btn" })
 	async submitBtn(interaction: ButtonInteraction) {
 		// create modal to get idea data
-		const modal = new ModalBuilder()
-			.setTitle("Submit an Idea")
-			.setCustomId("idea-modal");
+		const modal = new ModalBuilder().setTitle("Submit an Idea").setCustomId("idea-modal");
 
 		const typeInputComponent = new TextInputBuilder()
 			.setCustomId("type-field")
@@ -76,7 +74,7 @@ class IdeaButton {
 		await interaction.showModal(modal);
 	}
 
-	@ModalComponent({id: "idea-modal"})
+	@ModalComponent({ id: "idea-modal" })
 	async submitIdeaModal(interaction: ModalSubmitInteraction): Promise<void> {
 		const [ideaType, idea] = ["type-field", "idea-field"].map((id) => interaction.fields.getTextInputValue(id));
 

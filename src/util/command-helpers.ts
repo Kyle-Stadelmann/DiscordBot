@@ -72,9 +72,9 @@ export function isHelpCmd(args: string[]): boolean {
 function buildNormalCmdHelpEmbed(cmd: Command): EmbedBuilder {
 	const helpEmbed = new EmbedBuilder()
 		.addFields(
-			{name: "Command", value: `\`${cmd.name}\``, inline: true},
-			{name: "Description", value: cmd.description},
-			{name: "Usage", value: `\`${PREFIX}${cmd.usage}\``}
+			{ name: "Command", value: `\`${cmd.name}\``, inline: true },
+			{ name: "Description", value: cmd.description },
+			{ name: "Usage", value: `\`${PREFIX}${cmd.usage}\`` }
 		)
 		.setColor(0x0);
 
@@ -85,7 +85,7 @@ function buildNormalCmdHelpEmbed(cmd: Command): EmbedBuilder {
 			examplesStr += `\`${PREFIX}${examples[i]}\``;
 			if (i !== examples.length - 1) examplesStr += "\n";
 		}
-		helpEmbed.addFields({name: "Examples", value: examplesStr});
+		helpEmbed.addFields({ name: "Examples", value: examplesStr });
 	}
 
 	return helpEmbed;
@@ -96,8 +96,8 @@ function buildNormalCmdHelpEmbed(cmd: Command): EmbedBuilder {
 function buildParentCmdHelpEmbed(cmd: ParentCommand): EmbedBuilder {
 	const helpEmbed = new EmbedBuilder()
 		.addFields(
-			{name: "Command", value: `\`${cmd.name}\``, inline: true},
-			{name: "Description", value: cmd.description}
+			{ name: "Command", value: `\`${cmd.name}\``, inline: true },
+			{ name: "Description", value: cmd.description }
 		)
 		.setColor(0x0);
 
@@ -108,7 +108,7 @@ function buildParentCmdHelpEmbed(cmd: ParentCommand): EmbedBuilder {
 			examplesStr += `\`${PREFIX}${examples[i]}\``;
 			if (i !== examples.length - 1) examplesStr += "\n";
 		}
-		helpEmbed.addFields({name: "Examples", value: examplesStr});
+		helpEmbed.addFields({ name: "Examples", value: examplesStr });
 	}
 
 	return helpEmbed;
