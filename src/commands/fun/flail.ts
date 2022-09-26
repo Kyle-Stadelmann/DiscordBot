@@ -15,6 +15,12 @@ import { deleteVoiceChannel, sendErrorMessage, sleep } from "../../util/index.js
 
 const NUM_CHANNELS_FLAILED = 10;
 
+const WAIT_TIME = 20 * 1000;
+
+// Amount of time to put whole guild on cooldown while the flailing is occuring
+// Note: We end the cooldown manually after cmd is done too
+const GUILD_CD_TIME = 60 * 1000;
+
 const cmdConfig: CommandConfig = {
 	name: "flail",
 	description: "Brigitte lends you her flail to hit your target a large amount of channels down",
@@ -31,6 +37,8 @@ class FlailCommand extends Command {
 		const error = await this.errorCheck(victim, msg.member, msg.channel);
 		if (error) return false;
 
+		await this.putOnGuildCooldown(msg.guild, GUILD_CD_TIME);
+
 		const originalChannel = victim.voice.channel;
 		// Voice channels iterator in order of position
 		const voiceChannels = this.getValidVoiceChannels(guild, victim);
@@ -38,10 +46,12 @@ class FlailCommand extends Command {
 		// Perform flail, gather temp channels to be deleted
 		const tempChannels = await this.flail(voiceChannels, victim, guild);
 
-		// Some time for everyone to comprehend what happened to this poor soul
-		await sleep(20000);
+		// Wait some time for everyone to comprehend what happened to this poor soul
+		await sleep(WAIT_TIME);
 
 		await this.cleanup(victim, tempChannels, originalChannel);
+
+		await this.endGuildCooldown(msg.guild);
 
 		return true;
 	}
