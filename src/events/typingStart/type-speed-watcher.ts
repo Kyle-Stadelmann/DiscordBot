@@ -5,7 +5,7 @@ import { TYPE_SPEED_RESET_TIME } from "../../constants.js";
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class TypeSpeedWatcher {
-	@On({event: "typingStart"})
+	@On({ event: "typingStart" })
 	private async watchTypeState([typingState]: ArgsOf<"typingStart">) {
 		const userId = typingState.user.id;
 		// Only watch people in the typingTimestamps collection

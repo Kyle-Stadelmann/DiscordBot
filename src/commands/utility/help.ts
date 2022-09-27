@@ -27,7 +27,7 @@ class HelpCommand extends Command {
 		});
 
 		const roleInfo = new EmbedBuilder()
-			.addFields({name: "All Commands", value: cmdStr})
+			.addFields({ name: "All Commands", value: cmdStr })
 			.setThumbnail(msg.guild ? msg.guild.iconURL() : "")
 			.setFooter({ text: `Use '${PREFIX}commandName help' to recieve instructions on how to use any command.` })
 			.setColor(0x0);

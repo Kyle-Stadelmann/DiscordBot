@@ -6,7 +6,7 @@ import { countWords, danielWPMChanceFunction } from "./daniel-wpm.js";
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class TypingSpeedReporter {
-	@On({event: "messageCreate"})
+	@On({ event: "messageCreate" })
 	private async tryReportTypingSpeed([msg]: ArgsOf<"messageCreate">) {
 		const userId = msg.author.id;
 		const { channel } = msg;

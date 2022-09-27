@@ -25,7 +25,7 @@ function wordsPerMinute(wpm, numWords) {
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class DanielWPM {
-	@On({event: "messageCreate"})
+	@On({ event: "messageCreate" })
 	private async tryDanielWPM([msg]: ArgsOf<"messageCreate">) {
 		// Only continue if Daniel sent the message
 		if (msg.author.id !== DANIEL_ID) return;
