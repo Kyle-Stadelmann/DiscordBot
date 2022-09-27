@@ -1,5 +1,14 @@
 /* eslint-disable no-await-in-loop */
-import { Collection, Guild, GuildMember, Message, PermissionFlagsBits, StageChannel, TextBasedChannel, VoiceChannel } from "discord.js";
+import {
+	Collection,
+	Guild,
+	GuildMember,
+	Message,
+	PermissionFlagsBits,
+	StageChannel,
+	TextBasedChannel,
+	VoiceChannel,
+} from "discord.js";
 import { CommandConfig, Command } from "../../types/command.js";
 import { getRandomElement, random, sendErrorMessage, sendMessage, sleep } from "../../util/index.js";
 
@@ -9,6 +18,7 @@ const cmdConfig: CommandConfig = {
 		"Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time.",
 	usage: `randomMove @admin`,
 	examples: ["randomMove @Dualkim"],
+	aliases: ['move'],
 	cooldownTime: 10 * 60 * 1000,
 };
 
@@ -40,7 +50,10 @@ class RandomMoveCommand extends Command {
 
 		// If sender or victim isn't an admin, ignore this event
 		// TODO: Migrate to command permission check
-		if (!sender.permissions.has(PermissionFlagsBits.Administrator) || !victim.permissions.has(PermissionFlagsBits.Administrator)) {
+		if (
+			!sender.permissions.has(PermissionFlagsBits.Administrator) ||
+			!victim.permissions.has(PermissionFlagsBits.Administrator)
+		) {
 			await sendErrorMessage(textChannel, "Command was NOT successful, you or your victim are not an admin.");
 			return true;
 		}
@@ -83,7 +96,7 @@ class RandomMoveCommand extends Command {
 
 			const randomChannel = getRandomElement(validChannels);
 
-			if (victim.voice.channel == null) {
+			if (victim.voice.channel !== null) {
 				await victim.edit({ channel: randomChannel });
 				await sendMessage(textChannel, `${victim} has been banished!`);
 				chanceToMove /= 2;

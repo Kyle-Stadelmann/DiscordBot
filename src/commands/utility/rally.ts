@@ -24,7 +24,9 @@ class RallyCommand extends Command {
 		// Pull to hidden channels or not
 		let pullToHidden = false;
 		// Whether or not user's channel is public
-		const publicChannel = voiceChannel.permissionsFor(msg.guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
+		const publicChannel = voiceChannel
+			.permissionsFor(msg.guild.roles.everyone)
+			.has(PermissionFlagsBits.ViewChannel);
 		// Role(s) getting pulled (empty collection if none specified)
 		const rolesToCall = msg.mentions.roles;
 

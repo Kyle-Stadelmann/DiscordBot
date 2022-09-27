@@ -1,4 +1,4 @@
-import { ChannelType, GuildMember, Message, User } from "discord.js";
+import { ChannelType, Guild, GuildMember, Message, User } from "discord.js";
 import { PREFIX } from "../constants.js";
 import { sendErrorMessage } from "../util/index.js";
 import { Command, CommandConfig } from "./command.js";
@@ -18,7 +18,7 @@ export abstract class ParentCommand extends Command {
 			usage: "", // Unused
 			aliases: options.aliases,
 			disabled: options.disabled,
-			allowInDM: options.allowInDM
+			allowInDM: options.allowInDM,
 		};
 		super(config);
 		this.subCommands = [];
@@ -71,6 +71,15 @@ export abstract class ParentCommand extends Command {
 		return cmd?.putOnCooldown(person, args);
 	}
 
+	public override putOnGuildCooldown(guild: Guild, cooldownTime: number, args?: string[]): Promise<void> {
+		if (this.shareCooldownMap) {
+			return this.cooldowns.putOnGuildCooldown(guild, cooldownTime);
+		}
+
+		const cmd = this.resolveSubCommand(args);
+		return cmd?.putOnGuildCooldown(guild, cooldownTime, args);
+	}
+
 	public override endCooldown(person: GuildMember | User, args?: string[]) {
 		if (this.shareCooldownMap) {
 			return this.cooldowns.endCooldown(person);
@@ -78,6 +87,15 @@ export abstract class ParentCommand extends Command {
 
 		const cmd = this.resolveSubCommand(args);
 		return cmd?.endCooldown(person, args);
+	}
+
+	public override endGuildCooldown(guild: Guild, args?: string[]) {
+		if (this.shareCooldownMap) {
+			return this.cooldowns.endGuildCooldown(guild);
+		}
+
+		const cmd = this.resolveSubCommand(args);
+		return cmd?.endGuildCooldown(guild, args);
 	}
 
 	override get examples(): string[] {

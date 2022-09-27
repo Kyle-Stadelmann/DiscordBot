@@ -21,7 +21,7 @@ class BipenCommand extends Command {
 		const bipenPicUrl = random(SHINY_BIPEN_CHANCE) ? SHINY_BIPEN_IMG_URL : BIPEN_IMG_URL;
 
 		const embed = new EmbedBuilder()
-			.addFields({name: "Bipen", value: message})
+			.addFields({ name: "Bipen", value: message })
 			.setImage(bipenPicUrl)
 			.setFooter({ text: `R.I.P. Bipen 08/2012` })
 			.setColor(0x0);

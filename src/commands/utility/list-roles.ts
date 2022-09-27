@@ -46,10 +46,7 @@ class ListRolesCommand extends Command {
 		});
 
 		const roleInfo = new EmbedBuilder()
-			.addFields(
-				{name: "Main Roles", value: mainRoleStr},
-				{name: "Player Roles", value: playerRoleStr}
-			)
+			.addFields({ name: "Main Roles", value: mainRoleStr }, { name: "Player Roles", value: playerRoleStr })
 			.setThumbnail(msg.guild.iconURL())
 			.setColor(0x0);
 

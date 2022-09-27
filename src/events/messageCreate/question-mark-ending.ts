@@ -8,7 +8,7 @@ const QUESTION_MARK_CHANCE = 5;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class QuestionMarkEnding {
-	@On({event: "messageCreate"})
+	@On({ event: "messageCreate" })
 	private async handleQuestionMarkEnding([msg]: ArgsOf<"messageCreate">) {
 		if (msg.content.charAt(msg.content.length - 1) !== "?") return;
 

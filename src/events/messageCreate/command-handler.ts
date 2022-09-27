@@ -7,7 +7,7 @@ import { parseArgs } from "../../util/index.js";
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export abstract class CommandHandler {
-	@On({event: "messageCreate"})
+	@On({ event: "messageCreate" })
 	private async handleMessage([msg]: ArgsOf<"messageCreate">) {
 		// If message comes from a bot, don't perform any of the below events
 		// (to stop bd4 bot from triggering other bots events)
