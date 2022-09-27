@@ -4,4 +4,4 @@ export const BotModeEnum = {
 	PROD: "production",
 };
 
-export const botMode = BotModeEnum.PROD;
+export const botMode = BotModeEnum.DEV;

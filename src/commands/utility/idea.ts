@@ -14,17 +14,17 @@ import {
 import { ButtonComponent, Discord, ModalComponent } from "discordx";
 import { BD4_BOT_ID, LIGHTBULB } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { UserIdeaTypedModel } from "../../types/data-access/idea.js";
+import { getAllIdeas, UserIdeaTypedModel } from "../../types/data-access/idea.js";
+import { ParentCommand, ParentCommandConfig } from "../../types/parent-command.js";
 
-const cmdConfig: CommandConfig = {
-	name: "idea",
+const ideaSubmitConfig: CommandConfig = {
+	name: "submit",
 	description: "Submit an idea/feature request to the development team.",
-	usage: "idea",
-	aliases: ["feedback", "suggest", "suggestion"],
+	usage: "idea submit",
 	allowInDM: true,
 };
 
-class IdeaCommand extends Command {
+class IdeaSubmitCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		// i think you can dynamically grab CommandType to make types[]
 		// youd still have to add "General" though
@@ -109,4 +109,38 @@ class IdeaButton {
 	}
 }
 
-export default new IdeaCommand(cmdConfig);
+const ideaListConfig: CommandConfig = {
+	name: "list",
+	description: "List all ideas [of a certain type]",
+	usage: "idea list [type]",
+	examples: ["idea list", "idea list music", "idea list utility"],
+	allowInDM: true,
+};
+
+class IdeaListCommand extends Command {
+	public async run(msg: Message): Promise<boolean> {
+		// get ideas
+		const ideas = getAllIdeas();
+		console.log(ideas);
+		return true;
+	}
+}
+
+const ideaConfig: ParentCommandConfig = {
+	name: "idea",
+	description: "Submit an idea to the developers",
+	shareCooldownMap: false,
+	defaultCmdStr: "submit",
+	aliases: ["feedback"],
+	allowInDM: true,
+}
+
+class IdeaCommand extends ParentCommand {
+	constructor(options: ParentCommandConfig) {
+		super(options);
+		this.addSubCommand(IdeaSubmitCommand, ideaSubmitConfig);
+		this.addSubCommand(IdeaListCommand, ideaListConfig);
+	}
+}
+
+export default new IdeaCommand(ideaConfig);
