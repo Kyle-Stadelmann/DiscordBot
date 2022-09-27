@@ -29,6 +29,7 @@ class PlayCommand extends Command {
 		// https://discord-player.js.org/docs/main/master/general/welcome
 		const queue = bdbot.player.createQueue(msg.guild, {
 			metadata: { channel: msg.channel },
+			bufferingTimeout: 0.1,
 			ytdlOptions: {
 				filter: "audioonly",
 				// eslint-disable-next-line no-bitwise
