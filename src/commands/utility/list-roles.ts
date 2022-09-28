@@ -1,10 +1,11 @@
 import { Message, EmbedBuilder } from "discord.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { sendEmbeds } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "listroles",
 	description: "Lists the 'main' and 'player' roles on the BD4 server.",
+	category: CommandCategory.Utility,
 	usage: `listRoles`,
 	disabled: true,
 };

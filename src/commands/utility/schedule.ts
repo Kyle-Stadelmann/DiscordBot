@@ -1,8 +1,9 @@
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
 	name: "schedule",
 	description: "",
+	category: CommandCategory.Utility,
 	usage: `schedule`,
 	allowInDM: true,
 	disabled: true,

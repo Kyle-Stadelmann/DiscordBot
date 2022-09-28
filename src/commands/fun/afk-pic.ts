@@ -3,13 +3,14 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import { Message, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
 import { bdbot } from "../../app.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { ParentCommand, ParentCommandConfig } from "../../types/parent-command.js";
 import { sendEmbeds, sendErrorMessage, sendMessage } from "../../util/message-channel.js";
 
 const afkpicGetConfig: CommandConfig = {
 	name: "get",
 	description: "Sends an AFK Pic of a random (or given) user",
+	category: CommandCategory.Fun,
 	usage: "afkpic [get] [@user]",
 	examples: ["afkpic get", "afkpic get @Baconsunset", "afkpic", "afkpic @Meow"],
 	allowInDM: true,
@@ -61,6 +62,7 @@ const allowedImageRegex = [discordRegex, /(https?:)?\/\/(\w+\.)?imgur\.com\/(\S*
 const afkpicAddConfig: CommandConfig = {
 	name: "add",
 	description: "Adds AFK Pic(s) to the AFK Pic collection. (Supports local uploads, discord image links, i.imgur)",
+	category: CommandCategory.Fun,
 	usage: "afkpic add [image or image link]",
 	examples: [
 		"afkpic add **nathan.jpg**",
@@ -126,6 +128,7 @@ class AfkPicAddCommand extends Command {
 const afkpicConfig: ParentCommandConfig = {
 	name: "afkpic",
 	description: "Sends an AFK Pic of a random (or given) user",
+	category: CommandCategory.Fun,
 	shareCooldownMap: false,
 	defaultCmdStr: "get",
 	aliases: ["pic"],

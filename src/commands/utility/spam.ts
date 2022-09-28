@@ -1,13 +1,14 @@
 // Critical to functionality of command
 /* eslint-disable no-await-in-loop */
 import { ChannelType, Message } from "discord.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
 import { sleep } from "../../util/sleep.js";
 
 const cmdConfig: CommandConfig = {
 	name: "spam",
 	description: "Repeatedly ping a victim with a message until they respond.",
+	category: CommandCategory.Utility,
 	usage: `spam @user [Message BatchAmount]`,
 	examples: ["spam @Xited1730", "spam @Xited1730 hello 5", 'spam @Xited1730 "wake up" 3'],
 };

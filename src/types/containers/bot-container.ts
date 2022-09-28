@@ -1,7 +1,7 @@
-import { Message, TextChannel } from "discord.js";
+import { Collection, Message, TextChannel } from "discord.js";
 import { Player, Queue, Track } from "discord-player";
 import { DANIEL_ID } from "../../constants.js";
-import { Command } from "../command.js";
+import { Command, CommandCategory } from "../command.js";
 import { AfkPicContainer } from "./afk-pic-container.js";
 import { CommandContainer } from "./command-container.js";
 import { client } from "../../app.js";
@@ -57,7 +57,10 @@ export class BDBot {
 
 	// Returns all unique commands (this.commandContainer.commands)
 	public getAllCommands(): Command[] {
-		const cmds = this.commandContainer.commands.values();
-		return [...new Set(cmds)];
+		return this.commandContainer.getAllCommands();
+	}
+
+	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {		
+		return this.commandContainer.getCmdCategoryMap();
 	}
 }

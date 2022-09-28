@@ -1,6 +1,6 @@
 import { GuildMember, Message, TextBasedChannel } from "discord.js";
 import { ZACH_ID, BD4_BOT_ID } from "../../constants.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { sendErrorMessage, sendMessage } from "../../util/index.js";
 
 const MIN_SHARPEN_TIME = 30 * 60 * 1000;
@@ -9,6 +9,7 @@ const cmdConfig: CommandConfig = {
 	name: "sword",
 	description:
 		"Exclusive command to Zach. Once a week he can begin sharpening his sword. He can sharpen it for up to a week before attempting to annihilate someone. The longer the sharpening time, the higher the potency!",
+	category: CommandCategory.Fun,
 	usage: `sword @victim`,
 	examples: ["sword @Dualkim"],
 	disabled: true,

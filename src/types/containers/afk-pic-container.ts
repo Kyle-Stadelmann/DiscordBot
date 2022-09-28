@@ -89,10 +89,6 @@ export class AfkPicContainer {
 		);
 	}
 
-	public getAllPics(): UserAfkPic[] {
-		return this.allPics;
-	}
-
 	public getUserPics(userId: string): UserAfkPic[] {
 		const userPics = this.userPicsMap.get(userId);
 		return userPics || [];

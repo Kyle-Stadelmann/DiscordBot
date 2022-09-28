@@ -29,6 +29,7 @@ export abstract class Command {
 	constructor(options: CommandConfig) {
 		this.name = options.name;
 		this.description = options.description;
+		this.category = options.category;
 		this.usage = options.usage ?? "";
 		this._examples = options.examples ?? [];
 		this.allowInDM = options.allowInDM ?? false;
@@ -37,7 +38,6 @@ export abstract class Command {
 		this.cooldownTime = options.cooldownTime ?? 0.5 * 1000;
 		this.permissions = options.permissions ?? [];
 		this.cooldowns = new CooldownContainer(this.cooldownTime, options.cooldown_name ?? this.name);
-		this.category = Command.getCategoryName();
 	}
 
 	public isOnCooldown(person: GuildMember | User, args?: string[]): Promise<boolean> {
@@ -85,21 +85,12 @@ export abstract class Command {
 
 		return true;
 	}
-
-	// Uses parent directory to return command category enum
-	protected static getCategoryName(): CommandCategory {
-		const filename = fileURLToPath(import.meta.url);
-		const parentDirName = path.basename(path.dirname(filename));
-		const firstLetterUppercase = parentDirName.charAt(0).toUpperCase();
-		const categoryStr = firstLetterUppercase + parentDirName.substring(1);
-
-		return CommandCategory[categoryStr];
-	}
 }
 
 export interface CommandConfig {
 	name: string;
 	description: string;
+	category: CommandCategory;
 	usage?: string;
 	cooldownTime?: number; // ms
 	examples?: string[];

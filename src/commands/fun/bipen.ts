@@ -1,10 +1,11 @@
 import { Message, EmbedBuilder } from "discord.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { random, sendEmbeds } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "bipen",
 	description: "Sends an important Bipen quote.",
+	category: CommandCategory.Fun,
 	usage: "bipen",
 	allowInDM: true,
 };

@@ -1,11 +1,12 @@
 import { getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
 import { Message, PermissionFlagsBits } from "discord.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
 	name: "connect",
 	description: "BD4 Bot connects to the user's voice channel.",
+	category: CommandCategory.Utility,
 	usage: "connect",
 };
 
