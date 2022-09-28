@@ -10,7 +10,7 @@ import {
 	TextBasedChannel,
 	VoiceChannel,
 } from "discord.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { deleteVoiceChannel, sendErrorMessage, sleep } from "../../util/index.js";
 
 const NUM_CHANNELS_FLAILED = 10;
@@ -24,6 +24,7 @@ const GUILD_CD_TIME = 60 * 1000;
 const cmdConfig: CommandConfig = {
 	name: "flail",
 	description: "Brigitte lends you her flail to hit your target a large amount of channels down",
+	category: CommandCategory.Fun,
 	usage: `flail @user`,
 	cooldownTime: 60 * 60 * 1000,
 	aliases: ["whip"],

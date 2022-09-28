@@ -1,13 +1,14 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { sendMessage } from "../../util/message-channel.js";
 import { findTrack } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "query",
 	description: "Moves a track with the specified name to the front of the queue",
+	category: CommandCategory.Music,
 	usage: "query [some part of the track's title]",
 	examples: ["query Rebecca Black - Friday", "query friday"],
 };

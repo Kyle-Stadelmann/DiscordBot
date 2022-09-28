@@ -9,13 +9,14 @@ import {
 	TextBasedChannel,
 	VoiceChannel,
 } from "discord.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { getRandomElement, random, sendErrorMessage, sendMessage, sleep } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "randommove",
 	description:
 		"Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time.",
+	category: CommandCategory.Fun,
 	usage: `randomMove @admin`,
 	examples: ["randomMove @Dualkim"],
 	aliases: ['move'],

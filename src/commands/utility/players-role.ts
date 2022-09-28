@@ -1,10 +1,11 @@
 import { Message, Role } from "discord.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { sendErrorMessage, sendMessage } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "role",
 	description: "Assigns 1 'players role.' Use the listRoles command to display the avaliable player roles.",
+	category: CommandCategory.Utility,
 	usage: `role <player role without the Players part>`,
 	examples: ["role CS:GO"],
 	disabled: true,

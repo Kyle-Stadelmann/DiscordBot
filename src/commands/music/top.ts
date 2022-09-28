@@ -1,12 +1,13 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { getSearchResult } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "top",
 	description: "Adds a track to the front of queue",
+	category: CommandCategory.Music,
 	usage: "top [link OR search phrase]",
 	examples: ["top https://www.youtube.com/watch?v=dQw4w9WgXcQ", "top darude sandstorm"],
 };

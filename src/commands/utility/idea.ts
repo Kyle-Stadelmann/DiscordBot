@@ -14,7 +14,7 @@ import {
 } from "discord.js";
 import { ButtonComponent, Discord, ModalComponent } from "discordx";
 import { ARROW_BACKWARD_ID, ARROW_FORWARD_ID, BD4_BOT_ID, IDEA_TYPES, LIGHTBULB } from "../../constants.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { getAllIdeas, UserIdea, UserIdeaTypedModel } from "../../types/data-access/idea.js";
 import { ParentCommand, ParentCommandConfig } from "../../types/parent-command.js";
 
@@ -52,6 +52,7 @@ const ideaSubmitConfig: CommandConfig = {
 	description: "Submit an idea/feature request to the development team.",
 	usage: "idea submit",
 	allowInDM: true,
+	category: CommandCategory.Utility,
 };
 
 class IdeaSubmitCommand extends Command {
@@ -143,6 +144,7 @@ const ideaListConfig: CommandConfig = {
 	usage: "idea list [type]",
 	examples: ["idea list", "idea list music", "idea list utility"],
 	allowInDM: true,
+	category: CommandCategory.Utility,
 };
 
 class IdeaListCommand extends Command {
@@ -236,6 +238,7 @@ const ideaConfig: ParentCommandConfig = {
 	defaultCmdStr: "submit",
 	aliases: ["feedback"],
 	allowInDM: true,
+	category: CommandCategory.Utility,
 }
 
 class IdeaCommand extends ParentCommand {

@@ -11,13 +11,16 @@ import {
 	printSpace,
 	sendErrorToDiscordChannel,
 } from "../../util/index.js";
-import { Command } from "../command.js";
+import { Command, CommandCategory } from "../command.js";
 
 export class CommandContainer {
-	public readonly commands = new Collection<string, Command>();
+	// Note: commands are not unique in this map; multiple strings map to the same command
+	private readonly commands = new Collection<string, Command>();
+
+	private readonly cmdCategoryMap = new Collection<CommandCategory, Command[]>();
 
 	public async initContainer() {
-		await this.setCmdMap();
+		await this.setCmdMaps();
 		printSpace();
 	}
 
@@ -63,7 +66,16 @@ export class CommandContainer {
 		return result;
 	}
 
-	private async setCmdMap() {
+	public getAllCommands(): Command[] {
+		const cmds = this.commands.values();
+		return [...new Set(cmds)];
+	}
+
+	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {		
+		return this.cmdCategoryMap;
+	}
+
+	private async setCmdMaps() {
 		// TODO: This is currently a little bit janky
 		const cmdFgLoc = isProdMode() ? COMMAND_FG_LOC_PROD : COMMAND_FG_LOC;
 		const cmdFiles = await fg(cmdFgLoc, { absolute: true });
@@ -74,6 +86,10 @@ export class CommandContainer {
 			}
 			this.commands.set(cmd.name, cmd);
 			cmd.aliases.forEach((alias) => this.commands.set(alias, cmd));
+
+			const cmdCatList = this.cmdCategoryMap.get(cmd.category) ?? [];
+			cmdCatList.push(cmd);
+			this.cmdCategoryMap.set(cmd.category, cmdCatList);
 		});
 	}
 

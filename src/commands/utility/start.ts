@@ -3,12 +3,13 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from "discord.js";
 import type { ButtonInteraction } from "discord.js";
 import { ButtonComponent, Discord } from "discordx";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { WHITE_CHECK_MARK } from "../../constants.js";
 
 const cmdConfig: CommandConfig = {
 	name: "start",
 	description: "Starts a 'queue' for a specified game.",
+	category: CommandCategory.Utility,
 	usage: `start @game-role`,
 	examples: ["start @skowhen", "start @owhen"],
 	disabled: true,

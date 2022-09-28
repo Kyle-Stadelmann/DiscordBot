@@ -1,10 +1,11 @@
 import { Guild, Message, PermissionFlagsBits, StageChannel, VoiceChannel } from "discord.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { getRandomElement, sendErrorMessage, sendMessage } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "scramble",
 	description: "Sends everyone in your channel to a random channel.",
+	category: CommandCategory.Fun,
 	usage: `scramble`,
 	cooldownTime: 60 * 60 * 1000,
 };
