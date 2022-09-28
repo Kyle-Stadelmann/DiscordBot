@@ -25,16 +25,15 @@ class HelpCommand extends Command {
 		const isDm = msg.channel.type === ChannelType.DM;
 		const fields = getEnumValues(CommandCategory).map(e => this.getCmdCategoryEmbedField(e, isDm), this);
 
-		const roleInfo = new EmbedBuilder()
+		const helpEmbed = new EmbedBuilder()
 			.addFields(fields)
 			.setThumbnail(msg.guild ? msg.guild.iconURL() : "")
 			.setAuthor({name: `${client.user.username}`, iconURL: `${client.user.avatarURL()}`})
 			.setDescription(`Use \`${PREFIX}commandName help\` to recieve instructions on how to use any command.`)
-			// .setFooter({ text:  })
 			.setTitle("All Commands")
 			.setColor(0x0);
-
-		await sendEmbeds(msg.channel, [roleInfo]);
+		
+		await sendEmbeds(msg.channel, [helpEmbed]);
 
 		return true;
 	}

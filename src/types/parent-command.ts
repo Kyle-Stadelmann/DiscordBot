@@ -37,7 +37,7 @@ export abstract class ParentCommand extends Command {
 
 	protected sliceSubCmdArgs(args: string[]): string[] {
 		if (args.length === 0) return args;
-		const subCmd = this.subCommands.find((cmd) => cmd.name === args[0]);
+		const subCmd = this.subCommands.find((cmd) => cmd.name === args[0] || cmd.aliases.includes(args[0]));
 		return subCmd ? args.slice(1) : args;
 	}
 
