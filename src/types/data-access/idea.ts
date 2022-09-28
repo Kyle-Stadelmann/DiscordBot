@@ -36,6 +36,6 @@ export interface UserIdea extends Document {
 }
 export const UserIdeaTypedModel = dynamoose.model<UserIdea>("idea", ideaSchema);
 
-export function getAllIdeas(): Promise<UserIdea[]> {
+export async function getAllIdeas(): Promise<UserIdea[]> {
 	return UserIdeaTypedModel.scan().all().exec();
 }
