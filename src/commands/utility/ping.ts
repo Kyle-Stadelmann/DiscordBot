@@ -1,7 +1,7 @@
 import { Message, EmbedBuilder } from "discord.js";
 import { client } from "../../app.js";
 import { TYPESCRIPT_URL } from "../../constants.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { getRandomHexColorStr, sendEmbeds } from "../../util/index.js";
 
 // Probably won't work in pm2
@@ -10,6 +10,7 @@ const version = process.env.npm_package_version;
 const cmdConfig: CommandConfig = {
 	name: "ping",
 	description: "Sends pong! for testing purposes.",
+	category: CommandCategory.Utility,
 	usage: `ping`,
 	allowInDM: true,
 };

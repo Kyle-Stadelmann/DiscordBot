@@ -1,8 +1,9 @@
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
 	name: "jar",
 	description: "Create a jar based on a certain topic. Users can then add entires and pull a random entry.",
+	category: CommandCategory.Utility,
 	usage: `jar [Action] [Category]`,
 	// extras: {
 	// 	Subcommands: [],
