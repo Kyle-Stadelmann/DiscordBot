@@ -1,11 +1,12 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { sendMessage } from "../../util/message-channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "seek",
 	description: "Go to a specified time in the current track",
+	category: CommandCategory.Music,
 	usage: `seek [Time]`,
 	examples: [`seek 5`, `seek 93`, `seek 2:39`, `seek 1:11:11`],
 };

@@ -1,12 +1,13 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { shuffleQueue } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "shuffle",
 	description: "Shuffles the queue",
+	category: CommandCategory.Music,
 	usage: "shuffle",
 };
 

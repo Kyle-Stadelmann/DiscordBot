@@ -1,12 +1,13 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { MUSICAL_NOTES } from "../../constants.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { sendMessage } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "queue",
 	description: "Shows the current music queue",
+	category: CommandCategory.Music,
 	usage: "queue",
 };
 

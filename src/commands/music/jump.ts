@@ -1,12 +1,13 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { sendMessage } from "../../util/message-channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "jump",
 	description: "Fast forwards the queue to the specified index",
+	category: CommandCategory.Music,
 	usage: "jump",
 };
 

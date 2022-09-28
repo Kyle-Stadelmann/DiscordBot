@@ -13,12 +13,13 @@ import {
 } from "discord.js";
 import { ButtonComponent, Discord, ModalComponent } from "discordx";
 import { BD4_BOT_ID, LIGHTBULB } from "../../constants.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { UserIdeaTypedModel } from "../../types/data-access/idea.js";
 
 const cmdConfig: CommandConfig = {
 	name: "idea",
 	description: "Submit an idea/feature request to the development team.",
+	category: CommandCategory.Utility,
 	usage: "idea",
 	aliases: ["feedback", "suggest", "suggestion"],
 	allowInDM: true,

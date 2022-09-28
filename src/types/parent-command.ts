@@ -15,6 +15,7 @@ export abstract class ParentCommand extends Command {
 		const config: CommandConfig = {
 			name: options.name,
 			description: options.description,
+			category: options.category,
 			usage: "", // Unused
 			aliases: options.aliases,
 			disabled: options.disabled,

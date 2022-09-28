@@ -1,10 +1,11 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
-import { Command, CommandConfig } from "../../types/command.js";
+import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 
 const cmdConfig: CommandConfig = {
 	name: "stop",
 	description: "Stops currently playing music and closes the queue",
+	category: CommandCategory.Music,
 	usage: "stop",
 };
 

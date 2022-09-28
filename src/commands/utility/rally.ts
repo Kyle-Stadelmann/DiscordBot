@@ -1,10 +1,11 @@
 import { Collection, Message, PermissionFlagsBits, StageChannel, VoiceChannel } from "discord.js";
-import { CommandConfig, Command } from "../../types/command.js";
+import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { sendErrorMessage, sendMessage } from "../../util/index.js";
 
 const cmdConfig: CommandConfig = {
 	name: "rally",
 	description: "Brings all users connected to voice to the voice channel that the user is in.",
+	category: CommandCategory.Utility,
 	usage: `rally`,
 };
 
