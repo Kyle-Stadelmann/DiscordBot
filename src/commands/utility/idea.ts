@@ -10,12 +10,42 @@ import {
 	TextInputStyle,
 	ButtonStyle,
 	ModalBuilder,
+	EmbedBuilder,
 } from "discord.js";
 import { ButtonComponent, Discord, ModalComponent } from "discordx";
-import { BD4_BOT_ID, LIGHTBULB } from "../../constants.js";
+import { ARROW_BACKWARD_ID, ARROW_FORWARD_ID, BD4_BOT_ID, IDEA_TYPES, LIGHTBULB } from "../../constants.js";
 import { CommandConfig, Command } from "../../types/command.js";
-import { getAllIdeas, UserIdeaTypedModel } from "../../types/data-access/idea.js";
+import { getAllIdeas, UserIdea, UserIdeaTypedModel } from "../../types/data-access/idea.js";
 import { ParentCommand, ParentCommandConfig } from "../../types/parent-command.js";
+
+const ideas: UserIdea[] = await getAllIdeas();
+let ideaEmbeds: EmbedBuilder[] = [];
+const sortedIdeaPages: EmbedBuilder[][] = [];
+
+for (let x = 0; x < IDEA_TYPES.length + 1; x += 1) {
+	let pageNum = 0;
+	const shownIdeas: UserIdea[] = [];
+
+	for (let y = 0; y < ideas.length; y += 1) {
+		if (x === 0 || ideas[y].type === IDEA_TYPES[x - 1]) shownIdeas.push(ideas[y]);
+	}
+
+	for (let z = 0; z < shownIdeas.length; z += 1) {
+		// if i is perfectly divisible by 5 (ie 0, 5, 10), create new page
+		if (z % 5 === 0) {
+			if (z !== 0) pageNum += 1;
+			ideaEmbeds[pageNum] = new EmbedBuilder()
+				.setTitle(`${IDEA_TYPES[x] ? `${IDEA_TYPES[x]} Ideas` : "All Ideas"} | Page ${pageNum + 1}`);
+		}
+		ideaEmbeds[pageNum].addFields(
+			{ name: `(${z + 1})`, value: `Type: ${shownIdeas[z].type}\n Idea: ${shownIdeas[z].description}` }
+		);
+	}
+
+	sortedIdeaPages.push(ideaEmbeds);
+	ideaEmbeds = [];
+}
+
 
 const ideaSubmitConfig: CommandConfig = {
 	name: "submit",
@@ -78,7 +108,7 @@ class IdeaButton {
 	async submitIdeaModal(interaction: ModalSubmitInteraction): Promise<void> {
 		const [ideaType, idea] = ["type-field", "idea-field"].map((id) => interaction.fields.getTextInputValue(id));
 
-		if (!["utility", "fun", "music", "general"].includes(ideaType)) {
+		if (!IDEA_TYPES.includes(ideaType)) {
 			await interaction.reply({
 				content:
 					`${interaction.user.toString()}, please make sure your type ` +
@@ -116,10 +146,85 @@ const ideaListConfig: CommandConfig = {
 };
 
 class IdeaListCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		// get ideas
-		const ideas = getAllIdeas();
-		console.log(ideas);
+	public async run(msg: Message, args: string[]): Promise<boolean> {
+		enum Types {
+			all = 0,
+			utility = 1,
+			fun = 2,
+			music = 3,
+			general = 4,
+		}
+
+		const ideaPages: EmbedBuilder[] = sortedIdeaPages[
+			Types[args[0]] ? Types[args[0]] : Types.all
+		];
+
+		const ideaBackBtn = new ButtonBuilder()
+			.setLabel("Previous Page")
+			.setEmoji(ARROW_BACKWARD_ID)
+			.setStyle(ButtonStyle.Primary)
+			.setCustomId("idea-back-btn");
+		
+		const ideaForwardBtn = new ButtonBuilder()
+			.setLabel("Next Page")
+			.setEmoji(ARROW_FORWARD_ID)
+			.setStyle(ButtonStyle.Primary)
+			.setCustomId("idea-forward-btn");
+
+		const ideaScrollRow = new ActionRowBuilder<ButtonBuilder>()
+			.addComponents([ideaBackBtn, ideaForwardBtn]);
+
+		await msg.channel.send({
+			embeds: [ideaPages[0]],
+			components: [ideaScrollRow],
+		});
+
+		return true;
+	}
+}
+
+@Discord()
+class IdeaBackButton {
+	@ButtonComponent({ id: "idea-back-btn" })
+	async backBtn(interaction: ButtonInteraction) {
+		if (interaction.component.label === "Previous Page") {
+			const findIdeaTypeFilter = (t: EmbedBuilder[]) =>
+				t[0].data.title.split(" ")[0] === 
+				interaction.message.embeds[0].title.split(" ")[0];
+
+			let pageNum = parseInt(interaction.message.embeds[0].data.title.split("Page ")[1], 10) - 1;
+			const ideaPages = sortedIdeaPages.filter(findIdeaTypeFilter)[0];
+
+			pageNum = pageNum > 0 ? pageNum -= 1 : ideaPages.length - 1;
+			await interaction.message.edit({
+				embeds: [ideaPages[pageNum]],
+			})
+		}
+
+		await interaction.deferUpdate();
+		return true;
+	}
+}
+
+@Discord()
+class IdeaForwardButton {
+	@ButtonComponent({ id: "idea-forward-btn" })
+	async forwardBtn(interaction: ButtonInteraction) {
+		if (interaction.component.label === "Next Page") {
+			const findIdeaTypeFilter = (t: EmbedBuilder[]) =>
+				t[0].data.title.split(" ")[0] === 
+				interaction.message.embeds[0].title.split(" ")[0];
+
+			let pageNum = parseInt(interaction.message.embeds[0].data.title.split("Page ")[1], 10) - 1;
+			const ideaPages = sortedIdeaPages.filter(findIdeaTypeFilter)[0];
+
+			pageNum = pageNum + 1 < ideaPages.length ? pageNum += 1 : 0;
+			await interaction.message.edit({
+				embeds: [ideaPages[pageNum]],
+			})
+		}
+
+		await interaction.deferUpdate();
 		return true;
 	}
 }

@@ -48,8 +48,11 @@ export const WHITE_CHECK_MARK = "✅";
 export const X_MARK = "❌";
 export const MUSICAL_NOTES = "🎶";
 export const LIGHTBULB = "💡";
+export const ARROW_BACKWARD_ID = "◀️";
+export const ARROW_FORWARD_ID = "▶️";
 export const L_THEME_URL = "https://www.youtube.com/watch?v=qR6dzwQahOM";
 export const PLAYER_SITES = ["spotify", "youtube", "youtu.be", "soundcloud"];
+export const IDEA_TYPES = ["utility", "fun", "music", "general"];
 // TODO: Standardize paths
 export const SRC_DIR = path.resolve(`${dirname}`);
 
