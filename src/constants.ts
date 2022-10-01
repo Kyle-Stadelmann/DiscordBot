@@ -26,6 +26,7 @@ export const MEGU_ID = "245844776639922176";
 export const TWEED_ID = "250368865089880067";
 export const NATHAN_P_ID = "164893909741338625";
 export const NATHAN_L_ID = "605626870301458433";
+export const TYLER_H_ID = "168976062825496576";
 
 // Note: not a full path
 export const AFKPIC_FG_LOC = "pics/AFK_PICS";

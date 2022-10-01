@@ -16,6 +16,7 @@ import {
 	NAT_ID,
 	SWISS_KYLE_ID,
 	TWEED_ID,
+	TYLER_H_ID,
 	ZACH_ID,
 } from "../../constants.js";
 import { UserAfkPic, getAllPicsForUser } from "../data-access/afk-pic.js";
@@ -40,6 +41,7 @@ AfkPicCodeMap.set("MGU", MEGU_ID);
 AfkPicCodeMap.set("MM", TWEED_ID);
 AfkPicCodeMap.set("NN", NAT_ID);
 AfkPicCodeMap.set("NP", NATHAN_P_ID);
+AfkPicCodeMap.set("TH", TYLER_H_ID);
 AfkPicCodeMap.set("ZT", ZACH_ID);
 
 export class AfkPicContainer {
