@@ -13,6 +13,5 @@ abstract class HalloweenColors {
 		// Only activate if user went from an offline->online or an online->offline state
 		// meaning, either old or new presence needs to be offline, but the other can't be as well
 		if ((oldPresence.status === "offline") === (newPresence.status === "offline")) return;
-		console.log("hi");
 	}
 }
