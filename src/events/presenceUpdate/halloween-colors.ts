@@ -1,17 +1,16 @@
-import { Guild, GuildMember } from "discord.js";
+import { GuildMember } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
-import { BD5_ID, BOTS_ROLE_ID, GUESTS_ROLE_ID, HOLIDAY_BLACK_ROLE_ID, HOLIDAY_ORANGE_ROLE_ID, HOLIDAY_WHITE_ROLE_ID, TEMPORAL_MANTLE_ROLE_ID } from "../../constants.js";
-import { rotateThroughRoles } from "../../util/holiday-role-helper.js";
-
-const roleIdOrder = [
-	HOLIDAY_ORANGE_ROLE_ID,
-	HOLIDAY_WHITE_ROLE_ID,
-	HOLIDAY_BLACK_ROLE_ID
-];
+import { BD5_ID, HOLIDAY_BLACK_ROLE_ID, HOLIDAY_ORANGE_ROLE_ID, HOLIDAY_WHITE_ROLE_ID } from "../../constants.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class HalloweenColors {
+	private halloweenRoleIds = [
+		HOLIDAY_ORANGE_ROLE_ID,
+		HOLIDAY_WHITE_ROLE_ID,
+		HOLIDAY_BLACK_ROLE_ID
+	];
+
 	@On({ event: "presenceUpdate" })
 	private async updateHalloweenColors([oldPresence, newPresence]: ArgsOf<"presenceUpdate">) {
 		if (!oldPresence || !newPresence) return;
@@ -20,21 +19,29 @@ abstract class HalloweenColors {
 		if (new Date().getMonth() !== 9) return;
 		// Only activate if user went from an offline->online or an online->offline state
 		// meaning, either old or new presence needs to be offline, but the other can't be as well
-		if ((oldPresence.status === "offline") === (newPresence.status === "offline")) return;
-		const displayOrderMemberList = this.getBd5DisplayOrderMemberList(oldPresence.guild);
-		await rotateThroughRoles(displayOrderMemberList, roleIdOrder);
+		if ((oldPresence.status === "offline") && (newPresence.status !== "offline")) return;
+		
+		const randomRole = this.getRandomHallowenRole();
+		const otherRoles = this.halloweenRoleIds.filter(r => r !== randomRole);
+		await this.addAndRemoveRoles(randomRole, newPresence.member, otherRoles);
 	}
 
-	private getBd5DisplayOrderMemberList(guild: Guild): GuildMember[] {
-		const temporalMantleMembers = this.getSortedMemberListForRole(guild, TEMPORAL_MANTLE_ROLE_ID);
-		const guestsMembers = this.getSortedMemberListForRole(guild, GUESTS_ROLE_ID);
-		const botsMembers = this.getSortedMemberListForRole(guild, BOTS_ROLE_ID);
-		return temporalMantleMembers.concat(guestsMembers).concat(botsMembers);
+	private getRandomHallowenRole(): string {
+		const randomRoleIndex = Math.floor(Math.random()*this.halloweenRoleIds.length);
+		return this.halloweenRoleIds[randomRoleIndex];
 	}
 
-	private getSortedMemberListForRole(guild: Guild, roleId: string): GuildMember[] {
-		const members = guild.roles.resolve(roleId)
-			.members.filter(m => m.presence?.status !== "offline");
-		return [...members.values()].sort((m1, m2) => m1.displayName.localeCompare(m2.displayName))
+	private async addAndRemoveRoles(newRole: string, member: GuildMember, roleIds: string[]) {
+		await Promise.all([this.removeRoles(member, roleIds), member.roles.add(newRole)]);
+	}
+
+	private async removeRoles(member: GuildMember, roleIds: string[]) {
+		const removePromises: Promise<GuildMember>[] = [];
+		for (const r of roleIds) {
+			if (member.roles.resolve(r)) {
+				removePromises.push(member.roles.remove(r));
+			}
+		}
+		await Promise.all(removePromises);
 	}
 }
