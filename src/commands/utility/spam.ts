@@ -31,7 +31,7 @@ class SpamCommand extends Command {
 
 		const spamStr: string = args[1];
 		let moveTimes = args.length > 1 && +args[2] ? +args[2] : 1;
-		moveTimes = Math.max(moveTimes, MAX_SPAM_AMOUNT);
+		moveTimes = Math.min(moveTimes, MAX_SPAM_AMOUNT);
 
 		await sendMessage(channel, `Spamming ${moveTimes} time${moveTimes === 1 ? "" : "s"}...`);
 
