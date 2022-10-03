@@ -11,10 +11,12 @@ const cmdConfig: CommandConfig = {
 	category: CommandCategory.Utility,
 	usage: `spam @user [Message BatchAmount]`,
 	examples: ["spam @Xited1730", "spam @Xited1730 hello 5", 'spam @Xited1730 "wake up" 3'],
+	cooldownTime: 10 * 60 * 1000
 };
 
 const SPAM_AMMOUNT = 4;
 const SLEEP_TIME_MS = 10 * 1000;
+const MAX_SPAM_AMOUNT = 20;
 
 class SpamCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
@@ -28,7 +30,8 @@ class SpamCommand extends Command {
 		}
 
 		const spamStr: string = args[1];
-		const moveTimes = args.length > 1 && +args[2] ? +args[2] : 1;
+		let moveTimes = args.length > 1 && +args[2] ? +args[2] : 1;
+		moveTimes = Math.max(moveTimes, MAX_SPAM_AMOUNT);
 
 		await sendMessage(channel, `Spamming ${moveTimes} time${moveTimes === 1 ? "" : "s"}...`);
 
