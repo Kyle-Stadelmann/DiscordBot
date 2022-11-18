@@ -1,8 +1,8 @@
-import { Message, EmbedBuilder } from "discord.js";
+import { EmbedBuilder, CommandInteraction } from "discord.js";
 import { client } from "../../app.js";
 import { TYPESCRIPT_URL } from "../../constants.js";
 import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
-import { getRandomHexColorStr, sendEmbeds } from "../../util/index.js";
+import { getRandomHexColorStr } from "../../util/index.js";
 
 // Probably won't work in pm2
 const version = process.env.npm_package_version;
@@ -16,14 +16,14 @@ const cmdConfig: CommandConfig = {
 };
 
 class PingCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
+	public async run(interaction: CommandInteraction): Promise<boolean> {
 		const embed = new EmbedBuilder()
 			.setImage(client.user.avatarURL())
 			.setTitle("pong!")
 			.setFooter({ text: `version ${version}`, iconURL: TYPESCRIPT_URL })
 			.setColor(getRandomHexColorStr());
 
-		await sendEmbeds(msg.channel, [embed]);
+		await interaction.reply({embeds: [embed]});
 		return true;
 	}
 }

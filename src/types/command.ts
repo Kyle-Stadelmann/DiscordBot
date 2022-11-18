@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import path from "path";
-import { ChannelType, Guild, GuildMember, Message, User } from "discord.js";
+import { ChannelType, CommandInteraction, Guild, GuildMember, Message, User } from "discord.js";
 import { fileURLToPath } from "url";
 import { CooldownContainer } from "./containers/cooldown-container.js";
 import { printSpace, sendErrorMessage } from "../util/index.js";
@@ -24,7 +24,7 @@ export abstract class Command {
 	public readonly category: CommandCategory;
 	protected readonly cooldowns: CooldownContainer;
 
-	public abstract run(msg: Message, args: string[]): Promise<boolean>;
+	public abstract run(interaction: CommandInteraction): Promise<boolean>;
 
 	constructor(options: CommandConfig) {
 		this.name = options.name;

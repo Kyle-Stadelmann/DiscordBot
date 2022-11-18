@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-export const PREFIX = ">";
 export const BD5_BOT_STUFF_CHANNEL_ID = "732739176285470942";
 
 export const DANIEL_ID = "250076166323568640";
