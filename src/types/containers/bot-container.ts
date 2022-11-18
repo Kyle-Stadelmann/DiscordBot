@@ -1,4 +1,4 @@
-import { Collection, Message, TextChannel } from "discord.js";
+import { Collection, CommandInteraction, Message, TextChannel } from "discord.js";
 import { Player, Queue, Track } from "discord-player";
 import { DANIEL_ID } from "../../constants.js";
 import { Command, CommandCategory } from "../command.js";
@@ -51,8 +51,8 @@ export class BDBot {
 		}
 	}
 
-	public tryRunCommand(cmdStr: string, msg: Message, args: string[]): Promise<boolean> {
-		return this.commandContainer.tryRunCommand(cmdStr, msg, args);
+	public tryRunCommand(interaction: CommandInteraction): Promise<boolean> {
+		return this.commandContainer.tryRunCommand(interaction);
 	}
 
 	// Returns all unique commands (this.commandContainer.commands)

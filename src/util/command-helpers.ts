@@ -7,36 +7,6 @@ import { isDevMode } from "./settings-helpers.js";
 import { sendEmbeds } from "./message-channel.js";
 import { printSpace } from "./print-space.js";
 
-// From GAwesomeBot's parser
-export function parseArgs(content: string, delim: string = " "): string[] {
-	if (delim === "") return [content];
-
-	const args = [];
-	let current = "";
-	let open = false;
-
-	for (let i = 0; i < content.length; i += 1) {
-		if (!open && content.slice(i, i + delim.length) === delim) {
-			if (current !== "") args.push(current);
-			current = "";
-			i += delim.length - 1;
-			// eslint-disable-next-line no-continue
-			continue;
-		}
-		if (content[i] === '"') {
-			open = !open;
-			if (current !== "") args.push(current);
-			current = "";
-			// eslint-disable-next-line no-continue
-			continue;
-		}
-		current += content[i];
-	}
-	if (current !== "") args.push(current);
-
-	return args.length === 1 && args[0] === "" ? [] : args.filter((a) => a !== delim && a !== " ");
-}
-
 export async function loadCommandFile(file: string): Promise<Command> {
 	const cmd = (await import(`file://${file}`)).default as Command;
 

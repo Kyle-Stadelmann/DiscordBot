@@ -1,4 +1,4 @@
-import { Collection, Message } from "discord.js";
+import { Collection, CommandInteraction, Message } from "discord.js";
 import fg from "fast-glob";
 import { COMMAND_FG_LOC, COMMAND_FG_LOC_PROD } from "../../constants.js";
 import {
@@ -25,10 +25,11 @@ export class CommandContainer {
 	}
 
 	// Returns whether or not the command (or help command) was successful
-	public async tryRunCommand(cmdStr: string, msg: Message, args: string[]): Promise<boolean> {
-		if (!this.commands.has(cmdStr)) return false;
+	public async tryRunCommand(interaction: CommandInteraction): Promise<boolean> {
+		const {commandName} = interaction;
+		if (!this.commands.has(commandName)) return false;
 
-		const cmd = this.commands.get(cmdStr);
+		const cmd = this.commands.get(commandName);
 
 		const canRunCmd = await cmd.validateCommand(msg, args);
 		if (!canRunCmd) return false;

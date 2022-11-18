@@ -1,9 +1,13 @@
 // Critical to functionality of command
 /* eslint-disable no-await-in-loop */
-import { ChannelType, Message } from "discord.js";
+import { ChannelType, CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
 import { sleep } from "../../util/sleep.js";
+
+const SPAM_AMMOUNT = 4;
+const SLEEP_TIME_MS = 10 * 1000;
+const MAX_SPAM_AMOUNT = 20;
 
 const cmdConfig: CommandConfig = {
 	name: "spam",
@@ -14,12 +18,8 @@ const cmdConfig: CommandConfig = {
 	cooldownTime: 10 * 60 * 1000
 };
 
-const SPAM_AMMOUNT = 4;
-const SLEEP_TIME_MS = 10 * 1000;
-const MAX_SPAM_AMOUNT = 20;
-
 class SpamCommand extends Command {
-	public async run(msg: Message, args: string[]): Promise<boolean> {
+	public async run(interaction: CommandInteraction): Promise<boolean> {
 		const victim = msg.mentions.members?.first();
 		const startTs = msg.createdTimestamp;
 		const { channel } = msg;
