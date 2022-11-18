@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { EmbedBuilder } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import * as cheerio from "cheerio";
-import { sendEmbeds, sleep } from "../../util/index.js";
+import { sendEmbeds } from "../../util/index.js";
 
 const TARGET_SITE = "https://nyaa.si/view/";
 const IMG_DESCRIPTION_REGEX = /!\[.*?]/g;
@@ -23,12 +23,9 @@ abstract class NyaaEmbed {
 	private async tryNyaaEmbed([msg]: ArgsOf<"messageCreate">) {
 		if (!msg.content.includes(TARGET_SITE)) return;
 
-		// Wait for discord embed, if it doesn't happen, we'll do the embed ourselves
-		await sleep(3000);
-		if (msg.embeds?.length > 0) {
-			return;
-		}
-
+		// Clear/block normal embed
+		await msg.suppressEmbeds(true);
+		
 		const url = TARGET_SITE + msg.content.split(TARGET_SITE)[1].split(" ")[0];
 
 		let response: AxiosResponse<string>;
