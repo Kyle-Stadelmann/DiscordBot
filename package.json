@@ -15,7 +15,7 @@
   "author": "Kyle Stadelmann",
   "license": "ISC",
   "dependencies": {
-    "@braintree/sanitize-url": "^6.0.0",
+    "@braintree/sanitize-url": "^6.0.1",
     "@discordjs/opus": "^0.8.0",
     "@discordjs/voice": "^0.11.0",
     "@discordx/importer": "^1.1.10",
