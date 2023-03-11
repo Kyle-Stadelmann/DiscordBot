@@ -22,13 +22,18 @@ export class HolidayColorCycler {
     public async tryHolidayColors(oldPresence: Presence, newPresence: Presence) {
         if (!oldPresence || !newPresence) return;
 		if (oldPresence.guild.id !== BD5_ID) return;
+        const date = new Date();
+        const { member } = newPresence;
+        // If its the first day of the next month, holiday is over. Remove roles
+        if (date.getMonth() === this.month + 1 && date.getDay() === 0) {
+            await this.removeHolidayColorRoles(member, this.holidayColorRoleIds);
+        }
         // Only activate in the correct month
-		if (new Date().getMonth() !== this.month) return;
+		if (date.getMonth() !== this.month) return;
 		// Only activate if user went from an offline->online or an online->offline state
 		// meaning, either old or new presence needs to be offline, but the other can't be as well
 		if ((oldPresence.status === "offline") && (newPresence.status !== "offline")) return;
 		
-        const { member } = newPresence;
 		const randomRole = this.getRandomHolidayRole();
 		const otherRoles = this.holidayColorRoleIds.filter(r => r !== randomRole);
 

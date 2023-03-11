@@ -6,6 +6,7 @@ const dirname = path.dirname(filename);
 
 export const PREFIX = ">";
 export const BD5_BOT_STUFF_CHANNEL_ID = "732739176285470942";
+export const CHRISTINA_POLLS_CHANNEL_ID = "1076370840670707712";
 
 export const DANIEL_ID = "250076166323568640";
 export const KHANG_ID = "123260646576881679";
@@ -39,10 +40,11 @@ export const BD5_ID = "505214234393706499";
 export const DEV_BOT_ID = "873375752408694855";
 export const DEV_SERVER_ID = "723147134605590598";
 export const BD4_BOT_ID = "480909013593227277";
-export const HEAVY_DOLLAR_SIGN = "💲";
 export const DANIEL_WPM = "48";
 export const QUESTION_MARK_URL =
 	"https://media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG";
+
+export const HEAVY_DOLLAR_SIGN = "💲";
 export const SUNGLASSES = "😎";
 export const KHANG_NEKO_EMOJI_ID = "cat_thonk";
 export const WHITE_CHECK_MARK = "✅";
@@ -51,7 +53,19 @@ export const MUSICAL_NOTES = "🎶";
 export const LIGHTBULB = "💡";
 export const ARROW_BACKWARD_ID = "◀️";
 export const ARROW_FORWARD_ID = "▶️";
+export const ZERO_EMOJI = "0️⃣";
+export const ONE_EMOJI = "1️⃣";
+export const TWO_EMOJI = "2️⃣";
+export const THREE_EMOJI = "3️⃣";
+export const FOUR_EMOJI = "4️⃣";
+export const FIVE_EMOJI = "5️⃣";
+export const SIX_EMOJI = "6️⃣";
+export const SEVEN_EMOJI = "7️⃣";
+export const EIGHT_EMOJI = "8️⃣";
+export const NINE_EMOJI = "9️⃣";
+
 export const L_THEME_URL = "https://www.youtube.com/watch?v=qR6dzwQahOM";
+export const GHOST_TRAIN_ROBBERY = "https://www.youtube.com/watch?v=jgWziW2iNjE";
 export const PLAYER_SITES = ["spotify", "youtube", "youtu.be", "soundcloud"];
 export const IDEA_TYPES = ["utility", "fun", "music", "general"];
 // TODO: Standardize paths
@@ -69,6 +83,9 @@ export const HOLIDAY_WHITE_ROLE_ID = "893722140791164930";
 export const HOLIDAY_ORANGE_ROLE_ID = "904640332791152651";
 export const HOLIDAY_BLACK_ROLE_ID = "893722039599366174";
 export const HOLIDAY_GREEN_ROLE_ID = "895546532487659520";
+export const HOLIDAY_GREEN2_ROLE_ID = "1084110687036518410";
+export const HOLIDAY_GREEN3_ROLE_ID = "1084111075571683370";
+export const HOLIDAY_GREEN4_ROLE_ID = "1084111522684477490";
 export const HOLIDAY_RED_ROLE_ID = "904641705180024882";
 
 export const TEMPORAL_MANTLE_ROLE_ID = "694742310197657703";
