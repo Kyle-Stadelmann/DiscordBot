@@ -13,8 +13,6 @@ const stPatricksRoleIds = [
 	HOLIDAY_GREEN2_ROLE_ID,
 	HOLIDAY_GREEN3_ROLE_ID,
 	HOLIDAY_GREEN4_ROLE_ID,
-    HOLIDAY_ORANGE_ROLE_ID,
-    HOLIDAY_WHITE_ROLE_ID
 ];
 
 const christmasRoleIds = [
