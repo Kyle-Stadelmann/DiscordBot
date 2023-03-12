@@ -19,7 +19,7 @@ const cmdConfig: CommandConfig = {
 	category: CommandCategory.Fun,
 	usage: `randomMove @admin`,
 	examples: ["randomMove @Dualkim"],
-	aliases: ['move'],
+	aliases: ["move"],
 	cooldownTime: 10 * 60 * 1000,
 };
 

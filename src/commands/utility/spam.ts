@@ -11,7 +11,7 @@ const cmdConfig: CommandConfig = {
 	category: CommandCategory.Utility,
 	usage: `spam @user [Message BatchAmount]`,
 	examples: ["spam @Xited1730", "spam @Xited1730 hello 5", 'spam @Xited1730 "wake up" 3'],
-	cooldownTime: 10 * 60 * 1000
+	cooldownTime: 10 * 60 * 1000,
 };
 
 const SPAM_AMMOUNT = 4;
