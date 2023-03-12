@@ -28,7 +28,7 @@ abstract class NyaaEmbed {
 
 		// Clear/block normal embed
 		await msg.suppressEmbeds(true);
-		
+
 		const url = TARGET_SITE + msg.content.split(TARGET_SITE)[1].split(" ")[0];
 
 		let response: AxiosResponse<string>;

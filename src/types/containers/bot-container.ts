@@ -60,7 +60,7 @@ export class BDBot {
 		return this.commandContainer.getAllCommands();
 	}
 
-	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {		
+	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {
 		return this.commandContainer.getCmdCategoryMap();
 	}
 }
