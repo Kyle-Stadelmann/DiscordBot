@@ -31,7 +31,7 @@ abstract class ChristinaPolls {
 	@On({ event: "messageCreate" })
 	private async tryReactPoll([msg]: ArgsOf<"messageCreate">) {
 		if (msg.channelId === CHRISTINA_POLLS_CHANNEL_ID) {
-			for (let i = 0; i <= 9; i += 1) {
+			for (let i = 1; i <= 9; i += 1) {
 				if (msg.content.includes(`${i}:`)) {
 					const numEmoji = numToUnicodeEmojiMap.get(i);
 					await msg.react(numEmoji);
