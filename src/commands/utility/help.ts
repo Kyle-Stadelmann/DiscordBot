@@ -22,11 +22,11 @@ const cmdCatIconMap: Map<CommandCategory, string> = new Map([
 class HelpCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const isDm = msg.channel.type === ChannelType.DM;
-		const fields = getEnumValues(CommandCategory).map((e) => this.getCmdCategoryEmbedField(e, isDm), this);
+		const fields = getEnumValues(CommandCategory).flatMap((e) => this.getCmdCategoryEmbedField(e, isDm), this);
 
 		const helpEmbed = new EmbedBuilder()
 			.addFields(fields)
-			.setThumbnail(msg.guild ? msg.guild.iconURL() : "")
+			.setThumbnail(msg.guild ? msg.guild.iconURL() : undefined)
 			.setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.avatarURL()}` })
 			.setDescription(`Use \`${PREFIX}commandName help\` to recieve instructions on how to use any command.`)
 			.setTitle("All Commands")
@@ -37,14 +37,17 @@ class HelpCommand extends Command {
 		return true;
 	}
 
-	private getCmdCategoryEmbedField(cmdCat: CommandCategory, isDm: boolean): APIEmbedField {
+	private getCmdCategoryEmbedField(cmdCat: CommandCategory, isDm: boolean): APIEmbedField[] {
 		const cmdNames = bdbot
 			.getCmdCategoryMap()
 			.get(cmdCat)
 			.filter((cmd) => !isDm || cmd.allowInDM)
 			.map((cmd) => `\`${cmd.name}\``);
+		
+		if (cmdNames.length === 0) return [];
+
 		const catName = `${cmdCatIconMap.get(cmdCat)} ${CommandCategory[cmdCat]}`;
-		return { name: catName, value: this.formatCmdNames(cmdNames) };
+		return [{ name: catName, value: this.formatCmdNames(cmdNames) }];
 	}
 
 	private formatCmdNames(cmdNames: string[]): string {
