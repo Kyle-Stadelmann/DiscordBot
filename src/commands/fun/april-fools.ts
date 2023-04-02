@@ -42,18 +42,8 @@ const nicknameMap = new Map([
 	[JCHEN_ID, "ValoKyle"],
 ]);
 
-// person id -> nickname
-const devNicknameMap = new Map([
-	[JUSTIN_M_ID, "10name"],
-    [SWISS_KYLE_ID, "11name"],
-    [TWEED_ID, "12name"],
-    [GARY_ID, "awe-wefwef name"],
-]);
-
-
 function isKyleName(name: string): boolean {
-	// return name.match(/.*name$/g) !== null;
-	return name.match(/.*Kyle$/g) !== null;
+	return name.match(/.*Kyle.*/g) !== null;
 }
 
 function getKyleName(id: string): string {
@@ -69,6 +59,7 @@ const startConfig: CommandConfig = {
 	category: CommandCategory.Fun,
 	usage: `[start]`,
 	allowInDM: true,
+	disabled: true
 };
 class AprilFoolsStartCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
@@ -118,11 +109,10 @@ const undoConfig: CommandConfig = {
 	category: CommandCategory.Fun,
 	usage: `undo`,
 	allowInDM: true,
+	disabled: true
 };
 class AprilFoolsUndoCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
-        if (msg.author.id !== CHRISTINA_ID) return false;
-
         const bd5 = client.guilds.resolve(BD5_ID);
 
 		const nicknamePromises: Promise<GuildMember>[] = [];
@@ -159,7 +149,8 @@ const aprilFoolsConfig: ParentCommandConfig = {
 	shareCooldownMap: false,
 	defaultCmdStr: "start",
 	allowInDM: true,
-	usage: `aprilFools [start | undo]?`
+	usage: `aprilFools [start | undo]?`,
+	disabled: true
 };
 class AprilFoolsCommand extends ParentCommand {
 	constructor(options: ParentCommandConfig) {
