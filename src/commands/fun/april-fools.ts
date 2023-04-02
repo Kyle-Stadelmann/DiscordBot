@@ -151,13 +151,13 @@ class AprilFoolsUndoCommand extends Command {
 
 
 const aprilFoolsConfig: ParentCommandConfig = {
-	name: "rename",
+	name: "aprilFools",
 	description: "!",
 	category: CommandCategory.Fun,
 	shareCooldownMap: false,
 	defaultCmdStr: "start",
 	allowInDM: true,
-	usage: `rename [start | undo]?`
+	usage: `aprilFools [start | undo]?`
 };
 class AprilFoolsCommand extends ParentCommand {
 	constructor(options: ParentCommandConfig) {
