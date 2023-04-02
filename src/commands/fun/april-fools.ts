@@ -96,7 +96,6 @@ class AprilFoolsStartCommand extends Command {
 				nicknamePromises.push(renamePromise);
 			}
 		});
-		// await OldNicknameModel.batchPut(oldNameItems);
 		await Promise.all(nicknamePromises);
 
 		return true;
@@ -113,6 +112,7 @@ const undoConfig: CommandConfig = {
 };
 class AprilFoolsUndoCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
+		if (msg.author.id !== CHRISTINA_ID) return false;
         const bd5 = client.guilds.resolve(BD5_ID);
 
 		const nicknamePromises: Promise<GuildMember>[] = [];
