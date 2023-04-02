@@ -81,12 +81,13 @@ export class CommandContainer {
 		const cmdFiles = await fg(cmdFgLoc, { absolute: true });
 		const cmds = await loadCommandFiles(cmdFiles);
 		cmds.forEach((cmd) => {
+			const name = cmd.name.toLowerCase();
 			if (this.checkCmdNameAlrdyExists(cmd)) {
 				throw new Error(
-					`Command name ${cmd.name} or one of it's aliases conflicts with that of an existing command's`
+					`Command name ${name} or one of it's aliases conflicts with that of an existing command's`
 				);
 			}
-			this.commands.set(cmd.name, cmd);
+			this.commands.set(name, cmd);
 			cmd.aliases.forEach((alias) => this.commands.set(alias, cmd));
 
 			const cmdCatList = this.cmdCategoryMap.get(cmd.category) ?? [];
