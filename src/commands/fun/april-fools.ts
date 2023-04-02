@@ -83,7 +83,7 @@ class AprilFoolsStartCommand extends Command {
 
 		bd5.members.cache.forEach((m, id) => {
 			const currName = m.nickname;
-			let oldnick: OldNickname;
+			let oldnick: OldNickname | undefined;
 
 			if (isNullOrUndefined(currName)) {
 				oldnick = new OldNicknameModel({userId: id});
@@ -91,7 +91,7 @@ class AprilFoolsStartCommand extends Command {
 				oldnick = new OldNicknameModel({userId: id, name: currName});
 			}
 
-			oldnick.save().catch((e) => console.error(e));
+			if (!isNullOrUndefined(oldnick)) oldnick.save().catch((e) => console.error(e));
 
 			if (m.manageable) {
 				const newName = getKyleName(id);
