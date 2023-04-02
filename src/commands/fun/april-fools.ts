@@ -80,16 +80,18 @@ class AprilFoolsStartCommand extends Command {
         const bd5 = client.guilds.resolve(BD5_ID);
 
 		const nicknamePromises: Promise<any>[] = [];
-		const oldNameItems: OldNickname[] = [];
 
 		bd5.members.cache.forEach((m, id) => {
 			const currName = m.nickname;
+			let oldnick: OldNickname;
 
 			if (isNullOrUndefined(currName)) {
-				oldNameItems.push(new OldNicknameModel({userId: id}));
+				oldnick = new OldNicknameModel({userId: id});
 			} else if (!isKyleName(currName)) {
-				oldNameItems.push(new OldNicknameModel({userId: id, name: currName}));
+				oldnick = new OldNicknameModel({userId: id, name: currName});
 			}
+
+			oldnick.save().catch((e) => console.error(e));
 
 			if (m.manageable) {
 				const newName = getKyleName(id);
@@ -103,7 +105,7 @@ class AprilFoolsStartCommand extends Command {
 				nicknamePromises.push(renamePromise);
 			}
 		});
-		await OldNicknameModel.batchPut(oldNameItems);
+		// await OldNicknameModel.batchPut(oldNameItems);
 		await Promise.all(nicknamePromises);
 
 		return true;
