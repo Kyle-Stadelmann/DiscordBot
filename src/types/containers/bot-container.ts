@@ -55,11 +55,6 @@ export class BDBot {
 		return this.commandContainer.tryRunCommand(cmdStr, msg, args);
 	}
 
-	// Returns all unique commands (this.commandContainer.commands)
-	public getAllCommands(): Command[] {
-		return this.commandContainer.getAllCommands();
-	}
-
 	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {
 		return this.commandContainer.getCmdCategoryMap();
 	}
