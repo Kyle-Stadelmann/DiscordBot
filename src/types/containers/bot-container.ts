@@ -12,7 +12,7 @@ export class BDBot {
 	private readonly commandContainer = new CommandContainer();
 	private readonly afkPicContainer = new AfkPicContainer();
 	public readonly typingTimestamps = new Map<string, number>().set(DANIEL_ID, null);
-	public readonly player = new Player(client);
+	public readonly player = new Player(client, {ytdlOptions: {quality: "lowestaudio"}});
 
 	public async initContainter() {
 		const cmdContainerPromise = this.commandContainer.initContainer();
