@@ -11,9 +11,9 @@ const cmdConfig: CommandConfig = {
 
 class PauseCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.getQueue(msg.guildId);
+		const queue = bdbot.player.queues.resolve(msg.guildId);
 
-		return queue.setPaused(true);
+		return queue.node.setPaused(true);
 	}
 }
 

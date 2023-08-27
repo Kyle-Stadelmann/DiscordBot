@@ -2,6 +2,7 @@ import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
+import { isNullOrUndefined } from "../../util/general.js";
 import { sendMessage } from "../../util/message-channel.js";
 
 const cmdConfig: CommandConfig = {
@@ -13,19 +14,19 @@ const cmdConfig: CommandConfig = {
 
 class JumpCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.getQueue(msg.guildId);
-		if (!queue || queue.destroyed || !queue.connection) return false;
+		const queue = bdbot.player.queues.resolve(msg.guildId);
+		if (isNullOrUndefined(queue) || queue.deleted || !queue.connection || args.length === 0 || Number.isNaN(+args[0])) return false;
 
-		const np = queue.nowPlaying();
-		if (!np || !args[0]) {
+		const np = queue.currentTrack;
+		if (!np) {
 			await msg.react(X_MARK);
 			return false;
 		}
 
-		const ptlen = Math.trunc(queue.previousTracks.length / 2);
-		const index = parseInt(args[0], 10);
+		const ptlen = Math.trunc(queue.history.getSize() / 2);
+		const index = +args[0];
 		try {
-			queue.skipTo(queue.getTrackPosition(index - ptlen - 2));
+			queue.node.skipTo(queue.node.getTrackPosition(index - ptlen - 2));
 		} catch (error) {
 			await sendMessage(msg.channel, `Jump failed, double check provided index`);
 			return false;

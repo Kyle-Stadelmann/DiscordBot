@@ -14,10 +14,10 @@ const cmdConfig: CommandConfig = {
 // queue.seek takes in time as millseconds
 class SeekCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.getQueue(msg.guildId);
-		if (!queue || queue.destroyed || !queue.connection) return false;
+		const queue = bdbot.player.queues.resolve(msg.guildId);
+		if (!queue || queue.deleted || !queue.connection) return false;
 
-		const np = queue.nowPlaying();
+		const np = queue.currentTrack;
 
 		let times: string[];
 		if (args[0]) {
@@ -30,14 +30,14 @@ class SeekCommand extends Command {
 		if (np) {
 			// seek(x) format
 			if (numc === 0) {
-				await queue.seek(parseInt(args[0], 10) * 1000);
+				await queue.node.seek(parseInt(args[0], 10) * 1000);
 			}
 			// seek(x:x) format
 			else if (numc === 1) {
 				try {
 					time += parseInt(times[0], 10) * 60000;
 					time += parseInt(times[1], 10) * 1000;
-					await queue.seek(time);
+					await queue.node.seek(time);
 				} catch (error) {
 					await sendMessage(msg.channel, "Can't seek to specified time, check formatting");
 					return false;
@@ -49,7 +49,7 @@ class SeekCommand extends Command {
 					time += parseInt(times[0], 10) * 3600000;
 					time += parseInt(times[1], 10) * 60000;
 					time += parseInt(times[2], 10) * 1000;
-					await queue.seek(time);
+					await queue.node.seek(time);
 				} catch (error) {
 					await sendMessage(msg.channel, "Can't seek to specified time, check formatting");
 					return false;

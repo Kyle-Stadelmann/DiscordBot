@@ -12,9 +12,9 @@ const cmdConfig: CommandConfig = {
 
 class SkipCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.getQueue(msg.guildId);
+		const queue = bdbot.player.queues.resolve(msg.guildId);
 		await sendMessage(msg.channel, `Skipping...`);
-		return queue.skip();
+		return queue.node.skip();
 	}
 }
 

@@ -14,16 +14,16 @@ const cmdConfig: CommandConfig = {
 class DisconnectCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const connection = getVoiceConnection(msg.guildId);
-		const musicConn = bdbot.player.getQueue(msg.guildId);
+		const musicQueue = bdbot.player.queues.resolve(msg.guildId);
 
-		if (!connection && !musicConn) {
+		if (!connection && !musicQueue) {
 			console.log(`Bot is not in a voice channel`);
 			await msg.react(X_MARK);
 			return false;
 		}
 
 		if (connection) connection.destroy();
-		if (musicConn) musicConn.destroy();
+		if (musicQueue) musicQueue.delete();
 
 		return true;
 	}
