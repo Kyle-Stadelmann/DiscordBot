@@ -3,6 +3,7 @@ import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { getSearchResult } from "../../util/music-helpers.js";
+import { sendErrorMessage } from "../../util/message-channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "top",
@@ -15,7 +16,10 @@ const cmdConfig: CommandConfig = {
 class TopCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!queue || queue.deleted || !queue.connection || args.length === 0) return false;
+		if (!queue || queue.deleted || !queue.connection || args.length === 0) {
+			await sendErrorMessage(msg.channel, "Music command failed. Please start a queue using the `play` command first!");
+			return false;
+		}
 
 		const np = queue.currentTrack;
 		if (!np) {
