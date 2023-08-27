@@ -8,12 +8,17 @@ export function findTrack(search: string, queue: GuildQueue): Track | undefined 
 }
 
 export function isQueueValid(queue: GuildQueue<unknown> | undefined): boolean {
-	return (!!queue && !queue.deleted && !!queue.connection);
+	return !!queue && !queue.deleted && !!queue.connection;
 }
 
-export function queueSong(voiceChannel: VoiceBasedChannel, query: string, textOutputChannel: TextBasedChannel, requester: User) {
+export function queueSong(
+	voiceChannel: VoiceBasedChannel,
+	query: string,
+	textOutputChannel: TextBasedChannel,
+	requester: User
+) {
 	return bdbot.player.play(voiceChannel, query, {
-		nodeOptions: {metadata: {channel: textOutputChannel}},
+		nodeOptions: { metadata: { channel: textOutputChannel } },
 		requestedBy: requester,
 	});
 }
@@ -24,7 +29,7 @@ export async function getSearchResult(args: string[], user: User): Promise<Playe
 	// if link, else search phrase containing all args
 	let search = "";
 	let searchEngine: SearchQueryType | undefined;
-	
+
 	// TODO: maybe change to regex
 	if (args[0].startsWith("https://") && PLAYER_SITES.some((site) => args[0].includes(site))) {
 		search = args[0];
@@ -38,7 +43,7 @@ export async function getSearchResult(args: string[], user: User): Promise<Playe
 
 	const result = await bdbot.player.search(search, {
 		requestedBy: user,
-		searchEngine
+		searchEngine,
 	});
 
 	/*

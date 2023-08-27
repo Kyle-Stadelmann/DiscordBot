@@ -17,7 +17,10 @@ class TopCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(msg.guildId);
 		if (!isQueueValid(queue) || args.length === 0) {
-			await sendErrorMessage(msg.channel, "Music command failed. Please start a queue using the `play` command first, or check command arguments!");
+			await sendErrorMessage(
+				msg.channel,
+				"Music command failed. Please start a queue using the `play` command first, or check command arguments!"
+			);
 			return false;
 		}
 

@@ -2,7 +2,40 @@
 import { Message, ChannelType, GuildMember } from "discord.js";
 import randomWords from "random-words";
 import { client } from "../../app.js";
-import { ALAN_ID, ANGELINA_ID, ANISH_ID, ANTHONY_ID, ASIAN_KYLE_ID, BD5_ID, CHRISTINA_ID, DANIEL_ALT_ID, DANIEL_ID, DTITAN_ID, ELLEN_ID, ERIC_ID, ETHAN_ID, GARY_ID, JASON_ID, JCHEN_ID, JOHNNY_ID, JUSTIN_M_ALT_ID, JUSTIN_M_ID, KECHENG_ID, KEISI_ID, KHANG_ID, MEGU_ID, NATHAN_L_ID, NATHAN_P_ALT_ID, NATHAN_P_ID, NAT_ID, RONNIE_ID, SWISS_KYLE_ID, TWEED_ID, ZACH_ALT_ID, ZACH_ID } from "../../constants.js";
+import {
+	ALAN_ID,
+	ANGELINA_ID,
+	ANISH_ID,
+	ANTHONY_ID,
+	ASIAN_KYLE_ID,
+	BD5_ID,
+	CHRISTINA_ID,
+	DANIEL_ALT_ID,
+	DANIEL_ID,
+	DTITAN_ID,
+	ELLEN_ID,
+	ERIC_ID,
+	ETHAN_ID,
+	GARY_ID,
+	JASON_ID,
+	JCHEN_ID,
+	JOHNNY_ID,
+	JUSTIN_M_ALT_ID,
+	JUSTIN_M_ID,
+	KECHENG_ID,
+	KEISI_ID,
+	KHANG_ID,
+	MEGU_ID,
+	NATHAN_L_ID,
+	NATHAN_P_ALT_ID,
+	NATHAN_P_ID,
+	NAT_ID,
+	RONNIE_ID,
+	SWISS_KYLE_ID,
+	TWEED_ID,
+	ZACH_ALT_ID,
+	ZACH_ID,
+} from "../../constants.js";
 import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { getNicknames, OldNickname, OldNicknameModel } from "../../types/data-access/curr-nickname.js";
 import { ParentCommand, ParentCommandConfig } from "../../types/parent-command.js";
@@ -49,7 +82,7 @@ function isKyleName(name: string): boolean {
 function getKyleName(id: string): string {
 	if (nicknameMap.has(id)) return nicknameMap.get(id);
 	let randomWord = randomWords(1)[0];
-	randomWord = `${randomWord.charAt(0).toUpperCase()}${randomWord.substring(1)}`
+	randomWord = `${randomWord.charAt(0).toUpperCase()}${randomWord.substring(1)}`;
 	return `${randomWord}Kyle`;
 }
 
@@ -59,16 +92,16 @@ const startConfig: CommandConfig = {
 	category: CommandCategory.Fun,
 	usage: `[start]`,
 	allowInDM: true,
-	disabled: true
+	disabled: true,
 };
 class AprilFoolsStartCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const isDm = msg.channel.type === ChannelType.DM;
 		const date = new Date();
 
-        if (!isDm || msg.author.id !== CHRISTINA_ID || date.getDate() !== 1 || date.getMonth() !== 3) return false;
+		if (!isDm || msg.author.id !== CHRISTINA_ID || date.getDate() !== 1 || date.getMonth() !== 3) return false;
 
-        const bd5 = client.guilds.resolve(BD5_ID);
+		const bd5 = client.guilds.resolve(BD5_ID);
 
 		const nicknamePromises: Promise<any>[] = [];
 
@@ -77,9 +110,9 @@ class AprilFoolsStartCommand extends Command {
 			let oldnick: OldNickname | undefined;
 
 			if (isNullOrUndefined(currName)) {
-				oldnick = new OldNicknameModel({userId: id});
+				oldnick = new OldNicknameModel({ userId: id });
 			} else if (!isKyleName(currName)) {
-				oldnick = new OldNicknameModel({userId: id, name: currName});
+				oldnick = new OldNicknameModel({ userId: id, name: currName });
 			}
 
 			if (!isNullOrUndefined(oldnick)) oldnick.save().catch((e) => console.error(e));
@@ -90,7 +123,7 @@ class AprilFoolsStartCommand extends Command {
 				// Don't want to throw out all rename requests if one produces an error somehow
 				const renamePromise = new Promise((resolve) => {
 					m.setNickname(newName)
-						.then((result => resolve(result)))
+						.then((result) => resolve(result))
 						.catch((e) => console.error(e));
 				});
 				nicknamePromises.push(renamePromise);
@@ -108,19 +141,19 @@ const undoConfig: CommandConfig = {
 	category: CommandCategory.Fun,
 	usage: `undo`,
 	allowInDM: true,
-	disabled: true
+	disabled: true,
 };
 class AprilFoolsUndoCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		if (msg.author.id !== CHRISTINA_ID) return false;
-        const bd5 = client.guilds.resolve(BD5_ID);
+		const bd5 = client.guilds.resolve(BD5_ID);
 
 		const nicknamePromises: Promise<GuildMember>[] = [];
 
 		const userIds = bd5.members.cache.map((m, id) => id);
 		const nicknames = await getNicknames(userIds);
 
-		nicknames.forEach(oldNickname => {
+		nicknames.forEach((oldNickname) => {
 			const { userId, name } = oldNickname;
 
 			const member = bd5.members.resolve(userId);
@@ -141,7 +174,6 @@ class AprilFoolsUndoCommand extends Command {
 	}
 }
 
-
 const aprilFoolsConfig: ParentCommandConfig = {
 	name: "aprilFools",
 	description: "!",
@@ -150,7 +182,7 @@ const aprilFoolsConfig: ParentCommandConfig = {
 	defaultCmdStr: "start",
 	allowInDM: true,
 	usage: `aprilFools [start | undo]?`,
-	disabled: true
+	disabled: true,
 };
 class AprilFoolsCommand extends ParentCommand {
 	constructor(options: ParentCommandConfig) {

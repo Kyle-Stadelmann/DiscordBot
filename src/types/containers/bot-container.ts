@@ -17,8 +17,8 @@ export class BDBot {
 			quality: "lowestaudio",
 			filter: "audioonly",
 			// eslint-disable-next-line no-bitwise
-			highWaterMark: 1<<25
-		}
+			highWaterMark: 1 << 25,
+		},
 	});
 
 	public async initContainter() {
@@ -66,9 +66,9 @@ export class BDBot {
 
 	private async initPlayer() {
 		await this.player.extractors.loadDefault();
-		
+
 		this.player.events.on("playerStart", async (queue: GuildQueue<{ channel: TextChannel }>, track: Track) => {
-			await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`)
+			await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);
 		});
 	}
 }
