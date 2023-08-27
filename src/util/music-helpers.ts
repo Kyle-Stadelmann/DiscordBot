@@ -7,6 +7,10 @@ export function findTrack(search: string, queue: GuildQueue): Track | undefined 
 	return queue.tracks.find((track) => track.title.toLowerCase().includes(search));
 }
 
+export function isQueueValid(queue: GuildQueue<unknown> | undefined): boolean {
+	return (!!queue && !queue.deleted && !!queue.connection);
+}
+
 export function queueSong(voiceChannel: VoiceBasedChannel, query: string, textOutputChannel: TextBasedChannel, requester: User) {
 	return bdbot.player.play(voiceChannel, query, {
 		nodeOptions: {metadata: {channel: textOutputChannel}},
