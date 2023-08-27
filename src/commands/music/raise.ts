@@ -15,20 +15,19 @@ const cmdConfig: CommandConfig = {
 // could get messy if you try to combine
 class RaiseCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.getQueue(msg.guildId);
-		if (!queue || queue.destroyed || !queue.connection) return false;
+		const queue = bdbot.player.queues.resolve(msg.guildId);
+		if (!queue || queue.deleted || !queue.connection) return false;
 
-		const np = queue.nowPlaying();
+		const np = queue.currentTrack;
 		if (!np || !args[0]) {
 			await msg.react(X_MARK);
 			return false;
 		}
 
-		const ptlen = Math.trunc(queue.previousTracks.length / 2);
+		const ptlen = Math.trunc(queue.history.size / 2);
 		try {
 			const index = parseInt(args[0], 10);
-			const foundTrack = queue.remove(queue.getTrackPosition(index - ptlen - 2));
-			queue.tracks.unshift(foundTrack);
+			queue.moveTrack(queue.tracks[index - ptlen - 2], 0);
 		} catch (error) {
 			await sendMessage(msg.channel, `Raise failed, double check provided index`);
 			return false;

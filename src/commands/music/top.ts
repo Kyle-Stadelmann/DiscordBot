@@ -14,11 +14,11 @@ const cmdConfig: CommandConfig = {
 
 class TopCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.getQueue(msg.guildId);
-		if (!queue || queue.destroyed || !queue.connection) return false;
+		const queue = bdbot.player.queues.resolve(msg.guildId);
+		if (!queue || queue.deleted || !queue.connection || args.length === 0) return false;
 
-		const np = queue.nowPlaying();
-		if (!np || !args[0]) {
+		const np = queue.currentTrack;
+		if (!np) {
 			await msg.react(X_MARK);
 			return false;
 		}
@@ -30,7 +30,7 @@ class TopCommand extends Command {
 		// dont think this can happen but just to be safe
 		if (!foundTrack) return false;
 
-		queue.tracks.unshift(foundTrack);
+		queue.insertTrack(foundTrack, 0);
 
 		await msg.react(WHITE_CHECK_MARK);
 		return true;
