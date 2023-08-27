@@ -29,7 +29,7 @@ class PlayCommand extends Command {
 		}
 
 		// argless play (functionally unpause)
-		if (args.length === 0) { 
+		if (args.length === 0) {
 			queue.node.setPaused(false);
 			return true;
 		}
@@ -46,7 +46,7 @@ class PlayCommand extends Command {
 		}
 
 		const { tracks } = result.searchResult;
-		
+
 		if (result.track.playlist) {
 			await sendMessage(msg.channel, `Added playlist ${result.searchResult.playlist?.title} to the queue`);
 		} else {

@@ -8,7 +8,10 @@ export class CooldownContainer {
 	// Cooldown 'cache'
 	// User/Member/Guild id -> Cooldown
 	private cooldowns = new Collection<string, Cooldown>();
-	constructor(private cooldownTime: number, private cooldownName: string) {}
+	constructor(
+		private cooldownTime: number,
+		private cooldownName: string
+	) {}
 
 	public async isOnCooldown(person: GuildMember | User): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown

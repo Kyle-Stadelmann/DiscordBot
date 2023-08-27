@@ -18,7 +18,10 @@ class QueryCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(msg.guildId);
 		if (!isQueueValid(queue)) {
-			await sendErrorMessage(msg.channel, "Music command failed. Please start a queue using the `play` command first!");
+			await sendErrorMessage(
+				msg.channel,
+				"Music command failed. Please start a queue using the `play` command first!"
+			);
 			return false;
 		}
 
@@ -34,7 +37,7 @@ class QueryCommand extends Command {
 			await sendMessage(msg.channel, `Query failed, ensure your search is part of the track title`);
 			return false;
 		}
-		
+
 		queue.moveTrack(track, 0);
 
 		await msg.react(WHITE_CHECK_MARK);

@@ -16,7 +16,10 @@ class ShuffleCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(msg.guildId);
 		if (!isQueueValid(queue)) {
-			await sendErrorMessage(msg.channel, "Music command failed. Please start a queue using the `play` command first!");
+			await sendErrorMessage(
+				msg.channel,
+				"Music command failed. Please start a queue using the `play` command first!"
+			);
 			return false;
 		}
 

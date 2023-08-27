@@ -43,7 +43,7 @@ class HelpCommand extends Command {
 			.get(cmdCat)
 			.filter((cmd) => !isDm || cmd.allowInDM)
 			.map((cmd) => `\`${cmd.name}\``);
-		
+
 		if (cmdNames.length === 0) return [];
 
 		const catName = `${cmdCatIconMap.get(cmdCat)} ${CommandCategory[cmdCat]}`;

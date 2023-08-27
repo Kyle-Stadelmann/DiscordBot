@@ -21,7 +21,10 @@ const lastUpdatedColorMemberMap: Map<string, Date> = new Map();
 const UPDATE_DATE_PERIOD_MS = 6 * 60 * 60 * 1000;
 
 export class HolidayColorCycler {
-	constructor(private holidayColorRoleIds: string[], private month: Month) {}
+	constructor(
+		private holidayColorRoleIds: string[],
+		private month: Month
+	) {}
 
 	public async tryHolidayColors(oldPresence: Presence, newPresence: Presence) {
 		if (!oldPresence || !newPresence) return;

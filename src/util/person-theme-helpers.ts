@@ -11,7 +11,7 @@ export async function tryPlayPersonTheme(
 	oldState: VoiceState,
 	newState: VoiceState
 ) {
-	const {player} = bdbot;
+	const { player } = bdbot;
 	const stateMemberId = oldState.member.id;
 
 	if (stateMemberId === personId && oldState.channel === null && newState.channel !== null && random(chance)) {
@@ -30,7 +30,7 @@ export async function tryPlayPersonTheme(
 
 		// disconnect after 15 seconds
 		await sleep(15000);
-		
+
 		player.queues.resolve(newState.guild.id).delete();
 		console.log(`Exiting theme for memberId: ${stateMemberId}`);
 	}
