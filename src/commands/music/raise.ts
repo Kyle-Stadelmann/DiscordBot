@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendMessage } from "../../util/message-channel.js";
+import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "raise",
@@ -16,7 +16,10 @@ const cmdConfig: CommandConfig = {
 class RaiseCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!queue || queue.deleted || !queue.connection) return false;
+		if (!queue || queue.deleted || !queue.connection) {
+			await sendErrorMessage(msg.channel, "Music command failed. Please start a queue using the `play` command first!");
+			return false;
+		}
 
 		const np = queue.currentTrack;
 		if (!np || !args[0]) {

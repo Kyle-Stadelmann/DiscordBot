@@ -1,10 +1,17 @@
 import { GuildQueue, PlayerSearchResult, QueryType, SearchQueryType, Track } from "discord-player";
-import { User } from "discord.js";
+import { TextBasedChannel, User, VoiceBasedChannel } from "discord.js";
 import { bdbot } from "../app.js";
 import { PLAYER_SITES } from "../constants.js";
 
 export function findTrack(search: string, queue: GuildQueue): Track | undefined {
 	return queue.tracks.find((track) => track.title.toLowerCase().includes(search));
+}
+
+export function queueSong(voiceChannel: VoiceBasedChannel, query: string, textOutputChannel: TextBasedChannel, requester: User) {
+	return bdbot.player.play(voiceChannel, query, {
+		nodeOptions: {metadata: {channel: textOutputChannel}},
+		requestedBy: requester,
+	});
 }
 
 // Returns Track[] containing search result (for both single song and playlist)

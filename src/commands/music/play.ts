@@ -4,6 +4,7 @@ import { bdbot } from "../../app.js";
 import { X_MARK } from "../../constants.js";
 import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { sendMessage } from "../../util/message-channel.js";
+import { queueSong } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "play",
@@ -37,9 +38,7 @@ class PlayCommand extends Command {
 
 		let result: PlayerNodeInitializationResult;
 		try {
-			result = await bdbot.player.play(voiceChannel, query, {
-				nodeOptions: {metadata: {channel: msg.channel}}
-			});
+			result = await queueSong(voiceChannel, query, msg.channel, msg.author);
 		} catch (e) {
 			await msg.react(X_MARK);
 			console.error(e);

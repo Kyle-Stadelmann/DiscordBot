@@ -2,6 +2,7 @@ import { VoiceState } from "discord.js";
 import { bdbot } from "../app.js";
 import { random, sleep } from "./index.js";
 import { isNullOrUndefined } from "./general.js";
+import { queueSong } from "./music-helpers.js";
 
 export async function tryPlayPersonTheme(
 	personId: string,
@@ -21,10 +22,7 @@ export async function tryPlayPersonTheme(
 		}
 
 		try {
-			await player.play(newState.channel, themeUrl, {
-				requestedBy: newState.guild.members.cache.get(personId),
-				nodeOptions: {metadata: {channel: newState.channel}}
-			});
+			await queueSong(newState.channel, themeUrl, newState.channel, newState.member.user);
 			console.log(`Playing theme for memberId: ${stateMemberId}`);
 		} catch (e) {
 			console.error(`Failed to play theme for memberId: ${stateMemberId}`);
