@@ -3,6 +3,7 @@ import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
+import { isQueueValid } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "jump",
@@ -14,12 +15,13 @@ const cmdConfig: CommandConfig = {
 class JumpCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!queue || queue.deleted || !queue.connection || args.length === 0) {
-			await sendErrorMessage(msg.channel, "Music command failed. Please start a queue using the `play` command first!");
+		if (!isQueueValid(queue) || args.length === 0) {
+			await sendErrorMessage(msg.channel, "Music command failed. Please start a queue using the `play` command first, or check command arguments!");
 			return false;
 		}
 
-		if (Number.isNaN(+args[0])) {
+		const index = +args[0];
+		if (Number.isNaN(index)) {
 			await sendErrorMessage(msg.channel, "Jump failed, double check provided index.")
 			return false;
 		}
@@ -31,7 +33,6 @@ class JumpCommand extends Command {
 		}
 
 		const ptlen = queue.history.size;
-		const index = +args[0];
 		try {
 			queue.node.skipTo(queue.node.getTrackPosition(index - ptlen - 2));
 		} catch (error) {

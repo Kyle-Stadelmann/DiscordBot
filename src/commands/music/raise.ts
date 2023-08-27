@@ -3,6 +3,7 @@ import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
 import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
+import { isQueueValid } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "raise",
@@ -16,8 +17,14 @@ const cmdConfig: CommandConfig = {
 class RaiseCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!queue || queue.deleted || !queue.connection) {
+		if (!isQueueValid(queue)) {
 			await sendErrorMessage(msg.channel, "Music command failed. Please start a queue using the `play` command first!");
+			return false;
+		}
+
+		const index = +args[0];
+		if (Number.isNaN(index)) {
+			await sendErrorMessage(msg.channel, "Raise failed, double check provided index.");
 			return false;
 		}
 
@@ -27,12 +34,11 @@ class RaiseCommand extends Command {
 			return false;
 		}
 
-		const ptlen = Math.trunc(queue.history.size / 2);
+		const ptlen = queue.history.size;
 		try {
-			const index = parseInt(args[0], 10);
-			queue.moveTrack(queue.tracks[index - ptlen - 2], 0);
+			queue.moveTrack(queue.tracks.at(index - ptlen - 2), 0);
 		} catch (error) {
-			await sendMessage(msg.channel, `Raise failed, double check provided index`);
+			await sendMessage(msg.channel, `Raise failed, double check provided index.`);
 			return false;
 		}
 
