@@ -6,9 +6,9 @@ import { CooldownContainer } from "./containers/cooldown-container.js";
 import { printSpace, sendErrorMessage } from "../util/index.js";
 
 export enum CommandCategory {
-	Fun,
-	Utility,
-	Music,
+	"Fun",
+	"Utility",
+	"Music",
 }
 
 export abstract class Command {
@@ -85,18 +85,4 @@ export abstract class Command {
 
 		return true;
 	}
-}
-
-export interface CommandConfig {
-	name: string;
-	description: string;
-	category: CommandCategory;
-	usage?: string;
-	cooldownTime?: number; // ms
-	examples?: string[];
-	allowInDM?: boolean;
-	aliases?: string[];
-	disabled?: boolean;
-	permissions?: any[];
-	cooldown_name?: string; // Do not manually set
 }

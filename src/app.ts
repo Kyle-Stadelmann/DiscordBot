@@ -9,8 +9,6 @@ import { initDb, isDevMode, isProdMode } from "./util/index.js";
 
 dotenv.config({ path: `${SRC_DIR}/../.env` });
 
-initDb();
-
 const myIntents = [
 	GatewayIntentBits.Guilds,
 	GatewayIntentBits.GuildMembers,
@@ -35,11 +33,17 @@ export const client = new Client({
 // Bot state
 export const bdbot = new BDBot();
 
-client.on("interactionCreate", (interaction) => {
-	client.executeInteraction(interaction);
-});
-
 export async function startup() {
+	initDb();
+
+	client.once("ready", async () => {
+		await client.initApplicationCommands();
+	});
+	
+	client.on("interactionCreate", (interaction) => {
+		client.executeInteraction(interaction);
+	});
+
 	const fileType = isProdMode() ? "js" : "ts";
 
 	await Promise.all([

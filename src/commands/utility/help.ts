@@ -1,17 +1,10 @@
-import { Message, EmbedBuilder, APIEmbedField, ChannelType } from "discord.js";
-import { bdbot, client } from "../../app.js";
-import { PREFIX } from "../../constants.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
+import { EmbedBuilder, APIEmbedField, CommandInteraction } from "discord.js";
+import { DApplicationCommand, Discord, Slash } from "discordx";
+import { ICategory } from "@discordx/utilities";
+import { client } from "../../app.js";
 import { getEnumValues } from "../../util/enum-helper.js";
-import { sendEmbeds } from "../../util/index.js";
-
-const cmdConfig: CommandConfig = {
-	name: "help",
-	description: "Lists all commands that this bot currently has to offer.",
-	category: CommandCategory.Utility,
-	usage: `help`,
-	allowInDM: true,
-};
+import { CommandCategory } from "../../types/command.js";
+import { ICooldownTime } from "../../types/cooldown-time.js";
 
 const cmdCatIconMap: Map<CommandCategory, string> = new Map([
 	[CommandCategory.Fun, ":tada:"],
@@ -19,29 +12,39 @@ const cmdCatIconMap: Map<CommandCategory, string> = new Map([
 	[CommandCategory.Utility, ":tools:"],
 ]);
 
-class HelpCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const isDm = msg.channel.type === ChannelType.DM;
-		const fields = getEnumValues(CommandCategory).flatMap((e) => this.getCmdCategoryEmbedField(e, isDm), this);
+@Discord()
+export class HelpCommand {
+	@Slash({name: "help", description: "Lists all commands that this bot currently has to offer."})
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const isDm = !interaction.inGuild();
+
+		const cmds = client.applicationCommands.filter(ac => {
+			const cmd = ac as DApplicationCommand & ICategory & ICooldownTime;
+			return (isDm) 
+				? cmd.dmPermission
+				: cmd.guilds.includes(interaction.guild.id);
+		});
+
+		const fields = getEnumValues(CommandCategory).flatMap((e) => this.getCmdCategoryEmbedField(cmds, e), this);
 
 		const helpEmbed = new EmbedBuilder()
 			.addFields(fields)
-			.setThumbnail(msg.guild ? msg.guild.iconURL() : undefined)
+			.setThumbnail(interaction.guild ? interaction.guild.iconURL() : undefined)
 			.setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.avatarURL()}` })
-			.setDescription(`Use \`${PREFIX}commandName help\` to recieve instructions on how to use any command.`)
 			.setTitle("All Commands")
 			.setColor(0x0);
 
-		await sendEmbeds(msg.channel, [helpEmbed]);
+		await interaction.reply({embeds: [helpEmbed]});
 
 		return true;
 	}
 
-	private getCmdCategoryEmbedField(cmdCat: CommandCategory, isDm: boolean): APIEmbedField[] {
-		const cmdNames = bdbot
-			.getCmdCategoryMap()
-			.get(cmdCat)
-			.filter((cmd) => !isDm || cmd.allowInDM)
+	private getCmdCategoryEmbedField(cmds: DApplicationCommand[], cmdCat: CommandCategory): APIEmbedField[] {
+		const cmdNames = cmds
+			.filter(ac => {
+				const cmd = ac as DApplicationCommand & ICategory & ICooldownTime;
+				return (cmd.category ?? CommandCategory.Utility) === cmdCat
+			})
 			.map((cmd) => `\`${cmd.name}\``);
 
 		if (cmdNames.length === 0) return [];
@@ -54,5 +57,3 @@ class HelpCommand extends Command {
 		return cmdNames.toString().replaceAll(",", ", ");
 	}
 }
-
-export default new HelpCommand(cmdConfig);

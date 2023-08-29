@@ -1,7 +1,6 @@
-import { Collection, CommandInteraction, TextChannel } from "discord.js";
+import { CommandInteraction, TextChannel } from "discord.js";
 import { GuildQueue, Player, Track } from "discord-player";
 import { DANIEL_ID } from "../../constants.js";
-import { Command, CommandCategory } from "../command.js";
 import { AfkPicContainer } from "./afk-pic-container.js";
 import { CommandContainer } from "./command-container.js";
 import { client } from "../../app.js";
@@ -22,11 +21,10 @@ export class BDBot {
 	});
 
 	public async initContainter() {
-		const cmdContainerPromise = this.commandContainer.initContainer();
 		const afkPicContainerPromise = this.afkPicContainer.initContainer();
 		const initPlayerPromise = this.initPlayer();
 
-		await Promise.all([cmdContainerPromise, afkPicContainerPromise, initPlayerPromise]);
+		await Promise.all([afkPicContainerPromise, initPlayerPromise]);
 	}
 
 	public hasAfkPics(): boolean {
@@ -58,10 +56,6 @@ export class BDBot {
 
 	public tryRunCommand(interaction: CommandInteraction): Promise<boolean> {
 		return this.commandContainer.tryRunCommand(interaction);
-	}
-
-	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {
-		return this.commandContainer.getCmdCategoryMap();
 	}
 
 	private async initPlayer() {
