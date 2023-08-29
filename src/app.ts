@@ -2,7 +2,7 @@ import "reflect-metadata";
 import * as dotenv from "dotenv";
 import { dirname, importx } from "@discordx/importer";
 import { Client } from "discordx";
-import { GatewayIntentBits } from "discord.js";
+import { GatewayIntentBits, Partials } from "discord.js";
 import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot-container.js";
 import { initDb, isDevMode, isProdMode } from "./util/index.js";
@@ -14,7 +14,6 @@ initDb();
 const myIntents = [
 	GatewayIntentBits.Guilds,
 	GatewayIntentBits.GuildMembers,
-	GatewayIntentBits.GuildBans,
 	GatewayIntentBits.GuildEmojisAndStickers,
 	GatewayIntentBits.GuildIntegrations,
 	GatewayIntentBits.GuildVoiceStates,
@@ -30,6 +29,7 @@ const myIntents = [
 
 export const client = new Client({
 	intents: myIntents,
+	partials: [Partials.Message, Partials.Channel], // Needed to get messages from DM's as well
 });
 
 // Bot state
@@ -41,6 +41,7 @@ client.on("interactionCreate", (interaction) => {
 
 export async function startup() {
 	const fileType = isProdMode() ? "js" : "ts";
+
 	await Promise.all([
 		importx(`${dirname(import.meta.url)}/events/**/*.${fileType}`),
 		importx(`${dirname(import.meta.url)}/commands/**/*.${fileType}`),

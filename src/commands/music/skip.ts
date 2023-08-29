@@ -1,7 +1,8 @@
 import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendMessage } from "../../util/message-channel.js";
+import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
+import { isQueueValid } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "skip",
@@ -12,9 +13,18 @@ const cmdConfig: CommandConfig = {
 
 class SkipCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.getQueue(msg.guildId);
+		const queue = bdbot.player.queues.resolve(msg.guildId);
+
+		if (!isQueueValid(queue)) {
+			await sendErrorMessage(
+				msg.channel,
+				"Music command failed. Please start a queue using the `play` command first!"
+			);
+			return false;
+		}
+
 		await sendMessage(msg.channel, `Skipping...`);
-		return queue.skip();
+		return queue.node.skip();
 	}
 }
 

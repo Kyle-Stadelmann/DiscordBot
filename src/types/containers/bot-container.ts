@@ -1,5 +1,5 @@
-import { Collection, CommandInteraction, Message, TextChannel } from "discord.js";
-import { Player, Queue, Track } from "discord-player";
+import { Collection, CommandInteraction, TextChannel } from "discord.js";
+import { GuildQueue, Player, Track } from "discord-player";
 import { DANIEL_ID } from "../../constants.js";
 import { Command, CommandCategory } from "../command.js";
 import { AfkPicContainer } from "./afk-pic-container.js";
@@ -12,16 +12,21 @@ export class BDBot {
 	private readonly commandContainer = new CommandContainer();
 	private readonly afkPicContainer = new AfkPicContainer();
 	public readonly typingTimestamps = new Map<string, number>().set(DANIEL_ID, null);
-	public readonly player = new Player(client);
+	public readonly player = new Player(client, {
+		ytdlOptions: {
+			quality: "lowestaudio",
+			filter: "audioonly",
+			// eslint-disable-next-line no-bitwise
+			highWaterMark: 1 << 25,
+		},
+	});
 
 	public async initContainter() {
 		const cmdContainerPromise = this.commandContainer.initContainer();
 		const afkPicContainerPromise = this.afkPicContainer.initContainer();
-		this.player.on("trackStart", (queue: Queue<{ channel: TextChannel }>, track: Track) =>
-			queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`)
-		);
+		const initPlayerPromise = this.initPlayer();
 
-		await Promise.all([cmdContainerPromise, afkPicContainerPromise]);
+		await Promise.all([cmdContainerPromise, afkPicContainerPromise, initPlayerPromise]);
 	}
 
 	public hasAfkPics(): boolean {
@@ -55,12 +60,15 @@ export class BDBot {
 		return this.commandContainer.tryRunCommand(interaction);
 	}
 
-	// Returns all unique commands (this.commandContainer.commands)
-	public getAllCommands(): Command[] {
-		return this.commandContainer.getAllCommands();
+	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {
+		return this.commandContainer.getCmdCategoryMap();
 	}
 
-	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {		
-		return this.commandContainer.getCmdCategoryMap();
+	private async initPlayer() {
+		await this.player.extractors.loadDefault();
+
+		this.player.events.on("playerStart", async (queue: GuildQueue<{ channel: TextChannel }>, track: Track) => {
+			await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);
+		});
 	}
 }

@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from "axios";
-import { EmbedBuilder } from "discord.js";
+import { APIEmbedField, EmbedBuilder } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import * as cheerio from "cheerio";
-import { sendEmbeds, sleep } from "../../util/index.js";
+import { sendEmbeds } from "../../util/index.js";
 
 const TARGET_SITE = "https://nyaa.si/view/";
 const IMG_DESCRIPTION_REGEX = /!\[.*?]/g;
@@ -16,6 +16,9 @@ const TARGET_SITE_ICON = "https://nyaa.si/static/img/avatar/default.png";
 // Truncate title if it's longer than this
 const MAX_TITLE_CHARS = 68;
 
+const ROWAN_NAME = "Rowan";
+const OTAKU_NAME = "ot4ku";
+
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class NyaaEmbed {
@@ -23,11 +26,8 @@ abstract class NyaaEmbed {
 	private async tryNyaaEmbed([msg]: ArgsOf<"messageCreate">) {
 		if (!msg.content.includes(TARGET_SITE)) return;
 
-		// Wait for discord embed, if it doesn't happen, we'll do the embed ourselves
-		await sleep(3000);
-		if (msg.embeds?.length > 0) {
-			return;
-		}
+		// Clear/block normal embed
+		await msg.suppressEmbeds(true);
 
 		const url = TARGET_SITE + msg.content.split(TARGET_SITE)[1].split(" ")[0];
 
@@ -82,11 +82,15 @@ abstract class NyaaEmbed {
 					{ name: "File Size", value: fileSize }
 				);
 
-			const rowansComment = this.tryGetRowanComment(data, $);
-			if (rowansComment) {
-				embed.addFields({ name: "Rowan's Take", value: rowansComment });
+			const rowansComment = this.tryGetUsersComment(data, $, ROWAN_NAME);
+			const otakusComment = this.tryGetUsersComment(data, $, OTAKU_NAME);
+			if (rowansComment || otakusComment) {
+				const userTakes: APIEmbedField[] = [];
+				if (otakusComment) userTakes.push({ name: "ot4ku's Take", value: otakusComment, inline: true });
+				if (rowansComment) userTakes.push({ name: "Rowan's Take", value: rowansComment, inline: true });
+				embed.addFields(userTakes);
 			} else {
-				embed.setFooter({ text: "Rowan was not here :(" });
+				embed.setFooter({ text: "Rowan and ot4ku were not here :(" });
 			}
 		} catch (err) {
 			// Possible errors from invalid image can crash bot
@@ -132,12 +136,12 @@ abstract class NyaaEmbed {
 		return img;
 	}
 
-	private tryGetRowanComment(data: string, $: cheerio.CheerioAPI): string | undefined {
-		const isRowanHere = data.includes("/user/Rowan");
+	private tryGetUsersComment(data: string, $: cheerio.CheerioAPI, userStr: string): string | undefined {
+		const isRowanHere = data.includes(`/user/${userStr}`);
 		let rowansComment: string;
 		if (isRowanHere) {
 			let comments = $("#collapse-comments").html().split(COMMENT_PANEL_DIV_REGEX);
-			comments = comments.filter((html) => html.includes("/user/Rowan"));
+			comments = comments.filter((html) => html.includes(`/user/${userStr}`));
 
 			rowansComment = comments[0].split(COMMENT_REGEX)[1].split("</div>\n")[0];
 		}

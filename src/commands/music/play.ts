@@ -1,9 +1,10 @@
 import { Message } from "discord.js";
+import { PlayerNodeInitializationResult } from "discord-player";
 import { bdbot } from "../../app.js";
 import { X_MARK } from "../../constants.js";
 import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
 import { sendMessage } from "../../util/message-channel.js";
-import { getSearchResult, unpause } from "../../util/music-helpers.js";
+import { queueSong } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "play",
@@ -17,6 +18,7 @@ const cmdConfig: CommandConfig = {
 // TODO: this breaks if connect was used prior
 class PlayCommand extends Command {
 	public async run(msg: Message, args: string[]): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(msg.guildId);
 		// User's voice channel
 		const voiceChannel = msg.member.voice.channel;
 
@@ -26,52 +28,30 @@ class PlayCommand extends Command {
 			return false;
 		}
 
-		// Create/check for Queue
-		// https://discord-player.js.org/docs/main/master/general/welcome
-		const queue = bdbot.player.createQueue(msg.guild, {
-			metadata: { channel: msg.channel },
-			bufferingTimeout: 0.1,
-			ytdlOptions: {
-				filter: "audioonly",
-				// eslint-disable-next-line no-bitwise
-				highWaterMark: 1 << 30,
-				dlChunkSize: 0,
-			},
-		});
+		// argless play (functionally unpause)
+		if (args.length === 0) {
+			queue.node.setPaused(false);
+			return true;
+		}
 
-		// Join/verify voice connection
+		const query = args.join(" ");
+
+		let result: PlayerNodeInitializationResult;
 		try {
-			if (!queue.connection) {
-				await queue.connect(voiceChannel);
-				console.log(`Connected to ${voiceChannel.name}`);
-			}
-		} catch {
-			queue.destroy();
-			console.log("the queue connection broke for some reason");
+			result = await queueSong(voiceChannel, query, msg.channel, msg.author);
+		} catch (e) {
+			await msg.react(X_MARK);
+			console.error(e);
 			return false;
 		}
 
-		// argless play (functionally unpause)
-		if (args.length === 0) return unpause(queue);
+		const { tracks } = result.searchResult;
 
-		const result = await getSearchResult(args, msg.author);
-		const { tracks } = result;
-
-		// Add track(s) to queue
-		if (tracks.length === 1) {
-			if (queue.nowPlaying()) queue.addTrack(tracks[0]);
-			else await queue.play(tracks[0]);
-
-			await sendMessage(msg.channel, `${tracks[0].title} by ${tracks[0].author} has been added to the queue`);
+		if (result.track.playlist) {
+			await sendMessage(msg.channel, `Added playlist ${result.searchResult.playlist?.title} to the queue`);
 		} else {
-			if (!queue.nowPlaying()) {
-				await queue.play(tracks[0]);
-				queue.addTracks(tracks.slice(1, tracks.length));
-			} else queue.addTracks(tracks);
-
-			await sendMessage(msg.channel, `Added playlist ${result?.playlist?.title} to the queue`);
+			await sendMessage(msg.channel, `${tracks[0].title} by ${tracks[0].author} has been added to the queue`);
 		}
-
 		return true;
 	}
 }
