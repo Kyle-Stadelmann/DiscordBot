@@ -1,4 +1,4 @@
-import { Collection, CommandInteraction, Message } from "discord.js";
+import { Collection, CommandInteraction } from "discord.js";
 import fg from "fast-glob";
 import { COMMAND_FG_LOC, COMMAND_FG_LOC_PROD } from "../../constants.js";
 import {
@@ -39,7 +39,7 @@ export class CommandContainer {
 			return true;
 		}
 
-		// The point of this initial cd is to ensure the cmd isn't reissued while this instance 
+		// The point of this initial cd is to ensure the cmd isn't reissued while this instance
 		// of the cmd is still executing
 		await cmd.putOnCooldown(msg.member || msg.author, args);
 
@@ -72,7 +72,7 @@ export class CommandContainer {
 		return [...new Set(cmds)];
 	}
 
-	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {		
+	public getCmdCategoryMap(): Collection<CommandCategory, Command[]> {
 		return this.cmdCategoryMap;
 	}
 
@@ -82,10 +82,13 @@ export class CommandContainer {
 		const cmdFiles = await fg(cmdFgLoc, { absolute: true });
 		const cmds = await loadCommandFiles(cmdFiles);
 		cmds.forEach((cmd) => {
+			const name = cmd.name.toLowerCase();
 			if (this.checkCmdNameAlrdyExists(cmd)) {
-				throw new Error(`Command name ${cmd.name} or one of it's aliases conflicts with that of an existing command's`);
+				throw new Error(
+					`Command name ${name} or one of it's aliases conflicts with that of an existing command's`
+				);
 			}
-			this.commands.set(cmd.name, cmd);
+			this.commands.set(name, cmd);
 			cmd.aliases.forEach((alias) => this.commands.set(alias, cmd));
 
 			const cmdCatList = this.cmdCategoryMap.get(cmd.category) ?? [];
@@ -95,7 +98,9 @@ export class CommandContainer {
 	}
 
 	private checkCmdNameAlrdyExists(incomingCmd: Command): boolean {
-		return (this.commands.has(incomingCmd.name) || 
-			this.commands.some((existingCmd, existingCmdName) => existingCmdName === incomingCmd.name));
+		return (
+			this.commands.has(incomingCmd.name) ||
+			this.commands.some((existingCmd, existingCmdName) => existingCmdName === incomingCmd.name)
+		);
 	}
 }

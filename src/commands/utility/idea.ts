@@ -132,24 +132,21 @@ class IdeaListCommand extends Command {
 			general = 4,
 		}
 
-		const ideaPages: EmbedBuilder[] = sortedIdeaPages[
-			Types[args[0]] ? Types[args[0]] : Types.all
-		];
+		const ideaPages: EmbedBuilder[] = sortedIdeaPages[Types[args[0]] ? Types[args[0]] : Types.all];
 
 		const ideaBackBtn = new ButtonBuilder()
 			.setLabel("Previous Page")
 			.setEmoji(ARROW_BACKWARD_ID)
 			.setStyle(ButtonStyle.Primary)
 			.setCustomId("idea-back-btn");
-		
+
 		const ideaForwardBtn = new ButtonBuilder()
 			.setLabel("Next Page")
 			.setEmoji(ARROW_FORWARD_ID)
 			.setStyle(ButtonStyle.Primary)
 			.setCustomId("idea-forward-btn");
 
-		const ideaScrollRow = new ActionRowBuilder<ButtonBuilder>()
-			.addComponents([ideaBackBtn, ideaForwardBtn]);
+		const ideaScrollRow = new ActionRowBuilder<ButtonBuilder>().addComponents([ideaBackBtn, ideaForwardBtn]);
 
 		await msg.channel.send({
 			embeds: [ideaPages[0]],
@@ -166,16 +163,15 @@ class IdeaBackButton {
 	async backBtn(interaction: ButtonInteraction) {
 		if (interaction.component.label === "Previous Page") {
 			const findIdeaTypeFilter = (t: EmbedBuilder[]) =>
-				t[0].data.title.split(" ")[0] === 
-				interaction.message.embeds[0].title.split(" ")[0];
+				t[0].data.title.split(" ")[0] === interaction.message.embeds[0].title.split(" ")[0];
 
 			let pageNum = parseInt(interaction.message.embeds[0].data.title.split("Page ")[1], 10) - 1;
 			const ideaPages = sortedIdeaPages.filter(findIdeaTypeFilter)[0];
 
-			pageNum = pageNum > 0 ? pageNum -= 1 : ideaPages.length - 1;
+			pageNum = pageNum > 0 ? (pageNum -= 1) : ideaPages.length - 1;
 			await interaction.message.edit({
 				embeds: [ideaPages[pageNum]],
-			})
+			});
 		}
 
 		await interaction.deferUpdate();
@@ -189,16 +185,15 @@ class IdeaForwardButton {
 	async forwardBtn(interaction: ButtonInteraction) {
 		if (interaction.component.label === "Next Page") {
 			const findIdeaTypeFilter = (t: EmbedBuilder[]) =>
-				t[0].data.title.split(" ")[0] === 
-				interaction.message.embeds[0].title.split(" ")[0];
+				t[0].data.title.split(" ")[0] === interaction.message.embeds[0].title.split(" ")[0];
 
 			let pageNum = parseInt(interaction.message.embeds[0].data.title.split("Page ")[1], 10) - 1;
 			const ideaPages = sortedIdeaPages.filter(findIdeaTypeFilter)[0];
 
-			pageNum = pageNum + 1 < ideaPages.length ? pageNum += 1 : 0;
+			pageNum = pageNum + 1 < ideaPages.length ? (pageNum += 1) : 0;
 			await interaction.message.edit({
 				embeds: [ideaPages[pageNum]],
-			})
+			});
 		}
 
 		await interaction.deferUpdate();
@@ -214,7 +209,7 @@ const ideaConfig: ParentCommandConfig = {
 	aliases: ["feedback"],
 	allowInDM: true,
 	category: CommandCategory.Utility,
-}
+};
 
 class IdeaCommand extends ParentCommand {
 	constructor(options: ParentCommandConfig) {

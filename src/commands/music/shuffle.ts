@@ -2,7 +2,8 @@ import { Message } from "discord.js";
 import { bdbot } from "../../app.js";
 import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { shuffleQueue } from "../../util/music-helpers.js";
+import { sendErrorMessage } from "../../util/message-channel.js";
+import { isQueueValid } from "../../util/music-helpers.js";
 
 const cmdConfig: CommandConfig = {
 	name: "shuffle",
@@ -13,16 +14,22 @@ const cmdConfig: CommandConfig = {
 
 class ShuffleCommand extends Command {
 	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.getQueue(msg.guildId);
-		if (!queue || queue.destroyed || !queue.connection) return false;
+		const queue = bdbot.player.queues.resolve(msg.guildId);
+		if (!isQueueValid(queue)) {
+			await sendErrorMessage(
+				msg.channel,
+				"Music command failed. Please start a queue using the `play` command first!"
+			);
+			return false;
+		}
 
-		const np = queue.nowPlaying();
-		if (!np || queue.tracks.length < 3) {
+		const np = queue.currentTrack;
+		if (!np || queue.size < 3) {
 			await msg.react(X_MARK);
 			return false;
 		}
 
-		queue.tracks = shuffleQueue(queue.tracks);
+		queue.tracks.shuffle();
 		await msg.react(WHITE_CHECK_MARK);
 		return true;
 	}
