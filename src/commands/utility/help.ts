@@ -1,6 +1,6 @@
 import { EmbedBuilder, APIEmbedField, CommandInteraction } from "discord.js";
 import { DApplicationCommand, Discord, Slash } from "discordx";
-import { ICategory } from "@discordx/utilities";
+import { Category, ICategory } from "@discordx/utilities";
 import { client } from "../../app.js";
 import { getEnumValues } from "../../util/enum-helper.js";
 import { CommandCategory } from "../../types/command.js";
@@ -13,6 +13,7 @@ const cmdCatIconMap: Map<CommandCategory, string> = new Map([
 ]);
 
 @Discord()
+@Category(CommandCategory.Utility)
 export class HelpCommand {
 	@Slash({name: "help", description: "Lists all commands that this bot currently has to offer."})
 	async run(interaction: CommandInteraction): Promise<boolean> {
