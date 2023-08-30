@@ -15,7 +15,7 @@ const cmdCatIconMap: Map<CommandCategory, string> = new Map([
 @Discord()
 @Category(CommandCategory.Utility)
 export class HelpCommand {
-	@Slash({name: "help", description: "Lists all commands that this bot currently has to offer."})
+	@Slash({name: "help", description: "Lists all commands that this bot currently has to offer"})
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const isDm = !interaction.inGuild();
 

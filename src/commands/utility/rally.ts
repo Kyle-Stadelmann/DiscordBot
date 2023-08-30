@@ -9,7 +9,7 @@ import { CommandCategory } from "../../types/command.js";
 @Category(CommandCategory.Utility)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class RallyCommand {
-	@Slash({name: "rally", description: "Brings all users connected to voice to the voice channel that the user is in."})
+	@Slash({name: "rally", description: "Brings all users connected to voice to the voice channel that the user is in"})
 	async run(
 		@SlashOption({
 			name: "role",

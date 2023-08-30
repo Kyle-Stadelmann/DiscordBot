@@ -13,7 +13,7 @@ const SHINY_BIPEN_CHANCE = (1 / 4000) * 100; // percentage
 @Category(CommandCategory.Fun)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class BipenCommand {
-	@Slash({name: "bipen", description: "Sends an important Bipen quote."})
+	@Slash({name: "bipen", description: "Sends an important Bipen quote"})
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const message = "I'm a dragon, Rob! ~ *Bipen*";
 

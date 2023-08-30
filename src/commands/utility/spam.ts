@@ -19,7 +19,7 @@ class SpamCommand {
 	public cooldownTime = 10 * 60 * 1000;
 	public category = CommandCategory.Utility;
 
-	@Slash({name: "spam", description: "Repeatedly ping a victim with a message until they respond.", dmPermission: false})
+	@Slash({name: "spam", description: "Repeatedly ping a victim with a message until they respond", dmPermission: false})
 	async run(
 		@SlashOption({
 			name: "victim",
@@ -34,14 +34,14 @@ class SpamCommand {
 			required: false,
 			type: ApplicationCommandOptionType.String
 		})
-		spamMessage: string,
+		spamMessage: string | undefined,
 		@SlashOption({
 			name: "count",
 			description: "The number of spam batches to send (max 20)",
 			required: false,
 			type: ApplicationCommandOptionType.Number
 		})
-		count: number,
+		count: number | undefined,
 		interaction: CommandInteraction
 	): Promise<boolean> {
 		const startTs = interaction.createdTimestamp;
