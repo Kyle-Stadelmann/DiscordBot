@@ -29,7 +29,7 @@ class SeekCommand {
 		const times = this.getSplitTimes(timeStr);
 
 		if (!times) {
-			await interaction.reply("Can't seek to specified time, check formatting");
+			await interaction.reply("Couldn't seek to specified time, check formatting");
 			return false;
 		}
 

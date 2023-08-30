@@ -1,20 +1,20 @@
-import { Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { Category } from "@discordx/utilities";
+import { Discord, Slash } from "discordx";
 import { bdbot } from "../../app.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
+import { CommandCategory } from "../../types/command.js";
 
-const cmdConfig: CommandConfig = {
-	name: "stop",
-	description: "Stops currently playing music and closes the queue",
-	category: CommandCategory.Music,
-	usage: "stop",
-};
-
-class StopCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (queue) queue.delete();
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class StopCommand {
+	@Slash({name: "stop", description: "Stops the currently playing music and closes the queue"})
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		if (queue) {
+			queue.delete();
+			await interaction.reply("Queue has been closed.")
+		}
 		return true;
 	}
 }
-
-export default new StopCommand(cmdConfig);
