@@ -1,76 +1,84 @@
-import { Message } from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
+import { Discord, Slash, SlashOption } from "discordx";
+import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
+import { CommandCategory } from "../../types/command.js";
 import { isQueueValid } from "../../util/music-helpers.js";
 
-const cmdConfig: CommandConfig = {
-	name: "seek",
-	description: "Go to a specified time in the current track",
-	category: CommandCategory.Music,
-	usage: `seek [Time]`,
-	examples: [`seek 5`, `seek 93`, `seek 2:39`, `seek 1:11:11`],
-};
-
-// queue.seek takes in time as millseconds
-class SeekCommand extends Command {
-	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!isQueueValid(queue)) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first!"
-			);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class SeekCommand {
+	@Slash({name: "seek", description: "Go to a specified time in the current track"})
+	async run(
+		@SlashOption({
+			name: "time",
+			description: "The time to seek to",
+			required: true,
+			type: ApplicationCommandOptionType.String
+		})
+		timeStr: string,
+		interaction: CommandInteraction
+	): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		if (!isQueueValid(queue) || !queue.currentTrack) {
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
-		const np = queue.currentTrack;
+		const times = this.getSplitTimes(timeStr);
 
-		let times: string[];
-		if (args[0]) {
-			times = args[0].split(":");
-		} else return false;
-
-		const numc = times.length - 1;
-		let time = 0;
-
-		if (np) {
-			// seek(x) format
-			if (numc === 0) {
-				await queue.node.seek(parseInt(args[0], 10) * 1000);
-			}
-			// seek(x:x) format
-			else if (numc === 1) {
-				try {
-					time += parseInt(times[0], 10) * 60000;
-					time += parseInt(times[1], 10) * 1000;
-					await queue.node.seek(time);
-				} catch (error) {
-					await sendMessage(msg.channel, "Can't seek to specified time, check formatting");
-					return false;
-				}
-			}
-			// seek(x:x:x) format
-			else if (numc === 2) {
-				try {
-					time += parseInt(times[0], 10) * 3600000;
-					time += parseInt(times[1], 10) * 60000;
-					time += parseInt(times[2], 10) * 1000;
-					await queue.node.seek(time);
-				} catch (error) {
-					await sendMessage(msg.channel, "Can't seek to specified time, check formatting");
-					return false;
-				}
-			}
-			// bad input
-			else {
-				await sendMessage(msg.channel, "Can't seek to specified time, check formatting");
-				return false;
-			}
+		if (!times) {
+			await interaction.reply("Can't seek to specified time, check formatting");
+			return false;
 		}
+
+		const time = this.getTime(times);
+
+		await queue.node.seek(time);
 
 		return true;
 	}
-}
 
-export default new SeekCommand(cmdConfig);
+	getSplitTimes(timeStr: string): number[] | null {
+		const splitTimes: string[] = timeStr.split(":");
+		let hadError = false;
+		const times: number[] = [];
+
+		splitTimes.forEach(time => {
+			const parsedTime = +time;
+			if (Number.isNaN(parsedTime)) {
+				hadError = true;
+			} else {
+				times.push(parsedTime);
+			}
+		});
+
+		// Formats with more than 4 'time places' aren't supported
+		if (hadError || times.length > 3) return null;
+		return times;
+	}
+
+	getTime(times: number[]): number {
+		let time = 0;
+		const numc = times.length - 1;
+
+		// seek(x) format
+		if (numc === 0) {
+			time += times[0] * 1000;
+		}
+		// seek(x:x) format
+		else if (numc === 1) {
+			time += times[0] * 60000;
+			time += times[1] * 1000;
+		}
+		// seek(x:x:x) format
+		else if (numc === 2) {
+			time += times[0]* 3600000;
+			time += times[1] * 60000;
+			time += times[2] * 1000;
+		}
+
+		return time;
+	}
+}

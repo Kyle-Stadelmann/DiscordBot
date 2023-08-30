@@ -1,30 +1,24 @@
-import { Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { Category } from "@discordx/utilities";
+import { Discord, Slash } from "discordx";
 import { bdbot } from "../../app.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage } from "../../util/message-channel.js";
+import { CommandCategory } from "../../types/command.js";
 import { isQueueValid } from "../../util/music-helpers.js";
 
-const cmdConfig: CommandConfig = {
-	name: "pause",
-	description: "Pauses the current track",
-	category: CommandCategory.Music,
-	usage: "pause",
-};
-
-class PauseCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class PauseCommand {
+	@Slash({name: "pause", description: "Pauses the current track", dmPermission: false})
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
 
 		if (!isQueueValid(queue)) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first!"
-			);
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
-		return queue.node.setPaused(true);
+		queue.node.setPaused(true);
+		return true;
 	}
 }
-
-export default new PauseCommand(cmdConfig);

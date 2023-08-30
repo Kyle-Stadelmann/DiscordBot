@@ -1,53 +1,51 @@
-import { Message } from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
+import { Discord, Slash, SlashOption } from "discordx";
+import { Category } from "@discordx/utilities";
+import { Track } from "discord-player";
 import { bdbot } from "../../app.js";
-import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
+import { CommandCategory } from "../../types/command.js";
 import { isQueueValid } from "../../util/music-helpers.js";
-
-const cmdConfig: CommandConfig = {
-	name: "raise",
-	description: "Moves specified track number to front of queue",
-	category: CommandCategory.Music,
-	usage: "raise",
-};
 
 // TODO: Not sure if this should stay a separate command from query
 // could get messy if you try to combine
-class RaiseCommand extends Command {
-	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!isQueueValid(queue)) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first!"
-			);
+
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class RaiseCommand {
+	@Slash({name: "raise", description: "Moves specified track number to front of queue"})
+	async run(
+		@SlashOption({
+			name: "index",
+			description: "The track number to raise",
+			required: true,
+			type: ApplicationCommandOptionType.Number
+		})
+		index: number,
+		interaction: CommandInteraction
+	): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		if (!isQueueValid(queue) || !queue.currentTrack) {
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
-		const index = +args[0];
-		if (Number.isNaN(index)) {
-			await sendErrorMessage(msg.channel, "Raise failed, double check provided index.");
-			return false;
-		}
-
-		const np = queue.currentTrack;
-		if (!np || !args[0]) {
-			await msg.react(X_MARK);
+		if (index < 0 || index >= queue.size) {
+			await interaction.reply("Raise failed, double check provided index.");
 			return false;
 		}
 
 		const ptlen = queue.history.size;
+		let track: Track;
 		try {
-			queue.moveTrack(queue.tracks.at(index - ptlen - 2), 0);
+			track = queue.tracks.at(index - ptlen - 2);
+			queue.moveTrack(track, 0);
 		} catch (error) {
-			await sendMessage(msg.channel, `Raise failed, double check provided index.`);
+			await interaction.reply("Raise failed, maybe double check provided index.");
 			return false;
 		}
 
-		await msg.react(WHITE_CHECK_MARK);
+		await interaction.reply(`${track.title} has been raised.`);
 		return true;
 	}
 }
-
-export default new RaiseCommand(cmdConfig);

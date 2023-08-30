@@ -1,37 +1,30 @@
-import { Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { Discord, Slash } from "discordx";
+import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
+import { CommandCategory } from "../../types/command.js";
 import { isQueueValid } from "../../util/music-helpers.js";
 
-const cmdConfig: CommandConfig = {
-	name: "back",
-	description: "Plays the previous track",
-	category: CommandCategory.Music,
-	usage: "back",
-};
-
-class BackCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class BackCommand {
+	@Slash({name: "back", description: "Plays the previous track", dmPermission: false})
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
 
 		if (!isQueueValid(queue)) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first!"
-			);
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
 		try {
 			await queue.history.previous();
 		} catch (error) {
-			await sendMessage(msg.channel, "Could not find previous track");
+			await interaction.reply("Could not find previous track");
 			return false;
 		}
 
 		return true;
 	}
 }
-
-export default new BackCommand(cmdConfig);

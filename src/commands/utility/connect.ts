@@ -8,7 +8,7 @@ import { CommandCategory } from "../../types/command.js";
 @Discord()
 @Category(CommandCategory.Utility)
 export class ConnectCommand {
-	@Slash({ name: "connect", description: "BDBot connects to the user's voice channel.", dmPermission: false})
+	@Slash({ name: "connect", description: "BDBot connects to the user's voice channel", dmPermission: false})
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		if (getVoiceConnection(interaction.guildId)) {
 			return false;

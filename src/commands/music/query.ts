@@ -1,48 +1,41 @@
-import { Message } from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
+import { Discord, Slash, SlashOption } from "discordx";
+import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
-import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
+import { CommandCategory } from "../../types/command.js";
 import { findTrack, isQueueValid } from "../../util/music-helpers.js";
-import { isNullOrUndefined } from "../../util/general.js";
 
-const cmdConfig: CommandConfig = {
-	name: "query",
-	description: "Moves a track with the specified name to the front of the queue",
-	category: CommandCategory.Music,
-	usage: "query [some part of the track's title]",
-	examples: ["query Rebecca Black - Friday", "query friday"],
-};
-
-class QueryCommand extends Command {
-	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!isQueueValid(queue)) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first!"
-			);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class QueryCommand {
+	@Slash({name: "query", description: "Moves a track with the specified name to the front of the queue", dmPermission: false})
+	async run(
+		@SlashOption({
+			name: "track",
+			description: "The name (or part of the name) of the track to move",
+			required: true,
+			type: ApplicationCommandOptionType.String
+		})
+		trackQuery: string,
+		interaction: CommandInteraction
+	): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		if (!isQueueValid(queue) || !queue.currentTrack) {
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
-		const np = queue.currentTrack;
-		if (!np || !args[0]) {
-			await msg.react(X_MARK);
-			return false;
-		}
+		const track = findTrack(trackQuery, queue);
 
-		const track = findTrack(args.join(" "), queue);
-
-		if (isNullOrUndefined(track)) {
-			await sendMessage(msg.channel, `Query failed, ensure your search is part of the track title`);
+		if (!track) {
+			await interaction.reply(`Query failed, ensure your search is part of the track title.`)
 			return false;
 		}
 
 		queue.moveTrack(track, 0);
 
-		await msg.react(WHITE_CHECK_MARK);
+		await interaction.reply(`${track.title} was elevated in the queue.`);
 		return true;
 	}
 }
-
-export default new QueryCommand(cmdConfig);

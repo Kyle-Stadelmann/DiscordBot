@@ -13,7 +13,7 @@ const version = process.env.npm_package_version;
 @Category(CommandCategory.Utility)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class PingCommand {
-	@Slash({name: "ping", description: "Sends pong! for testing purposes."})
+	@Slash({name: "ping", description: "Sends pong! for testing purposes"})
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const embed = new EmbedBuilder()
 			.setImage(client.user.avatarURL())

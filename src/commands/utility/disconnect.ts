@@ -8,7 +8,7 @@ import { CommandCategory } from "../../types/command.js";
 @Discord()
 @Category(CommandCategory.Utility)
 export class DisconnectCommand {
-	@Slash({ name: "disconnect", description: "BDBot disconnects from its current voice channel.", dmPermission: false})
+	@Slash({ name: "disconnect", description: "BDBot disconnects from its current voice channel", dmPermission: false})
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const connection = getVoiceConnection(interaction.guildId);
 		const musicQueue = bdbot.player.queues.resolve(interaction.guildId);

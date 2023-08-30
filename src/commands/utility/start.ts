@@ -10,7 +10,7 @@ import { WHITE_CHECK_MARK } from "../../constants.js";
 @Category(CommandCategory.Utility)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class StartCommand {
-	// @Slash({name: "start", description: "Starts a 'queue' for a specified game."})
+	// @Slash({name: "start", description: "Starts a 'queue' for a specified game"})
 	async run(msg: Message): Promise<boolean> {
 		const playBtn = new ButtonBuilder()
 			.setLabel("Join")

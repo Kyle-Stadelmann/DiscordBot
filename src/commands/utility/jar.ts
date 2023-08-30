@@ -27,7 +27,7 @@ const cmdConfig: CommandConfig = {
 @Category(CommandCategory.Utility)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class JarCommand {
-	// @Slash({name: "jar", description: "Create a jar based on a certain topic. Users can then add entires and pull a random entry."})
+	// @Slash({name: "jar", description: "Create a jar based on a certain topic. Users can then add entires and pull a random entry"})
 	public async run(): Promise<boolean> {
 		return true;
 	}
