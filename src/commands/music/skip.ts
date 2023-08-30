@@ -1,31 +1,23 @@
-import { Message } from "discord.js";
+import { Discord, Slash } from "discordx";
+import { Category } from "@discordx/utilities";
+import { CommandInteraction } from "discord.js";
 import { bdbot } from "../../app.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
+import { CommandCategory } from "../../types/command.js";
 import { isQueueValid } from "../../util/music-helpers.js";
 
-const cmdConfig: CommandConfig = {
-	name: "skip",
-	description: "Skips current track",
-	category: CommandCategory.Music,
-	usage: "skip",
-};
-
-class SkipCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-
-		if (!isQueueValid(queue)) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first!"
-			);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class SkipCommand {
+	@Slash({name: "skip", description: "Skips current track"})
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		if (!isQueueValid(queue) || !queue.currentTrack) {
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
-		await sendMessage(msg.channel, `Skipping...`);
+		await interaction.reply(`Skipping ${queue.currentTrack.title}...`)
 		return queue.node.skip();
 	}
 }
-
-export default new SkipCommand(cmdConfig);

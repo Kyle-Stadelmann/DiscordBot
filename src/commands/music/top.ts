@@ -1,9 +1,9 @@
-import { Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { Category } from "@discordx/utilities";
+import { Discord } from "discordx";
 import { bdbot } from "../../app.js";
-import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
+import { CommandCategory } from "../../types/command.js";
 import { getSearchResult, isQueueValid } from "../../util/music-helpers.js";
-import { sendErrorMessage } from "../../util/message-channel.js";
 
 const cmdConfig: CommandConfig = {
 	name: "top",
@@ -13,20 +13,14 @@ const cmdConfig: CommandConfig = {
 	examples: ["top https://www.youtube.com/watch?v=dQw4w9WgXcQ", "top darude sandstorm"],
 };
 
-class TopCommand extends Command {
-	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!isQueueValid(queue) || args.length === 0) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first, or check command arguments!"
-			);
-			return false;
-		}
-
-		const np = queue.currentTrack;
-		if (!np) {
-			await msg.react(X_MARK);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class TopCommand {
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		if (!isQueueValid(queue) || !queue.currentTrack) {
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
@@ -39,9 +33,7 @@ class TopCommand extends Command {
 
 		queue.insertTrack(foundTrack, 0);
 
-		await msg.react(WHITE_CHECK_MARK);
+		await interaction.reply(`Added ${foundTrack.title} to the front of the queue.`);
 		return true;
 	}
 }
-
-export default new TopCommand(cmdConfig);
