@@ -13,7 +13,7 @@ import { isQueueValid } from "../../util/music-helpers.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class RaiseCommand {
-	@Slash({name: "raise", description: "Moves specified track number to front of queue"})
+	@Slash({name: "raise", description: "Moves specified track number to front of queue", dmPermission: false})
 	async run(
 		@SlashOption({
 			name: "index",

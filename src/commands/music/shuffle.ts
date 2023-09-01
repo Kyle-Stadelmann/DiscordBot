@@ -9,7 +9,7 @@ import { isQueueValid } from "../../util/music-helpers.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class ShuffleCommand {
-	@Slash({name: "shuffle", description: "Shuffles the queue"})
+	@Slash({name: "shuffle", description: "Shuffles the queue", dmPermission: false})
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(interaction.guildId);
 		if (!isQueueValid(queue) || !queue.currentTrack) {

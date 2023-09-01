@@ -21,7 +21,7 @@ import { CooldownTime } from "../../types/cooldown-time.js";
 @CooldownTime(10 * 60 * 1000)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class RandomMoveCommand {
-	@Slash({name: "randommove", description: "Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time"})
+	@Slash({name: "randommove", description: "Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time", defaultMemberPermissions: "Administrator"})
 	async run(
 		@SlashOption({
 			name: "user",

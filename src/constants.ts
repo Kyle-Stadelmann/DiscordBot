@@ -50,6 +50,7 @@ export const BD4_ID = "191318875667824650";
 export const BD5_ID = "505214234393706499";
 export const DEV_BOT_ID = "873375752408694855";
 export const DEV_SERVER_ID = "723147134605590598";
+export const BD5_DEV_SERVER_IDS = [BD5_ID, DEV_BOT_ID];
 export const BD4_BOT_ID = "480909013593227277";
 export const DANIEL_WPM = "48";
 export const QUESTION_MARK_URL =

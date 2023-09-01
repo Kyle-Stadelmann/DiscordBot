@@ -2,7 +2,7 @@ import { Collection, Guild, GuildMember, User } from "discord.js";
 import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.js";
 
 /*
- * CooldownContainer is managed inside of each command object
+ * CooldownContainer is managed inside of the bot-container
  */
 export class CooldownContainer {
 	// Cooldown 'cache'
