@@ -9,7 +9,7 @@ import { isQueueValid } from "../../util/music-helpers.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class SeekCommand {
-	@Slash({name: "seek", description: "Go to a specified time in the current track"})
+	@Slash({name: "seek", description: "Go to a specified time in the current track", dmPermission: false})
 	async run(
 		@SlashOption({
 			name: "time",

@@ -8,13 +8,11 @@ import {
 	printSpace,
 	sendErrorToDiscordChannel,
 } from "../../util/index.js";
-import { Command, CommandCategory } from "../command.js";
+import { Command } from "../command.js";
 
 export class CommandContainer {
 	// Note: commands are not unique in this map; multiple strings map to the same command
 	private readonly commands = new Collection<string, Command>();
-
-	private readonly cmdCategoryMap = new Collection<CommandCategory, Command[]>();
 
 	// Returns whether or not the command (or help command) was successful
 	public async tryRunCommand(interaction: CommandInteraction): Promise<boolean> {
@@ -57,10 +55,5 @@ export class CommandContainer {
 		}
 
 		return result;
-	}
-
-	public getAllCommands(): Command[] {
-		const cmds = this.commands.values();
-		return [...new Set(cmds)];
 	}
 }

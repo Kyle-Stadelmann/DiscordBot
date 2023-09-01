@@ -36,7 +36,7 @@ export class BDBot {
 		return this.afkPicContainer.getRandomPicUrl();
 	}
 
-	public hasUser(userId: string): boolean {
+	public hasAfkPicsOfUser(userId: string): boolean {
 		return this.afkPicContainer.hasUser(userId);
 	}
 
