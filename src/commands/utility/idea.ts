@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-classes-per-file */
 import {
 	ButtonInteraction,
-	Message,
 	ActionRowBuilder,
 	ModalSubmitInteraction,
 	ButtonBuilder,
@@ -11,33 +9,33 @@ import {
 	ButtonStyle,
 	ModalBuilder,
 	EmbedBuilder,
+	CommandInteraction,
+	ApplicationCommandOptionType,
 } from "discord.js";
-import { ButtonComponent, Discord, ModalComponent } from "discordx";
-import { ARROW_BACKWARD_ID, ARROW_FORWARD_ID, BD4_BOT_ID, IDEA_TYPES, LIGHTBULB } from "../../constants.js";
-import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
+import { ButtonComponent, Discord, ModalComponent, Slash, SlashChoice, SlashOption } from "discordx";
+import { Category } from "@discordx/utilities";
+import { Pagination, PaginationItem } from "@discordx/pagination";
+import { ARROW_BACKWARD_ID, ARROW_FORWARD_ID, IDEA_TYPES, LIGHTBULB } from "../../constants.js";
+import { CommandCategory } from "../../types/command.js";
 import { UserIdeaTypedModel } from "../../types/data-access/idea.js";
-import { ParentCommand, ParentCommandConfig } from "../../types/parent-command.js";
 import { refreshIdeas } from "../../util/idea-helpers.js";
 
 let sortedIdeaPages = await refreshIdeas();
 
-const ideaSubmitConfig: CommandConfig = {
-	name: "submit",
-	description: "Submit an idea/feature request to the development team.",
-	usage: "idea submit",
-	allowInDM: true,
-	category: CommandCategory.Utility,
-};
+export enum IdeaType {
+	all = "all",
+	utility = "utility",
+	fun = "fun",
+	music = "music",
+	general = "general",
+}
 
-class IdeaSubmitCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		// i think you can dynamically grab CommandType to make types[]
-		// youd still have to add "General" though
-		// https://www.youtube.com/watch?v=mScQ38_jffg this is crazy rn
-		// i was gonna say something else but i forgot
-
-		if (msg.author.id === BD4_BOT_ID) return false;
-
+@Discord()
+@Category(CommandCategory.Utility)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class IdeaCommand {
+	@Slash({name: "submit", description: "Submit an idea/feature request to the development team"})
+	public async submit(interaction: CommandInteraction): Promise<boolean> {
 		const ideaBtn = new ButtonBuilder()
 			.setLabel("Submit Idea")
 			.setEmoji(LIGHTBULB)
@@ -46,9 +44,54 @@ class IdeaSubmitCommand extends Command {
 
 		const ideaRow = new ActionRowBuilder<ButtonBuilder>().addComponents(ideaBtn);
 
-		await msg.channel.send({
+		await interaction.reply({
 			content: "Click the button below to submit your idea!",
 			components: [ideaRow],
+		});
+
+		return true;
+	}
+
+	@Slash({name: "list", description: "Lists user-submitted ideas"})
+	async list(
+		@SlashChoice(IdeaType.utility, IdeaType.fun, IdeaType.music, IdeaType.general)
+		@SlashOption({
+			name: "type",
+			description: "Filter by idea type",
+			required: false,
+			type: ApplicationCommandOptionType.String
+		})
+		type: string,
+		interaction: CommandInteraction
+	): Promise<boolean> {
+		sortedIdeaPages = await refreshIdeas();
+
+		const pages: PaginationItem[] = [
+			
+		]
+
+		const pagination = new Pagination(interaction, );
+		await pagination.send();
+
+		const ideaPages: EmbedBuilder[] = sortedIdeaPages[IdeaType[args[0]] ? IdeaType[args[0]] : IdeaType.all];
+
+		const ideaBackBtn = new ButtonBuilder()
+			.setLabel("Previous Page")
+			.setEmoji(ARROW_BACKWARD_ID)
+			.setStyle(ButtonStyle.Primary)
+			.setCustomId("idea-back-btn");
+
+		const ideaForwardBtn = new ButtonBuilder()
+			.setLabel("Next Page")
+			.setEmoji(ARROW_FORWARD_ID)
+			.setStyle(ButtonStyle.Primary)
+			.setCustomId("idea-forward-btn");
+
+		const ideaScrollRow = new ActionRowBuilder<ButtonBuilder>().addComponents([ideaBackBtn, ideaForwardBtn]);
+
+		await interaction.reply({
+			embeds: [ideaPages[0]],
+			components: [ideaScrollRow],
 		});
 
 		return true;
@@ -101,59 +144,20 @@ class IdeaButton {
 			ephemeral: true,
 		});
 
-		await UserIdeaTypedModel.create({
-			id: interaction.id,
-			userId: interaction.user.id,
-			type: ideaType,
-			description: idea,
-		});
-		const newLocal = `Idea with ID: ${interaction.id} submitted to DB by ${interaction.user.username}`;
-		console.log(newLocal);
-	}
-}
-
-const ideaListConfig: CommandConfig = {
-	name: "list",
-	description: "List all ideas [of a certain type]",
-	usage: "idea list [type]",
-	examples: ["idea list", "idea list music", "idea list utility"],
-	allowInDM: true,
-	category: CommandCategory.Utility,
-};
-
-class IdeaListCommand extends Command {
-	public async run(msg: Message, args: string[]): Promise<boolean> {
-		sortedIdeaPages = await refreshIdeas();
-		enum Types {
-			all = 0,
-			utility = 1,
-			fun = 2,
-			music = 3,
-			general = 4,
+		try {
+			await UserIdeaTypedModel.create({
+				id: interaction.id,
+				userId: interaction.user.id,
+				type: ideaType,
+				description: idea,
+				completed: false
+			});
+		} catch (e) {
+			console.error(e)
 		}
 
-		const ideaPages: EmbedBuilder[] = sortedIdeaPages[Types[args[0]] ? Types[args[0]] : Types.all];
-
-		const ideaBackBtn = new ButtonBuilder()
-			.setLabel("Previous Page")
-			.setEmoji(ARROW_BACKWARD_ID)
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId("idea-back-btn");
-
-		const ideaForwardBtn = new ButtonBuilder()
-			.setLabel("Next Page")
-			.setEmoji(ARROW_FORWARD_ID)
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId("idea-forward-btn");
-
-		const ideaScrollRow = new ActionRowBuilder<ButtonBuilder>().addComponents([ideaBackBtn, ideaForwardBtn]);
-
-		await msg.channel.send({
-			embeds: [ideaPages[0]],
-			components: [ideaScrollRow],
-		});
-
-		return true;
+		const newLocal = `Idea with ID: ${interaction.id} submitted to DB by ${interaction.user.username}`;
+		console.log(newLocal);
 	}
 }
 
@@ -200,23 +204,3 @@ class IdeaForwardButton {
 		return true;
 	}
 }
-
-const ideaConfig: ParentCommandConfig = {
-	name: "idea",
-	description: "Submit an idea to the developers",
-	shareCooldownMap: false,
-	defaultCmdStr: "submit",
-	aliases: ["feedback"],
-	allowInDM: true,
-	category: CommandCategory.Utility,
-};
-
-class IdeaCommand extends ParentCommand {
-	constructor(options: ParentCommandConfig) {
-		super(options);
-		this.addSubCommand(IdeaSubmitCommand, ideaSubmitConfig);
-		this.addSubCommand(IdeaListCommand, ideaListConfig);
-	}
-}
-
-export default new IdeaCommand(ideaConfig);

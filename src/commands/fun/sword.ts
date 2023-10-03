@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType, CommandInteraction, User } from "discord.js";
-import { Discord, SlashOption } from "discordx";
+import { Discord, Guild, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
-import { ZACH_ID, BD4_BOT_ID } from "../../constants.js";
+import { ZACH_ID, BD4_BOT_ID, BD5_DEV_SERVER_IDS } from "../../constants.js";
 import { CommandCategory } from "../../types/command.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
 
@@ -10,6 +10,7 @@ const MIN_SHARPEN_TIME = 30 * 60 * 1000;
 @Discord()
 @Category(CommandCategory.Fun)
 @CooldownTime(7 * 24 * 60 * 60 * 1000)
+@Guild(BD5_DEV_SERVER_IDS)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class SwordCommand {
 	// TODO: Store as snapshotted state somehow

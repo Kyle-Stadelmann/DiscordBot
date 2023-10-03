@@ -38,6 +38,7 @@ export async function startup() {
 
 	client.once("ready", async () => {
 		await client.initApplicationCommands();
+		await bdbot.initContainter();
 	});
 	
 	client.on("interactionCreate", (interaction) => {
@@ -56,8 +57,6 @@ export async function startup() {
 	} else {
 		await client.login(process.env.BOT_TOKEN);
 	}
-
-	await bdbot.initContainter();
 }
 
 startup().catch(console.error);
