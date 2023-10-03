@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { Message, EmbedBuilder, CommandInteraction, ApplicationCommandOptionType, User, Attachment } from "discord.js";
+import { EmbedBuilder, CommandInteraction, ApplicationCommandOptionType, User, Attachment } from "discord.js";
 import fetch from "node-fetch";
 import { Discord, Guild, Slash, SlashGroup, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";

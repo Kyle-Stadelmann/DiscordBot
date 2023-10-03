@@ -16,6 +16,7 @@ import { Category } from "@discordx/utilities";
 import { CommandCategory } from "../../types/command.js";
 import { deleteVoiceChannel, sleep } from "../../util/index.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
+import { bdbot } from "../../app.js";
 
 const NUM_CHANNELS_FLAILED = 10;
 
@@ -29,9 +30,9 @@ const GUILD_CD_TIME = 60 * 1000;
 @Category(CommandCategory.Fun)
 @CooldownTime(60 * 60 * 1000)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class FlailCommand {
+class WhipCommand {
 	@Slash({name: "whip", description: "Smacks your target a large amount of channels down", dmPermission: false, defaultMemberPermissions: "Administrator"})
-	async run(
+	async whip(
 		@SlashOption({
 			name: "target",
 			description: "The target of your flail",
@@ -47,8 +48,8 @@ class FlailCommand {
 
 		const error = await this.hadError(victimMember, senderMember, interaction);
 		if (error) return false;
-
-		await this.putOnGuildCooldown(guild, GUILD_CD_TIME);
+		
+		await bdbot.putOnGuildCooldown(guild.id, "whip", GUILD_CD_TIME);
 
 		const originalChannel = victimMember.voice.channel;
 		// Voice channels iterator in order of position
@@ -62,7 +63,7 @@ class FlailCommand {
 
 		await this.cleanup(victimMember, tempChannels, originalChannel);
 
-		await this.endGuildCooldown(guild);
+		await bdbot.endGuildCooldown(guild.id, "whip");
 
 		return true;
 	}

@@ -1,4 +1,4 @@
-import { Collection, Guild, GuildMember, User } from "discord.js";
+import { Collection, GuildMember, Snowflake, User } from "discord.js";
 import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.js";
 
 /*
@@ -24,16 +24,16 @@ export class CooldownContainer {
 		await this.putIdOnCooldown(person.id, this.cooldownTime);
 	}
 
-	public async putOnGuildCooldown(guild: Guild, cooldownTime: number) {
-		await this.putIdOnCooldown(guild.id, cooldownTime);
+	public async putOnGuildCooldown(guildId: Snowflake, cooldownTime: number) {
+		await this.putIdOnCooldown(guildId, cooldownTime);
 	}
 
 	public async endCooldown(person: GuildMember | User) {
 		await this.endCooldownById(person.id);
 	}
 
-	public async endGuildCooldown(guild: Guild) {
-		await this.endCooldownById(guild.id);
+	public async endGuildCooldown(guildId: Snowflake) {
+		await this.endCooldownById(guildId);
 	}
 
 	private async getCooldown(id: string): Promise<Cooldown | undefined> {

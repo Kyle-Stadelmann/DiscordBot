@@ -21,6 +21,10 @@ const ideaSchema = new dynamoose.Schema(
 			type: String,
 			required: true,
 		},
+		completed: {
+			type: Boolean,
+			required: true
+		}
 	},
 	{
 		timestamps: true,
@@ -33,6 +37,7 @@ export interface UserIdea extends Document {
 	userId: string;
 	type: string;
 	description: string;
+	completed: boolean;
 }
 export const UserIdeaTypedModel = dynamoose.model<UserIdea>("idea", ideaSchema);
 
