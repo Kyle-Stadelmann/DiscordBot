@@ -23,6 +23,7 @@ const stPatricksRoleIds = [
 const christmasRoleIds = [HOLIDAY_WHITE_ROLE_ID, HOLIDAY_GREEN_ROLE_ID, HOLIDAY_RED_ROLE_ID];
 
 const halloweenColorCycler = new HolidayColorCycler(halloweenRoleIds, Month.October);
+halloweenColorCycler.cyclerActive = true
 const stPatricksColorCycler = new HolidayColorCycler(stPatricksRoleIds, Month.March);
 const christmasColorCycler = new HolidayColorCycler(christmasRoleIds, Month.December);
 
