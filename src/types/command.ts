@@ -3,7 +3,7 @@ import path from "path";
 import { ChannelType, CommandInteraction, Guild, GuildMember, Message, User } from "discord.js";
 import { fileURLToPath } from "url";
 import { CooldownContainer } from "./containers/cooldown-container.js";
-import { printSpace, sendErrorMessage } from "../util/index.js";
+import { printSpace } from "../util/index.js";
 
 export enum CommandCategory {
 	"Fun",
@@ -78,7 +78,7 @@ export abstract class Command {
 
 		if (await this.isOnCooldown(member || author, args)) {
 			console.log("Command was NOT successful, member is on cooldown.");
-			await sendErrorMessage(channel, "Command was NOT successful, you are on cooldown for this command.");
+			await channel.send("Command was NOT successful, you are on cooldown for this command.");
 			printSpace();
 			return false;
 		}

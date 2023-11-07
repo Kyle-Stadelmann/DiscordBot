@@ -1,6 +1,6 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { bdbot } from "../../app.js";
-import { printSpace, random, sendMessage } from "../../util/index.js";
+import { printSpace, random } from "../../util/index.js";
 import { countWords, danielWPMChanceFunction } from "./daniel-wpm.js";
 
 @Discord()
@@ -24,8 +24,7 @@ abstract class TypingSpeedReporter {
 			const wpmInt = wpm.toFixed(0);
 
 			console.log(`Reporting a typing time of: ${typingTimeInt} with WPM of ${wpmInt} for user: ${userId}`);
-			await sendMessage(
-				channel,
+			await channel.send(
 				`That message took approximately ${typingTimeInt} seconds, with a WPM of ${wpmInt}`
 			);
 			printSpace();
