@@ -1,5 +1,5 @@
 import { ArgsOf, Discord, On } from "discordx";
-import { random, sendMessage } from "../../util/index.js";
+import { random } from "../../util/index.js";
 
 const ZACC_CHANCE = 5;
 
@@ -23,7 +23,7 @@ abstract class ZachZacc {
 				output += `${firstHalf}zacc${lastHalf}`;
 			}
 
-			await sendMessage(msg.channel, `${output}*`);
+			await msg.channel.send(`${output}*`);
 		}
 	}
 }

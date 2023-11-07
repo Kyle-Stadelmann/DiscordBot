@@ -1,6 +1,6 @@
 import { ArgsOf, Discord, On } from "discordx";
-import { DANIEL_ID, PREFIX, DANIEL_WPM } from "../../constants.js";
-import { random, sendMessage } from "../../util/index.js";
+import { DANIEL_ID, DANIEL_WPM } from "../../constants.js";
+import { random } from "../../util/index.js";
 
 export function danielWPMChanceFunction(numWords: number): number {
 	const MIN_WORDS = 8;
@@ -29,13 +29,10 @@ abstract class DanielWPM {
 	private async tryDanielWPM([msg]: ArgsOf<"messageCreate">) {
 		// Only continue if Daniel sent the message
 		if (msg.author.id !== DANIEL_ID) return;
-		// ignore commands for this event
-		if (msg.content.startsWith(PREFIX)) return;
 
 		const numWords = countWords(msg.content);
 		if (random(danielWPMChanceFunction(numWords))) {
-			await sendMessage(
-				msg.channel,
+			await msg.channel.send(
 				`It took Daniel approximately ${wordsPerMinute(
 					DANIEL_WPM,
 					numWords
