@@ -1,10 +1,9 @@
-import { CommandInteraction, Snowflake, TextChannel } from "discord.js";
+import { Snowflake, TextChannel } from "discord.js";
 import { GuildQueue, Player, Track } from "discord-player";
 import { DApplicationCommand, DSimpleCommand, MetadataStorage } from "discordx";
 import { ICategory } from "@discordx/utilities";
 import { DANIEL_ID } from "../../constants.js";
 import { AfkPicContainer } from "./afk-pic-container.js";
-import { CommandContainer } from "./command-container.js";
 import { client } from "../../app.js";
 import { ICooldownTime } from "../cooldown-time.js";
 import { CooldownContainer } from "./cooldown-container.js";
@@ -12,7 +11,6 @@ import { CooldownContainer } from "./cooldown-container.js";
 // Global state and functions that read/write global state
 export class BDBot {
 	// Global state
-	private readonly commandContainer = new CommandContainer();
 	private readonly afkPicContainer = new AfkPicContainer();
 	private readonly cdContainers = new Map<string, CooldownContainer>();
 	public readonly typingTimestamps = new Map<string, number>().set(DANIEL_ID, null);
@@ -60,8 +58,14 @@ export class BDBot {
 		}
 	}
 
-	public tryRunCommand(interaction: CommandInteraction): Promise<boolean> {
-		return this.commandContainer.tryRunCommand(interaction);
+	public isOnCooldown(cmdName: string, personId: Snowflake, guildId: Snowflake | undefined): Promise<boolean> {
+		const cdContainer = this.cdContainers.get(cmdName);
+		return cdContainer.isOnCooldown(personId, guildId);
+	}
+
+	public async putOnCooldown(cmdName: string, personId: Snowflake) {
+		const cdContainer = this.cdContainers.get(cmdName);
+		await cdContainer.putOnCooldown(personId);
 	}
 
 	public async putOnGuildCooldown(guildId: Snowflake, cmdName: string, cd: number) {

@@ -1,4 +1,4 @@
-import { Message, EmbedBuilder } from "discord.js";
+import { Message, EmbedBuilder, CommandInteraction } from "discord.js";
 import path from "path";
 import { PREFIX } from "../constants.js";
 import { Command } from "../types/command.js";
@@ -96,10 +96,9 @@ export async function handleHelpCmd(msg: Message, cmd: Command) {
 	printSpace();
 }
 
-export function createCmdErrorStr(cmdStr: string, error: Error, msg: Message, args: string[]): string {
-	let errStr = `Error when executing command ${cmdStr}\n`;
-	errStr += `**msg**: ${JSON.stringify(msg)}\n\n`;
-	errStr += `**args**: ${JSON.stringify(args)}\n\n`;
+export function createCmdErrorStr(cmdName: string, error: Error, ci: CommandInteraction): string {
+	let errStr = `Error when executing command ${cmdName}\n`;
+	errStr += `**msg**: ${JSON.stringify(ci)}\n\n`;
 	errStr += `**error**: ${error.stack}\n\n`;
 	return errStr;
 }

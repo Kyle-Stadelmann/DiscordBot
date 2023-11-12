@@ -41,10 +41,6 @@ export async function startup() {
 		await bdbot.initContainter();
 	});
 	
-	client.on("interactionCreate", (interaction) => {
-		client.executeInteraction(interaction);
-	});
-
 	const fileType = isProdMode() ? "js" : "ts";
 
 	await Promise.all([
