@@ -13,23 +13,23 @@ export class CooldownContainer {
 		private cooldownName: string
 	) {}
 
-	public async isOnCooldown(person: GuildMember | User): Promise<boolean> {
+	public async isOnCooldown(personId: Snowflake, guildId: Snowflake | undefined): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown
-		return person instanceof GuildMember && (await this.isIdOnCooldown(person.guild.id))
+		return guildId !== undefined && (await this.isIdOnCooldown(guildId))
 			? true
-			: this.isIdOnCooldown(person.id);
+			: this.isIdOnCooldown(personId);
 	}
 
-	public async putOnCooldown(person: GuildMember | User) {
-		await this.putIdOnCooldown(person.id, this.cooldownTime);
+	public async putOnCooldown(personId: Snowflake) {
+		await this.putIdOnCooldown(personId, this.cooldownTime);
 	}
 
 	public async putOnGuildCooldown(guildId: Snowflake, cooldownTime: number) {
 		await this.putIdOnCooldown(guildId, cooldownTime);
 	}
 
-	public async endCooldown(person: GuildMember | User) {
-		await this.endCooldownById(person.id);
+	public async endCooldown(personId: Snowflake) {
+		await this.endCooldownById(personId);
 	}
 
 	public async endGuildCooldown(guildId: Snowflake) {

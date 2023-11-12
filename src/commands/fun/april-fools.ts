@@ -95,7 +95,7 @@ function getKyleName(id: string): string {
 @Guild(BD5_DEV_SERVER_IDS)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class AprilFoolsStartCommand {
-	@Slash({name: "start", description: "!", dmPermission: false})
+	// @Slash({name: "start", description: "!", dmPermission: false})
 	async start(msg: Message): Promise<boolean> {
 		const isDm = msg.channel.type === ChannelType.DM;
 		const date = new Date();
