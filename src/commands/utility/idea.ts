@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-classes-per-file */
 import {
 	ButtonInteraction,
@@ -8,26 +9,22 @@ import {
 	TextInputStyle,
 	ButtonStyle,
 	ModalBuilder,
-	EmbedBuilder,
 	CommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
 import { ButtonComponent, Discord, ModalComponent, Slash, SlashChoice, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
-import { Pagination, PaginationItem } from "@discordx/pagination";
-import { ARROW_BACKWARD_ID, ARROW_FORWARD_ID, IDEA_TYPES, LIGHTBULB } from "../../constants.js";
+import { Pagination, PaginationType } from "@discordx/pagination";
+import { LIGHTBULB } from "../../constants.js";
 import { CommandCategory } from "../../types/command.js";
-import { UserIdeaTypedModel } from "../../types/data-access/idea.js";
-import { refreshIdeas } from "../../util/index.js";
-
-let sortedIdeaPages = await refreshIdeas();
+import { UserIdeaTypedModel, getAllIdeas, getIdeasByType } from "../../types/data-access/idea.js";
+import { buildIdeaEmbeds } from "../../util/idea-helpers.js";
 
 export enum IdeaType {
-	all = "all",
-	utility = "utility",
-	fun = "fun",
-	music = "music",
-	general = "general",
+	Utility = "Utility",
+	Fun = "Fun",
+	Music = "Music",
+	General = "General",
 }
 
 @Discord()
@@ -54,7 +51,7 @@ class IdeaCommand {
 
 	@Slash({ name: "list", description: "Lists user-submitted ideas" })
 	async list(
-		@SlashChoice(IdeaType.utility, IdeaType.fun, IdeaType.music, IdeaType.general)
+		@SlashChoice(IdeaType.Utility, IdeaType.Fun, IdeaType.Music, IdeaType.General)
 		@SlashOption({
 			name: "type",
 			description: "Filter by idea type",
@@ -62,35 +59,28 @@ class IdeaCommand {
 			type: ApplicationCommandOptionType.String,
 		})
 		type: string,
+		@SlashOption({
+			name: "completed",
+			description: "Filter by completed (true) or uncompleted (false)",
+			required: false,
+			type: ApplicationCommandOptionType.Boolean
+		})
+		completed: boolean,
 		interaction: CommandInteraction
 	): Promise<boolean> {
-		sortedIdeaPages = await refreshIdeas();
+		let ideas = (type) ? await getIdeasByType(type) : await getAllIdeas();
+		ideas = ideas
+			.filter(i => (completed === undefined) ? true : i.completed === completed)
+			.sort((a, b) => a.createdAt - b.createdAt);
 
-		const pages: PaginationItem[] = [];
+		// eslint-disable-next-line arrow-body-style
+		const ideaPages = buildIdeaEmbeds(ideas, type as IdeaType).map(e => {return {embeds: [e]}})
 
-		const pagination = new Pagination(interaction);
-		await pagination.send();
-
-		const ideaPages: EmbedBuilder[] = sortedIdeaPages[IdeaType[args[0]] ? IdeaType[args[0]] : IdeaType.all];
-
-		const ideaBackBtn = new ButtonBuilder()
-			.setLabel("Previous Page")
-			.setEmoji(ARROW_BACKWARD_ID)
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId("idea-back-btn");
-
-		const ideaForwardBtn = new ButtonBuilder()
-			.setLabel("Next Page")
-			.setEmoji(ARROW_FORWARD_ID)
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId("idea-forward-btn");
-
-		const ideaScrollRow = new ActionRowBuilder<ButtonBuilder>().addComponents([ideaBackBtn, ideaForwardBtn]);
-
-		await interaction.reply({
-			embeds: [ideaPages[0]],
-			components: [ideaScrollRow],
+		const pagination = new Pagination(interaction, ideaPages, {
+			filter: (interact) => interact.user.id === interaction.user.id,
+			type: PaginationType.Button
 		});
+		await pagination.send();
 
 		return true;
 	}
@@ -156,49 +146,5 @@ class IdeaButton {
 
 		const newLocal = `Idea with ID: ${interaction.id} submitted to DB by ${interaction.user.username}`;
 		console.log(newLocal);
-	}
-}
-
-@Discord()
-class IdeaBackButton {
-	@ButtonComponent({ id: "idea-back-btn" })
-	async backBtn(interaction: ButtonInteraction) {
-		if (interaction.component.label === "Previous Page") {
-			const findIdeaTypeFilter = (t: EmbedBuilder[]) =>
-				t[0].data.title.split(" ")[0] === interaction.message.embeds[0].title.split(" ")[0];
-
-			let pageNum = parseInt(interaction.message.embeds[0].data.title.split("Page ")[1], 10) - 1;
-			const ideaPages = sortedIdeaPages.filter(findIdeaTypeFilter)[0];
-
-			pageNum = pageNum > 0 ? (pageNum -= 1) : ideaPages.length - 1;
-			await interaction.message.edit({
-				embeds: [ideaPages[pageNum]],
-			});
-		}
-
-		await interaction.deferUpdate();
-		return true;
-	}
-}
-
-@Discord()
-class IdeaForwardButton {
-	@ButtonComponent({ id: "idea-forward-btn" })
-	async forwardBtn(interaction: ButtonInteraction) {
-		if (interaction.component.label === "Next Page") {
-			const findIdeaTypeFilter = (t: EmbedBuilder[]) =>
-				t[0].data.title.split(" ")[0] === interaction.message.embeds[0].title.split(" ")[0];
-
-			let pageNum = parseInt(interaction.message.embeds[0].data.title.split("Page ")[1], 10) - 1;
-			const ideaPages = sortedIdeaPages.filter(findIdeaTypeFilter)[0];
-
-			pageNum = pageNum + 1 < ideaPages.length ? (pageNum += 1) : 0;
-			await interaction.message.edit({
-				embeds: [ideaPages[pageNum]],
-			});
-		}
-
-		await interaction.deferUpdate();
-		return true;
 	}
 }

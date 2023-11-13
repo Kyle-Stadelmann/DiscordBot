@@ -80,7 +80,6 @@ export const L_THEME_URL = "https://www.youtube.com/watch?v=qR6dzwQahOM";
 export const GHOST_TRAIN_ROBBERY = "https://www.youtube.com/watch?v=jgWziW2iNjE";
 export const TOXIC_URL = "https://www.youtube.com/watch?v=LOZuxwVk7TU";
 export const PLAYER_SITES = ["spotify", "youtube", "youtu.be", "soundcloud"];
-export const IDEA_TYPES = ["utility", "fun", "music", "general"];
 // TODO: Standardize paths
 export const SRC_DIR = path.resolve(`${dirname}`);
 
