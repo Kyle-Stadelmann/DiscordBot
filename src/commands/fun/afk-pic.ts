@@ -66,8 +66,8 @@ class AfkPicCommand {
 	})
 	@Guard(
 		PermissionGuard(["Administrator"], {
-		  content: "You do not have the required permission for that. Please contact bot dev.",
-		}),
+			content: "You do not have the required permission for that. Please contact bot dev.",
+		})
 	)
 	async add(
 		@SlashOption({
@@ -144,11 +144,9 @@ class AfkPicCommand {
 	): Promise<boolean> {
 		const { user } = interaction;
 		await interaction.deferReply();
-		const pics = [pic, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9, pic10].filter(p => p !== undefined);
+		const pics = [pic, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9, pic10].filter((p) => p !== undefined);
 
-		const afkPicUrls: string[] = pics
-			.filter((p) => this.isAllowedSite(p.url))
-			.map((p) => sanitizeUrl(p.url));
+		const afkPicUrls: string[] = pics.filter((p) => this.isAllowedSite(p.url)).map((p) => sanitizeUrl(p.url));
 
 		if (afkPicUrls.length === 0) {
 			await interaction.editReply("Couldn't find a valid AFK Pic to add.");
