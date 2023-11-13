@@ -1,7 +1,21 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { bdbot } from "../../app.js";
 import { printSpace, random } from "../../util/index.js";
-import { countWords, danielWPMChanceFunction } from "./daniel-wpm.js";
+
+function danielWPMChanceFunction(numWords: number): number {
+	const MIN_WORDS = 8;
+	const MAX_CHANCE = 15;
+
+	// If not enough words, chance is 0%
+	if (numWords < MIN_WORDS) return 0;
+
+	// Chance equation (exponential)
+	return Math.min(numWords ** 1.7 * 0.1, MAX_CHANCE);
+}
+
+function countWords(str: string) {
+	return str ? str.trim().split(/\s+/).length : 0;
+}
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -3,7 +3,7 @@ import { Category } from "@discordx/utilities";
 import { Discord, Slash, SlashOption } from "discordx";
 import { bdbot } from "../../app.js";
 import { CommandCategory } from "../../types/command.js";
-import { getSearchResult, isQueueValid } from "../../util/music-helpers.js";
+import { getSearchResult, isQueueValid } from "../../util/index.js";
 
 @Discord()
 @Category(CommandCategory.Music)

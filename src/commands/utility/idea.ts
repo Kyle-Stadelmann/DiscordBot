@@ -18,7 +18,7 @@ import { Pagination, PaginationItem } from "@discordx/pagination";
 import { ARROW_BACKWARD_ID, ARROW_FORWARD_ID, IDEA_TYPES, LIGHTBULB } from "../../constants.js";
 import { CommandCategory } from "../../types/command.js";
 import { UserIdeaTypedModel } from "../../types/data-access/idea.js";
-import { refreshIdeas } from "../../util/idea-helpers.js";
+import { refreshIdeas } from "../../util/index.js";
 
 let sortedIdeaPages = await refreshIdeas();
 
