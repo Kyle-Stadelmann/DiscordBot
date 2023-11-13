@@ -58,7 +58,7 @@ export class BDBot {
 		}
 	}
 
-	public isOnCooldown(cmdName: string, personId: Snowflake, guildId: Snowflake | undefined): Promise<boolean> {
+	public isOnCooldown(cmdName: string, personId: Snowflake, guildId: Snowflake | null): Promise<boolean> {
 		const cdContainer = this.cdContainers.get(cmdName);
 		return cdContainer.isOnCooldown(personId, guildId);
 	}

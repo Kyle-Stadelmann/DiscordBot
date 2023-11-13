@@ -45,7 +45,7 @@ export abstract class CommandHandler {
 			}
 
 			try {
-				if (!interaction.replied) await interaction.reply("Sorry, an error has occurred!");
+				if (!interaction.replied && !interaction.deferred) await interaction.reply("Sorry, an error has occurred!");
 				else await interaction.editReply("Sorry, an error has occurred!");
 			} catch (replyErr) {
 				// This happens when it took 15 minutes for cmd to error out
@@ -73,8 +73,8 @@ export abstract class CommandHandler {
 		// of the cmd is still executing
 		await bdbot.putOnCooldown(commandName, personId);
 
-		const result = client.executeInteraction(interaction) as boolean;
-		if (result) {
+		const result = await client.executeInteraction(interaction) as boolean;
+		if (result === true) {
 			console.log(`${commandName} was successful`);
 			if (isDevMode()) await bdbot.endCooldown(commandName, personId);
 			else await bdbot.putOnCooldown(commandName, personId);

@@ -10,7 +10,7 @@ import { CooldownTime } from "../../types/cooldown-time.js";
 @CooldownTime(60 * 60 * 1000)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class ScrambleCommand {
-	@Slash({ name: "scramble", description: "Sends everyone in your channel to a random channel" })
+	@Slash({ name: "scramble", description: "Sends everyone in your channel to a random channel", dmPermission: false })
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const { guild } = interaction;
 		const member = await guild.members.fetch(interaction.user.id);

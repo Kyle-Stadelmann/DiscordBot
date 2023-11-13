@@ -4,14 +4,14 @@ import { DEV_SERVER_ERROR_CHANNEL } from "../constants.js";
 
 export function createCmdErrorStr(cmdName: string, error: Error, ci: ChatInputCommandInteraction): string {
 	let errStr = `Error when executing command ${cmdName}\n`;
-	errStr += `**CommandInteraction**: ${JSON.stringify(ci)}\n\n`;
+	errStr += `**CommandInteraction**: ${ci.toString()})\n\n`;
 	errStr += `**error**: ${error.stack}\n\n`;
 	return errStr;
 }
 
 export function createInteractionErrorStr(interaction: Interaction, error: Error): string {
 	let errStr = `Error when executing interaction\n`;
-	errStr += `**Interaction**: ${JSON.stringify(interaction)}\n\n`;
+	errStr += `**Interaction**: ${interaction.toString()}\n\n`;
 	errStr += `**error**: ${error.stack}\n\n`;
 	return errStr;
 }

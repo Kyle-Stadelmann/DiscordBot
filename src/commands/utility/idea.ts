@@ -71,10 +71,17 @@ class IdeaCommand {
 		completed: boolean,
 		interaction: CommandInteraction
 	): Promise<boolean> {
+		await interaction.deferReply();
+
 		let ideas = type ? await getIdeasByType(type) : await getAllIdeas();
 		ideas = ideas
 			.filter((i) => (completed === undefined ? true : i.completed === completed))
 			.sort((a, b) => a.createdAt - b.createdAt);
+
+		if (ideas.length === 0) {
+			await interaction.editReply("No ideas found with those filters");
+			return true;
+		}
 
 		// eslint-disable-next-line arrow-body-style
 		const ideaPages = buildIdeaEmbeds(ideas, type as IdeaType).map((e) => {
