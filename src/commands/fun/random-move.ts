@@ -26,6 +26,7 @@ class RandomMoveCommand {
 		description:
 			"Admin command that moves another admin to a random channel every 5 minutes a random number of times",
 		defaultMemberPermissions: "Administrator",
+		dmPermission: false
 	})
 	async run(
 		@SlashOption({

@@ -1,5 +1,6 @@
 import { Collection, Snowflake } from "discord.js";
 import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.js";
+import { isNullOrUndefined } from "../../util/general.js";
 
 /*
  * CooldownContainer is managed inside of the bot-container
@@ -13,9 +14,9 @@ export class CooldownContainer {
 		private cooldownName: string
 	) {}
 
-	public async isOnCooldown(personId: Snowflake, guildId: Snowflake | undefined): Promise<boolean> {
+	public async isOnCooldown(personId: Snowflake, guildId: Snowflake | null): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown
-		return guildId !== undefined && (await this.isIdOnCooldown(guildId)) ? true : this.isIdOnCooldown(personId);
+		return !isNullOrUndefined(guildId) && (await this.isIdOnCooldown(guildId)) ? true : this.isIdOnCooldown(personId);
 	}
 
 	public async putOnCooldown(personId: Snowflake) {
