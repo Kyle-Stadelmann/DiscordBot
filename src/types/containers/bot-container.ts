@@ -27,7 +27,7 @@ export class BDBot {
 		const afkPicContainerPromise = this.afkPicContainer.initContainer();
 		const initPlayerPromise = this.initPlayer();
 		this.initCooldowns();
-		
+
 		await Promise.all([afkPicContainerPromise, initPlayerPromise]);
 	}
 
@@ -72,7 +72,7 @@ export class BDBot {
 		const cdContainer = this.cdContainers.get(cmdName);
 		await cdContainer.putOnGuildCooldown(guildId, cd);
 	}
-	
+
 	public async endCooldown(cmdName: string, personId: Snowflake) {
 		const cdContainer = this.cdContainers.get(cmdName);
 		await cdContainer.endCooldown(personId);

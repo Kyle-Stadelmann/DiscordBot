@@ -15,15 +15,13 @@ const cmdCatIconMap: Map<CommandCategory, string> = new Map([
 @Discord()
 @Category(CommandCategory.Utility)
 export class HelpCommand {
-	@Slash({name: "help", description: "Lists all commands that this bot currently has to offer"})
+	@Slash({ name: "help", description: "Lists all commands that this bot currently has to offer" })
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const isDm = !interaction.inGuild();
 
-		const cmds = client.applicationCommands.filter(ac => {
+		const cmds = client.applicationCommands.filter((ac) => {
 			const cmd = ac as DApplicationCommand & ICategory & ICooldownTime;
-			return (isDm) 
-				? cmd.dmPermission
-				: cmd.guilds.includes(interaction.guild.id);
+			return isDm ? cmd.dmPermission : cmd.guilds.includes(interaction.guild.id);
 		});
 
 		const fields = getEnumValues(CommandCategory).flatMap((e) => this.getCmdCategoryEmbedField(cmds, e), this);
@@ -35,16 +33,16 @@ export class HelpCommand {
 			.setTitle("All Commands")
 			.setColor(0x0);
 
-		await interaction.reply({embeds: [helpEmbed]});
+		await interaction.reply({ embeds: [helpEmbed] });
 
 		return true;
 	}
 
 	private getCmdCategoryEmbedField(cmds: DApplicationCommand[], cmdCat: CommandCategory): APIEmbedField[] {
 		const cmdNames = cmds
-			.filter(ac => {
+			.filter((ac) => {
 				const cmd = ac as DApplicationCommand & ICategory & ICooldownTime;
-				return (cmd.category ?? CommandCategory.Utility) === cmdCat
+				return (cmd.category ?? CommandCategory.Utility) === cmdCat;
 			})
 			.map((cmd) => `\`${cmd.name}\``);
 

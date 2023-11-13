@@ -15,9 +15,7 @@ export class CooldownContainer {
 
 	public async isOnCooldown(personId: Snowflake, guildId: Snowflake | undefined): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown
-		return guildId !== undefined && (await this.isIdOnCooldown(guildId))
-			? true
-			: this.isIdOnCooldown(personId);
+		return guildId !== undefined && (await this.isIdOnCooldown(guildId)) ? true : this.isIdOnCooldown(personId);
 	}
 
 	public async putOnCooldown(personId: Snowflake) {

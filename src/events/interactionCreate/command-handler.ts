@@ -8,12 +8,12 @@ import { createCmdErrorStr, isDevMode, isProdMode, printSpace, sendErrorToDiscor
 export abstract class CommandHandler {
 	@On({ event: "interactionCreate" })
 	private async handleCommand([interaction]: ArgsOf<"interactionCreate">) {
-        if (!interaction.isChatInputCommand()) {
+		if (!interaction.isChatInputCommand()) {
 			client.executeInteraction(interaction);
 			return;
 		}
 
-        const {commandName, user, guildId, member} = interaction;
+		const { commandName, user, guildId, member } = interaction;
 
 		let personId;
 		try {
@@ -31,7 +31,7 @@ export abstract class CommandHandler {
 				if (!interaction.replied) await interaction.reply("Sorry, an error has occurred!");
 				else await interaction.editReply("Sorry, an error has occurred!");
 			} catch (replyErr) {
-				// This happens when it took 15 minutes for cmd to error out 
+				// This happens when it took 15 minutes for cmd to error out
 				// and now can't reply to the interaction, log and don't followup
 				console.error("Reply timed out. User wasn't made aware of above error");
 				console.error(replyErr);
@@ -41,8 +41,8 @@ export abstract class CommandHandler {
 	}
 
 	private async processCmd(interaction: ChatInputCommandInteraction, personId: Snowflake) {
-        const {commandName, user, guildId} = interaction;
-        
+		const { commandName, user, guildId } = interaction;
+
 		console.log(`${commandName} command detected by: ${user.username}`);
 
 		if (await bdbot.isOnCooldown(commandName, personId, guildId)) {
@@ -55,7 +55,7 @@ export abstract class CommandHandler {
 		// Initial cd to ensure the cmd isn't reissued while this instance
 		// of the cmd is still executing
 		await bdbot.putOnCooldown(commandName, personId);
-		
+
 		const result = client.executeInteraction(interaction) as boolean;
 		if (result) {
 			console.log(`${commandName} was successful`);
@@ -72,7 +72,7 @@ export abstract class CommandHandler {
 		if (member instanceof GuildMember) {
 			personId = member.id;
 		} else if (guildId) {
-			personId = client.guilds.resolve(guildId).members.resolve(userId).id
+			personId = client.guilds.resolve(guildId).members.resolve(userId).id;
 		} else {
 			personId = userId;
 		}

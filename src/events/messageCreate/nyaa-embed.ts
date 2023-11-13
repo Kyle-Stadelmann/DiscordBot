@@ -47,7 +47,7 @@ abstract class NyaaEmbed {
 		const embed = this.createEmbed($, url, data);
 		if (!embed) return;
 
-		await msg.channel.send({embeds: [embed]});
+		await msg.channel.send({ embeds: [embed] });
 	}
 
 	private createEmbed($: cheerio.CheerioAPI, url: string, data: string): EmbedBuilder | undefined {

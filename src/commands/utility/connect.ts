@@ -8,7 +8,7 @@ import { CommandCategory } from "../../types/command.js";
 @Discord()
 @Category(CommandCategory.Utility)
 export class ConnectCommand {
-	@Slash({ name: "connect", description: "BDBot connects to the user's voice channel", dmPermission: false})
+	@Slash({ name: "connect", description: "BDBot connects to the user's voice channel", dmPermission: false })
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		if (getVoiceConnection(interaction.guildId)) {
 			return false;
@@ -19,7 +19,10 @@ export class ConnectCommand {
 		const voiceChannel = member.voice?.channel;
 
 		if (!voiceChannel || voiceChannel === guild.afkChannel) {
-			await interaction.reply({content: "Couldn't connect. You're not in a valid voice channel!", ephemeral: true});
+			await interaction.reply({
+				content: "Couldn't connect. You're not in a valid voice channel!",
+				ephemeral: true,
+			});
 			return false;
 		}
 

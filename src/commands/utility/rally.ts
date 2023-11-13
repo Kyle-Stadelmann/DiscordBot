@@ -1,34 +1,45 @@
-import { ApplicationCommandOptionType, Collection, CommandInteraction, PermissionFlagsBits, Role, StageChannel, VoiceChannel } from "discord.js";
+import {
+	ApplicationCommandOptionType,
+	Collection,
+	CommandInteraction,
+	PermissionFlagsBits,
+	Role,
+	StageChannel,
+	VoiceChannel,
+} from "discord.js";
 import { Category } from "@discordx/utilities";
 import { Discord, Slash, SlashChoice, SlashOption } from "discordx";
 import { CommandCategory } from "../../types/command.js";
 
-// TODO: Add back ability to add multiple roles 
+// TODO: Add back ability to add multiple roles
 // (seems impossible to do variable number of roles like before though)
 @Discord()
 @Category(CommandCategory.Utility)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class RallyCommand {
-	@Slash({name: "rally", description: "Brings all users connected to voice to the voice channel that the user is in"})
+	@Slash({
+		name: "rally",
+		description: "Brings all users connected to voice to the voice channel that the user is in",
+	})
 	async run(
 		@SlashOption({
 			name: "role",
 			description: "Role to pull to you",
 			required: false,
-			type: ApplicationCommandOptionType.Role
+			type: ApplicationCommandOptionType.Role,
 		})
 		role: Role | undefined,
-		@SlashChoice({name: "to me", value: true})
+		@SlashChoice({ name: "to me", value: true })
 		@SlashOption({
 			name: "where",
 			description: "To you? Leave empty if you don't know what this is",
 			required: false,
-			type: ApplicationCommandOptionType.Boolean
+			type: ApplicationCommandOptionType.Boolean,
 		})
 		where: boolean | undefined,
 		interaction: CommandInteraction
 	): Promise<boolean> {
-		const rolesToCall = (role) ? [role] : [];
+		const rolesToCall = role ? [role] : [];
 		const { guild } = interaction;
 		const member = await guild.members.fetch(interaction.user.id);
 		const voiceChannel = member.voice?.channel;
@@ -36,7 +47,7 @@ class RallyCommand {
 		const pullToHidden = where ?? false;
 
 		// Don't broadcast if target channel is hidden
-		await interaction.deferReply({ephemeral: pullToHidden});
+		await interaction.deferReply({ ephemeral: pullToHidden });
 
 		// Confirm that user called from a voice channel
 		if (!voiceChannel) {
@@ -47,9 +58,7 @@ class RallyCommand {
 		// List of channels that can be taken from
 		const validChannels = new Collection<string, VoiceChannel | StageChannel>();
 		// Whether or not user's channel is public
-		const publicChannel = voiceChannel
-			.permissionsFor(guild.roles.everyone)
-			.has(PermissionFlagsBits.ViewChannel);
+		const publicChannel = voiceChannel.permissionsFor(guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
 
 		// Check if called from valid voice channel
 		if (voiceChannel === guild.afkChannel || (!publicChannel && !pullToHidden)) {
@@ -96,7 +105,9 @@ class RallyCommand {
 		validChannels.forEach((userChannel) => {
 			userChannel.members.forEach((chMember) => {
 				// size of roles list && whether any entry in roles list overlaps with user's roles
-				if (!(rolesToCall.length > 0 && !rolesToCall.some((userRole) => chMember.roles.cache.has(userRole.id)))) {
+				if (
+					!(rolesToCall.length > 0 && !rolesToCall.some((userRole) => chMember.roles.cache.has(userRole.id)))
+				) {
 					console.log(`Moving user with ID: ${member.id}`);
 					chMember.edit({ channel: voiceChannel }).catch((error) => {
 						console.error(error);
@@ -105,7 +116,7 @@ class RallyCommand {
 			});
 		});
 
-		await interaction.followUp({content: "Rally completed", ephemeral: pullToHidden});
+		await interaction.followUp({ content: "Rally completed", ephemeral: pullToHidden });
 
 		return true;
 	}

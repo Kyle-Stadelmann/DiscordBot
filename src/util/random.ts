@@ -2,7 +2,7 @@
 // Input: Percentage (can be non-int) of returning true.
 // Output: returns true/false
 export function random(chance: number) {
-	return (Math.random() * 100) <= chance;
+	return Math.random() * 100 <= chance;
 }
 
 export function getRandomElement<T>(arr: T[]): T | undefined {

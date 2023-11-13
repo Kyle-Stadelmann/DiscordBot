@@ -9,13 +9,13 @@ import { getSearchResult, isQueueValid } from "../../util/index.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class TopCommand {
-	@Slash({name: "top", description: "Adds a track to the front of queue", dmPermission: false})
+	@Slash({ name: "top", description: "Adds a track to the front of queue", dmPermission: false })
 	async run(
 		@SlashOption({
 			name: "query",
 			description: "Search query or music link to add to the queue",
 			required: true,
-			type: ApplicationCommandOptionType.String
+			type: ApplicationCommandOptionType.String,
 		})
 		query: string,
 		interaction: CommandInteraction
