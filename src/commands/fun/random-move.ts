@@ -21,18 +21,23 @@ import { CooldownTime } from "../../types/cooldown-time.js";
 @CooldownTime(10 * 60 * 1000)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class RandomMoveCommand {
-	@Slash({name: "randommove", description: "Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time", defaultMemberPermissions: "Administrator"})
+	@Slash({
+		name: "randommove",
+		description:
+			"Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time",
+		defaultMemberPermissions: "Administrator",
+	})
 	async run(
 		@SlashOption({
 			name: "user",
 			description: "Your victim",
 			required: false,
-			type: ApplicationCommandOptionType.User
+			type: ApplicationCommandOptionType.User,
 		})
 		user: User,
 		interaction: CommandInteraction
 	): Promise<boolean> {
-		const {member, guild} = interaction;
+		const { member, guild } = interaction;
 		const sender = await guild.members.fetch(member.user.id);
 		const victim = await guild.members.fetch(user.id);
 
@@ -50,9 +55,17 @@ class RandomMoveCommand {
 		return true;
 	}
 
-	private async validateArgs(victim: GuildMember | undefined, interaction: CommandInteraction, sender: GuildMember, guild: Guild) {
+	private async validateArgs(
+		victim: GuildMember | undefined,
+		interaction: CommandInteraction,
+		sender: GuildMember,
+		guild: Guild
+	) {
 		if (!victim) {
-			await interaction.reply({content: "Command was NOT successful, you must specify an admin on the server.", ephemeral: true});
+			await interaction.reply({
+				content: "Command was NOT successful, you must specify an admin on the server.",
+				ephemeral: true,
+			});
 			return true;
 		}
 
@@ -62,19 +75,28 @@ class RandomMoveCommand {
 			!sender.permissions.has(PermissionFlagsBits.Administrator) ||
 			!victim.permissions.has(PermissionFlagsBits.Administrator)
 		) {
-			await interaction.reply({content: "Command was NOT successful, you or your victim are not an admin.", ephemeral: true});
+			await interaction.reply({
+				content: "Command was NOT successful, you or your victim are not an admin.",
+				ephemeral: true,
+			});
 			return true;
 		}
 
 		// If sender isnt in a channel
 		if (sender.voice.channel == null || sender.voice.channel === guild.afkChannel) {
-			await interaction.reply({content: "Command was NOT successful, you must be in a non-AFK channel.", ephemeral: true});
+			await interaction.reply({
+				content: "Command was NOT successful, you must be in a non-AFK channel.",
+				ephemeral: true,
+			});
 			return true;
 		}
 
 		// Test if victim is in a channel or not
 		if (victim.voice.channel == null) {
-			await interaction.reply({content: "Command was NOT successful, your victim isn't in a channel.", ephemeral: true});
+			await interaction.reply({
+				content: "Command was NOT successful, your victim isn't in a channel.",
+				ephemeral: true,
+			});
 			return true;
 		}
 

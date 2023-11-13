@@ -22,7 +22,7 @@ class SwordCommand {
 			name: "target",
 			description: "The target of Zach's annihilation",
 			required: false,
-			type: ApplicationCommandOptionType.User
+			type: ApplicationCommandOptionType.User,
 		})
 		victimUser: User | undefined,
 		interaction: CommandInteraction
@@ -47,7 +47,9 @@ class SwordCommand {
 		const victimMember = await interaction.guild.members.fetch(victimUser.id);
 
 		if (!victimMember.kickable || victimMember.id === BD4_BOT_ID) {
-			await interaction.reply("You decided against it, you fear your victim's strength completely eclipses yours.");
+			await interaction.reply(
+				"You decided against it, you fear your victim's strength completely eclipses yours."
+			);
 			return false;
 		}
 

@@ -23,8 +23,8 @@ const ideaSchema = new dynamoose.Schema(
 		},
 		completed: {
 			type: Boolean,
-			required: true
-		}
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

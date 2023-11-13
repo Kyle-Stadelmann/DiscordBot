@@ -9,7 +9,7 @@ import { isQueueValid } from "../../util/index.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class BackCommand {
-	@Slash({name: "back", description: "Plays the previous track", dmPermission: false})
+	@Slash({ name: "back", description: "Plays the previous track", dmPermission: false })
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(interaction.guildId);
 

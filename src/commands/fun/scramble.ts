@@ -10,28 +10,34 @@ import { CooldownTime } from "../../types/cooldown-time.js";
 @CooldownTime(60 * 60 * 1000)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class ScrambleCommand {
-	@Slash({name: "scramble", description: "Sends everyone in your channel to a random channel"})
+	@Slash({ name: "scramble", description: "Sends everyone in your channel to a random channel" })
 	async run(interaction: CommandInteraction): Promise<boolean> {
-		const {guild} = interaction;
+		const { guild } = interaction;
 		const member = await guild.members.fetch(interaction.user.id);
 		const startChannel = member.voice?.channel;
 
 		if (!startChannel || guild.afkChannel === startChannel) {
-			await interaction.reply({content: "Scramble failed because you are not in a valid voice channel!", ephemeral: true});
+			await interaction.reply({
+				content: "Scramble failed because you are not in a valid voice channel!",
+				ephemeral: true,
+			});
 			return false;
 		}
 
 		const validChannels = this.getValidChannels(guild, startChannel);
 		if (validChannels.length === 0) {
-			await interaction.reply({content: "Scramble failed because there are no valid, visible voice channels.", ephemeral: true});
+			await interaction.reply({
+				content: "Scramble failed because there are no valid, visible voice channels.",
+				ephemeral: true,
+			});
 			return false;
 		}
 
-		await interaction.reply({content: `Initiating channel scramble on *${startChannel.name}*.`});
+		await interaction.reply({ content: `Initiating channel scramble on *${startChannel.name}*.` });
 
 		await this.moveChannelMembers(startChannel, validChannels);
 
-		await interaction.reply({content: "Channel scramble completed!"});
+		await interaction.reply({ content: "Channel scramble completed!" });
 
 		return true;
 	}

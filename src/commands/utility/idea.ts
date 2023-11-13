@@ -34,7 +34,7 @@ export enum IdeaType {
 @Category(CommandCategory.Utility)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class IdeaCommand {
-	@Slash({name: "submit", description: "Submit an idea/feature request to the development team"})
+	@Slash({ name: "submit", description: "Submit an idea/feature request to the development team" })
 	public async submit(interaction: CommandInteraction): Promise<boolean> {
 		const ideaBtn = new ButtonBuilder()
 			.setLabel("Submit Idea")
@@ -52,25 +52,23 @@ class IdeaCommand {
 		return true;
 	}
 
-	@Slash({name: "list", description: "Lists user-submitted ideas"})
+	@Slash({ name: "list", description: "Lists user-submitted ideas" })
 	async list(
 		@SlashChoice(IdeaType.utility, IdeaType.fun, IdeaType.music, IdeaType.general)
 		@SlashOption({
 			name: "type",
 			description: "Filter by idea type",
 			required: false,
-			type: ApplicationCommandOptionType.String
+			type: ApplicationCommandOptionType.String,
 		})
 		type: string,
 		interaction: CommandInteraction
 	): Promise<boolean> {
 		sortedIdeaPages = await refreshIdeas();
 
-		const pages: PaginationItem[] = [
-			
-		]
+		const pages: PaginationItem[] = [];
 
-		const pagination = new Pagination(interaction, );
+		const pagination = new Pagination(interaction);
 		await pagination.send();
 
 		const ideaPages: EmbedBuilder[] = sortedIdeaPages[IdeaType[args[0]] ? IdeaType[args[0]] : IdeaType.all];
@@ -150,10 +148,10 @@ class IdeaButton {
 				userId: interaction.user.id,
 				type: ideaType,
 				description: idea,
-				completed: false
+				completed: false,
 			});
 		} catch (e) {
-			console.error(e)
+			console.error(e);
 		}
 
 		const newLocal = `Idea with ID: ${interaction.id} submitted to DB by ${interaction.user.username}`;

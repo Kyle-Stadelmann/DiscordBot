@@ -12,13 +12,13 @@ import { queueSong } from "../../util/index.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class PlayCommand {
-	@Slash({name: "play", description: "Add a track to the queue or resume the current track", dmPermission: false})
+	@Slash({ name: "play", description: "Add a track to the queue or resume the current track", dmPermission: false })
 	public async run(
 		@SlashOption({
 			name: "query",
 			description: "Search query or music link to add to the queue",
 			required: false,
-			type: ApplicationCommandOptionType.String
+			type: ApplicationCommandOptionType.String,
 		})
 		query: string | undefined,
 		interaction: CommandInteraction
@@ -29,7 +29,7 @@ class PlayCommand {
 		const voiceChannel = member.voice.channel;
 
 		if (!voiceChannel || voiceChannel === guild.afkChannel) {
-			await interaction.reply("Music command failed. Please join a channel first!")
+			await interaction.reply("Music command failed. Please join a channel first!");
 			return false;
 		}
 
@@ -43,7 +43,7 @@ class PlayCommand {
 		try {
 			result = await queueSong(voiceChannel, query, interaction.channel, member.user);
 		} catch (e) {
-			await interaction.reply("Music command failed. Was unable to queue song, are you connected to a channel?")
+			await interaction.reply("Music command failed. Was unable to queue song, are you connected to a channel?");
 			console.error(e);
 			return false;
 		}

@@ -15,19 +15,19 @@ const afkpicGetConfig: CommandConfig = {
 };
 
 @Discord()
-@SlashGroup({name: "afkpic", description: "!"})
+@SlashGroup({ name: "afkpic", description: "!" })
 @SlashGroup("afkpic")
 @Category(CommandCategory.Fun)
 @Guild(BD5_DEV_SERVER_IDS)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class AfkPicCommand {
-	@Slash({name: "get", description: "Sends an AFK Pic of a random (or given) user"})
+	@Slash({ name: "get", description: "Sends an AFK Pic of a random (or given) user" })
 	async get(
 		@SlashOption({
 			name: "user",
 			description: "The user to fetch a picture of",
 			required: false,
-			type: ApplicationCommandOptionType.User
+			type: ApplicationCommandOptionType.User,
 		})
 		user: User | undefined,
 		interaction: CommandInteraction
@@ -41,7 +41,7 @@ class AfkPicCommand {
 
 		if (afkPicUrl) {
 			const embed = new EmbedBuilder().setImage(afkPicUrl);
-			await interaction.reply({embeds: [embed]});
+			await interaction.reply({ embeds: [embed] });
 			return true;
 		}
 
@@ -62,13 +62,17 @@ class AfkPicCommand {
 	}
 
 	// TODO: Multiple attachments?
-	@Slash({name: "add", description: "Adds AFK Pic(s) to the AFK Pic collection. (Supports local uploads, discord image links, i.imgur)"})
+	@Slash({
+		name: "add",
+		description:
+			"Adds AFK Pic(s) to the AFK Pic collection. (Supports local uploads, discord image links, i.imgur)",
+	})
 	async add(
 		@SlashOption({
 			name: "pic",
 			description: "The picture you want to add to the collection",
 			required: true,
-			type: ApplicationCommandOptionType.Attachment
+			type: ApplicationCommandOptionType.Attachment,
 		})
 		pic: Attachment,
 		interaction: CommandInteraction
@@ -87,10 +91,14 @@ class AfkPicCommand {
 		const result = await bdbot.tryAddAfkPics(afkPicUrls, msg.author.id);
 		if (result && afkPicUrls.length > 0) {
 			// TODO: Leaderboard for who submits most afk pics
-			await interaction.reply(`AFK Pic${afkPicUrls.length > 1 ? "s" : ""} added. Thank you for your *generous donation*!`);
+			await interaction.reply(
+				`AFK Pic${afkPicUrls.length > 1 ? "s" : ""} added. Thank you for your *generous donation*!`
+			);
 			return true;
 		}
-		await interaction.reply("Failed to add any AFK Pics. This picture **may** exist already or is from an unsupported image source.");
+		await interaction.reply(
+			"Failed to add any AFK Pics. This picture **may** exist already or is from an unsupported image source."
+		);
 		return false;
 	}
 

@@ -31,13 +31,18 @@ const GUILD_CD_TIME = 60 * 1000;
 @CooldownTime(60 * 60 * 1000)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class WhipCommand {
-	@Slash({name: "whip", description: "Smacks your target a large amount of channels down", dmPermission: false, defaultMemberPermissions: "Administrator"})
+	@Slash({
+		name: "whip",
+		description: "Smacks your target a large amount of channels down",
+		dmPermission: false,
+		defaultMemberPermissions: "Administrator",
+	})
 	async whip(
 		@SlashOption({
 			name: "target",
 			description: "The target of your flail",
 			required: true,
-			type: ApplicationCommandOptionType.User
+			type: ApplicationCommandOptionType.User,
 		})
 		victimUser: User,
 		interaction: CommandInteraction
@@ -48,7 +53,7 @@ class WhipCommand {
 
 		const error = await this.hadError(victimMember, senderMember, interaction);
 		if (error) return false;
-		
+
 		await bdbot.putOnGuildCooldown(guild.id, "whip", GUILD_CD_TIME);
 
 		const originalChannel = victimMember.voice.channel;
@@ -143,9 +148,15 @@ class WhipCommand {
 		return validChannels as IterableIterator<VoiceChannel | StageChannel>;
 	}
 
-	private async hadError(victim: GuildMember, sender: GuildMember, interaction: CommandInteraction): Promise<boolean> {
+	private async hadError(
+		victim: GuildMember,
+		sender: GuildMember,
+		interaction: CommandInteraction
+	): Promise<boolean> {
 		if (sender.voice.channel == null || sender.voice.channelId !== victim.voice.channelId) {
-			await interaction.reply("Command was NOT successful, your target isn't close enough (not in the same voice channel as you)");
+			await interaction.reply(
+				"Command was NOT successful, your target isn't close enough (not in the same voice channel as you)"
+			);
 			return true;
 		}
 

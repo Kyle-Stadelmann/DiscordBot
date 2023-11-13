@@ -38,9 +38,7 @@ abstract class TypingSpeedReporter {
 			const wpmInt = wpm.toFixed(0);
 
 			console.log(`Reporting a typing time of: ${typingTimeInt} with WPM of ${wpmInt} for user: ${userId}`);
-			await channel.send(
-				`That message took approximately ${typingTimeInt} seconds, with a WPM of ${wpmInt}`
-			);
+			await channel.send(`That message took approximately ${typingTimeInt} seconds, with a WPM of ${wpmInt}`);
 			printSpace();
 		}
 

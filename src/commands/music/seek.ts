@@ -9,13 +9,13 @@ import { isQueueValid } from "../../util/index.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class SeekCommand {
-	@Slash({name: "seek", description: "Go to a specified time in the current track", dmPermission: false})
+	@Slash({ name: "seek", description: "Go to a specified time in the current track", dmPermission: false })
 	async run(
 		@SlashOption({
 			name: "time",
 			description: "The time to seek to",
 			required: true,
-			type: ApplicationCommandOptionType.String
+			type: ApplicationCommandOptionType.String,
 		})
 		timeStr: string,
 		interaction: CommandInteraction
@@ -45,7 +45,7 @@ class SeekCommand {
 		let hadError = false;
 		const times: number[] = [];
 
-		splitTimes.forEach(time => {
+		splitTimes.forEach((time) => {
 			const parsedTime = +time;
 			if (Number.isNaN(parsedTime)) {
 				hadError = true;
@@ -74,7 +74,7 @@ class SeekCommand {
 		}
 		// seek(x:x:x) format
 		else if (numc === 2) {
-			time += times[0]* 3600000;
+			time += times[0] * 3600000;
 			time += times[1] * 60000;
 			time += times[2] * 1000;
 		}

@@ -9,13 +9,17 @@ import { findTrack, isQueueValid } from "../../util/index.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class QueryCommand {
-	@Slash({name: "query", description: "Moves a track with the specified name to the front of the queue", dmPermission: false})
+	@Slash({
+		name: "query",
+		description: "Moves a track with the specified name to the front of the queue",
+		dmPermission: false,
+	})
 	async run(
 		@SlashOption({
 			name: "track",
 			description: "The name (or part of the name) of the track to move",
 			required: true,
-			type: ApplicationCommandOptionType.String
+			type: ApplicationCommandOptionType.String,
 		})
 		trackQuery: string,
 		interaction: CommandInteraction
@@ -29,7 +33,7 @@ class QueryCommand {
 		const track = findTrack(trackQuery, queue);
 
 		if (!track) {
-			await interaction.reply(`Query failed, ensure your search is part of the track title.`)
+			await interaction.reply(`Query failed, ensure your search is part of the track title.`);
 			return false;
 		}
 

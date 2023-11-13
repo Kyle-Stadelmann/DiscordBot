@@ -38,7 +38,7 @@ export async function getSearchResult(query: string, user: User): Promise<Player
 			else if (query.includes("spotify")) searchEngine = QueryType.SPOTIFY_PLAYLIST;
 		}
 	}
-	
+
 	const result = await bdbot.player.search(search, {
 		requestedBy: user,
 		searchEngine,

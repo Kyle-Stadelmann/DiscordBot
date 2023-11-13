@@ -40,7 +40,7 @@ export async function startup() {
 		await client.initApplicationCommands();
 		await bdbot.initContainter();
 	});
-	
+
 	const fileType = isProdMode() ? "js" : "ts";
 
 	await Promise.all([

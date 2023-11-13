@@ -89,7 +89,7 @@ function getKyleName(id: string): string {
 }
 
 @Discord()
-@SlashGroup({name: "aprilfools", description: "!"})
+@SlashGroup({ name: "aprilfools", description: "!" })
 @SlashGroup("aprilfools")
 @Category(CommandCategory.Fun)
 @Guild(BD5_DEV_SERVER_IDS)
@@ -135,7 +135,7 @@ class AprilFoolsStartCommand {
 		return true;
 	}
 
-	@Slash({name: "undo", description: "!", dmPermission: false})
+	@Slash({ name: "undo", description: "!", dmPermission: false })
 	async undo(msg: Message): Promise<boolean> {
 		if (msg.author.id !== CHRISTINA_ID) return false;
 		const bd5 = client.guilds.resolve(BD5_ID);

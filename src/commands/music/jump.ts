@@ -9,20 +9,22 @@ import { isQueueValid } from "../../util/index.js";
 @Category(CommandCategory.Music)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class JumpCommand {
-	@Slash({name: "jump", description: "Fast forwards the queue to the specified index", dmPermission: false})
+	@Slash({ name: "jump", description: "Fast forwards the queue to the specified index", dmPermission: false })
 	async run(
 		@SlashOption({
 			name: "index",
 			description: "The index to fast forward to",
 			required: true,
-			type: ApplicationCommandOptionType.Number
+			type: ApplicationCommandOptionType.Number,
 		})
 		index: number,
 		interaction: CommandInteraction
 	): Promise<boolean> {
 		const queue = bdbot.player.queues.resolve(interaction.guildId);
 		if (!isQueueValid(queue) || !queue.currentTrack) {
-			await interaction.reply("Music command failed. Please start a queue using the `play` command first, or check command arguments!");
+			await interaction.reply(
+				"Music command failed. Please start a queue using the `play` command first, or check command arguments!"
+			);
 			return false;
 		}
 
