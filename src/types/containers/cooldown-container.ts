@@ -1,4 +1,4 @@
-import { Collection, GuildMember, Snowflake, User } from "discord.js";
+import { Collection, Snowflake } from "discord.js";
 import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.js";
 
 /*

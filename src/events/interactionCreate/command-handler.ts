@@ -1,7 +1,7 @@
 import { APIGuildMember, ChatInputCommandInteraction, GuildMember, Snowflake } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import { bdbot, client } from "../../app.js";
-import { createCmdErrorStr, isProdMode, printSpace, sendErrorToDiscordChannel } from "../../util/index.js";
+import { createCmdErrorStr, isDevMode, isProdMode, printSpace, sendErrorToDiscordChannel } from "../../util/index.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,6 +26,7 @@ export abstract class CommandHandler {
 			if (isProdMode()) {
 				await sendErrorToDiscordChannel(errStr);
 			}
+
 			try {
 				if (!interaction.replied) await interaction.reply("Sorry, an error has occurred!");
 				else await interaction.editReply("Sorry, an error has occurred!");
@@ -44,7 +45,6 @@ export abstract class CommandHandler {
         
 		console.log(`${commandName} command detected by: ${user.username}`);
 
-		// const memberId = (guildId !== undefined) ? client.guilds.resolve(guildId)?.members?.resolve(user.id)?.id : undefined;
 		if (await bdbot.isOnCooldown(commandName, personId, guildId)) {
 			console.log("Command was NOT successful, member is on cooldown.");
 			printSpace();
@@ -56,13 +56,14 @@ export abstract class CommandHandler {
 		// of the cmd is still executing
 		await bdbot.putOnCooldown(commandName, personId);
 		
-		let result;
+		const result = client.executeInteraction(interaction) as boolean;
 		if (result) {
 			console.log(`${commandName} was successful`);
-			client.executeInteraction(interaction);
-			// TODO: How do we (un)assign cd's here without knowing true/false returned from cmd executing
+			if (isDevMode()) await bdbot.endCooldown(commandName, personId);
+			else await bdbot.putOnCooldown(commandName, personId);
 		} else {
 			console.error(`${commandName} was NOT successful`);
+			await bdbot.endCooldown(commandName, personId);
 		}
 	}
 
@@ -77,7 +78,7 @@ export abstract class CommandHandler {
 		}
 
 		if (personId === undefined) {
-			throw new Error("Error: no member or user found for the interaction");
+			throw new Error("Error: no member or user found for command interaction");
 		}
 
 		return personId;

@@ -4,7 +4,7 @@ import { Discord, Slash, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
 import { CommandCategory } from "../../types/command.js";
-import { queueSong } from "../../util/music-helpers.js";
+import { queueSong } from "../../util/index.js";
 
 // TODO: this breaks if connect was used prior
 

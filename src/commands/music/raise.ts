@@ -4,7 +4,7 @@ import { Category } from "@discordx/utilities";
 import { Track } from "discord-player";
 import { bdbot } from "../../app.js";
 import { CommandCategory } from "../../types/command.js";
-import { isQueueValid } from "../../util/music-helpers.js";
+import { isQueueValid } from "../../util/index.js";
 
 // TODO: Not sure if this should stay a separate command from query
 // could get messy if you try to combine

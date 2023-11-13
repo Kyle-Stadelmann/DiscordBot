@@ -72,6 +72,11 @@ export class BDBot {
 		const cdContainer = this.cdContainers.get(cmdName);
 		await cdContainer.putOnGuildCooldown(guildId, cd);
 	}
+	
+	public async endCooldown(cmdName: string, personId: Snowflake) {
+		const cdContainer = this.cdContainers.get(cmdName);
+		await cdContainer.endCooldown(personId);
+	}
 
 	public async endGuildCooldown(guildId: Snowflake, cmdName: string) {
 		const cdContainer = this.cdContainers.get(cmdName);

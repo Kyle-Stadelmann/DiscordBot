@@ -41,7 +41,7 @@ import {
 } from "../../constants.js";
 import { CommandCategory } from "../../types/command.js";
 import { getNicknames, OldNickname, OldNicknameModel } from "../../types/data-access/curr-nickname.js";
-import { isNullOrUndefined } from "../../util/general.js";
+import { isNullOrUndefined } from "../../util/index.js";
 
 const nicknameMap = new Map([
 	[ASIAN_KYLE_ID, "AsianKyle"],

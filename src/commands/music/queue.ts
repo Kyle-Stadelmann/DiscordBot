@@ -4,7 +4,7 @@ import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
 import { MUSICAL_NOTES } from "../../constants.js";
 import { CommandCategory } from "../../types/command.js";
-import { isQueueValid } from "../../util/music-helpers.js";
+import { isQueueValid } from "../../util/index.js";
 
 @Discord()
 @Category(CommandCategory.Music)

@@ -4,7 +4,7 @@ import { ApplicationCommandOptionType, CommandInteraction, User } from "discord.
 import { Discord, Slash, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
 import { CommandCategory } from "../../types/command.js";
-import { sleep } from "../../util/sleep.js";
+import { sleep } from "../../util/index.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
 
 const SPAM_AMMOUNT = 4;
