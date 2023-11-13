@@ -1,7 +1,14 @@
 import { APIGuildMember, ChatInputCommandInteraction, GuildMember, Snowflake } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import { bdbot, client } from "../../app.js";
-import { createCmdErrorStr, isDevMode, isProdMode, printSpace, sendErrorToDiscordChannel } from "../../util/index.js";
+import {
+	createCmdErrorStr,
+	createInteractionErrorStr,
+	isDevMode,
+	isProdMode,
+	printSpace,
+	sendErrorToDiscordChannel,
+} from "../../util/index.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -9,7 +16,17 @@ export abstract class CommandHandler {
 	@On({ event: "interactionCreate" })
 	private async handleCommand([interaction]: ArgsOf<"interactionCreate">) {
 		if (!interaction.isChatInputCommand()) {
-			client.executeInteraction(interaction);
+			try {
+				client.executeInteraction(interaction);
+			} catch (error) {
+				const errStr = createInteractionErrorStr(interaction, error);
+				console.error(errStr);
+				printSpace();
+
+				if (isProdMode()) {
+					await sendErrorToDiscordChannel(errStr);
+				}
+			}
 			return;
 		}
 
