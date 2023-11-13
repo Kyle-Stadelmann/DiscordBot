@@ -1,5 +1,7 @@
 import { GuildMember, Presence } from "discord.js";
 import { BD5_ID } from "../constants.js";
+import { client } from "../app.js";
+import { sleep } from "../util/sleep.js";
 
 export enum Month {
 	January = 0,
@@ -21,6 +23,7 @@ const lastUpdatedColorMemberMap: Map<string, Date> = new Map();
 const UPDATE_DATE_PERIOD_MS = 6 * 60 * 60 * 1000;
 
 export class HolidayColorCycler {
+	private cyclerActive: boolean = false;
 	constructor(
 		private holidayColorRoleIds: string[],
 		private month: Month
@@ -31,12 +34,16 @@ export class HolidayColorCycler {
 		if (oldPresence.guild.id !== BD5_ID) return;
 		const currDate = new Date();
 		const { member } = newPresence;
-		// If its the first day of the next month, holiday is over. Remove roles
-		if (currDate.getMonth() === this.month + 1 && currDate.getDay() === 0) {
-			await this.removeHolidayColorRoles(member, this.holidayColorRoleIds);
-		}
+
 		// Only activate in the correct month
-		if (currDate.getMonth() !== this.month) return;
+		if (currDate.getMonth() !== this.month) {
+			// If cycler active is on but we are in the next month, 
+			// do a one time full reset of colors for all guild members
+			if (this.cyclerActive) await this.resetAllMembersHolidayColors();
+			this.cyclerActive = false;
+			return;
+		} 
+		this.cyclerActive = true;
 
 		const lastUpdatedTime = lastUpdatedColorMemberMap.get(member.id);
 		if (lastUpdatedTime !== undefined && currDate.getTime() < lastUpdatedTime.getTime() + UPDATE_DATE_PERIOD_MS)
@@ -68,5 +75,15 @@ export class HolidayColorCycler {
 			}
 		}
 		await Promise.all(removePromises);
+	}
+
+	private async resetAllMembersHolidayColors() {
+		// Reset all member's colors once
+		const promises = client.guilds.resolve(BD5_ID).members.cache.map(async (mem) => {
+			await this.removeHolidayColorRoles(mem, this.holidayColorRoleIds);
+			await sleep(5000);
+		});
+
+		await Promise.all(promises);
 	}
 }

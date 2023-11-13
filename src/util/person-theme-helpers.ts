@@ -9,7 +9,8 @@ export async function tryPlayPersonTheme(
 	chance: number,
 	themeUrl: string,
 	oldState: VoiceState,
-	newState: VoiceState
+	newState: VoiceState,
+	startTime?: number // In ms
 ) {
 	const { player } = bdbot;
 	const stateMemberId = oldState.member.id;
@@ -23,6 +24,7 @@ export async function tryPlayPersonTheme(
 
 		try {
 			await queueSong(newState.channel, themeUrl, newState.channel, newState.member.user);
+			await queue.node.seek(startTime);
 			console.log(`Playing theme for memberId: ${stateMemberId}`);
 		} catch (e) {
 			console.error(`Failed to play theme for memberId: ${stateMemberId}`);
