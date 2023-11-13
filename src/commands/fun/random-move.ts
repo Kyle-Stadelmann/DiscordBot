@@ -24,7 +24,7 @@ class RandomMoveCommand {
 	@Slash({
 		name: "randommove",
 		description:
-			"Exclusive command for admins that moves another admin to a random channel every 5 minutes for a random amount of time",
+			"Admin command that moves another admin to a random channel every 5 minutes a random number of times",
 		defaultMemberPermissions: "Administrator",
 	})
 	async run(
