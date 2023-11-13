@@ -7,12 +7,13 @@ import {
 	CommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
-import { Discord, ModalComponent, Slash, SlashChoice, SlashOption } from "discordx";
+import { Discord, ModalComponent, Slash, SlashChoice, SlashGroup, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
 import { Pagination, PaginationType } from "@discordx/pagination";
 import { CommandCategory } from "../../types/command.js";
 import { createIdea, getAllIdeas, getIdeasByType } from "../../types/data-access/idea.js";
 import { buildIdeaEmbeds } from "../../util/idea-helpers.js";
+import { ARROW_BACKWARD_EMOJI, ARROW_FORWARD_EMOJI } from "../../constants.js";
 
 export enum IdeaType {
 	Utility = "Utility",
@@ -22,6 +23,8 @@ export enum IdeaType {
 }
 
 @Discord()
+@SlashGroup({name: "idea", description: "List or submit ideas/feature requests for this bot"})
+@SlashGroup("idea")
 @Category(CommandCategory.Utility)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class IdeaCommand {
@@ -81,6 +84,8 @@ class IdeaCommand {
 		const pagination = new Pagination(interaction, ideaPages, {
 			filter: (interact) => interact.user.id === interaction.user.id,
 			type: PaginationType.Button,
+			next: {label: `${ARROW_FORWARD_EMOJI} Next`},
+			previous: {label: `${ARROW_BACKWARD_EMOJI} Previous`}
 		});
 		await pagination.send();
 

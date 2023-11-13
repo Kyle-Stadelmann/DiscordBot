@@ -2,8 +2,8 @@
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { EmbedBuilder, CommandInteraction, ApplicationCommandOptionType, User, Attachment } from "discord.js";
 import fetch from "node-fetch";
-import { Discord, Guard, Guild, Slash, SlashGroup, SlashOption } from "discordx";
-import { Category, PermissionGuard } from "@discordx/utilities";
+import { Discord, Guild, Slash, SlashGroup, SlashOption } from "discordx";
+import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
 import { CommandCategory } from "../../types/command.js";
 import { BD5_DEV_SERVER_IDS } from "../../constants.js";
@@ -63,12 +63,8 @@ class AfkPicCommand {
 		name: "add",
 		description:
 			"Adds AFK Pic(s) to the AFK Pic collection. (Supports local uploads, discord image links, i.imgur)",
+		defaultMemberPermissions: "Administrator"
 	})
-	@Guard(
-		PermissionGuard(["Administrator"], {
-			content: "You do not have the required permission for that. Please contact bot dev.",
-		})
-	)
 	async add(
 		@SlashOption({
 			name: "pic",

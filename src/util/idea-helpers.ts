@@ -9,12 +9,13 @@ export function buildIdeaEmbeds(ideas: UserIdea[], type: IdeaType | undefined): 
 	const pages: EmbedBuilder[] = [];
 	for (let i = 0; i < ideas.length; i += 1) {
 		const idea = ideas[i];
+		const pageNum = Math.floor(i / MAX_IDEAS_PER_PAGE);
 
 		if (i % MAX_IDEAS_PER_PAGE === 0) {
-			pages.push(new EmbedBuilder().setTitle(type === undefined ? "All Ideas" : `${type} Ideas`));
+			pages.push(new EmbedBuilder().setTitle(type === undefined ? "All Ideas" : `${type} Ideas`).setFooter({text: `Page ${pageNum} of ${Math.floor(ideas.length / MAX_IDEAS_PER_PAGE)}`}));
 		}
 
-		const embed = pages[Math.floor(i / MAX_IDEAS_PER_PAGE)];
+		const embed = pages[pageNum];
 		embed.addFields({
 			name: `(${i + 1})`,
 			value: `Type: ${idea.type}\n Idea: ${idea.description}\n Completed: ${idea.completed}`,

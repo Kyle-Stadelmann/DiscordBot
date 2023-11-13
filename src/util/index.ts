@@ -1,4 +1,3 @@
-export * from "./command-helpers.js";
 export * from "./db-helper.js";
 export * from "./delete-voice-channel.js";
 export * from "./embed-helpers.js";

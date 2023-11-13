@@ -25,7 +25,7 @@ class BipenCommand {
 			.setFooter({ text: `R.I.P. Bipen 08/2012` })
 			.setColor(0x0);
 
-		await interaction.channel.send({ embeds: [embed] });
+		await interaction.reply({ embeds: [embed] });
 		return true;
 	}
 }
