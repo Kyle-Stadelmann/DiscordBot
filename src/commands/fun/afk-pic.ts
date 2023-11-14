@@ -63,7 +63,7 @@ class AfkPicCommand {
 		name: "add",
 		description:
 			"Adds AFK Pic(s) to the AFK Pic collection. (Supports local uploads, discord image links, i.imgur)",
-		defaultMemberPermissions: "Administrator"
+		defaultMemberPermissions: "Administrator",
 	})
 	async add(
 		@SlashOption({

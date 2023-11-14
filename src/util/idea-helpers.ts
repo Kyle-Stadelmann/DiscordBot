@@ -14,7 +14,11 @@ export function buildIdeaEmbeds(ideas: UserIdea[], type: IdeaType | undefined): 
 		const pageNum = Math.floor(i / MAX_IDEAS_PER_PAGE);
 
 		if (i % MAX_IDEAS_PER_PAGE === 0) {
-			pages.push(new EmbedBuilder().setTitle(type === undefined ? "All Ideas" : `${type} Ideas`).setFooter({text: `Page ${pageNum + 1} of ${maxPagesCount}`}));
+			pages.push(
+				new EmbedBuilder()
+					.setTitle(type === undefined ? "All Ideas" : `${type} Ideas`)
+					.setFooter({ text: `Page ${pageNum + 1} of ${maxPagesCount}` })
+			);
 		}
 
 		const embed = pages[pageNum];

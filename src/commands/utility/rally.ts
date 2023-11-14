@@ -20,7 +20,7 @@ class RallyCommand {
 	@Slash({
 		name: "rally",
 		description: "Brings all users connected to voice to the voice channel that the user is in",
-		dmPermission: false
+		dmPermission: false,
 	})
 	async run(
 		@SlashOption({
