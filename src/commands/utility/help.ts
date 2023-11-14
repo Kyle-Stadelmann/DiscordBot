@@ -24,7 +24,7 @@ export class HelpCommand {
 			return isDm ? cmd.dmPermission : cmd.guilds.includes(interaction.guild.id);
 		});
 
-		console.log(cmds)
+		console.log(cmds);
 
 		const fields = getEnumValues(CommandCategory).flatMap((e) => this.getCmdCategoryEmbedField(cmds, e), this);
 

@@ -17,7 +17,7 @@ export abstract class CommandHandler {
 	private async handleCommand([interaction]: ArgsOf<"interactionCreate">) {
 		if (!interaction.isChatInputCommand()) {
 			try {
-				client.executeInteraction(interaction);
+				await client.executeInteraction(interaction);
 			} catch (error) {
 				const errStr = createInteractionErrorStr(interaction, error);
 				console.error(errStr);
@@ -45,7 +45,8 @@ export abstract class CommandHandler {
 			}
 
 			try {
-				if (!interaction.replied && !interaction.deferred) await interaction.reply("Sorry, an error has occurred!");
+				if (!interaction.replied && !interaction.deferred)
+					await interaction.reply("Sorry, an error has occurred!");
 				else await interaction.editReply("Sorry, an error has occurred!");
 			} catch (replyErr) {
 				// This happens when it took 15 minutes for cmd to error out
@@ -73,7 +74,7 @@ export abstract class CommandHandler {
 		// of the cmd is still executing
 		await bdbot.putOnCooldown(commandName, personId);
 
-		const result = await client.executeInteraction(interaction) as boolean;
+		const result = (await client.executeInteraction(interaction)) as boolean;
 		if (result === true) {
 			console.log(`${commandName} was successful`);
 			if (isDevMode()) await bdbot.endCooldown(commandName, personId);
