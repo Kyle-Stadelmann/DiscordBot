@@ -22,3 +22,8 @@ How to use
 To understand how a certain command works use `>commandName help` to get meaningful information about the command.
 
 ![Image of command help command](https://i.imgur.com/XhlapRM.png)
+
+
+Install/Self-Host
+-----------------------------------------------------------------------
+Install ffmpeg onto system and set the environment variable FFMPEG_PATH to the install location.

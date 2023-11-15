@@ -36,6 +36,7 @@ class SeekCommand {
 		const time = this.getTime(times);
 
 		await queue.node.seek(time);
+		await interaction.reply(`Playing ${queue.currentTrack.title} from ${time}`);
 
 		return true;
 	}
