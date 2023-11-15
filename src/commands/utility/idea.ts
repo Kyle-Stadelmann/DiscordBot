@@ -44,6 +44,7 @@ class IdeaCommand {
 
 		const row1 = new ActionRowBuilder<TextInputBuilder>().addComponents(typeInputComponent);
 		const row2 = new ActionRowBuilder<TextInputBuilder>().addComponents(ideaInputComponent);
+		new ActionRowBuilder<TextInputBuilder>().addComponents();
 
 		modal.addComponents(row1, row2);
 
@@ -106,7 +107,7 @@ class IdeaCommand {
 		const [ideaType, ideaStr] = ["type-field", "idea-field"].map((id) => interaction.fields.getTextInputValue(id));
 
 		if (!(ideaType in IdeaType)) {
-			await interaction.reply({
+			await interaction.editReply({
 				content:
 					`${interaction.user.toString()}, please make sure your type ` +
 					"matches one of: `Utility | Fun | Music | General`.\n" +

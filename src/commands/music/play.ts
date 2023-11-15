@@ -23,13 +23,14 @@ class PlayCommand {
 		query: string | undefined,
 		interaction: CommandInteraction
 	): Promise<boolean> {
+		await interaction.deferReply();
 		const queue = bdbot.player.queues.resolve(interaction.guildId);
 		const { guild } = interaction;
 		const member = await guild.members.fetch(interaction.user.id);
 		const voiceChannel = member.voice.channel;
 
 		if (!voiceChannel || voiceChannel === guild.afkChannel) {
-			await interaction.reply("Music command failed. Please join a channel first!");
+			await interaction.editReply("Music command failed. Please join a channel first!");
 			return false;
 		}
 
@@ -43,7 +44,9 @@ class PlayCommand {
 		try {
 			result = await queueSong(voiceChannel, query, interaction.channel, member.user);
 		} catch (e) {
-			await interaction.reply("Music command failed. Was unable to queue song, are you connected to a channel?");
+			await interaction.editReply(
+				"Music command failed. Was unable to queue song, are you connected to a channel?"
+			);
 			console.error(e);
 			return false;
 		}
@@ -51,9 +54,9 @@ class PlayCommand {
 		const { tracks } = result.searchResult;
 
 		if (result.track.playlist) {
-			await interaction.reply(`Added playlist ${result.searchResult.playlist?.title} to the queue.`);
+			await interaction.editReply(`Added playlist ${result.searchResult.playlist?.title} to the queue.`);
 		} else {
-			await interaction.reply(`${tracks[0].title} by ${tracks[0].author} has been added to the queue.`);
+			await interaction.editReply(`${tracks[0].title} by ${tracks[0].author} has been added to the queue.`);
 		}
 		return true;
 	}

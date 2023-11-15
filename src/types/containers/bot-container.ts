@@ -98,5 +98,21 @@ export class BDBot {
 		this.player.events.on("playerStart", async (queue: GuildQueue<{ channel: TextChannel }>, track: Track) => {
 			await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);
 		});
+
+		this.player.on("error", (error: Error) => {
+			console.error("There was an error with the music bot...");
+			console.error(error);
+		});
+
+		this.player.events.on("error", (queue: GuildQueue<{ channel: TextChannel }>, error: Error) => {
+			console.error("There was an error with the music bot...");
+			console.error(error);
+		});
+
+		this.player.events.on("playerError", (queue: GuildQueue<{ channel: TextChannel }>, error: Error) => {
+			queue.metadata.channel.send("There was an error with the music bot...").catch(console.error);
+			console.error("There was an error with the music bot...");
+			console.error(error);
+		});
 	}
 }
