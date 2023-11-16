@@ -34,7 +34,7 @@ export const client = new Client({
 // Bot state
 export const bdbot = new BDBot();
 
-export async function startup() {
+async function startup() {
 	initDb();
 
 	client.once("ready", async () => {
