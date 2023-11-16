@@ -28,7 +28,7 @@ const myIntents = [
 export const client = new Client({
 	intents: myIntents,
 	partials: [Partials.Message, Partials.Channel], // Needed to get messages from DM's as well
-	guards: [ExceptionCatcher]
+	guards: [ExceptionCatcher],
 });
 
 // Bot state
