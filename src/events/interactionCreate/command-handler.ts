@@ -9,6 +9,7 @@ import {
 	printSpace,
 	sendErrorToDiscordChannel,
 } from "../../util/index.js";
+import { getCmdCooldownStrInteraction } from "../../util/cooldown-helper.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -30,14 +31,16 @@ export abstract class CommandHandler {
 			return;
 		}
 
-		const { commandName, user, guildId, member } = interaction;
+		const { user, guildId, member } = interaction;
 
 		let personId;
 		try {
 			personId = this.determinePersonId(member, guildId, user.id);
 			await this.processCmd(interaction, personId);
 		} catch (error) {
-			const errStr = createCmdErrorStr(commandName, error, interaction);
+			const cmdCooldownName = getCmdCooldownStrInteraction(interaction);
+
+			const errStr = createCmdErrorStr(cmdCooldownName, error, interaction);
 			console.error(errStr);
 			printSpace();
 			if (isProdMode()) {
@@ -54,16 +57,18 @@ export abstract class CommandHandler {
 				console.error("Reply timed out. User wasn't made aware of above error");
 				console.error(replyErr);
 			}
-			if (personId) await bdbot.endCooldown(commandName, personId);
+			if (personId) await bdbot.endCooldown(cmdCooldownName, personId);
 		}
 	}
 
 	private async processCmd(interaction: ChatInputCommandInteraction, personId: Snowflake) {
-		const { commandName, user, guildId } = interaction;
+		const { user, guildId } = interaction;
 
-		console.log(`${commandName} command detected by: ${user.username}`);
+		const cmdCooldownName = getCmdCooldownStrInteraction(interaction);
 
-		if (await bdbot.isOnCooldown(commandName, personId, guildId)) {
+		console.log(`${cmdCooldownName} command detected by: ${user.username}`);
+
+		if (await bdbot.isOnCooldown(cmdCooldownName, personId, guildId)) {
 			console.log("Command was NOT successful, member is on cooldown.");
 			printSpace();
 			await interaction.reply("Command was NOT successful, you are on cooldown for this command.");
@@ -72,16 +77,16 @@ export abstract class CommandHandler {
 
 		// Initial cd to ensure the cmd isn't reissued while this instance
 		// of the cmd is still executing
-		await bdbot.putOnCooldown(commandName, personId);
+		await bdbot.putOnCooldown(cmdCooldownName, personId);
 
 		const result = (await client.executeInteraction(interaction)) as boolean;
 		if (result === true) {
-			console.log(`${commandName} was successful`);
-			if (isDevMode()) await bdbot.endCooldown(commandName, personId);
-			else await bdbot.putOnCooldown(commandName, personId);
+			console.log(`${cmdCooldownName} was successful`);
+			if (isDevMode()) await bdbot.endCooldown(cmdCooldownName, personId);
+			else await bdbot.putOnCooldown(cmdCooldownName, personId);
 		} else {
-			console.error(`${commandName} was NOT successful`);
-			await bdbot.endCooldown(commandName, personId);
+			console.log(`${cmdCooldownName} was NOT successful`);
+			await bdbot.endCooldown(cmdCooldownName, personId);
 		}
 	}
 

@@ -1,12 +1,13 @@
 import { Snowflake, TextChannel } from "discord.js";
 import { GuildQueue, Player, Track } from "discord-player";
-import { DApplicationCommand, DSimpleCommand, MetadataStorage } from "discordx";
+import { DApplicationCommand, MetadataStorage } from "discordx";
 import { ICategory } from "@discordx/utilities";
 import { DANIEL_ID } from "../../constants.js";
 import { AfkPicContainer } from "./afk-pic-container.js";
 import { client } from "../../app.js";
 import { ICooldownTime } from "../cooldown-time.js";
 import { CooldownContainer } from "./cooldown-container.js";
+import { getCmdCooldownStr } from "../../util/cooldown-helper.js";
 
 // Global state and functions that read/write global state
 export class BDBot {
@@ -58,36 +59,38 @@ export class BDBot {
 		}
 	}
 
-	public isOnCooldown(cmdName: string, personId: Snowflake, guildId: Snowflake | null): Promise<boolean> {
-		const cdContainer = this.cdContainers.get(cmdName);
+	public isOnCooldown(cmdCooldownName: string, personId: Snowflake, guildId: Snowflake | null): Promise<boolean> {
+		const cdContainer = this.cdContainers.get(cmdCooldownName);
 		return cdContainer.isOnCooldown(personId, guildId);
 	}
 
-	public async putOnCooldown(cmdName: string, personId: Snowflake) {
-		const cdContainer = this.cdContainers.get(cmdName);
+	public async putOnCooldown(cmdCooldownName: string, personId: Snowflake) {
+		const cdContainer = this.cdContainers.get(cmdCooldownName);
 		await cdContainer.putOnCooldown(personId);
 	}
 
-	public async putOnGuildCooldown(guildId: Snowflake, cmdName: string, cd: number) {
-		const cdContainer = this.cdContainers.get(cmdName);
+	public async putOnGuildCooldown(guildId: Snowflake, cmdCooldownName: string, cd: number) {
+		const cdContainer = this.cdContainers.get(cmdCooldownName);
 		await cdContainer.putOnGuildCooldown(guildId, cd);
 	}
 
-	public async endCooldown(cmdName: string, personId: Snowflake) {
-		const cdContainer = this.cdContainers.get(cmdName);
+	public async endCooldown(cmdCooldownName: string, personId: Snowflake) {
+		const cdContainer = this.cdContainers.get(cmdCooldownName);
 		await cdContainer.endCooldown(personId);
 	}
 
-	public async endGuildCooldown(guildId: Snowflake, cmdName: string) {
-		const cdContainer = this.cdContainers.get(cmdName);
+	public async endGuildCooldown(guildId: Snowflake, cmdCooldownName: string) {
+		const cdContainer = this.cdContainers.get(cmdCooldownName);
 		await cdContainer.endGuildCooldown(guildId);
 	}
 
 	private initCooldowns() {
-		MetadataStorage.instance.applicationCommands.forEach(
-			(cmd: (DApplicationCommand | DSimpleCommand) & ICategory & ICooldownTime) => {
-				const container = new CooldownContainer(cmd.cooldownTime ?? 0.5 * 1000, cmd.name);
-				this.cdContainers.set(cmd.name, container);
+		MetadataStorage.instance.applicationCommandSlashesFlat.forEach(
+			(cmd: DApplicationCommand & ICategory & ICooldownTime) => {
+				const { name, group, subgroup } = cmd;
+				const cmdCdName = getCmdCooldownStr(name, group, subgroup);
+				const container = new CooldownContainer(cmd.cooldownTime ?? 0.5 * 1000, cmdCdName);
+				this.cdContainers.set(cmdCdName, container);
 			}
 		);
 	}

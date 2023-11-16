@@ -2,21 +2,20 @@
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { EmbedBuilder, CommandInteraction, ApplicationCommandOptionType, User, Attachment } from "discord.js";
 import fetch from "node-fetch";
-import { Discord, Guild, Slash, SlashGroup, SlashOption } from "discordx";
+import { Discord, Slash, SlashGroup, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
 import { CommandCategory } from "../../types/command.js";
-import { BD5_DEV_SERVER_IDS } from "../../constants.js";
 
 const discordRegex =
 	/^(https?:)?\/\/(cdn|media)\.discordapp\.(com|net)\/attachments\/(\d*)\/(\d*)(?!.*https?:)\/(\S*)(\.(png|jpeg|jpg))(\?width=\d*&height=\d*)?/m;
 const allowedImageRegex = [discordRegex, /(https?:)?\/\/(\w+\.)?imgur\.com\/(\S*)(\.(png|jpeg|jpg))/m];
 
 @Discord()
+@Category(CommandCategory.Fun)
 @SlashGroup({ name: "afkpic", description: "Send or add pictures to the AFK Pic collection" })
 @SlashGroup("afkpic")
-@Category(CommandCategory.Fun)
-@Guild(BD5_DEV_SERVER_IDS)
+// @Guild(BD5_DEV_SERVER_IDS)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class AfkPicCommand {
 	@Slash({ name: "get", description: "Sends an AFK Pic of a random (or given) user" })
