@@ -3,7 +3,7 @@ import { client } from "../app.js";
 import { DEV_SERVER_ERROR_CHANNEL } from "../constants.js";
 
 export function createCmdErrorStr(cmdName: string, error: Error, ci: ChatInputCommandInteraction): string {
-	let errStr = `Error when executing command ${cmdName}\n`;
+	let errStr = `**Error when executing command ${cmdName}\n**`;
 	errStr += `**CommandInteraction**: ${ci.toString()})\n\n`;
 	errStr += `**error**: ${error.stack}\n\n`;
 	return errStr;

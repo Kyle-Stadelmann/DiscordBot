@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Message, ChannelType, GuildMember } from "discord.js";
 import randomWords from "random-words";
-import { Discord, Guild, Slash, SlashGroup } from "discordx";
+import { Discord, Guild } from "discordx";
 import { Category } from "@discordx/utilities";
 import { client } from "../../app.js";
 import {
@@ -89,8 +89,8 @@ function getKyleName(id: string): string {
 }
 
 @Discord()
-@SlashGroup({ name: "aprilfools", description: "!" })
-@SlashGroup("aprilfools")
+// @SlashGroup({ name: "aprilfools", description: "!" })
+// @SlashGroup("aprilfools")
 @Category(CommandCategory.Fun)
 @Guild(BD5_DEV_SERVER_IDS)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -135,7 +135,7 @@ class AprilFoolsStartCommand {
 		return true;
 	}
 
-	@Slash({ name: "undo", description: "!", dmPermission: false })
+	// @Slash({ name: "undo", description: "!", dmPermission: false })
 	async undo(msg: Message): Promise<boolean> {
 		if (msg.author.id !== CHRISTINA_ID) return false;
 		const bd5 = client.guilds.resolve(BD5_ID);
