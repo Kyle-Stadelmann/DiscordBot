@@ -4,12 +4,12 @@ import { bdbot, client } from "../../app.js";
 import {
 	createCmdErrorStr,
 	createInteractionErrorStr,
+	getCmdCooldownStrInteraction,
 	isDevMode,
 	isProdMode,
 	printSpace,
 	sendErrorToDiscordChannel,
 } from "../../util/index.js";
-import { getCmdCooldownStrInteraction } from "../../util/cooldown-helper.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

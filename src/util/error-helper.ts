@@ -1,6 +1,8 @@
 import { TextBasedChannel, EmbedBuilder, ChatInputCommandInteraction, Interaction } from "discord.js";
+import { GuardFunction } from "discordx";
 import { client } from "../app.js";
 import { DEV_SERVER_ERROR_CHANNEL } from "../constants.js";
+import { isProdMode, printSpace } from "./index.js";
 
 export function createCmdErrorStr(cmdName: string, error: Error, ci: ChatInputCommandInteraction): string {
 	let errStr = `**Error when executing command ${cmdName}\n**`;
@@ -21,3 +23,14 @@ export function sendErrorToDiscordChannel(errStr: string) {
 	const errEmbed = new EmbedBuilder().setDescription(errStr);
 	return debugChannel.send({ embeds: [errEmbed] });
 }
+
+export const ExceptionCatcher: GuardFunction = async (p, c, next) => {
+	try {
+		return await next();
+	} catch (e) {
+		console.error(e);
+		printSpace();
+		if (isProdMode()) await sendErrorToDiscordChannel(e.stack);
+		return false;
+	}
+};

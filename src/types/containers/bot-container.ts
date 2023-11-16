@@ -7,7 +7,7 @@ import { AfkPicContainer } from "./afk-pic-container.js";
 import { client } from "../../app.js";
 import { ICooldownTime } from "../cooldown-time.js";
 import { CooldownContainer } from "./cooldown-container.js";
-import { getCmdCooldownStr } from "../../util/cooldown-helper.js";
+import { getCmdCooldownStr } from "../../util/index.js";
 
 // Global state and functions that read/write global state
 export class BDBot {

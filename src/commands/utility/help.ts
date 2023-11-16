@@ -48,7 +48,7 @@ export class HelpCommand {
 		const validCmdNames = new Set<string>();
 		validCmds.forEach((c) => validCmdNames.add(c.name));
 
-		return client.applicationCommands.filter((ac) => validCmdNames.has(ac.name));
+		return client.applicationCommands.filter((ac) => validCmdNames.has(ac.name) && (!isDm || ac.guilds.length === 0));
 	}
 
 	private getCmdCategoryEmbedField(cmds: DApplicationCommand[], cmdCat: CommandCategory): APIEmbedField[] {
