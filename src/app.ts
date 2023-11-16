@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import * as dotenv from "dotenv";
 import { dirname, importx } from "@discordx/importer";
-import { Client, GuardFunction } from "discordx";
+import { Client } from "discordx";
 import { GatewayIntentBits, Partials } from "discord.js";
 import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot-container.js";
-import { initDb, isDevMode, isProdMode, printSpace, sendErrorToDiscordChannel } from "./util/index.js";
+import { ExceptionCatcher, initDb, isDevMode, isProdMode } from "./util/index.js";
 
 dotenv.config({ path: `${SRC_DIR}/../.env` });
 
@@ -25,21 +25,10 @@ const myIntents = [
 	GatewayIntentBits.MessageContent,
 ];
 
-const ExceptionCatcher: GuardFunction = async (p, client, next) => {
-	try {
-		return await next();
-	} catch (e) {
-		console.error(e);
-		printSpace();
-		if (isProdMode()) await sendErrorToDiscordChannel(e.stack);
-		return false;
-	}
-};
-
 export const client = new Client({
 	intents: myIntents,
 	partials: [Partials.Message, Partials.Channel], // Needed to get messages from DM's as well
-	guards: [ExceptionCatcher],
+	guards: [ExceptionCatcher]
 });
 
 // Bot state
