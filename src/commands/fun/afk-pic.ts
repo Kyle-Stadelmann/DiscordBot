@@ -38,7 +38,7 @@ class AfkPicCommand {
 		const afkPicUrl = this.getCorrespondingAfkPicUrl(user);
 
 		if (afkPicUrl) {
-			const embed = new EmbedBuilder().setImage(afkPicUrl);
+			const embed = new EmbedBuilder().setImage(afkPicUrl).setColor(0x0);
 			await interaction.reply({ embeds: [embed] });
 			return true;
 		}

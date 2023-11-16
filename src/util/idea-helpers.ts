@@ -4,6 +4,10 @@ import { IdeaType } from "../commands/utility/idea.js";
 
 const MAX_IDEAS_PER_PAGE = 5;
 
+function capitalizeFirstLetter(str: string): string {
+	return `${str.charAt(0).toUpperCase()}${str.substring(1)}`;
+}
+
 // When type is undefined, we are displaying all ideas
 export function buildIdeaEmbeds(ideas: UserIdea[], type: IdeaType | undefined): EmbedBuilder[] {
 	const pages: EmbedBuilder[] = [];
@@ -16,15 +20,16 @@ export function buildIdeaEmbeds(ideas: UserIdea[], type: IdeaType | undefined): 
 		if (i % MAX_IDEAS_PER_PAGE === 0) {
 			pages.push(
 				new EmbedBuilder()
-					.setTitle(type === undefined ? "All Ideas" : `${type} Ideas`)
+					.setTitle(type === undefined ? "All Ideas" : `${capitalizeFirstLetter(type)} Ideas`)
 					.setFooter({ text: `Page ${pageNum + 1} of ${maxPagesCount}` })
+					.setColor(0x0)
 			);
 		}
 
 		const embed = pages[pageNum];
 		embed.addFields({
 			name: `(${i + 1})`,
-			value: `**Type**: ${idea.type}\n **Idea**: ${idea.description}\n **Completed**: ${idea.completed}`,
+			value: `**Type**: ${capitalizeFirstLetter(idea.type)}\n **Idea**: ${idea.description}\n **Completed**: ${idea.completed}`,
 		});
 	}
 	return pages;

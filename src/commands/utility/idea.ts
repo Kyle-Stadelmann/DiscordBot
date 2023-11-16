@@ -17,10 +17,10 @@ import { buildIdeaEmbeds } from "../../util/idea-helpers.js";
 import { ARROW_BACKWARD_EMOJI, ARROW_FORWARD_EMOJI } from "../../constants.js";
 
 export enum IdeaType {
-	Utility = "Utility",
-	Fun = "Fun",
-	Music = "Music",
-	General = "General",
+	Utility = "utility",
+	Fun = "fun",
+	Music = "music",
+	General = "general",
 }
 
 @Discord()
@@ -104,9 +104,10 @@ class IdeaCommand {
 	async submitIdeaModal(interaction: ModalSubmitInteraction): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
 
-		const [ideaType, ideaStr] = ["type-field", "idea-field"].map((id) => interaction.fields.getTextInputValue(id));
+		const [ideaTypeField, ideaStr] = ["type-field", "idea-field"].map((id) => interaction.fields.getTextInputValue(id));
+		const ideaType = ideaTypeField.toLowerCase();
 
-		if (!(ideaType in IdeaType)) {
+		if (!(Object.values<string>(IdeaType).includes(ideaType))) {
 			await interaction.editReply({
 				content:
 					`${interaction.user.toString()}, please make sure your type ` +
@@ -127,12 +128,13 @@ class IdeaCommand {
 				}" with type "${idea.type}"`,
 			});
 			console.log(`Idea with ID: ${idea.id} submitted to DB by ${interaction.user.username}`);
-		} catch (e) {
+		} catch (error) {
 			console.error("Couldn't create idea in db.");
-			console.error(e);
 			await interaction.editReply({
-				content: `Internal error. Failed to sumbit idea: "${ideaStr}" with type "${ideaType}"`,
+				content: `**Internal error. Failed to sumbit idea:**\n"${ideaStr}"\n**With type:** "${ideaType}"`,
 			});
+			// Propagate error to allow error channel reporting
+			throw error;
 		}
 	}
 }
