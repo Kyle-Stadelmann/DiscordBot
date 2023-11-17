@@ -1,7 +1,7 @@
 import { ArgsOf, Discord, On } from "discordx";
 
 var activeTrain = false;
-var activeTrainString = '';
+var previousString = '';
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -9,35 +9,29 @@ abstract class Train {
 	@On({ event: "messageCreate" })
 	private async handleTrain([msg]: ArgsOf<"messageCreate">) {
     if(!activeTrain){
-      console.log('no active train detected')
-      msg.channel.messages.fetch({limit: 2}).then (msgs => {
-        console.log('checking previous 2 messages')
-        // msgs.reverse().forEach(async element=>{
-        //   console.log(activeTrainString, element.content)
-        //   if(activeTrainString === element.content){
-        //     console.log('last 2 messages were the same, so active train')
-        //     activeTrain = true
-        //     await msg.channel.send(activeTrainString)
-        //   } else {
-        //     console.log('last 2 messages were different, so buisness as usual')
-        //     activeTrainString = element.content
-        //   }
-        // })
-        for(let element of msgs){
-          
+      msg.channel.messages.fetch({limit: 2}).then (async msgs => {
+        for await (let element of msgs){
+          console.log(previousString, element[1].content)
+          if(previousString === element[1].content){
+            // last 2 messages were the same, train time bby
+            activeTrain = true
+            await msg.channel.send(previousString)
+            break;
+          } else {
+            // buisness as usual...
+            previousString = element[1].content
+          }
         }
       })
-    }else {
-      console.log('were in a train!')
+    } else {
       // wait to end activeTrain
-      console.log(activeTrainString, msg.content)
-      if(activeTrainString !== msg.content){
-        console.log('the last message is different from the train string, so end the train')
+      console.log(previousString, msg.content)
+      if(previousString !== msg.content){
         activeTrain = false
       } else {
-        console.log('TRAINTRAINTRAINTRAINTRAIN')
-        activeTrainString = msg.content
+        previousString = msg.content
       }
     }
-	}
+
+  }
 }
