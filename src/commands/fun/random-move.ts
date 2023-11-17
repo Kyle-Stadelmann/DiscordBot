@@ -70,12 +70,8 @@ class RandomMoveCommand {
 			return true;
 		}
 
-		// If sender or victim isn't an admin, ignore this event
-		// TODO: Migrate to command permission check
-		if (
-			!sender.permissions.has(PermissionFlagsBits.Administrator) ||
-			!victim.permissions.has(PermissionFlagsBits.Administrator)
-		) {
+		// If victim isn't also an admin, ignore this event
+		if (!victim.permissions.has(PermissionFlagsBits.Administrator)) {
 			await interaction.reply({
 				content: "Command was NOT successful, you or your victim are not an admin.",
 				ephemeral: true,

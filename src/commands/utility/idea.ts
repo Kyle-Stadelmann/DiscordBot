@@ -104,10 +104,12 @@ class IdeaCommand {
 	async submitIdeaModal(interaction: ModalSubmitInteraction): Promise<void> {
 		await interaction.deferReply({ ephemeral: true });
 
-		const [ideaTypeField, ideaStr] = ["type-field", "idea-field"].map((id) => interaction.fields.getTextInputValue(id));
+		const [ideaTypeField, ideaStr] = ["type-field", "idea-field"].map((id) =>
+			interaction.fields.getTextInputValue(id)
+		);
 		const ideaType = ideaTypeField.toLowerCase();
 
-		if (!(Object.values<string>(IdeaType).includes(ideaType))) {
+		if (!Object.values<string>(IdeaType).includes(ideaType)) {
 			await interaction.editReply({
 				content:
 					`${interaction.user.toString()}, please make sure your type ` +
