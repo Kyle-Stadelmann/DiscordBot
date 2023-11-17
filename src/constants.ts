@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-export const PREFIX = ">";
 export const BD5_BOT_STUFF_CHANNEL_ID = "732739176285470942";
 export const CHRISTINA_POLLS_CHANNEL_ID = "1076370840670707712";
 
@@ -51,6 +50,7 @@ export const BD4_ID = "191318875667824650";
 export const BD5_ID = "505214234393706499";
 export const DEV_BOT_ID = "873375752408694855";
 export const DEV_SERVER_ID = "723147134605590598";
+export const BD5_DEV_SERVER_IDS = [BD5_ID, DEV_SERVER_ID];
 export const BD4_BOT_ID = "480909013593227277";
 export const DANIEL_WPM = "48";
 export const QUESTION_MARK_URL =
@@ -63,8 +63,8 @@ export const WHITE_CHECK_MARK = "✅";
 export const X_MARK = "❌";
 export const MUSICAL_NOTES = "🎶";
 export const LIGHTBULB = "💡";
-export const ARROW_BACKWARD_ID = "◀️";
-export const ARROW_FORWARD_ID = "▶️";
+export const ARROW_BACKWARD_EMOJI = "◀️";
+export const ARROW_FORWARD_EMOJI = "▶️";
 export const ZERO_EMOJI = "0️⃣";
 export const ONE_EMOJI = "1️⃣";
 export const TWO_EMOJI = "2️⃣";
@@ -80,7 +80,6 @@ export const L_THEME_URL = "https://www.youtube.com/watch?v=qR6dzwQahOM";
 export const GHOST_TRAIN_ROBBERY = "https://www.youtube.com/watch?v=jgWziW2iNjE";
 export const TOXIC_URL = "https://www.youtube.com/watch?v=LOZuxwVk7TU";
 export const PLAYER_SITES = ["spotify", "youtube", "youtu.be", "soundcloud"];
-export const IDEA_TYPES = ["utility", "fun", "music", "general"];
 // TODO: Standardize paths
 export const SRC_DIR = path.resolve(`${dirname}`);
 

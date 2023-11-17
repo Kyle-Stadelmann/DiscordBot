@@ -1,17 +1,22 @@
 // Awaits in loops are critical to the functionality of this command
 /* eslint-disable no-await-in-loop */
 import {
+	ApplicationCommandOptionType,
 	ChannelType,
+	CommandInteraction,
 	Guild,
 	GuildMember,
-	Message,
 	PermissionFlagsBits,
 	StageChannel,
-	TextBasedChannel,
+	User,
 	VoiceChannel,
 } from "discord.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { deleteVoiceChannel, sendErrorMessage, sleep } from "../../util/index.js";
+import { Discord, Slash, SlashOption } from "discordx";
+import { Category } from "@discordx/utilities";
+import { CommandCategory } from "../../types/command.js";
+import { deleteVoiceChannel, sleep } from "../../util/index.js";
+import { CooldownTime } from "../../types/cooldown-time.js";
+import { bdbot } from "../../app.js";
 
 const NUM_CHANNELS_FLAILED = 10;
 
@@ -21,38 +26,49 @@ const WAIT_TIME = 20 * 1000;
 // Note: We end the cooldown manually after cmd is done too
 const GUILD_CD_TIME = 60 * 1000;
 
-const cmdConfig: CommandConfig = {
-	name: "flail",
-	description: "Brigitte lends you her flail to hit your target a large amount of channels down",
-	category: CommandCategory.Fun,
-	usage: `flail @user`,
-	cooldownTime: 60 * 60 * 1000,
-	aliases: ["whip"],
-};
+@Discord()
+@Category(CommandCategory.Fun)
+@CooldownTime(60 * 60 * 1000)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class WhipCommand {
+	@Slash({
+		name: "whip",
+		description: "Smacks your target a large amount of channels down",
+		dmPermission: false,
+		defaultMemberPermissions: "Administrator",
+	})
+	async whip(
+		@SlashOption({
+			name: "target",
+			description: "The target of your flail",
+			required: true,
+			type: ApplicationCommandOptionType.User,
+		})
+		victimUser: User,
+		interaction: CommandInteraction
+	): Promise<boolean> {
+		const { guild } = interaction;
+		const victimMember = await guild.members.fetch(victimUser.id);
+		const senderMember = await guild.members.fetch(interaction.user.id);
 
-class FlailCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const victim = msg.mentions.members.first();
-		const { guild } = msg;
-
-		const error = await this.errorCheck(victim, msg.member, msg.channel);
+		const error = await this.hadError(victimMember, senderMember, interaction);
 		if (error) return false;
 
-		await this.putOnGuildCooldown(msg.guild, GUILD_CD_TIME);
+		await bdbot.putOnGuildCooldown(guild.id, "whip", GUILD_CD_TIME);
 
-		const originalChannel = victim.voice.channel;
+		const originalChannel = victimMember.voice.channel;
 		// Voice channels iterator in order of position
-		const voiceChannels = this.getValidVoiceChannels(guild, victim);
+		const voiceChannels = this.getValidVoiceChannels(guild, victimMember);
 
-		// Perform flail, gather temp channels to be deleted
-		const tempChannels = await this.flail(voiceChannels, victim, guild);
+		// Perform whip, gather temp channels to be deleted
+		const tempChannels = await this.flail(voiceChannels, victimMember, guild);
 
 		// Wait some time for everyone to comprehend what happened to this poor soul
 		await sleep(WAIT_TIME);
 
-		await this.cleanup(victim, tempChannels, originalChannel);
+		await this.cleanup(victimMember, tempChannels, originalChannel);
 
-		await this.endGuildCooldown(msg.guild);
+		await bdbot.endGuildCooldown(guild.id, "whip");
 
 		return true;
 	}
@@ -132,23 +148,13 @@ class FlailCommand extends Command {
 		return validChannels as IterableIterator<VoiceChannel | StageChannel>;
 	}
 
-	private async errorCheck(victim: GuildMember, sender: GuildMember, channel: TextBasedChannel): Promise<boolean> {
-		if (victim == null) {
-			await sendErrorMessage(channel, "Command was NOT successful, you must specify an victim.");
-			return true;
-		}
-
-		const permissions = sender.permissionsIn(sender.voice.channel);
-		// If sender isn't an admin, ignore this event
-		// TODO: Migrate to command permission check
-		if (!permissions.has(PermissionFlagsBits.Administrator)) {
-			await sendErrorMessage(channel, "Command was NOT successful, Brigitte only lends her flail to admins.");
-			return true;
-		}
-
+	private async hadError(
+		victim: GuildMember,
+		sender: GuildMember,
+		interaction: CommandInteraction
+	): Promise<boolean> {
 		if (sender.voice.channel == null || sender.voice.channelId !== victim.voice.channelId) {
-			await sendErrorMessage(
-				channel,
+			await interaction.reply(
 				"Command was NOT successful, your target isn't close enough (not in the same voice channel as you)"
 			);
 			return true;
@@ -157,5 +163,3 @@ class FlailCommand extends Command {
 		return false;
 	}
 }
-
-export default new FlailCommand(cmdConfig);

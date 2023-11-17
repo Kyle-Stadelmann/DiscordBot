@@ -1,36 +1,43 @@
-import { Guild, Message, PermissionFlagsBits, StageChannel, VoiceChannel } from "discord.js";
-import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
-import { getRandomElement, sendErrorMessage, sendMessage } from "../../util/index.js";
+import { CommandInteraction, Guild, PermissionFlagsBits, StageChannel, VoiceChannel } from "discord.js";
+import { Category } from "@discordx/utilities";
+import { Discord, Slash } from "discordx";
+import { CommandCategory } from "../../types/command.js";
+import { getRandomElement } from "../../util/index.js";
+import { CooldownTime } from "../../types/cooldown-time.js";
 
-const cmdConfig: CommandConfig = {
-	name: "scramble",
-	description: "Sends everyone in your channel to a random channel.",
-	category: CommandCategory.Fun,
-	usage: `scramble`,
-	cooldownTime: 60 * 60 * 1000,
-};
+@Discord()
+@Category(CommandCategory.Fun)
+@CooldownTime(60 * 60 * 1000)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class ScrambleCommand {
+	@Slash({ name: "scramble", description: "Sends everyone in your channel to a random channel", dmPermission: false })
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const { guild } = interaction;
+		const member = await guild.members.fetch(interaction.user.id);
+		const startChannel = member.voice?.channel;
 
-class ScrambleCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const textChannel = msg.channel;
-		const startChannel = msg.member.voice.channel;
-
-		if (!startChannel || msg.guild.afkChannel === startChannel) {
-			await sendErrorMessage(textChannel, "Scramble failed because you are not in a valid voice channel!");
+		if (!startChannel || guild.afkChannel === startChannel) {
+			await interaction.reply({
+				content: "Scramble failed because you are not in a valid voice channel!",
+				ephemeral: true,
+			});
 			return false;
 		}
 
-		const validChannels = this.getValidChannels(msg.guild, startChannel);
+		const validChannels = this.getValidChannels(guild, startChannel);
 		if (validChannels.length === 0) {
-			await sendErrorMessage(textChannel, "Scramble failed because there are no valid, visible voice channels.");
+			await interaction.reply({
+				content: "Scramble failed because there are no valid, visible voice channels.",
+				ephemeral: true,
+			});
 			return false;
 		}
 
-		await sendMessage(textChannel, `Initiating channel scramble on *${startChannel.name}*.`);
+		await interaction.reply({ content: `Initiating channel scramble on *${startChannel.name}*.` });
 
 		await this.moveChannelMembers(startChannel, validChannels);
 
-		await sendMessage(textChannel, "Channel scramble completed!");
+		await interaction.reply({ content: "Channel scramble completed!" });
 
 		return true;
 	}
@@ -67,5 +74,3 @@ class ScrambleCommand extends Command {
 		return validChannels;
 	}
 }
-
-export default new ScrambleCommand(cmdConfig);

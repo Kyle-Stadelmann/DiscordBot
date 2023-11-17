@@ -1,24 +1,23 @@
 import { getVoiceConnection } from "@discordjs/voice";
-import { Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { Discord, Slash } from "discordx";
+import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
-import { X_MARK } from "../../constants.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
+import { CommandCategory } from "../../types/command.js";
 
-const cmdConfig: CommandConfig = {
-	name: "disconnect",
-	description: "BD4 Bot disconnects from its current voice channel.",
-	category: CommandCategory.Utility,
-	usage: `disconnect`,
-};
-
-class DisconnectCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const connection = getVoiceConnection(msg.guildId);
-		const musicQueue = bdbot.player.queues.resolve(msg.guildId);
+@Discord()
+@Category(CommandCategory.Utility)
+export class DisconnectCommand {
+	@Slash({ name: "disconnect", description: "BDBot disconnects from its current voice channel", dmPermission: false })
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const connection = getVoiceConnection(interaction.guildId);
+		const musicQueue = bdbot.player.queues.resolve(interaction.guildId);
 
 		if (!connection && !musicQueue) {
-			console.log(`Bot is not in a voice channel`);
-			await msg.react(X_MARK);
+			await interaction.reply({
+				content: "Couldn't disconnect from channel, bot is not in a channel!",
+				ephemeral: true,
+			});
 			return false;
 		}
 
@@ -28,5 +27,3 @@ class DisconnectCommand extends Command {
 		return true;
 	}
 }
-
-export default new DisconnectCommand(cmdConfig);

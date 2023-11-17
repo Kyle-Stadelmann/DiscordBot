@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from "axios";
 import { APIEmbedField, EmbedBuilder } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import * as cheerio from "cheerio";
-import { sendEmbeds } from "../../util/index.js";
 
 const TARGET_SITE = "https://nyaa.si/view/";
 const IMG_DESCRIPTION_REGEX = /!\[.*?]/g;
@@ -48,7 +47,7 @@ abstract class NyaaEmbed {
 		const embed = this.createEmbed($, url, data);
 		if (!embed) return;
 
-		await sendEmbeds(msg.channel, [embed]);
+		await msg.channel.send({ embeds: [embed] });
 	}
 
 	private createEmbed($: cheerio.CheerioAPI, url: string, data: string): EmbedBuilder | undefined {
