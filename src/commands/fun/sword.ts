@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType, CommandInteraction, User } from "discord.js";
 import { Discord, Guild, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
-import { ZACH_ID, BD4_BOT_ID, BD5_DEV_SERVER_IDS } from "../../constants.js";
+import { ZACH_ID, BDBOT_ID, BD5_DEV_SERVER_IDS } from "../../constants.js";
 import { CommandCategory } from "../../types/command.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
 
@@ -46,7 +46,7 @@ class SwordCommand {
 
 		const victimMember = await interaction.guild.members.fetch(victimUser.id);
 
-		if (!victimMember.kickable || victimMember.id === BD4_BOT_ID) {
+		if (!victimMember.kickable || victimMember.id === BDBOT_ID) {
 			await interaction.reply(
 				"You decided against it, you fear your victim's strength completely eclipses yours."
 			);

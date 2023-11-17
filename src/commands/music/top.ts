@@ -30,7 +30,6 @@ class TopCommand {
 			// TODO: would anyone ever want to top a whole playlist?
 			.then((x) => x.tracks[0]);
 
-		// dont think this can happen but just to be safe
 		if (!foundTrack) {
 			await interaction.reply("Couldn't find a track. Please report this bug to the bot developers");
 			return false;
