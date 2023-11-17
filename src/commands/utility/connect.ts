@@ -1,47 +1,38 @@
 import { getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
-import { Message, PermissionFlagsBits } from "discord.js";
-import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
-
-const cmdConfig: CommandConfig = {
-	name: "connect",
-	description: "BD4 Bot connects to the user's voice channel.",
-	category: CommandCategory.Utility,
-	usage: "connect",
-};
+import { Category } from "@discordx/utilities";
+import { CommandInteraction } from "discord.js";
+import { Discord, Slash } from "discordx";
+import { CommandCategory } from "../../types/command.js";
 
 // TODO: make it so that this doesn't break music functions
-class ConnectCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		if (getVoiceConnection(msg.guildId)) {
-			console.log("Bot already connected");
+@Discord()
+@Category(CommandCategory.Utility)
+export class ConnectCommand {
+	@Slash({ name: "connect", description: "BDBot connects to the user's voice channel", dmPermission: false })
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		if (getVoiceConnection(interaction.guildId)) {
 			return false;
 		}
 
-		// User's voice channel
-		const voiceChannel = msg.member.voice.channel;
+		const { guild } = interaction;
+		const member = await guild.members.fetch(interaction.user.id);
+		const voiceChannel = member.voice?.channel;
 
-		if (!voiceChannel || voiceChannel === msg.guild.afkChannel) {
-			console.log(`${msg.author.username} is not connected to a valid voice channel`);
-			await msg.react(X_MARK);
+		if (!voiceChannel || voiceChannel === guild.afkChannel) {
+			await interaction.reply({
+				content: "Couldn't connect. You're not in a valid voice channel!",
+				ephemeral: true,
+			});
 			return false;
 		}
 
 		joinVoiceChannel({
 			channelId: voiceChannel.id,
 			guildId: voiceChannel.guildId,
-			selfDeaf: true,
-
-			adapterCreator: msg.guild.voiceAdapterCreator,
+			adapterCreator: guild.voiceAdapterCreator,
 		});
-		console.log(`Connected to ${voiceChannel.name}`);
 
-		if (voiceChannel.permissionsFor(msg.guild.roles.everyone).has(PermissionFlagsBits.ViewChannel)) {
-			await msg.react(WHITE_CHECK_MARK);
-		}
-
+		await interaction.reply(`Connecting to ${voiceChannel.name}...`);
 		return true;
 	}
 }
-
-export default new ConnectCommand(cmdConfig);

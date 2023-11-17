@@ -4,6 +4,7 @@ import { botMode, BotModeEnum } from "../settings.js";
 
 switch (botMode) {
 	case BotModeEnum.PROD:
+		execSync("rm -rf dist", { stdio: [0, 1, 2] });
 		execSync("npm run build", { stdio: [0, 1, 2] });
 		execSync("npm run start-js", { stdio: [0, 1, 2] });
 		break;

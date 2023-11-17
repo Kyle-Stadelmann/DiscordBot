@@ -1,52 +1,73 @@
 // Critical to functionality of command
 /* eslint-disable no-await-in-loop */
-import { ChannelType, Message } from "discord.js";
-import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/message-channel.js";
-import { sleep } from "../../util/sleep.js";
-
-const cmdConfig: CommandConfig = {
-	name: "spam",
-	description: "Repeatedly ping a victim with a message until they respond.",
-	category: CommandCategory.Utility,
-	usage: `spam @user [Message BatchAmount]`,
-	examples: ["spam @Xited1730", "spam @Xited1730 hello 5", 'spam @Xited1730 "wake up" 3'],
-	cooldownTime: 10 * 60 * 1000,
-};
+import { ApplicationCommandOptionType, CommandInteraction, User } from "discord.js";
+import { Discord, Slash, SlashOption } from "discordx";
+import { Category } from "@discordx/utilities";
+import { CommandCategory } from "../../types/command.js";
+import { sleep } from "../../util/index.js";
+import { CooldownTime } from "../../types/cooldown-time.js";
 
 const SPAM_AMMOUNT = 4;
 const SLEEP_TIME_MS = 10 * 1000;
 const MAX_SPAM_AMOUNT = 20;
 
-class SpamCommand extends Command {
-	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const victim = msg.mentions.members?.first();
-		const startTs = msg.createdTimestamp;
-		const { channel } = msg;
+@Discord()
+@Category(CommandCategory.Utility)
+@CooldownTime(10 * 60 * 1000)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class SpamCommand {
+	public cooldownTime = 10 * 60 * 1000;
+	public category = CommandCategory.Utility;
 
-		if (!victim) {
-			await sendErrorMessage(channel, "You must specify a victim.");
-			return false;
-		}
+	@Slash({
+		name: "spam",
+		description: "Repeatedly ping a victim with a message until they respond",
+		dmPermission: false,
+	})
+	async run(
+		@SlashOption({
+			name: "victim",
+			description: "The user to spam",
+			required: true,
+			type: ApplicationCommandOptionType.User,
+		})
+		victim: User,
+		@SlashOption({
+			name: "message",
+			description: "The message to spam",
+			required: false,
+			type: ApplicationCommandOptionType.String,
+		})
+		spamMessage: string | undefined,
+		@SlashOption({
+			name: "count",
+			description: "The number of spam batches to send (max 20)",
+			required: false,
+			type: ApplicationCommandOptionType.Number,
+		})
+		count: number | undefined,
+		interaction: CommandInteraction
+	): Promise<boolean> {
+		const startTs = interaction.createdTimestamp;
+		const { channel } = interaction;
 
-		const spamStr: string = args[1];
-		let moveTimes = args.length > 1 && +args[2] ? +args[2] : 1;
-		moveTimes = Math.min(moveTimes, MAX_SPAM_AMOUNT);
+		let batchCount = count ?? 1;
+		batchCount = Math.min(batchCount, MAX_SPAM_AMOUNT);
+		const spamStr = spamMessage ?? "";
 
-		await sendMessage(channel, `Spamming ${moveTimes} time${moveTimes === 1 ? "" : "s"}...`);
+		await interaction.reply(`Spamming ${batchCount} times${batchCount === 1 ? "" : "s"}...`);
 
-		for (let i = 0; i < moveTimes; i += 1) {
+		for (let i = 0; i < batchCount; i += 1) {
 			for (let s = 0; s < SPAM_AMMOUNT; s += 1) {
-				await sendMessage(channel, `${victim.toString()} ${spamStr}`);
+				await channel.send(`${victim.toString()} ${spamStr}`);
 			}
 
 			await sleep(SLEEP_TIME_MS);
 
 			// This command is not allowed in DM so this will never be true.
 			// But this is necessary for the next line to type check
-			if (channel.type === ChannelType.DM) return false;
-			if (channel.messages.cache.some((m) => m.member === victim && m.createdTimestamp > startTs)) {
-				await sendMessage(channel, `Stopping spam since victim has responded.`);
+			if (channel.messages.cache.some((m) => m.member.user === victim && m.createdTimestamp > startTs)) {
+				await channel.send(`Stopping spam since victim has responded.`);
 				return true;
 			}
 		}
@@ -54,5 +75,3 @@ class SpamCommand extends Command {
 		return true;
 	}
 }
-
-export default new SpamCommand(cmdConfig);

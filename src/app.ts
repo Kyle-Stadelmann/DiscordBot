@@ -5,11 +5,9 @@ import { Client } from "discordx";
 import { GatewayIntentBits, Partials } from "discord.js";
 import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot-container.js";
-import { initDb, isDevMode, isProdMode } from "./util/index.js";
+import { ExceptionCatcher, initDb, isDevMode, isProdMode } from "./util/index.js";
 
 dotenv.config({ path: `${SRC_DIR}/../.env` });
-
-initDb();
 
 const myIntents = [
 	GatewayIntentBits.Guilds,
@@ -30,16 +28,20 @@ const myIntents = [
 export const client = new Client({
 	intents: myIntents,
 	partials: [Partials.Message, Partials.Channel], // Needed to get messages from DM's as well
+	guards: [ExceptionCatcher],
 });
 
 // Bot state
 export const bdbot = new BDBot();
 
-client.on("interactionCreate", (interaction) => {
-	client.executeInteraction(interaction);
-});
+async function startup() {
+	initDb();
 
-export async function startup() {
+	client.once("ready", async () => {
+		await client.initApplicationCommands();
+		await bdbot.initContainter();
+	});
+
 	const fileType = isProdMode() ? "js" : "ts";
 
 	await Promise.all([
@@ -52,8 +54,6 @@ export async function startup() {
 	} else {
 		await client.login(process.env.BOT_TOKEN);
 	}
-
-	await bdbot.initContainter();
 }
 
 startup().catch(console.error);

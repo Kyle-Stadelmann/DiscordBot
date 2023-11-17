@@ -1,38 +1,24 @@
-import { Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { Discord, Slash } from "discordx";
+import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
 import { MUSICAL_NOTES } from "../../constants.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage, sendMessage } from "../../util/index.js";
-import { isQueueValid } from "../../util/music-helpers.js";
+import { CommandCategory } from "../../types/command.js";
+import { isQueueValid } from "../../util/index.js";
 
-const cmdConfig: CommandConfig = {
-	name: "queue",
-	description: "Shows the current music queue",
-	category: CommandCategory.Music,
-	usage: "queue",
-};
-
-// There may be a way to completely rework this command so that you can see
-// all the songs in the queue, but that'll require a lot of brain power
-
-// could potentially renovate to add a command where you jump to the index
-// of a specific track which also works with previous tracks
-class QueueCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!isQueueValid(queue)) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first!"
-			);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class QueueCommand {
+	@Slash({ name: "queue", description: "Shows the current music queue", dmPermission: false })
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		if (!isQueueValid(queue) || !queue.currentTrack) {
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
 		const np = queue.currentTrack;
-		if (!np) {
-			await sendMessage(msg.channel, `No tracks in the queue`);
-			return false;
-		}
 
 		const ptlen = queue.history.size;
 		const currentPos = ptlen + 1;
@@ -53,9 +39,7 @@ class QueueCommand extends Command {
 
 		tracks += "```";
 
-		await sendMessage(msg.channel, tracks);
+		await interaction.reply(tracks);
 		return true;
 	}
 }
-
-export default new QueueCommand(cmdConfig);

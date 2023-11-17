@@ -1,8 +1,11 @@
-import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
+import { Discord } from "discordx";
+import { Category } from "@discordx/utilities";
+import { CommandCategory } from "../../types/command.js";
 
+/*
 const cmdConfig: CommandConfig = {
 	name: "jar",
-	description: "Create a jar based on a certain topic. Users can then add entires and pull a random entry.",
+	description: "",
 	category: CommandCategory.Utility,
 	usage: `jar [Action] [Category]`,
 	// extras: {
@@ -18,11 +21,14 @@ const cmdConfig: CommandConfig = {
 	allowInDM: true,
 	disabled: true,
 };
+*/
 
-class JarCommand extends Command {
+@Discord()
+@Category(CommandCategory.Utility)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class JarCommand {
+	// @Slash({name: "jar", description: "Create a jar based on a certain topic. Users can then add entires and pull a random entry"})
 	public async run(): Promise<boolean> {
 		return true;
 	}
 }
-
-export default new JarCommand(cmdConfig);

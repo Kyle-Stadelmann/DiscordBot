@@ -1,31 +1,27 @@
-import { Message, EmbedBuilder } from "discord.js";
-import { client } from "../../app.js";
+import { EmbedBuilder, CommandInteraction } from "discord.js";
+import { Discord, Slash } from "discordx";
+import { Category } from "@discordx/utilities";
 import { TYPESCRIPT_URL } from "../../constants.js";
-import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
-import { getRandomHexColorStr, sendEmbeds } from "../../util/index.js";
+import { getRandomHexColorStr } from "../../util/index.js";
+import { CommandCategory } from "../../types/command.js";
+import { client } from "../../app.js";
 
 // Probably won't work in pm2
 const version = process.env.npm_package_version;
 
-const cmdConfig: CommandConfig = {
-	name: "ping",
-	description: "Sends pong! for testing purposes.",
-	category: CommandCategory.Utility,
-	usage: `ping`,
-	allowInDM: true,
-};
-
-class PingCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
+@Discord()
+@Category(CommandCategory.Utility)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class PingCommand {
+	@Slash({ name: "ping", description: "Sends pong! for testing purposes" })
+	async run(interaction: CommandInteraction): Promise<boolean> {
 		const embed = new EmbedBuilder()
 			.setImage(client.user.avatarURL())
 			.setTitle("pong!")
 			.setFooter({ text: `version ${version}`, iconURL: TYPESCRIPT_URL })
 			.setColor(getRandomHexColorStr());
 
-		await sendEmbeds(msg.channel, [embed]);
+		await interaction.reply({ embeds: [embed] });
 		return true;
 	}
 }
-
-export default new PingCommand(cmdConfig);
