@@ -92,8 +92,8 @@ abstract class NyaaEmbed {
 				embed.setFooter({ text: "Rowan and ot4ku were not here :(" });
 			}
 		} catch (err) {
-			// Possible errors from invalid image can crash bot
-			// TODO: Catch errors from all events somehow
+			console.error(`Couldn't build nyaa embed for url: ${url}`);
+			console.error(err);
 		}
 
 		return embed;

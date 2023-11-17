@@ -11,6 +11,10 @@ export class ConnectCommand {
 	@Slash({ name: "connect", description: "BDBot connects to the user's voice channel", dmPermission: false })
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		if (getVoiceConnection(interaction.guildId)) {
+			await interaction.reply({
+				content: "Couldn't connect. I'm already connected to a channel!",
+				ephemeral: true,
+			});
 			return false;
 		}
 
@@ -26,13 +30,14 @@ export class ConnectCommand {
 			return false;
 		}
 
+		await interaction.reply(`Connecting to ${voiceChannel.name}...`);
+
 		joinVoiceChannel({
 			channelId: voiceChannel.id,
 			guildId: voiceChannel.guildId,
 			adapterCreator: guild.voiceAdapterCreator,
 		});
 
-		await interaction.reply(`Connecting to ${voiceChannel.name}...`);
 		return true;
 	}
 }
