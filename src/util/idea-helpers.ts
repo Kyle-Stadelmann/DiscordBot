@@ -29,7 +29,9 @@ export function buildIdeaEmbeds(ideas: UserIdea[], type: IdeaType | undefined): 
 		const embed = pages[pageNum];
 		embed.addFields({
 			name: `(${i + 1})`,
-			value: `**Type**: ${capitalizeFirstLetter(idea.type)}\n **Idea**: ${idea.description}\n **Completed**: ${idea.completed}`,
+			value: `**Type**: ${capitalizeFirstLetter(idea.type)}\n **Idea**: ${idea.description}\n **Completed**: ${
+				idea.completed
+			}`,
 		});
 	}
 	return pages;

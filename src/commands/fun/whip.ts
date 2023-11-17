@@ -18,7 +18,7 @@ import { deleteVoiceChannel, sleep } from "../../util/index.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
 import { bdbot } from "../../app.js";
 
-const NUM_CHANNELS_FLAILED = 10;
+const NUM_CHANNELS_WHIPPED = 10;
 
 const WAIT_TIME = 20 * 1000;
 
@@ -40,7 +40,7 @@ class WhipCommand {
 	async whip(
 		@SlashOption({
 			name: "target",
-			description: "The target of your flail",
+			description: "The target of your wrath",
 			required: true,
 			type: ApplicationCommandOptionType.User,
 		})
@@ -66,6 +66,7 @@ class WhipCommand {
 		// Wait some time for everyone to comprehend what happened to this poor soul
 		await sleep(WAIT_TIME);
 
+		// TODO add retry here maybe?
 		await this.cleanup(victimMember, tempChannels, originalChannel);
 
 		await bdbot.endGuildCooldown(guild.id, "whip");
@@ -92,7 +93,7 @@ class WhipCommand {
 	): Promise<VoiceChannel[]> {
 		const tempChannels: VoiceChannel[] = [];
 
-		for (let i = 0; i < NUM_CHANNELS_FLAILED; i += 1) {
+		for (let i = 0; i < NUM_CHANNELS_WHIPPED; i += 1) {
 			// Next channel to move victim to is the next available channel below current one in guild
 			const nextIterator = voiceChannels.next();
 			let nextChannel = nextIterator.value;
