@@ -6,20 +6,16 @@ let activeTrain = false;
 abstract class Train {
 	@On({ event: "messageCreate" })
 	private async handleTrain([msg]: ArgsOf<"messageCreate">) {
-		if (!activeTrain) {
-			const msgs = await msg.channel.messages.fetch({ limit: 2 });
-			console.log(`msgs:${msgs}`);
-			console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
-			console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
-			console.log("++++++++++++++++++++++++++++++++++++++++++++++++++");
-			console.log(`msgs[0]:${msgs[0]}`);
-			if (msgs[0].content === msgs[1].content && msgs[0].user.id !== msgs[1].user.id) {
-				// last 2 messages were the same and written by different people, train time bby
-				activeTrain = true;
-				await msg.channel.send(msgs[0].content);
-			} else if (msgs[0].content !== msgs[1].content) {
-				activeTrain = false;
-			}
+		const msgs = await msg.channel.messages.fetch({ limit: 2 });
+		if (
+			!activeTrain &&
+			msgs.at(0).content === msgs.at(1).content &&
+			msgs.at(0).author.id !== msgs.at(1).author.id
+		) {
+			activeTrain = true;
+			await msg.channel.send(msgs.at(0).content);
+		} else if (msgs.at(0).content !== msgs.at(1).content) {
+			activeTrain = false;
 		}
 	}
 }
