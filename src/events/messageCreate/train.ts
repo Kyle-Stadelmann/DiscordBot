@@ -1,6 +1,6 @@
 import { ArgsOf, Discord, On } from "discordx";
 
-let activeTrain = false;
+const activeTrains = new Set<String>();
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class Train {
@@ -8,14 +8,14 @@ abstract class Train {
 	private async handleTrain([msg]: ArgsOf<"messageCreate">) {
 		const msgs = await msg.channel.messages.fetch({ limit: 2 });
 		if (
-			!activeTrain &&
+			!activeTrains.has(msg.channelId) &&
 			msgs.at(0).content === msgs.at(1).content &&
 			msgs.at(0).author.id !== msgs.at(1).author.id
 		) {
-			activeTrain = true;
+			activeTrains.add(msg.channelId);
 			await msg.channel.send(msgs.at(0).content);
 		} else if (msgs.at(0).content !== msgs.at(1).content) {
-			activeTrain = false;
+			activeTrains.delete(msg.channelId);
 		}
 	}
 }
