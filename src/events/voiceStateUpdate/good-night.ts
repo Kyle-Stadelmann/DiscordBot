@@ -1,7 +1,11 @@
-import { GuildMember, VoiceBasedChannel } from "discord.js";
+import axios from "axios";
+import { GuildMember, TextBasedChannel, VoiceBasedChannel } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
+import { client } from "../../app.js";
+import { BD5_BOT_STUFF_CHANNEL_ID, DEV_SERVER_TESTING_CHANNEL_1_ID } from "../../constants.js";
+import { random } from "../../util/index.js";
 
-const goodNightVariations = [
+const GOOD_NIGHT_VARIATIONS = [
 	"goot!",
 	"goote!",
 	"gooten!",
@@ -11,6 +15,8 @@ const goodNightVariations = [
 	"goodnight!",
 	"good night!",
 ];
+
+const KISS_CHANCE = 10;
 
 const leftOnLog = new Map<GuildMember, Date>();
 
@@ -51,23 +57,36 @@ async function hasHumans(channel: VoiceBasedChannel): Promise<boolean> {
 	}
 
 	// eslint-disable-next-line consistent-return
-	channel.members.forEach((member) => {
-		if (!member.user.bot) return true;
+	channel.members.forEach(async (member) => {
+		if (!(await member.user.fetch()).bot) return true;
 	});
 	return false;
 }
+
+async function randomGifUrl(lmt, searchString): Promise<string> {
+	const searchUrl = `https://tenor.googleapis.com/v2/search?key=${process.env.TENOR_API_KEY}&q=${searchString}&limit=${lmt}&random=true`;
+	const url = await axios.get(searchUrl).then((res) => res.data.results[0].url);
+	return url;
+}
+
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-abstract class PeopleThemes {
+abstract class GoodNight {
 	@On({ event: "voiceStateUpdate" })
-	private async tryGoodNight([, newState]: ArgsOf<"voiceStateUpdate">) {
+	private async tryGoodNight([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
+		// const botStuffChannel = client.channels.resolve(BD5_BOT_STUFF_CHANNEL_ID) as TextBasedChannel;
+		const test1Channel = client.channels.resolve(DEV_SERVER_TESTING_CHANNEL_1_ID) as TextBasedChannel;
+
 		if (newState.channelId === null || typeof newState.channelId === "undefined") {
 			const currTime = new Date();
-			leftOnLog.set(newState.member, currTime); // TODO member might need to key as newState.member.id if newState.member doesn't point to memory location
-			if ((currTime.getHours() >= 22 || currTime.getHours() <= 5) && !hasHumans(newState.channel)) {
+			leftOnLog.set(newState.member, currTime);
+			if (
+				(currTime.getHours() >= 22 || currTime.getHours() <= 5) &&
+				!(await hasHumans(await oldState.channel.fetch()))
+			) {
 				const membersInLast15Mins: GuildMember[] = [];
 				leftOnLog.forEach((lastLeftTime, member) => {
-					if (currTime.getTime() - lastLeftTime.getTime() >= 15 * 60 * 1000) {
+					if (currTime.getTime() - lastLeftTime.getTime() <= 15 * 60 * 1000) {
 						membersInLast15Mins.push(member);
 					}
 				});
@@ -78,7 +97,17 @@ abstract class PeopleThemes {
 					goodNightMsg += `${member.toString()} `;
 				});
 
-				goodNightMsg += `\n${goodNightVariations[Math.floor(Math.random() * goodNightVariations.length)]}`;
+				goodNightMsg += `\n${
+					GOOD_NIGHT_VARIATIONS[Math.floor(Math.random() * GOOD_NIGHT_VARIATIONS.length)]
+				}\n`;
+
+				if (random(KISS_CHANCE)) {
+					goodNightMsg += await randomGifUrl(1, "good night anime kiss");
+				} else {
+					goodNightMsg += await randomGifUrl(1, "good night anime");
+				}
+				// await botStuffChannel.send(goodNightMsg);
+				await test1Channel.send(goodNightMsg);
 			}
 		}
 	}
