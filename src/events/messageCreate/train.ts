@@ -8,6 +8,7 @@ abstract class Train {
 	@On({ event: "messageCreate" })
 	private async handleTrain([msg]: ArgsOf<"messageCreate">) {
 		const msgs = await msg.channel.messages.fetch({ limit: 2 });
+		if (msgs.every((e) => e.content === "")) return;
 		if (
 			!activeTrains.has(msg.channelId) &&
 			msgs.at(0).content === msgs.at(1).content &&
