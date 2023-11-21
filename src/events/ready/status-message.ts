@@ -28,7 +28,7 @@ abstract class StatusMessage {
 		// eslint-disable-next-line no-constant-condition
 		while (true) {
 			const randomStatus = getRandomElement(statuses);
-			client.user.setActivity({ name: randomStatus });
+			client.user.setActivity({ name: randomStatus, type: 4 });
 			// eslint-disable-next-line no-await-in-loop
 			await sleep(STATUS_ROTATION_TIME);
 		}
