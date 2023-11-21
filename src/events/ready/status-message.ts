@@ -5,16 +5,16 @@ import { getRandomElement, printSpace, sleep } from "../../util/index.js";
 const STATUS_ROTATION_TIME = 5 * 60 * 1000;
 
 const statuses = [
-	"With Khang's Catgirls",
+	"Playing With Khang's Catgirls",
 	"Kyle is there a reason why I was demode?",
 	"Guten",
-	"Valhen",
-	"Skowhen",
-	"Hanabihen",
-	"Toontownhen",
+	"Playing Valhen",
+	"Playing Skowhen",
+	"Playing Hanabihen",
+	"Playing Toontownhen",
 	"Increasing Daniel's WPM...",
 	"Watching Kyle blow more money on maple",
-	"With your permissions",
+	"Playing with your permissions",
 ];
 
 @Discord()
