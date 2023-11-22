@@ -1,4 +1,4 @@
-import { StageChannel, VoiceChannel } from "discord.js";
+import { StageChannel, VoiceBasedChannel, VoiceChannel } from "discord.js";
 
 // Special helper function to absolutely ensure we aren't deleting important channel
 export async function deleteVoiceChannel(channel: VoiceChannel | StageChannel) {
@@ -6,4 +6,13 @@ export async function deleteVoiceChannel(channel: VoiceChannel | StageChannel) {
 	if (channel.isVoiceBased()) {
 		await channel.delete();
 	}
+}
+
+export function hasHumans(channel: VoiceBasedChannel): boolean {
+	// trivial case
+	if (channel.members.size === 0) {
+		return false;
+	}
+
+	return channel.members.some((member) => !member.user.bot);
 }
