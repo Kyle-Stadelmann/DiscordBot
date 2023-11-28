@@ -12,11 +12,7 @@ initDb();
 const backupPath = path.join(PROJECT_DIR, "afk-pics");
 
 async function downloadImage(url: string, dest: string) {
-	const response = await axios({
-		method: "get",
-		url,
-		responseType: "arraybuffer",
-	});
+	const response = await axios({ method: "get", url, responseType: "arraybuffer" });
 
 	const buffer = Buffer.from(response.data);
 
@@ -32,8 +28,8 @@ function getFileUrlHash(url: string): string {
 
 async function generateBackupDir(): Promise<string> {
 	const d = new Date();
-	const name = `${d.toDateString()} ${d.getHours()}-${d.getMinutes()}-${d.getSeconds()}`;
-	const dirPath = path.join(backupPath, name);
+	const dirName = `${d.toDateString()} ${d.getHours()}-${d.getMinutes()}-${d.getSeconds()}`;
+	const dirPath = path.join(backupPath, dirName);
 
 	await fs.mkdir(dirPath, { recursive: true });
 
@@ -60,7 +56,7 @@ export async function backupAfkPics() {
 			// eslint-disable-next-line no-await-in-loop
 			await downloadImage(url, outputPath);
 		} catch (e) {
-			console.error(`Failed to download ${url}`);
+			console.error(`Failed to download afk pic with url=${url}`);
 			console.error(e);
 		}
 	}
