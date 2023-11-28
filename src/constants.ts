@@ -82,6 +82,7 @@ export const TOXIC_URL = "https://www.youtube.com/watch?v=LOZuxwVk7TU";
 export const PLAYER_SITES = ["spotify", "youtube", "youtu.be", "soundcloud"];
 // TODO: Standardize paths
 export const SRC_DIR = path.resolve(`${dirname}`);
+export const PROJECT_DIR = path.dirname(SRC_DIR);
 
 export const TYPE_SPEED_RESET_TIME = 30 * 1000;
 export const TYPESCRIPT_URL = "https://i.imgur.com/PUkCMgu.png";
