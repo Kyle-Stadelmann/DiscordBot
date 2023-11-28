@@ -3,7 +3,7 @@ import { ArgsOf, Discord, On } from "discordx";
 import { QUESTION_MARK_URL } from "../../constants.js";
 import { random } from "../../util/index.js";
 
-const QUESTION_MARK_CHANCE = 5;
+const QUESTION_MARK_CHANCE = 1;
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
