@@ -53,3 +53,9 @@ export async function getAllPicsForUser(userId: string): Promise<UserAfkPic[]> {
 		return [];
 	}
 }
+
+export async function getAfkPicUrls(): Promise<string[]> {
+	const userPics = await UserAfkPicTypedModel.scan().all().exec();
+	const picUrls = new Set(userPics.map((pic) => pic.url));
+	return Array.from(picUrls);
+}
