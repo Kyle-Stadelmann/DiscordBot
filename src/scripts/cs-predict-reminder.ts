@@ -20,7 +20,7 @@ function createMembersToRemindList(userIds: string[], bd5: Guild): GuildMember[]
 	return userIds.flatMap((userId) => {
 		const discordUserId = process.env[userId];
 		if (isNullOrUndefined(discordUserId)) {
-			console.error(`cs-prediction userId=${userId} couldn't map to a discord user id`);
+			// This user probably does not wish to be reminded
 			return [];
 		}
 
@@ -29,7 +29,7 @@ function createMembersToRemindList(userIds: string[], bd5: Guild): GuildMember[]
 }
 
 async function remindCSPlayers(userIds: string[], matchDate: Date) {
-	const bd5 = client.guilds.resolve(BD5_ID);
+	const bd5 = await client.guilds.resolve(BD5_ID);
 	const membersToRemind = createMembersToRemindList(userIds, bd5);
 
 	if (membersToRemind.length === 0) {
@@ -48,12 +48,12 @@ async function remindCSPlayers(userIds: string[], matchDate: Date) {
 		.setURL(CS_PREDICTION_URL)
 		.setThumbnail(CSGO_PREDICTION_IMG_URL)
 		.setTimestamp(matchDate)
-		.setDescription(membersToRemind.map((m) => m.id).join(" "));
+		.setDescription(membersToRemind.map((m) => m.toString()).join(""));
 
 	await reminderChannel.send({ embeds: [embed] });
 }
 
-export async function tryRemindCSPlayers() {
+async function tryRemindCSPlayersHelper() {
 	let reminder: Reminder | undefined;
 	try {
 		reminder = await getUsersToRemind(HARDCODED_LEAGUE_ID, process.env.CS_PREDICT_PASSWORD);
@@ -66,7 +66,7 @@ export async function tryRemindCSPlayers() {
 	if (
 		new Date(currDate.getTime() + REMINDER_TIME_MS) < reminder.firstMatchDate ||
 		// We only want to remind once per batches of matches
-		reminder.firstMatchDate === lastRemindedMatchTime ||
+		reminder.firstMatchDate.getTime() === lastRemindedMatchTime.getTime() ||
 		reminder.userIds.length === 0
 	) {
 		return;
@@ -75,4 +75,12 @@ export async function tryRemindCSPlayers() {
 	await remindCSPlayers(reminder.userIds, reminder.firstMatchDate);
 
 	lastRemindedMatchTime = reminder.firstMatchDate;
+}
+
+export async function tryRemindCSPlayers() {
+	try {
+		await tryRemindCSPlayersHelper();
+	} catch (e) {
+		console.error(e);
+	}
 }

@@ -1,14 +1,10 @@
 import "reflect-metadata";
-import * as dotenv from "dotenv";
 import { dirname, importx } from "@discordx/importer";
 import { Client } from "discordx";
 import { GatewayIntentBits, Partials } from "discord.js";
-import { SRC_DIR } from "./constants.js";
 import { BDBot } from "./types/containers/bot-container.js";
 import { initDb, isDevMode, isProdMode } from "./util/index.js";
 import { REPEAT_CS_REMINDER_CHECK_TIME_MS, tryRemindCSPlayers } from "./scripts/cs-predict-reminder.js";
-
-dotenv.config({ path: `${SRC_DIR}/../.env` });
 
 initDb();
 
