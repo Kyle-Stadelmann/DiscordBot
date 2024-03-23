@@ -60,6 +60,7 @@ async function tryRemindCSPlayersHelper() {
 	const currDate = new Date();
 	if (
 		new Date(currDate.getTime() + REMINDER_TIME_MS) < reminder.firstMatchDate ||
+		currDate > reminder.firstMatchDate ||
 		// We only want to remind once per batches of matches
 		reminder.firstMatchDate.getTime() === lastRemindedMatchTime.getTime() ||
 		reminder.userIds.length === 0
