@@ -75,6 +75,7 @@ abstract class GoodNight {
 					await botStuffChannel.send({ embeds: [embed] });
 				} catch (error) {
 					if (isProdMode()) await sendErrorToDiscordChannel(error);
+					else console.error(error);
 				}
 			}
 		}
