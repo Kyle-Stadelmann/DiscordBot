@@ -24,21 +24,19 @@ export function queueSong(
 }
 
 // Returns Track[] containing search result (for both single song and playlist)
-export async function getSearchResult(args: string[], user: User): Promise<PlayerSearchResult> {
+export async function getSearchResult(query: string, user: User): Promise<PlayerSearchResult> {
 	// Find track with args
 	// if link, else search phrase containing all args
 	let search = "";
 	let searchEngine: SearchQueryType | undefined;
 
 	// TODO: maybe change to regex
-	if (args[0].startsWith("https://") && PLAYER_SITES.some((site) => args[0].includes(site))) {
-		search = args[0];
-		if (args[0].includes("playlist")) {
-			if (args[0].includes("youtube")) searchEngine = QueryType.YOUTUBE_PLAYLIST;
-			else if (args[0].includes("spotify")) searchEngine = QueryType.SPOTIFY_PLAYLIST;
+	if (query.startsWith("https://") && PLAYER_SITES.some((site) => query.includes(site))) {
+		search = query;
+		if (query.includes("playlist")) {
+			if (query.includes("youtube")) searchEngine = QueryType.YOUTUBE_PLAYLIST;
+			else if (query.includes("spotify")) searchEngine = QueryType.SPOTIFY_PLAYLIST;
 		}
-	} else {
-		search = args.join(" ");
 	}
 
 	const result = await bdbot.player.search(search, {

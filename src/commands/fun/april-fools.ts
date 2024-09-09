@@ -1,6 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { Message, ChannelType, GuildMember } from "discord.js";
 import randomWords from "random-words";
+import { Discord, Guild } from "discordx";
+import { Category } from "@discordx/utilities";
 import { client } from "../../app.js";
 import {
 	ALAN_ID,
@@ -8,6 +10,7 @@ import {
 	ANISH_ID,
 	ANTHONY_ID,
 	ASIAN_KYLE_ID,
+	BD5_DEV_SERVER_IDS,
 	BD5_ID,
 	CHRISTINA_ID,
 	DANIEL_ALT_ID,
@@ -36,10 +39,9 @@ import {
 	ZACH_ALT_ID,
 	ZACH_ID,
 } from "../../constants.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
+import { CommandCategory } from "../../types/command.js";
 import { getNicknames, OldNickname, OldNicknameModel } from "../../types/data-access/curr-nickname.js";
-import { ParentCommand, ParentCommandConfig } from "../../types/parent-command.js";
-import { isNullOrUndefined } from "../../util/general.js";
+import { isNullOrUndefined } from "../../util/index.js";
 
 const nicknameMap = new Map([
 	[ASIAN_KYLE_ID, "AsianKyle"],
@@ -86,16 +88,15 @@ function getKyleName(id: string): string {
 	return `${randomWord}Kyle`;
 }
 
-const startConfig: CommandConfig = {
-	name: "start",
-	description: "!",
-	category: CommandCategory.Fun,
-	usage: `[start]`,
-	allowInDM: true,
-	disabled: true,
-};
-class AprilFoolsStartCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
+@Discord()
+// @SlashGroup({ name: "aprilfools", description: "!" })
+// @SlashGroup("aprilfools")
+@Category(CommandCategory.Fun)
+@Guild(BD5_DEV_SERVER_IDS)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class AprilFoolsStartCommand {
+	// @Slash({name: "start", description: "!", dmPermission: false})
+	async start(msg: Message): Promise<boolean> {
 		const isDm = msg.channel.type === ChannelType.DM;
 		const date = new Date();
 
@@ -133,18 +134,9 @@ class AprilFoolsStartCommand extends Command {
 
 		return true;
 	}
-}
 
-const undoConfig: CommandConfig = {
-	name: "undo",
-	description: "Undos april fool stuff",
-	category: CommandCategory.Fun,
-	usage: `undo`,
-	allowInDM: true,
-	disabled: true,
-};
-class AprilFoolsUndoCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
+	// @Slash({ name: "undo", description: "!", dmPermission: false })
+	async undo(msg: Message): Promise<boolean> {
 		if (msg.author.id !== CHRISTINA_ID) return false;
 		const bd5 = client.guilds.resolve(BD5_ID);
 
@@ -173,23 +165,3 @@ class AprilFoolsUndoCommand extends Command {
 		return true;
 	}
 }
-
-const aprilFoolsConfig: ParentCommandConfig = {
-	name: "aprilFools",
-	description: "!",
-	category: CommandCategory.Fun,
-	shareCooldownMap: false,
-	defaultCmdStr: "start",
-	allowInDM: true,
-	usage: `aprilFools [start | undo]?`,
-	disabled: true,
-};
-class AprilFoolsCommand extends ParentCommand {
-	constructor(options: ParentCommandConfig) {
-		super(options);
-		this.addSubCommand(AprilFoolsStartCommand, startConfig);
-		this.addSubCommand(AprilFoolsUndoCommand, undoConfig);
-	}
-}
-
-export default new AprilFoolsCommand(aprilFoolsConfig);

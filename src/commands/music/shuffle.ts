@@ -1,38 +1,29 @@
-import { Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { Discord, Slash } from "discordx";
+import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
-import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
-import { Command, CommandCategory, CommandConfig } from "../../types/command.js";
-import { sendErrorMessage } from "../../util/message-channel.js";
-import { isQueueValid } from "../../util/music-helpers.js";
+import { CommandCategory } from "../../types/command.js";
+import { isQueueValid } from "../../util/index.js";
 
-const cmdConfig: CommandConfig = {
-	name: "shuffle",
-	description: "Shuffles the queue",
-	category: CommandCategory.Music,
-	usage: "shuffle",
-};
-
-class ShuffleCommand extends Command {
-	public async run(msg: Message): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-		if (!isQueueValid(queue)) {
-			await sendErrorMessage(
-				msg.channel,
-				"Music command failed. Please start a queue using the `play` command first!"
-			);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class ShuffleCommand {
+	@Slash({ name: "shuffle", description: "Shuffles the queue", dmPermission: false })
+	async run(interaction: CommandInteraction): Promise<boolean> {
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		if (!isQueueValid(queue) || !queue.currentTrack) {
+			await interaction.reply("Music command failed. Please start a queue using the `play` command first!");
 			return false;
 		}
 
-		const np = queue.currentTrack;
-		if (!np || queue.size < 3) {
-			await msg.react(X_MARK);
+		if (queue.size < 3) {
+			await interaction.reply("Shuffle failed, the queue isn't big enough!");
 			return false;
 		}
 
 		queue.tracks.shuffle();
-		await msg.react(WHITE_CHECK_MARK);
+		await interaction.reply("The queue has been shuffled!");
 		return true;
 	}
 }
-
-export default new ShuffleCommand(cmdConfig);

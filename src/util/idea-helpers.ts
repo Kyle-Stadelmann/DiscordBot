@@ -1,39 +1,38 @@
 import { EmbedBuilder } from "discord.js";
-import { IDEA_TYPES } from "../constants.js";
-import { getAllIdeas, UserIdea } from "../types/data-access/idea.js";
+import { UserIdea } from "../types/data-access/idea.js";
+import { IdeaType } from "../commands/utility/idea.js";
 
-// All ideas is x === 0 cuz utility = 0 was causing conditional issues
-export async function refreshIdeas(): Promise<EmbedBuilder[][]> {
-	const ideas: UserIdea[] = await getAllIdeas();
-	let ideaEmbeds: EmbedBuilder[] = [];
-	const sortedIdeaPages: EmbedBuilder[][] = [];
+const MAX_IDEAS_PER_PAGE = 5;
 
-	for (let x = 0; x < IDEA_TYPES.length + 1; x += 1) {
-		let pageNum = 0;
-		const shownIdeas: UserIdea[] = [];
+function capitalizeFirstLetter(str: string): string {
+	return `${str.charAt(0).toUpperCase()}${str.substring(1)}`;
+}
 
-		for (let y = 0; y < ideas.length; y += 1) {
-			if (x === 0 || ideas[y].type === IDEA_TYPES[x - 1]) shownIdeas.push(ideas[y]);
+// When type is undefined, we are displaying all ideas
+export function buildIdeaEmbeds(ideas: UserIdea[], type: IdeaType | undefined): EmbedBuilder[] {
+	const pages: EmbedBuilder[] = [];
+	const maxPagesCount = Math.ceil(ideas.length / MAX_IDEAS_PER_PAGE);
+
+	for (let i = 0; i < ideas.length; i += 1) {
+		const idea = ideas[i];
+		const pageNum = Math.floor(i / MAX_IDEAS_PER_PAGE);
+
+		if (i % MAX_IDEAS_PER_PAGE === 0) {
+			pages.push(
+				new EmbedBuilder()
+					.setTitle(type === undefined ? "All Ideas" : `${capitalizeFirstLetter(type)} Ideas`)
+					.setFooter({ text: `Page ${pageNum + 1} of ${maxPagesCount}` })
+					.setColor(0x0)
+			);
 		}
 
-		// TODO: add ID or something to embed to identify for completion marking
-		for (let z = 0; z < shownIdeas.length; z += 1) {
-			// if i is perfectly divisible by 5 (ie 0, 5, 10), create new page
-			if (z % 5 === 0) {
-				if (z !== 0) pageNum += 1;
-				ideaEmbeds[pageNum] = new EmbedBuilder().setTitle(
-					`${IDEA_TYPES[x - 1] ? `${IDEA_TYPES[x - 1]} Ideas` : "All Ideas"} | Page ${pageNum + 1}`
-				);
-			}
-			ideaEmbeds[pageNum].addFields({
-				name: `(${z + 1})`,
-				value: `Type: ${shownIdeas[z].type}\n Idea: ${shownIdeas[z].description}`,
-			});
-		}
-
-		sortedIdeaPages.push(ideaEmbeds);
-		ideaEmbeds = [];
+		const embed = pages[pageNum];
+		embed.addFields({
+			name: `(${i + 1})`,
+			value: `**Type**: ${capitalizeFirstLetter(idea.type)}\n **Idea**: ${idea.description}\n **Completed**: ${
+				idea.completed
+			}`,
+		});
 	}
-
-	return sortedIdeaPages;
+	return pages;
 }

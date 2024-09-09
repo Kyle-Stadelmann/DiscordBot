@@ -1,46 +1,52 @@
-import { Message } from "discord.js";
+import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
 import { PlayerNodeInitializationResult } from "discord-player";
+import { Discord, Slash, SlashOption } from "discordx";
+import { Category } from "@discordx/utilities";
 import { bdbot } from "../../app.js";
-import { X_MARK } from "../../constants.js";
-import { CommandConfig, Command, CommandCategory } from "../../types/command.js";
-import { sendMessage } from "../../util/message-channel.js";
-import { queueSong } from "../../util/music-helpers.js";
-
-const cmdConfig: CommandConfig = {
-	name: "play",
-	description: "Add a track to the queue or resume the current track",
-	category: CommandCategory.Music,
-	usage: "play",
-	examples: ["play", "play L's theme", "play https://www.youtube.com/watch?v=VKIEzhzV28s"],
-	allowInDM: false,
-};
+import { CommandCategory } from "../../types/command.js";
+import { queueSong } from "../../util/index.js";
 
 // TODO: this breaks if connect was used prior
-class PlayCommand extends Command {
-	public async run(msg: Message, args: string[]): Promise<boolean> {
-		const queue = bdbot.player.queues.resolve(msg.guildId);
-		// User's voice channel
-		const voiceChannel = msg.member.voice.channel;
 
-		if (!voiceChannel || voiceChannel === msg.guild.afkChannel) {
-			console.log(`${msg.author.username} is not connected to a valid voice channel`);
-			await msg.react(X_MARK);
+@Discord()
+@Category(CommandCategory.Music)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class PlayCommand {
+	@Slash({ name: "play", description: "Add a track to the queue or resume the current track", dmPermission: false })
+	public async run(
+		@SlashOption({
+			name: "query",
+			description: "Search query or music link to add to the queue",
+			required: false,
+			type: ApplicationCommandOptionType.String,
+		})
+		query: string | undefined,
+		interaction: CommandInteraction
+	): Promise<boolean> {
+		await interaction.deferReply();
+		const queue = bdbot.player.queues.resolve(interaction.guildId);
+		const { guild } = interaction;
+		const member = await guild.members.fetch(interaction.user.id);
+		const voiceChannel = member.voice.channel;
+
+		if (!voiceChannel || voiceChannel === guild.afkChannel) {
+			await interaction.editReply("Music command failed. Please join a channel first!");
 			return false;
 		}
 
 		// argless play (functionally unpause)
-		if (args.length === 0) {
+		if (!query) {
 			queue.node.setPaused(false);
 			return true;
 		}
 
-		const query = args.join(" ");
-
 		let result: PlayerNodeInitializationResult;
 		try {
-			result = await queueSong(voiceChannel, query, msg.channel, msg.author);
+			result = await queueSong(voiceChannel, query, interaction.channel, member.user);
 		} catch (e) {
-			await msg.react(X_MARK);
+			await interaction.editReply(
+				"Music command failed. Was unable to queue song, are you connected to a channel?"
+			);
 			console.error(e);
 			return false;
 		}
@@ -48,12 +54,10 @@ class PlayCommand extends Command {
 		const { tracks } = result.searchResult;
 
 		if (result.track.playlist) {
-			await sendMessage(msg.channel, `Added playlist ${result.searchResult.playlist?.title} to the queue`);
+			await interaction.editReply(`Added playlist ${result.searchResult.playlist?.title} to the queue.`);
 		} else {
-			await sendMessage(msg.channel, `${tracks[0].title} by ${tracks[0].author} has been added to the queue`);
+			await interaction.editReply(`${tracks[0].title} by ${tracks[0].author} has been added to the queue.`);
 		}
 		return true;
 	}
 }
-
-export default new PlayCommand(cmdConfig);

@@ -37,12 +37,12 @@ export class HolidayColorCycler {
 
 		// Only activate in the correct month
 		if (currDate.getMonth() !== this.month) {
-			// If cycler active is on but we are in the next month, 
+			// If cycler active is on but we are in the next month,
 			// do a one time full reset of colors for all guild members
 			if (this.cyclerActive) await this.resetAllMembersHolidayColors();
 			this.cyclerActive = false;
 			return;
-		} 
+		}
 		this.cyclerActive = true;
 
 		const lastUpdatedTime = lastUpdatedColorMemberMap.get(member.id);
