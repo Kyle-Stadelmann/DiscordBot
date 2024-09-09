@@ -33,11 +33,13 @@ class ScrambleCommand {
 			return false;
 		}
 
-		await interaction.reply({ content: `Initiating channel scramble on *${startChannel.name}*.` });
+		const startMsg = `Initiating channel scramble on *${startChannel.name}*.`;
+
+		await interaction.reply({ content: startMsg });
 
 		await this.moveChannelMembers(startChannel, validChannels);
 
-		await interaction.reply({ content: "Channel scramble completed!" });
+		await interaction.editReply({ content: `${startMsg}\nChannel scramble completed!` });
 
 		return true;
 	}

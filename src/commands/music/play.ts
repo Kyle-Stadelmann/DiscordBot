@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
 import { PlayerNodeInitializationResult } from "discord-player";
 import { Discord, Slash, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
-import { bdbot, client } from "../../app.js";
+import { bdbot } from "../../app.js";
 import { CommandCategory } from "../../types/command.js";
 import { createNpString, queueSong } from "../../util/index.js";
 

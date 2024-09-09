@@ -51,8 +51,21 @@ class WhipCommand {
 		const victimMember = await guild.members.fetch(victimUser.id);
 		const senderMember = await guild.members.fetch(interaction.user.id);
 
-		const error = await this.hadError(victimMember, senderMember, interaction);
-		if (error) return false;
+		if (senderMember.voice.channel == null || senderMember.voice.channelId !== victimMember.voice.channelId) {
+			await interaction.reply(
+				"Command was NOT successful, your target isn't close enough (not in the same voice channel as you)"
+			);
+			return false;
+		}
+
+		if (victimMember.user.bot) {
+			await interaction.reply("Command was NOT successful, your target isn't human!");
+			return false;
+		}
+
+		await interaction.reply(
+			`Initiating the whipping... Knocking your tartget ***${NUM_CHANNELS_WHIPPED}*** channels down!`
+		);
 
 		await bdbot.putOnGuildCooldown(guild.id, "whip", GUILD_CD_TIME);
 
@@ -70,6 +83,8 @@ class WhipCommand {
 		await this.cleanup(victimMember, tempChannels, originalChannel);
 
 		await bdbot.endGuildCooldown(guild.id, "whip");
+
+		await interaction.editReply("Whipping has concluded... Hopefully your target has mercy on you.");
 
 		return true;
 	}
@@ -147,20 +162,5 @@ class WhipCommand {
 			.values();
 
 		return validChannels as IterableIterator<VoiceChannel | StageChannel>;
-	}
-
-	private async hadError(
-		victim: GuildMember,
-		sender: GuildMember,
-		interaction: CommandInteraction
-	): Promise<boolean> {
-		if (sender.voice.channel == null || sender.voice.channelId !== victim.voice.channelId) {
-			await interaction.reply(
-				"Command was NOT successful, your target isn't close enough (not in the same voice channel as you)"
-			);
-			return true;
-		}
-
-		return false;
 	}
 }

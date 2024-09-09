@@ -68,7 +68,7 @@ export abstract class CommandHandler {
 
 		console.log(`${cmdCooldownName} command detected by: ${user.username}`);
 
-		if (await bdbot.isOnCooldown(cmdCooldownName, personId, guildId)) {
+		if ((await bdbot.isOnCooldown(cmdCooldownName, personId, guildId)) && !isDevMode()) {
 			console.log("Command was NOT successful, member is on cooldown.");
 			printSpace();
 			await interaction.reply("Command was NOT successful, you are on cooldown for this command.");
