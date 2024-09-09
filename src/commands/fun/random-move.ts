@@ -51,7 +51,7 @@ class RandomMoveCommand {
 
 		await this.performRandomMoves(validChannels, victim, interaction);
 
-		await interaction.reply(`Fear not ${victim}, your randomMove has completed.`);
+		await interaction.editReply(`Fear not ${victim}, your randomMove has completed.`);
 
 		return true;
 	}
@@ -125,6 +125,7 @@ class RandomMoveCommand {
 
 			if (victim.voice.channel !== null) {
 				await victim.edit({ channel: randomChannel });
+				// TODO: Some servers won't have permission to send messages like this
 				await interaction.channel.send(`${victim} has been banished!`);
 				chanceToMove /= 2;
 			}
