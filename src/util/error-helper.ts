@@ -1,4 +1,4 @@
-import { TextBasedChannel, EmbedBuilder, ChatInputCommandInteraction, Interaction } from "discord.js";
+import { EmbedBuilder, ChatInputCommandInteraction, Interaction, TextChannel } from "discord.js";
 import { GuardFunction } from "discordx";
 import { client } from "../app.js";
 import { DEV_SERVER_ERROR_CHANNEL } from "../constants.js";
@@ -19,7 +19,7 @@ export function createInteractionErrorStr(interaction: Interaction, error: Error
 }
 
 export function sendErrorToDiscordChannel(errStr: string) {
-	const debugChannel = client.channels.resolve(DEV_SERVER_ERROR_CHANNEL) as TextBasedChannel;
+	const debugChannel = client.channels.resolve(DEV_SERVER_ERROR_CHANNEL) as TextChannel;
 	const errEmbed = new EmbedBuilder().setDescription(errStr);
 	return debugChannel.send({ embeds: [errEmbed] });
 }
