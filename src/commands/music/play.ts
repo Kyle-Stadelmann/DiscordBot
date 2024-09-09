@@ -40,7 +40,7 @@ class PlayCommand {
 
 			const npmsg = createNpString(queue);
 
-			await interaction.editReply(npmsg);
+			await interaction.editReply(`Unpaused track\n${npmsg}`);
 			return true;
 		}
 

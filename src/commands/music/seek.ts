@@ -26,17 +26,19 @@ class SeekCommand {
 			return false;
 		}
 
+		await interaction.deferReply();
+
 		const times = this.getSplitTimes(timeStr);
 
 		if (!times) {
-			await interaction.reply("Couldn't seek to specified time, check formatting");
+			await interaction.editReply("Couldn't seek to specified time, check formatting");
 			return false;
 		}
 
 		const time = this.getTime(times);
 
 		await queue.node.seek(time);
-		await interaction.reply(`Playing ${queue.currentTrack.title} from ${time}`);
+		await interaction.editReply(`Playing ${queue.currentTrack.title} from ${time}`);
 
 		return true;
 	}
