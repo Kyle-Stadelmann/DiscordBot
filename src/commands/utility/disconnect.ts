@@ -24,6 +24,8 @@ export class DisconnectCommand {
 		if (connection) connection.destroy();
 		if (musicQueue) musicQueue.delete();
 
+		await interaction.reply("Goodbye!");
+
 		return true;
 	}
 }
