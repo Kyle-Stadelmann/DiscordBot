@@ -1,6 +1,6 @@
 export * from "./cooldown-helper.js";
 export * from "./db-helper.js";
-export * from "./delete-voice-channel.js";
+export * from "./voice-channel.js";
 export * from "./embed-helpers.js";
 export * from "./enum-helper.js";
 export * from "./error-helper.js";
