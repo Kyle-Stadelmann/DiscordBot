@@ -2,9 +2,9 @@ import { ApplicationCommandOptionType, CommandInteraction } from "discord.js";
 import { PlayerNodeInitializationResult } from "discord-player";
 import { Discord, Slash, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
-import { bdbot } from "../../app.js";
+import { bdbot, client } from "../../app.js";
 import { CommandCategory } from "../../types/command.js";
-import { queueSong } from "../../util/index.js";
+import { createNpString, queueSong } from "../../util/index.js";
 
 // TODO: this breaks if connect was used prior
 
@@ -37,6 +37,10 @@ class PlayCommand {
 		// argless play (functionally unpause)
 		if (!query) {
 			queue.node.setPaused(false);
+
+			const npmsg = createNpString(queue);
+
+			await interaction.editReply(npmsg);
 			return true;
 		}
 

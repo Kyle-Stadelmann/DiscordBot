@@ -3,7 +3,7 @@ import { Category } from "@discordx/utilities";
 import { Discord, Slash } from "discordx";
 import { bdbot } from "../../app.js";
 import { CommandCategory } from "../../types/command.js";
-import { isQueueValid } from "../../util/index.js";
+import { createNpString, isQueueValid } from "../../util/index.js";
 
 @Discord()
 @Category(CommandCategory.Music)
@@ -18,13 +18,7 @@ class NowPlayingCommand {
 			return false;
 		}
 
-		const np = queue.currentTrack;
-		const position = Math.round(queue.history.size + 1);
-
-		let npmsg = ``;
-		npmsg += `Now Playing: (#${position}) ${np.title} by ${np.author}\n`;
-		npmsg += `${queue.node.createProgressBar()}\n`;
-		npmsg += `${np.url}\n`;
+		const npmsg = createNpString(queue);
 
 		await interaction.reply(npmsg);
 		return true;
