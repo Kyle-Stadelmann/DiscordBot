@@ -55,6 +55,9 @@ export const BDBOT_ID = "480909013593227277";
 export const DANIEL_WPM = "48";
 export const QUESTION_MARK_URL =
 	"https://media.discordapp.net/attachments/201577195901026304/481948179110297631/kyledumbquestion.PNG";
+export const CSGO_PREDICTION_IMG_URL =
+	"https://raw.githubusercontent.com/Kyle-Stadelmann/CSGO-Predict-App/master/src/img/CSGOIcon.png";
+export const CS_PREDICTION_URL = "https://csgo.stadelmann.org:3000";
 
 export const HEAVY_DOLLAR_SIGN = "💲";
 export const SUNGLASSES = "😎";
