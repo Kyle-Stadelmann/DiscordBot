@@ -1,5 +1,5 @@
 import axios from "axios";
-import { EmbedBuilder, GuildMember, TextBasedChannel } from "discord.js";
+import { EmbedBuilder, GuildMember, TextChannel } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import { client } from "../../app.js";
 import { BD5_BOT_STUFF_CHANNEL_ID, BD5_DEV_SERVER_IDS } from "../../constants.js";
@@ -27,7 +27,7 @@ const KISS_CHANCE = 10;
 
 const leftOnLog = new Map<GuildMember, Date>();
 
-async function randomGifUrl(lmt, searchString): Promise<string> {
+async function randomGifUrl(lmt, searchString) {
 	const searchUrl = `https://tenor.googleapis.com/v2/search?key=${process.env.TENOR_API_KEY}&q=${searchString}&limit=${lmt}&random=true`;
 	const { url } = (await axios.get(searchUrl)).data.results[0].media_formats.gif;
 
@@ -42,7 +42,7 @@ abstract class GoodNight {
 		// TODO: We need a guild config that allows us to use bot_stuff channels more generally
 		if (!BD5_DEV_SERVER_IDS.includes(newState.guild.id)) return;
 
-		const botStuffChannel = client.channels.resolve(BD5_BOT_STUFF_CHANNEL_ID) as TextBasedChannel;
+		const botStuffChannel = client.channels.resolve(BD5_BOT_STUFF_CHANNEL_ID) as TextChannel;
 
 		if (isNullOrUndefined(newState.channelId)) {
 			const currTime = new Date();
