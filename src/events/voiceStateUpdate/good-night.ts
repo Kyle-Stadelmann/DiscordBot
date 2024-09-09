@@ -3,7 +3,14 @@ import { EmbedBuilder, GuildMember, TextBasedChannel } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import { client } from "../../app.js";
 import { BD5_BOT_STUFF_CHANNEL_ID, BD5_DEV_SERVER_IDS } from "../../constants.js";
-import { getRandomElement, hasHumans, isNullOrUndefined, random, sendErrorToDiscordChannel } from "../../util/index.js";
+import {
+	getRandomElement,
+	hasHumans,
+	isNullOrUndefined,
+	isProdMode,
+	random,
+	sendErrorToDiscordChannel,
+} from "../../util/index.js";
 
 const GOOD_NIGHT_VARIATIONS = [
 	"goot!",
@@ -67,7 +74,7 @@ abstract class GoodNight {
 
 					await botStuffChannel.send({ embeds: [embed] });
 				} catch (error) {
-					await sendErrorToDiscordChannel(error);
+					if (isProdMode()) await sendErrorToDiscordChannel(error);
 				}
 			}
 		}
