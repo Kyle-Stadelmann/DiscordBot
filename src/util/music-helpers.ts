@@ -55,3 +55,13 @@ export async function getSearchResult(query: string, user: User): Promise<Player
 
 	return result;
 }
+
+export function createNpString(queue: GuildQueue): string {
+	const np = queue.currentTrack;
+	const position = Math.round(queue.history.size + 1);
+
+	let npmsg = `Now Playing: (#${position}) ${np.title} by ${np.author}\n`;
+	npmsg += `${queue.node.createProgressBar()}\n`;
+	npmsg += `${np.url}\n`;
+	return npmsg;
+}
