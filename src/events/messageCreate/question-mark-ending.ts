@@ -1,9 +1,9 @@
 import { EmbedBuilder } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import { QUESTION_MARK_URL } from "../../constants.js";
-import { random, sendEmbeds } from "../../util/index.js";
+import { random } from "../../util/index.js";
 
-const QUESTION_MARK_CHANCE = 5;
+const QUESTION_MARK_CHANCE = 1;
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,7 +15,7 @@ abstract class QuestionMarkEnding {
 		if (random(QUESTION_MARK_CHANCE)) {
 			const embed = new EmbedBuilder().setImage(QUESTION_MARK_URL);
 
-			await sendEmbeds(msg.channel, [embed]);
+			await msg.channel.send({ embeds: [embed] });
 		}
 	}
 }

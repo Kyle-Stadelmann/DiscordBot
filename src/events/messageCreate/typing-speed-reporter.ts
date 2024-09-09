@@ -1,7 +1,21 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { bdbot } from "../../app.js";
-import { printSpace, random, sendMessage } from "../../util/index.js";
-import { countWords, danielWPMChanceFunction } from "./daniel-wpm.js";
+import { printSpace, random } from "../../util/index.js";
+
+function danielWPMChanceFunction(numWords: number): number {
+	const MIN_WORDS = 8;
+	const MAX_CHANCE = 15;
+
+	// If not enough words, chance is 0%
+	if (numWords < MIN_WORDS) return 0;
+
+	// Chance equation (exponential)
+	return Math.min(numWords ** 1.7 * 0.1, MAX_CHANCE);
+}
+
+function countWords(str: string) {
+	return str ? str.trim().split(/\s+/).length : 0;
+}
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -24,10 +38,7 @@ abstract class TypingSpeedReporter {
 			const wpmInt = wpm.toFixed(0);
 
 			console.log(`Reporting a typing time of: ${typingTimeInt} with WPM of ${wpmInt} for user: ${userId}`);
-			await sendMessage(
-				channel,
-				`That message took approximately ${typingTimeInt} seconds, with a WPM of ${wpmInt}`
-			);
+			await channel.send(`That message took approximately ${typingTimeInt} seconds, with a WPM of ${wpmInt}`);
 			printSpace();
 		}
 
