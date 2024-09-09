@@ -6,8 +6,8 @@
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
 		"start": "node src/scripts/startBot.js",
-		"start-ts": "ts-node --esm src/app.ts",
-		"start-js": "node dist/app.js",
+		"start-ts": "ts-node --esm -r dotenv/config src/app.ts",
+		"start-js": "node -r dotenv/config dist/app.js",
 		"format": "npx prettier src/ --write",
 		"lint": "npx eslint src/",
 		"dev": "nodemon"
@@ -24,6 +24,7 @@
 		"@types/glob": "^7.2.0",
 		"axios": "^1.7.7",
 		"cheerio": "^1.0.0-rc.10",
+		"csgo-predict-api": "^1.1.8",
 		"discord-player": "^6.7.1",
 		"discord.js": "^14.14.1",
 		"discordx": "^11.8.1",
