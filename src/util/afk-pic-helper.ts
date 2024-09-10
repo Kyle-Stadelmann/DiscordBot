@@ -23,7 +23,7 @@ async function validateAfkPics(urls: string[]): Promise<string[]> {
 
 export async function tryAddAfkPics(urls: string[], interaction: CommandInteraction): Promise<boolean> {
 	const { user } = interaction;
-	const afkPicUrls: string[] = await validateAfkPics(urls.map((p) => p));
+	const afkPicUrls: string[] = await validateAfkPics(urls);
 
 	if (afkPicUrls.length === 0) {
 		await interaction.editReply("Failed to add any AFK Pics. No valid AFK Pics found.");
