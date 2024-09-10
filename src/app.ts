@@ -44,6 +44,7 @@ async function startup() {
 	await Promise.all([
 		importx(`${dirname(import.meta.url)}/events/**/*.${fileType}`),
 		importx(`${dirname(import.meta.url)}/commands/**/*.${fileType}`),
+		importx(`${dirname(import.meta.url)}/context-menus/**/*.${fileType}`),
 	]);
 
 	if (isDevMode()) {
