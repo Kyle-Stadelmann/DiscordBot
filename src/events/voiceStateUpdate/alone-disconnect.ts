@@ -1,7 +1,8 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { getVoiceConnection } from "@discordjs/voice";
-import { GuildChannel } from "discord.js";
+import { VoiceBasedChannel } from "discord.js";
 import { bdbot, client } from "../../app.js";
+import { hasHumans } from "../../util/voice-channel.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -14,12 +15,12 @@ abstract class AloneDisconnect {
 		if (!connection) return;
 
 		const currBotChannelId = connection.joinConfig.channelId;
-		// Guaranteed to be guild channel, bots can't connect to dm channels
-		const currBotChannel = (await client.channels.fetch(currBotChannelId)) as GuildChannel;
+		// Guaranteed to be guild voice channel, bots can't connect otherwise
+		const currBotChannel = (await client.channels.fetch(currBotChannelId)) as VoiceBasedChannel;
 
 		if (
 			(oldState.channelId === currBotChannelId || newState.channelId === currBotChannelId) &&
-			!currBotChannel.members.some((m) => !m.user.bot)
+			!hasHumans(currBotChannel)
 		) {
 			if (connection) connection.destroy();
 			const musicQueue = bdbot.player.queues.resolve(guildId);

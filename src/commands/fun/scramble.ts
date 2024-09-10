@@ -33,7 +33,7 @@ class ScrambleCommand {
 			return false;
 		}
 
-		const startMsg = `Initiating channel scramble on *${startChannel.name}*.`;
+		const startMsg = `Initiating channel scramble on ***${startChannel.name}***.`;
 
 		await interaction.reply({ content: startMsg });
 
