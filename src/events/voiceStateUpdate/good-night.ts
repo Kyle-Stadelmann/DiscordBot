@@ -39,9 +39,9 @@ async function randomGifUrl(lmt, searchString) {
 abstract class GoodNight {
 	@On({ event: "voiceStateUpdate" })
 	private async tryGoodNight([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
-		// TODO: We need a guild config that allows us to use bot_stuff channels more generally
 		if (newState.guild.id !== BD5_ID || newState.member.user.bot) return;
 
+		// TODO: We need a guild config that allows us to use bot_stuff channels more generally
 		const botStuffChannel = client.channels.resolve(BD5_BOT_STUFF_CHANNEL_ID) as TextChannel;
 
 		if (isNullOrUndefined(newState.channelId)) {

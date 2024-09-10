@@ -30,7 +30,7 @@ export class ConnectCommand {
 			return false;
 		}
 
-		await interaction.reply(`Connecting to *${voiceChannel.name}*...`);
+		await interaction.reply(`Connecting to ***${voiceChannel.name}***...`);
 
 		joinVoiceChannel({
 			channelId: voiceChannel.id,
