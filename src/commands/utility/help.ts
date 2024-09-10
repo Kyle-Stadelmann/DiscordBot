@@ -25,7 +25,7 @@ export class HelpCommand {
 			.addFields(fields)
 			.setThumbnail(interaction.guild ? interaction.guild.iconURL() : undefined)
 			.setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.avatarURL()}` })
-			.setTitle("All Commands")
+			.setTitle(`All ${interaction.inGuild() ? "" : "DM"} Commands`)
 			.setColor(0x0);
 
 		await interaction.reply({ embeds: [helpEmbed] });
