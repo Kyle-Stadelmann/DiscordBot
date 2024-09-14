@@ -60,7 +60,10 @@ abstract class GoodNight {
 					goodNightMsg += `${member.toString()} `;
 				});
 
-				const embed = new EmbedBuilder().setTitle(getRandomElement(GOOD_NIGHT_VARIATIONS)).setColor(0x0);
+				const embed = new EmbedBuilder()
+					.setTitle(getRandomElement(GOOD_NIGHT_VARIATIONS))
+					.setColor(0x0)
+					.setDescription(goodNightMsg);
 
 				try {
 					const gifUrl = random(KISS_CHANCE)
@@ -69,7 +72,7 @@ abstract class GoodNight {
 
 					embed.setImage(gifUrl);
 
-					await botStuffChannel.send({ embeds: [embed], content: goodNightMsg });
+					await botStuffChannel.send({ embeds: [embed] });
 				} catch (error) {
 					if (isProdMode()) await sendErrorToDiscordChannel(error);
 					else console.error(error);
