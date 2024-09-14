@@ -4,7 +4,6 @@ import { Client } from "discordx";
 import { GatewayIntentBits, Partials } from "discord.js";
 import { BDBot } from "./types/containers/bot-container.js";
 import { ExceptionCatcher, initDb, isDevMode, isProdMode } from "./util/index.js";
-import { REPEAT_CS_REMINDER_CHECK_TIME_MS, tryRemindCSPlayers } from "./scripts/cs-predict-reminder.js";
 
 const myIntents = [
 	GatewayIntentBits.Guilds,
@@ -57,4 +56,4 @@ async function startup() {
 startup().catch(console.error);
 
 // eslint-disable-next-line @typescript-eslint/return-await
-if (isProdMode()) setInterval(async () => await tryRemindCSPlayers(), REPEAT_CS_REMINDER_CHECK_TIME_MS);
+// if (isProdMode()) setInterval(async () => await tryRemindCSPlayers(), REPEAT_CS_REMINDER_CHECK_TIME_MS);
