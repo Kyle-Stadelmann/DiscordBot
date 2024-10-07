@@ -37,8 +37,8 @@ export class BDBot {
 	}
 
 	// Can return undefined if there are no pics. Can use hasAfkPics first
-	public getRandomAfkPicUrl(): string | undefined {
-		return this.afkPicContainer.getRandomPicUrl();
+	public getRandomAfkPicUrl(shouldGetStagingPic?: boolean): string | undefined {
+		return this.afkPicContainer.getRandomPicUrl(shouldGetStagingPic);
 	}
 
 	public hasAfkPicsOfUser(userId: string): boolean {

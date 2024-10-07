@@ -72,11 +72,11 @@ export class AfkPicContainer {
 		return getRandomElement(this.userPicsMap.get(userId)).url;
 	}
 
-	public getRandomPicUrl(): string | undefined {
+	public getRandomPicUrl(shouldGetStagingPic?: boolean): string | undefined {
+		if (shouldGetStagingPic) return getRandomElement(this.stagingPics).url;
 		const totalPicLength = this.allPics.length + this.stagingPics.length;
 
 		if (totalPicLength === 0) return undefined;
-
 		// Random uses percentages
 		return random((this.allPics.length / totalPicLength) * 100)
 			? getRandomElement(this.allPics).url

@@ -23,6 +23,13 @@ class AfkPicCommand {
 			type: ApplicationCommandOptionType.User,
 		})
 		user: User | undefined,
+		@SlashOption({
+			name: "new",
+			description: "Fetch only newer, uncategorized pics (does not work with user option)",
+			required: false,
+			type: ApplicationCommandOptionType.Boolean,
+		})
+		shouldFetchStaging: boolean | undefined,
 		interaction: CommandInteraction
 	): Promise<boolean> {
 		if (!bdbot.hasAfkPics()) {
@@ -30,7 +37,7 @@ class AfkPicCommand {
 			return false;
 		}
 
-		const afkPicUrl = this.getCorrespondingAfkPicUrl(user);
+		const afkPicUrl = this.getCorrespondingAfkPicUrl(user, shouldFetchStaging);
 
 		if (afkPicUrl) {
 			const embed = new EmbedBuilder().setImage(afkPicUrl).setColor(0x0);
@@ -42,14 +49,14 @@ class AfkPicCommand {
 		return false;
 	}
 
-	private getCorrespondingAfkPicUrl(user: User | undefined): string | undefined {
+	private getCorrespondingAfkPicUrl(user?: User, shouldFetchStaging?: boolean): string | undefined {
 		let url: string;
 		if (user) {
 			if (bdbot.hasAfkPicsOfUser(user.id)) {
 				url = bdbot.getRandomAfkPicUrlByUser(user.id);
 			}
 		} else {
-			url = bdbot.getRandomAfkPicUrl();
+			url = bdbot.getRandomAfkPicUrl(shouldFetchStaging);
 		}
 		return url;
 	}
