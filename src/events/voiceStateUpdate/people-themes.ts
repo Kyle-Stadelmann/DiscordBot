@@ -2,8 +2,8 @@ import { ArgsOf, Discord, On } from "discordx";
 import { DANIEL_ID, GHOST_TRAIN_ROBBERY, JUSTIN_M_ID, TOXIC_URL } from "../../constants.js";
 import { tryPlayPersonTheme } from "../../util/person-theme-helpers.js";
 
-const JUSTIN_THEME_CHANCE = 5;
-const TOXIC_THEME_CHANCE = 5;
+const JUSTIN_THEME_CHANCE = 1;
+const TOXIC_THEME_CHANCE = 1;
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
