@@ -19,7 +19,9 @@ export class HelpCommand {
 	async run(interaction: CommandInteraction): Promise<boolean> {
 		const cmds = this.getAvailableCmds(interaction);
 
-		const fields = getEnumValues(CommandCategory).flatMap((e) => this.getCmdCategoryEmbedField(cmds, e), this);
+		const relevantEnums = getEnumValues(CommandCategory).filter((e) => cmdCatIconMap.has(e));
+
+		const fields = relevantEnums.flatMap((e) => this.getCmdCategoryEmbedField(cmds, e), this);
 
 		const helpEmbed = new EmbedBuilder()
 			.addFields(fields)

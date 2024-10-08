@@ -1,9 +1,12 @@
 import { ApplicationCommandType, MessageContextMenuCommandInteraction } from "discord.js";
 import { ContextMenu, Discord } from "discordx";
+import { Category } from "@discordx/utilities";
 import { BD5_DEV_SERVER_IDS } from "../constants.js";
 import { tryAddAfkPics } from "../util/afk-pic-helper.js";
+import { CommandCategory } from "../types/command.js";
 
 @Discord()
+@Category(CommandCategory.ContextMenu)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class AddAfkPics {
 	@ContextMenu({
