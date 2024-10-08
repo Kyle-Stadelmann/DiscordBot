@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
 		"start": "ts-node --esm -r dotenv/config src/app.ts",
-		"start-prod": "BDBOT_PROD_MODE=TRUE node -r dotenv/config dist/app.js",
+		"start-prod": "cross-env BDBOT_PROD_MODE=TRUE node -r dotenv/config dist/app.js",
 		"format": "npx prettier src/ --write",
 		"lint": "npx eslint src/",
 		"dev": "nodemon"
@@ -44,6 +44,7 @@
 		"@types/node": "^18.18.0",
 		"@typescript-eslint/eslint-plugin": "^6.11.0",
 		"@typescript-eslint/parser": "^6.11.0",
+		"cross-env": "^7.0.3",
 		"eslint": "^8.53.0",
 		"eslint-config-airbnb-typescript": "^17.1.0",
 		"nodemon": "^3.0.1",
