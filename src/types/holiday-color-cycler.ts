@@ -1,7 +1,7 @@
 import { GuildMember, Presence } from "discord.js";
 import { BD5_ID } from "../constants.js";
 import { client } from "../app.js";
-import { sleep } from "../util/sleep.js";
+import { isNullOrUndefined } from "../util/general.js";
 
 export enum Month {
 	January = 0,
@@ -43,6 +43,11 @@ export class HolidayColorCycler {
 			this.cyclerActive = false;
 			return;
 		}
+		if (!this.cyclerActive) {
+			// If cycler is not active, but we're in the correct month,
+			// do a one time full random color cycle
+			await this.giveAllMembersHolidayColors();
+		}
 		this.cyclerActive = true;
 
 		const lastUpdatedTime = lastUpdatedColorMemberMap.get(member.id);
@@ -78,10 +83,19 @@ export class HolidayColorCycler {
 	}
 
 	private async resetAllMembersHolidayColors() {
-		// Reset all member's colors once
 		const promises = client.guilds.resolve(BD5_ID).members.cache.map(async (mem) => {
 			await this.removeHolidayColorRoles(mem, this.holidayColorRoleIds);
-			await sleep(5000);
+		});
+
+		await Promise.all(promises);
+	}
+
+	private async giveAllMembersHolidayColors() {
+		const promises = client.guilds.resolve(BD5_ID).members.cache.map(async (mem) => {
+			// Member already has a holiday role
+			if (this.holidayColorRoleIds.some((r) => !isNullOrUndefined(mem.roles.resolve(r)))) return;
+			const randomRole = this.getRandomHolidayRole();
+			await mem.roles.add(randomRole);
 		});
 
 		await Promise.all(promises);
