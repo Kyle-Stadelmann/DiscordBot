@@ -1,5 +1,5 @@
-import * as dynamoose from "dynamoose";
-import { Document } from "dynamoose/dist/Document";
+import dynamoose from "dynamoose";
+import { Item } from "dynamoose/dist/Item";
 
 const oldNicknameSchema = new dynamoose.Schema({
 	userId: {
@@ -12,7 +12,7 @@ const oldNicknameSchema = new dynamoose.Schema({
 	},
 });
 
-export interface OldNickname extends Document {
+export interface OldNickname extends Item {
 	userId: string;
 	name: string;
 }

@@ -1,5 +1,5 @@
-import * as dynamoose from "dynamoose";
-import { Document } from "dynamoose/dist/Document";
+import dynamoose from "dynamoose";
+import { Item } from "dynamoose/dist/Item";
 
 const stagingAfkPicSchema = new dynamoose.Schema(
 	{
@@ -18,7 +18,7 @@ const stagingAfkPicSchema = new dynamoose.Schema(
 	}
 );
 
-export interface StagingAfkPic extends Document {
+export interface StagingAfkPic extends Item {
 	url: string;
 	submitterUserId: string;
 }

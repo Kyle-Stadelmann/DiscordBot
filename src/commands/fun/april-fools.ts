@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Message, ChannelType, GuildMember } from "discord.js";
-import randomWords from "random-words";
+import { generate } from "random-words";
 import { Discord, Guild } from "discordx";
 import { Category } from "@discordx/utilities";
 import { client } from "../../app.js";
@@ -83,7 +83,7 @@ function isKyleName(name: string): boolean {
 
 function getKyleName(id: string): string {
 	if (nicknameMap.has(id)) return nicknameMap.get(id);
-	let randomWord = randomWords(1)[0];
+	let randomWord = generate(1)[0];
 	randomWord = `${randomWord.charAt(0).toUpperCase()}${randomWord.substring(1)}`;
 	return `${randomWord}Kyle`;
 }

@@ -35,7 +35,7 @@ export class ConnectCommand {
 		joinVoiceChannel({
 			channelId: voiceChannel.id,
 			guildId: voiceChannel.guildId,
-			adapterCreator: guild.voiceAdapterCreator,
+			adapterCreator: guild.voiceAdapterCreator as any, // TODO remove any, temporary discord.js type problem ...
 		});
 
 		return true;

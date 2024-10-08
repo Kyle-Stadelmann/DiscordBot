@@ -1,5 +1,5 @@
-import * as dynamoose from "dynamoose";
-import { Document } from "dynamoose/dist/Document";
+import dynamoose from "dynamoose";
+import { Item } from "dynamoose/dist/Item";
 
 const ideaSchema = new dynamoose.Schema(
 	{
@@ -11,7 +11,7 @@ const ideaSchema = new dynamoose.Schema(
 		userId: {
 			type: String,
 			required: true,
-			index: { global: true, rangeKey: "type" },
+			index: { type: "global", rangeKey: "type" },
 		},
 		type: {
 			type: String,
@@ -32,7 +32,7 @@ const ideaSchema = new dynamoose.Schema(
 );
 export const userIdIndex = "userIdGlobalIndex";
 
-export interface UserIdea extends Document {
+export interface UserIdea extends Item {
 	id: string;
 	userId: string;
 	type: string;

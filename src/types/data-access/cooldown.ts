@@ -1,5 +1,5 @@
-import * as dynamoose from "dynamoose";
-import { Document } from "dynamoose/dist/Document";
+import dynamoose from "dynamoose";
+import { Item } from "dynamoose/dist/Item";
 
 const cooldownSchema = new dynamoose.Schema({
 	idToCooldown: {
@@ -15,7 +15,7 @@ const cooldownSchema = new dynamoose.Schema({
 	date: Date, // Note: 'required' defaulted to false
 });
 
-export interface Cooldown extends Document {
+export interface Cooldown extends Item {
 	idToCooldown: string; // Can be a user id, member id, or guild id
 	name: string;
 	date: Date;
