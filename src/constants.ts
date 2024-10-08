@@ -61,7 +61,7 @@ export const CS_PREDICTION_URL = "https://csgo.stadelmann.org:3000";
 
 export const HEAVY_DOLLAR_SIGN = "💲";
 export const SUNGLASSES = "😎";
-export const KHANG_NEKO_EMOJI_ID = "cat_thonk";
+export const KHANG_NEKO_EMOJI_ID = "1293018976128995413";
 export const WHITE_CHECK_MARK = "✅";
 export const X_MARK = "❌";
 export const MUSICAL_NOTES = "🎶";

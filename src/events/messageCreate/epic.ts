@@ -1,6 +1,6 @@
 import { ArgsOf, Discord, On } from "discordx";
 import { SUNGLASSES } from "../../constants.js";
-import { random } from "../../util/index.js";
+import { random, tryReactMessage } from "../../util/index.js";
 
 const EPIC_SUNGLASSES_CHANCE = 100;
 const SUNGLASSES_EPIC_CHANCE = 100;
@@ -12,15 +12,15 @@ abstract class Epic {
 	private async handleEpic([msg]: ArgsOf<"messageCreate">) {
 		// Reads "epic" from chat and reacts with sunglasses emoji
 		if (msg.content.toLowerCase().includes("epic") && random(EPIC_SUNGLASSES_CHANCE)) {
-			await msg.react(SUNGLASSES);
+			await tryReactMessage(msg, SUNGLASSES);
 		}
 
 		// Reads sunglasses emoji from chat and reacts with E, P, I, C
 		if (msg.content.includes(SUNGLASSES) && random(SUNGLASSES_EPIC_CHANCE)) {
-			await msg.react("🇪");
-			await msg.react("🇵");
-			await msg.react("🇮");
-			await msg.react("🇨");
+			await tryReactMessage(msg, "🇪");
+			await tryReactMessage(msg, "🇵");
+			await tryReactMessage(msg, "🇮");
+			await tryReactMessage(msg, "🇨");
 		}
 	}
 }

@@ -12,6 +12,7 @@ import {
 	THREE_EMOJI,
 	TWO_EMOJI,
 } from "../../constants.js";
+import { tryReactMessage } from "../../util/message-helper.js";
 
 const numToUnicodeEmojiMap: Map<number, string> = new Map([
 	[1, ONE_EMOJI],
@@ -34,7 +35,7 @@ abstract class ChristinaPolls {
 			for (let i = 1; i <= 9; i += 1) {
 				if (msg.content.includes(`${i}:`)) {
 					const numEmoji = numToUnicodeEmojiMap.get(i);
-					await msg.react(numEmoji);
+					await tryReactMessage(msg, numEmoji);
 				}
 			}
 		}
