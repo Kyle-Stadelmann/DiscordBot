@@ -1,13 +1,12 @@
 {
-	"name": "bd4discordbot",
-	"version": "3.0.0",
+	"name": "bddiscordbot",
+	"version": "3.0.1",
 	"description": "BD4 Discord Bot",
 	"main": "app.ts",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
-		"start": "node src/scripts/startBot.js",
-		"start-ts": "ts-node --esm -r dotenv/config src/app.ts",
-		"start-js": "node -r dotenv/config dist/app.js",
+		"start": "ts-node --esm -r dotenv/config src/app.ts",
+		"start-prod": "BDBOT_PROD_MODE=TRUE node -r dotenv/config dist/app.js",
 		"format": "npx prettier src/ --write",
 		"lint": "npx eslint src/",
 		"dev": "nodemon"

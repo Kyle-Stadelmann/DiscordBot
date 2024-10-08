@@ -1,10 +1,7 @@
-// eslint-disable-next-line import/extensions
-import * as settings from "../settings.js";
-
 export function isDevMode(): boolean {
-	return settings.botMode === settings.BotModeEnum.DEV;
+	return process.env.BDBOT_PROD_MODE !== "TRUE";
 }
 
 export function isProdMode(): boolean {
-	return settings.botMode === settings.BotModeEnum.PROD;
+	return process.env.BDBOT_PROD_MODE === "TRUE";
 }
