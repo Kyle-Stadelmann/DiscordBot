@@ -1,32 +1,22 @@
 # Custom DiscordBot
 
-Custom DiscordBot made for our private, personal Discord server. This is just a fun project several teammates work on occasionally in our free time. This is currently only available to those on the server, however a deployable version for anyone to use is planned.
-
-## Current commands
-
--   help
--   move
--   listroles
--   ping
--   role
--   randommove
--   sword
-
-And many more planned!
+Custom DiscordBot made for the private BD Discord server. This is just a fun project several teammates work on occasionally in our free time. This is currently only available to those on the server, however a deployable version for anyone to use is planned.
 
 ## How to use
 
-`>help` lists the commands and gives a tip on how to use other commands.
+`/help` lists the available commands in the current context (Discord server or DM).
 
-![Image of help command](https://i.imgur.com/IzrwXuS.png)
+![Image of help command](https://i.imgur.com/Wgq6Kcu.png)
 
-To understand how a certain command works use `>commandName help` to get meaningful information about the command.
-
-![Image of command help command](https://i.imgur.com/XhlapRM.png)
+To view the description and parameter information for a particular command, initiate a slash command by typing `/` followed by the command on a Discord server.
 
 ## Install/Self-Host
 
-Install ffmpeg onto system and set the environment variable FFMPEG_PATH to the install location.
+1. `git clone https://github.com/Kyle-Stadelmann/DiscordBot`
+2. `cd DiscordBot`
+3. Install ffmpeg onto system and set the environment variable FFMPEG_PATH to the install location.
+4. `npm install`
+5. `npm run start`
 
 ### Run Scripts
 
