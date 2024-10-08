@@ -36,18 +36,18 @@ export class BDBot {
 		return this.afkPicContainer.hasPics();
 	}
 
-	// Can return undefined if there are no pics. Can use hasAfkPics first
-	public getRandomAfkPicUrl(shouldGetStagingPic?: boolean): string | undefined {
-		return this.afkPicContainer.getRandomPicUrl(shouldGetStagingPic);
+	// Returns [] if there are no pics
+	public getRandomAfkPicUrl(shouldGetStagingPic?: boolean, count?: number): string[] {
+		return this.afkPicContainer.getRandomPicUrls(shouldGetStagingPic, count);
 	}
 
 	public hasAfkPicsOfUser(userId: string): boolean {
 		return this.afkPicContainer.hasUser(userId);
 	}
 
-	// Can return undefined if there are no pics for this user. Can use hasUser first
-	public getRandomAfkPicUrlByUser(userId: string): string | undefined {
-		return this.afkPicContainer.getRandomUserPicUrl(userId);
+	// Returns [] if user has no pics
+	public getRandomAfkPicUrlByUser(userId: string, count?: number): string[] {
+		return this.afkPicContainer.getRandomUserPicUrls(userId, count);
 	}
 
 	public async tryAddAfkPics(picUrls: string[], submitterUserId: string): Promise<boolean> {

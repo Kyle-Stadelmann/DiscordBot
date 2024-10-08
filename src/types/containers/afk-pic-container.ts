@@ -20,7 +20,7 @@ import {
 	ZACH_ID,
 } from "../../constants.js";
 import { UserAfkPic, getAllPicsForUser } from "../data-access/afk-pic.js";
-import { getRandomElement, random } from "../../util/random.js";
+import { getRandomElements } from "../../util/random.js";
 import { getAllStagingPics, StagingAfkPic, StagingAfkPicTypedModel } from "../data-access/staging-afk-pic.js";
 
 // User id to afk pic code
@@ -67,20 +67,15 @@ export class AfkPicContainer {
 		return this.allPics.length > 0 || this.stagingPics.length > 0;
 	}
 
-	public getRandomUserPicUrl(userId: string): string | undefined {
-		if (!this.hasUser(userId)) return undefined;
-		return getRandomElement(this.userPicsMap.get(userId)).url;
+	public getRandomUserPicUrls(userId: string, count?: number): string[] {
+		const userPics = this.getUserPics(userId);
+		return getRandomElements(userPics, count).map((p) => p.url);
 	}
 
-	public getRandomPicUrl(shouldGetStagingPic?: boolean): string | undefined {
-		if (shouldGetStagingPic) return getRandomElement(this.stagingPics).url;
-		const totalPicLength = this.allPics.length + this.stagingPics.length;
-
-		if (totalPicLength === 0) return undefined;
-		// Random uses percentages
-		return random((this.allPics.length / totalPicLength) * 100)
-			? getRandomElement(this.allPics).url
-			: getRandomElement(this.stagingPics).url;
+	public getRandomPicUrls(shouldGetStagingPic?: boolean, count?: number): string[] {
+		if (shouldGetStagingPic) return getRandomElements(this.stagingPics, count).map((p) => p.url);
+		const pics = [...this.allPics, ...this.stagingPics];
+		return getRandomElements(pics, count).map((p) => p.url);
 	}
 
 	// Note: Each time a picture is uploaded to discords CDN, it has a different url

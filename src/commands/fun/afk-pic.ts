@@ -7,6 +7,8 @@ import { CommandCategory } from "../../types/command.js";
 import { BD5_DEV_SERVER_IDS } from "../../constants.js";
 import { tryAddAfkPics } from "../../util/afk-pic-helper.js";
 
+const MAX_GET_AFK_PICS = 5;
+
 @Discord()
 @Category(CommandCategory.Fun)
 @SlashGroup({ name: "afkpic", description: "Send or add pictures to the AFK Pic collection" })
@@ -16,6 +18,13 @@ import { tryAddAfkPics } from "../../util/afk-pic-helper.js";
 class AfkPicCommand {
 	@Slash({ name: "get", description: "Sends an AFK Pic of a random (or given) user" })
 	async get(
+		@SlashOption({
+			name: "count",
+			description: "The number of AFK pics to fetch (max of 5)",
+			required: false,
+			type: ApplicationCommandOptionType.Integer,
+		})
+		countArg: number | undefined,
 		@SlashOption({
 			name: "user",
 			description: "The user to fetch a picture of",
@@ -37,11 +46,18 @@ class AfkPicCommand {
 			return false;
 		}
 
-		const afkPicUrl = this.getCorrespondingAfkPicUrl(user, shouldFetchStaging);
+		// Fetch between 1 and MAX_GET_AFK_PICS pics
+		const count = Math.max(1, Math.min(countArg, MAX_GET_AFK_PICS));
 
-		if (afkPicUrl) {
-			const embed = new EmbedBuilder().setImage(afkPicUrl).setColor(0x0);
-			await interaction.reply({ embeds: [embed] });
+		const afkPicUrls = this.getCorrespondingAfkPicUrls(user, shouldFetchStaging, count);
+
+		if (afkPicUrls.length > 0) {
+			const embeds: EmbedBuilder[] = [];
+			afkPicUrls.forEach((url) => {
+				const embed = new EmbedBuilder().setImage(url).setColor(0x0);
+				embeds.push(embed);
+			});
+			await interaction.reply({ embeds });
 			return true;
 		}
 
@@ -49,16 +65,11 @@ class AfkPicCommand {
 		return false;
 	}
 
-	private getCorrespondingAfkPicUrl(user?: User, shouldFetchStaging?: boolean): string | undefined {
-		let url: string;
+	private getCorrespondingAfkPicUrls(user?: User, shouldFetchStaging?: boolean, count?: number): string[] {
 		if (user) {
-			if (bdbot.hasAfkPicsOfUser(user.id)) {
-				url = bdbot.getRandomAfkPicUrlByUser(user.id);
-			}
-		} else {
-			url = bdbot.getRandomAfkPicUrl(shouldFetchStaging);
+			return bdbot.getRandomAfkPicUrlByUser(user.id, count);
 		}
-		return url;
+		return bdbot.getRandomAfkPicUrl(shouldFetchStaging, count);
 	}
 
 	@Slash({
