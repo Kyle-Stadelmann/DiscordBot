@@ -6,7 +6,7 @@ import { isProdMode, printSpace } from "./index.js";
 
 export function createCmdErrorStr(cmdName: string, error: Error, ci: ChatInputCommandInteraction): string {
 	let errStr = `**Error when executing command ${cmdName}**\n`;
-	errStr += `**CommandInteraction**: ${ci.toString()})\n\n`;
+	errStr += `**CommandInteraction**: ${ci.toString()}\n\n`;
 	errStr += `**error**: ${error.stack}\n\n`;
 	return errStr;
 }
