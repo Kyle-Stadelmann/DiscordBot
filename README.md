@@ -14,10 +14,11 @@ To view the description and parameter information for a particular command, init
 ### Install
 1. `git clone https://github.com/Kyle-Stadelmann/DiscordBot`
 2. `cd DiscordBot`
-3. `npm install`
-4. Install ffmpeg onto your system and set the system environment variable FFMPEG_PATH to the install location.
-5. `cp .env.template .env`
-6. Fill out fields in `.env` file with API keys/secrets
+3. Ensure node is installed and `node -v` matches the version in `.nvmrc` (can use `nvm use` or `nvm use [version]` if nvm is installed)
+4. `npm install`
+5. Install ffmpeg onto your system and set the system environment variable FFMPEG_PATH to the install location.
+6. `cp .env.template .env`
+7. Fill out fields in `.env` file with API keys/secrets
 
 ### Start in the development environment
 In the development environment, the development bot specified in the `.env` file (DEV_BOT_TOKEN) will be used instead of the production one. Additionally, certain rules such as removing cooldowns are activated to make development smoother.
