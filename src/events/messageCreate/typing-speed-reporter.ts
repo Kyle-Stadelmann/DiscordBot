@@ -4,13 +4,13 @@ import { printSpace, random } from "../../util/index.js";
 
 function danielWPMChanceFunction(numWords: number): number {
 	const MIN_WORDS = 8;
-	const MAX_CHANCE = 15;
+	const MAX_CHANCE = 5;
 
 	// If not enough words, chance is 0%
 	if (numWords < MIN_WORDS) return 0;
 
 	// Chance equation (exponential)
-	return Math.min(numWords ** 1.7 * 0.1, MAX_CHANCE);
+	return Math.min(numWords ** 1.7 * 0.01, MAX_CHANCE);
 }
 
 function countWords(str: string) {
