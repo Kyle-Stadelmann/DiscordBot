@@ -13,7 +13,6 @@ abstract class TypeSpeedWatcher {
 
 		const timestamp = bdbot.typingTimestamps.get(userId);
 		if (timestamp === null || timestamp + TYPE_SPEED_RESET_TIME < new Date().getTime()) {
-			console.log(`Watching: ${userId}`);
 			bdbot.typingTimestamps.set(userId, typingState.startedTimestamp);
 		}
 	}

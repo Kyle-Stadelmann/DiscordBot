@@ -17,7 +17,7 @@ export async function tryPlayPersonTheme(
 
 	if (stateMemberId === personId && oldState.channel === null && newState.channel !== null && random(chance)) {
 		// Don't run if a queue currently exists
-		const queue = player.queues.resolve(newState.guild.id);
+		let queue = player.queues.resolve(newState.guild.id);
 		if (!isNullOrUndefined(queue) && !queue.isEmpty()) {
 			return;
 		}
@@ -25,7 +25,6 @@ export async function tryPlayPersonTheme(
 		try {
 			await queueSong(newState.channel, themeUrl, newState.channel, newState.member.user);
 			await queue.node.seek(startTime);
-			console.log(`Playing theme for memberId: ${stateMemberId}`);
 		} catch (e) {
 			console.error(`Failed to play theme for memberId: ${stateMemberId}`);
 		}
@@ -33,7 +32,7 @@ export async function tryPlayPersonTheme(
 		// disconnect after 15 seconds
 		await sleep(15000);
 
-		player.queues.resolve(newState.guild.id).delete();
-		console.log(`Exiting theme for memberId: ${stateMemberId}`);
+		queue = player.queues.resolve(newState.guild.id);
+		if (queue) queue.delete();
 	}
 }
