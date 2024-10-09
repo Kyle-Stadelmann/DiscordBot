@@ -29,7 +29,7 @@ export const ExceptionCatcher: GuardFunction = async (p, c, next, data) => {
 		return await next();
 	} catch (e) {
 		let errStr = `**Error when executing event**\n`;
-		errStr += `**params**: ${JSON.stringify(p)}\n\n`;
+		errStr += `**params**: ${p}\n\n`;
 		errStr += `**data**: ${JSON.stringify(data)}\n\n`;
 		errStr += `**error**: ${e.stack}\n\n`;
 		console.error(errStr);

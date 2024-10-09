@@ -65,7 +65,7 @@ export class CooldownContainer {
 		const cd = await this.getCooldown(id);
 		if (!cd) return;
 
-		cd.date = undefined;
-		await cd.save();
+		await cd.delete();
+		this.cooldowns.delete(id);
 	}
 }
