@@ -5,7 +5,7 @@
 	"main": "app.ts",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
-		"start": "ts-node --esm -r dotenv/config src/app.ts",
+		"start": "node --loader ts-node/esm -r dotenv/config src/app.ts",
 		"start-prod": "cross-env BDBOT_PROD_MODE=TRUE node -r dotenv/config dist/app.js",
 		"format": "npx prettier src/ --write",
 		"lint": "npx eslint src/",
@@ -44,7 +44,7 @@
 		"yt-stream": "^1.4.10"
 	},
 	"devDependencies": {
-		"@types/node": "^18.18.0",
+		"@types/node": "^22.7.5",
 		"@typescript-eslint/eslint-plugin": "^6.11.0",
 		"@typescript-eslint/parser": "^6.11.0",
 		"eslint": "^8.53.0",
@@ -52,7 +52,7 @@
 		"nodemon": "^3.1.7",
 		"prettier": "^3.3.3",
 		"ts-jest": "^29.1.1",
-		"ts-node": "^10.9.1",
+		"ts-node": "^10.9.2",
 		"tslib": "^2.7.0",
 		"tsx": "^4.19.1",
 		"typescript": "^5.6.2"
