@@ -1,5 +1,5 @@
-import * as dynamoose from "dynamoose";
-import { Document } from "dynamoose/dist/Document";
+import dynamoose from "dynamoose";
+import { Item } from "dynamoose/dist/Item";
 
 const afkPicSchema = new dynamoose.Schema(
 	{
@@ -16,9 +16,11 @@ const afkPicSchema = new dynamoose.Schema(
 			type: String,
 			required: true,
 			rangeKey: true,
-			index: { global: true },
+			index: { name: "userIdGlobalIndex", type: "global" },
 		},
-		submitterUserId: String,
+		submitterUserId: {
+			type: String,
+		},
 	},
 	{
 		timestamps: true,
@@ -29,7 +31,7 @@ export const userIdIndex = "userIdGlobalIndex";
 // Note: some afk pics have multiple users in them.
 // These pictures have one record *per user*
 // This makes the model less intuitive, but allows for querying on user Id
-export interface UserAfkPic extends Document {
+export interface UserAfkPic extends Item {
 	filename: string;
 	url: string;
 	userId: string;
