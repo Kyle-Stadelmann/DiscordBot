@@ -1,4 +1,4 @@
-import { APIGuildMember, ChatInputCommandInteraction, GuildMember, Snowflake } from "discord.js";
+import { ChatInputCommandInteraction, Snowflake, User } from "discord.js";
 import { ArgsOf, Discord, On } from "discordx";
 import { bdbot, client } from "../../app.js";
 import {
@@ -31,12 +31,11 @@ export abstract class CommandHandler {
 			return;
 		}
 
-		const { user, guildId, member } = interaction;
+		const { user, guild } = interaction;
+		const guildId = guild !== null ? guild.id : undefined;
 
-		let personId;
 		try {
-			personId = this.determinePersonId(member, guildId, user.id);
-			await this.processCmd(interaction, personId);
+			await this.processCmd(interaction, user, guildId);
 		} catch (error) {
 			const cmdCooldownName = getCmdCooldownStrInteraction(interaction);
 
@@ -57,18 +56,18 @@ export abstract class CommandHandler {
 				console.error("Reply timed out. User wasn't made aware of above error");
 				console.error(replyErr);
 			}
-			if (personId) await bdbot.endCooldown(cmdCooldownName, personId);
+			await bdbot.endCooldown(cmdCooldownName, user.id, guildId);
 		}
 	}
 
-	private async processCmd(interaction: ChatInputCommandInteraction, personId: Snowflake) {
-		const { user, guildId } = interaction;
-
+	private async processCmd(interaction: ChatInputCommandInteraction, user: User, guildId?: Snowflake) {
 		const cmdCooldownName = getCmdCooldownStrInteraction(interaction);
 
 		console.log(`${cmdCooldownName} command detected by: ${user.username}`);
 
-		if ((await bdbot.isOnCooldown(cmdCooldownName, personId, guildId)) && !isDevMode()) {
+		const isOnCooldown = await bdbot.isOnCooldown(cmdCooldownName, user.id, guildId);
+
+		if (isOnCooldown && !isDevMode()) {
 			console.log("Command was NOT successful, member is on cooldown.");
 			printSpace();
 			await interaction.reply("Command was NOT successful, you are on cooldown for this command.");
@@ -77,33 +76,15 @@ export abstract class CommandHandler {
 
 		// Initial cd to ensure the cmd isn't reissued while this instance
 		// of the cmd is still executing
-		await bdbot.putOnCooldown(cmdCooldownName, personId);
+		await bdbot.putOnCooldown(cmdCooldownName, user.id, guildId);
 
 		const result = (await client.executeInteraction(interaction)) as boolean;
 		if (result === true) {
 			console.log(`${cmdCooldownName} was successful`);
-			if (isDevMode()) await bdbot.endCooldown(cmdCooldownName, personId);
-			else await bdbot.putOnCooldown(cmdCooldownName, personId);
+			await bdbot.putOnCooldown(cmdCooldownName, user.id, guildId);
 		} else {
 			console.log(`${cmdCooldownName} was NOT successful`);
-			await bdbot.endCooldown(cmdCooldownName, personId);
+			await bdbot.endCooldown(cmdCooldownName, user.id, guildId);
 		}
-	}
-
-	private determinePersonId(member: GuildMember | APIGuildMember, guildId: Snowflake, userId: Snowflake): Snowflake {
-		let personId: Snowflake;
-		if (member instanceof GuildMember) {
-			personId = member.id;
-		} else if (guildId) {
-			personId = client.guilds.resolve(guildId).members.resolve(userId).id;
-		} else {
-			personId = userId;
-		}
-
-		if (personId === undefined) {
-			throw new Error("Error: no member or user found for command interaction");
-		}
-
-		return personId;
 	}
 }

@@ -59,29 +59,29 @@ export class BDBot {
 		}
 	}
 
-	public isOnCooldown(cmdCooldownName: string, personId: Snowflake, guildId: Snowflake | null): Promise<boolean> {
+	public isOnCooldown(cmdCooldownName: string, personId: Snowflake, guildId?: Snowflake): Promise<boolean> {
 		const cdContainer = this.cdContainers.get(cmdCooldownName);
 		return cdContainer.isOnCooldown(personId, guildId);
 	}
 
-	public async putOnCooldown(cmdCooldownName: string, personId: Snowflake) {
+	public async putOnCooldown(cmdCooldownName: string, personId: Snowflake, guildId?: Snowflake) {
 		const cdContainer = this.cdContainers.get(cmdCooldownName);
-		await cdContainer.putOnCooldown(personId);
+		await cdContainer.putOnCooldown(personId, guildId);
 	}
 
-	public async putOnGuildCooldown(guildId: Snowflake, cmdCooldownName: string, cd: number) {
+	public async putOnGuildWideCooldown(guildId: Snowflake, cmdCooldownName: string, cd: number) {
 		const cdContainer = this.cdContainers.get(cmdCooldownName);
-		await cdContainer.putOnGuildCooldown(guildId, cd);
+		await cdContainer.putOnGuildWideCooldown(guildId, cd);
 	}
 
-	public async endCooldown(cmdCooldownName: string, personId: Snowflake) {
+	public async endCooldown(cmdCooldownName: string, userId: Snowflake, guildId?: Snowflake) {
 		const cdContainer = this.cdContainers.get(cmdCooldownName);
-		await cdContainer.endCooldown(personId);
+		await cdContainer.endCooldown(userId, guildId);
 	}
 
-	public async endGuildCooldown(guildId: Snowflake, cmdCooldownName: string) {
+	public async endGuildWideCooldown(guildId: Snowflake, cmdCooldownName: string) {
 		const cdContainer = this.cdContainers.get(cmdCooldownName);
-		await cdContainer.endGuildCooldown(guildId);
+		await cdContainer.endGuildWideCooldown(guildId);
 	}
 
 	private initCooldowns() {

@@ -13,14 +13,13 @@ const cooldownSchema = new dynamoose.Schema({
 		rangeKey: true,
 	},
 	date: {
-		type: Number,
-		required: true,
-		set: (value: Date | number) => {
-			if (value instanceof Date) {
-				return Math.floor(value.getTime() / 1000);
-			}
-			return value;
+		type: {
+			value: Date,
+			settings: {
+				storage: "seconds",
+			},
 		},
+		required: true,
 	},
 });
 
