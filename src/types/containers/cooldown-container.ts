@@ -20,7 +20,10 @@ export class CooldownContainer {
 
 	public async isOnCooldown(userId: Snowflake, guildId?: Snowflake): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown
-		return !isNullOrUndefined(guildId) && (await this.isIdOnCooldown(guildId)) ? true : this.isIdOnCooldown(userId);
+		if (!isNullOrUndefined(guildId) && (await this.isIdOnCooldown(guildId))) {
+			return true;
+		}
+		return this.isIdOnCooldown(userId);
 	}
 
 	public async putOnCooldown(userId: Snowflake, guildId?: Snowflake) {
@@ -45,7 +48,8 @@ export class CooldownContainer {
 
 	private async isIdOnCooldown(id: string): Promise<boolean> {
 		const cd = await this.getCooldown(id);
-		return cd?.date > new Date();
+		if (isNullOrUndefined(cd)) return false;
+		return cd.date > new Date();
 	}
 
 	private async putIdOnCooldown(id: string, cooldownTime: number) {

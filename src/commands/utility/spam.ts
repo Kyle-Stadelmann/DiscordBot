@@ -16,9 +16,6 @@ const MAX_SPAM_AMOUNT = 20;
 @CooldownTime(10 * 60 * 1000)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class SpamCommand {
-	public cooldownTime = 10 * 60 * 1000;
-	public category = CommandCategory.Utility;
-
 	@Slash({
 		name: "spam",
 		description: "Repeatedly ping a victim with a message until they respond",
