@@ -12,7 +12,15 @@ const cooldownSchema = new dynamoose.Schema({
 		required: true,
 		rangeKey: true,
 	},
-	date: Date, // Note: 'required' defaulted to false
+	date: {
+		type: {
+			value: Date,
+			settings: {
+				storage: "seconds",
+			},
+		},
+		required: true,
+	},
 });
 
 export interface Cooldown extends Item {

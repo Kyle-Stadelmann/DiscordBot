@@ -2,6 +2,10 @@ import { Collection, Snowflake } from "discord.js";
 import { Cooldown, createCooldown, getCooldown } from "../data-access/cooldown.js";
 import { isNullOrUndefined } from "../../util/general.js";
 
+function convertCooldownId(userId: Snowflake, guildId?: Snowflake) {
+	return isNullOrUndefined(guildId) ? userId : `${guildId}-${userId}`;
+}
+
 /*
  * CooldownContainer is managed inside of the bot-container
  */
@@ -14,26 +18,27 @@ export class CooldownContainer {
 		private cooldownName: string
 	) {}
 
-	public async isOnCooldown(personId: Snowflake, guildId: Snowflake | null): Promise<boolean> {
+	public async isOnCooldown(userId: Snowflake, guildId?: Snowflake): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown
-		return !isNullOrUndefined(guildId) && (await this.isIdOnCooldown(guildId))
-			? true
-			: this.isIdOnCooldown(personId);
+		if (!isNullOrUndefined(guildId) && (await this.isIdOnCooldown(guildId))) {
+			return true;
+		}
+		return this.isIdOnCooldown(userId);
 	}
 
-	public async putOnCooldown(personId: Snowflake) {
-		await this.putIdOnCooldown(personId, this.cooldownTime);
+	public async putOnCooldown(userId: Snowflake, guildId?: Snowflake) {
+		await this.putIdOnCooldown(convertCooldownId(userId, guildId), this.cooldownTime);
 	}
 
-	public async putOnGuildCooldown(guildId: Snowflake, cooldownTime: number) {
+	public async putOnGuildWideCooldown(guildId: Snowflake, cooldownTime: number) {
 		await this.putIdOnCooldown(guildId, cooldownTime);
 	}
 
-	public async endCooldown(personId: Snowflake) {
-		await this.endCooldownById(personId);
+	public async endCooldown(userId: Snowflake, guildId?: Snowflake) {
+		await this.endCooldownById(convertCooldownId(userId, guildId));
 	}
 
-	public async endGuildCooldown(guildId: Snowflake) {
+	public async endGuildWideCooldown(guildId: Snowflake) {
 		await this.endCooldownById(guildId);
 	}
 
@@ -43,7 +48,8 @@ export class CooldownContainer {
 
 	private async isIdOnCooldown(id: string): Promise<boolean> {
 		const cd = await this.getCooldown(id);
-		return cd?.date > new Date();
+		if (isNullOrUndefined(cd)) return false;
+		return cd.date > new Date();
 	}
 
 	private async putIdOnCooldown(id: string, cooldownTime: number) {
@@ -65,7 +71,7 @@ export class CooldownContainer {
 		const cd = await this.getCooldown(id);
 		if (!cd) return;
 
-		cd.date = undefined;
-		await cd.save();
+		await cd.delete();
+		this.cooldowns.delete(id);
 	}
 }

@@ -67,7 +67,7 @@ class WhipCommand {
 			`Initiating the whipping... Knocking your tartget ***${NUM_CHANNELS_WHIPPED}*** channels down!`
 		);
 
-		await bdbot.putOnGuildCooldown(guild.id, "whip", GUILD_CD_TIME);
+		await bdbot.putOnGuildWideCooldown(guild.id, "whip", GUILD_CD_TIME);
 
 		const originalChannel = victimMember.voice.channel;
 		// Voice channels iterator in order of position
@@ -82,7 +82,7 @@ class WhipCommand {
 		// TODO add retry here maybe?
 		await this.cleanup(victimMember, tempChannels, originalChannel);
 
-		await bdbot.endGuildCooldown(guild.id, "whip");
+		await bdbot.endGuildWideCooldown(guild.id, "whip");
 
 		await interaction.editReply("Whipping has concluded... Hopefully your target has mercy on you.");
 
