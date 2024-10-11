@@ -95,11 +95,13 @@ class HenCommand {
 			await activity.save();
 		}
 
+		const aActivityStr = `a${["a", "e", "i", "o", "u"].includes(activityName.charAt(0)) ? "n" : ""} ${activityName}`;
+
 		const embed = new EmbedBuilder()
 			.setTitle(`${activityName}`)
 			.setAuthor({ name: interaction.user.displayName, iconURL: interaction.user.avatarURL() })
 			.setDescription(
-				`${user.toString()} has initiated ${activityName}. Use the buttons below to join, leave, or subscribe to the ${activityName} queue!`
+				`${user.toString()} has created ${aActivityStr} queue. Use the buttons below to join, leave, or subscribe to the ${activityName} queue!`
 			);
 
 		const btnRow = this.createButtonRow(guildId, activityName);
@@ -165,7 +167,7 @@ class HenCommand {
 		} else {
 			activity.participantIds.push(userId);
 			await activity.save();
-			await interaction.reply(`${user.toString()} has joined the ***${name}*** queue}`);
+			await interaction.reply(`${user.toString()} has joined the ***${name}*** queue`);
 		}
 	}
 
@@ -174,7 +176,7 @@ class HenCommand {
 		if (activity.participantIds.includes(userId)) {
 			activity.participantIds = activity.participantIds.filter((id) => id !== userId);
 			await activity.save();
-			await interaction.reply(`${user.toString()} has left the ***${name}*** queue}`);
+			await interaction.reply(`${user.toString()} has left the ***${name}*** queue`);
 		} else {
 			await interaction.reply({ content: "You haven't joined this activity!", ephemeral: true });
 		}
