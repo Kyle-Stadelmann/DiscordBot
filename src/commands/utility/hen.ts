@@ -1,9 +1,19 @@
 import { Category } from "@discordx/utilities";
-import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, Role } from "discord.js";
-import { Discord, Slash, SlashOption } from "discordx";
+import {
+	ActionRowBuilder,
+	ApplicationCommandOptionType,
+	ButtonBuilder,
+	ButtonInteraction,
+	ButtonStyle,
+	CommandInteraction,
+	EmbedBuilder,
+	MessageActionRowComponentBuilder,
+	Role,
+} from "discord.js";
+import { ButtonComponent, Discord, Slash, SlashOption } from "discordx";
 import { CommandCategory } from "../../types/command.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
-import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
+import { getActivity } from "../../types/data-access/hen.js";
 
 @Discord()
 @Category(CommandCategory.Utility)
@@ -12,22 +22,22 @@ import { WHITE_CHECK_MARK, X_MARK } from "../../constants.js";
 class HenCommand {
 	@Slash({
 		name: "hen",
-		description: "Starts a 'queue' to help find people interested in a specified activity",
+		description: "Starts an activity 'queue' to help find people interested in joining",
 		dmPermission: false,
 	})
 	async run(
 		@SlashOption({
-			name: "activity",
-			description: "The activity you want to start a queue for",
+			name: "role",
+			description: "The role activity you want to start a queue for",
 			type: ApplicationCommandOptionType.Role,
 		})
-		activity: Role | undefined,
+		role: Role | undefined,
 		@SlashOption({
-			name: "activity2",
-			description: "The activity (when no role is associated) you want to start a queue for",
+			name: "name",
+			description: "The name of the activity (when no role is associated) you want to start a queue for",
 			type: ApplicationCommandOptionType.String,
 		})
-		activity2: string | undefined,
+		name: string | undefined,
 		@SlashOption({
 			name: "size",
 			description: "The max number of people allowed (default: no max)",
@@ -42,7 +52,7 @@ class HenCommand {
 		time: string | undefined,
 		interaction: CommandInteraction
 	): Promise<boolean> {
-		if (activity === undefined && activity2 === undefined) {
+		if (role === undefined && name === undefined) {
 			await interaction.reply({
 				content: "Command was NOT successful, no role or text for the activity was specified.",
 				ephemeral: true,
@@ -50,16 +60,71 @@ class HenCommand {
 			return false;
 		}
 
-		const activityStr = activity?.name ?? activity2;
+		const guildId = interaction.guild.id;
+		const activityStr = role?.name ?? name;
 
 		const embed = new EmbedBuilder()
 			.setTitle(`${activityStr}`)
 			.setAuthor({ name: interaction.user.displayName, iconURL: interaction.user.avatarURL() })
 			.setDescription(
-				`A ${activityStr} queue has been initiated. React with ${WHITE_CHECK_MARK} to join, or react with ${X_MARK} to leave the queue!`
+				`A ${activityStr} queue has been initiated. Use the buttons below to join, leave, or subscribe to the ${activityStr} queue!`
 			);
 
-		await interaction.reply({ embeds: [embed] });
+		const joinBtn = new ButtonBuilder()
+			.setLabel("Join")
+			.setStyle(ButtonStyle.Success)
+			.setCustomId(`join_${guildId}_${activityStr}`);
+		const leaveBtn = new ButtonBuilder()
+			.setLabel("Leave")
+			.setStyle(ButtonStyle.Danger)
+			.setCustomId(`leave_${guildId}_${activityStr}`);
+		const subscribeBtn = new ButtonBuilder()
+			.setLabel("Subscribe")
+			.setStyle(ButtonStyle.Primary)
+			.setCustomId(`subscribe_${guildId}_${activityStr}`);
+
+		const btnRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
+			joinBtn,
+			leaveBtn,
+			subscribeBtn
+		);
+
+		await interaction.reply({ embeds: [embed], components: [btnRow] });
 		return true;
+	}
+
+	@ButtonComponent({ id: /join_.*_.*/ })
+	async join(interaction: ButtonInteraction) {
+		const [, guildId, name] = interaction.customId.split("_");
+		await interaction.reply(`Joining ${guildId} ${name}`);
+	}
+
+	@ButtonComponent({ id: /leave_.*_.*/ })
+	async leave(interaction: ButtonInteraction) {
+		const [, guildId, name] = interaction.customId.split("_");
+		await interaction.reply(`Leaving ${guildId} ${name}`);
+	}
+
+	@ButtonComponent({ id: /subscribe.*_.*/ })
+	async subscribe(interaction: ButtonInteraction) {
+		const userId = interaction.user.id;
+		const [, guildId, name] = interaction.customId.split("_");
+		const activity = await getActivity(guildId, name);
+
+		if (activity.participantIds.includes(userId)) {
+			activity.participantIds = activity.participantIds.filter((id) => id !== userId);
+			await activity.save();
+			await interaction.reply({
+				content: `You've unsubscribed from the ***${name}*** activity! You will no longer receive notifications.`,
+				ephemeral: true,
+			});
+		} else {
+			activity.participantIds.push(userId);
+			await activity.save();
+			await interaction.reply({
+				content: `You've been subscribed to the ***${name}*** activity! You will receive a DM notification whenever this activity is hen'd. Click again to unsubscribe.`,
+				ephemeral: true,
+			});
+		}
 	}
 }
