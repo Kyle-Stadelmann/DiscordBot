@@ -35,7 +35,7 @@ async function startup() {
 
 	client.once("ready", async () => {
 		await client.initApplicationCommands();
-		await bdbot.initContainter();
+		await bdbot.initContainter(client);
 	});
 
 	const fileType = isProdMode() ? "js" : "ts";

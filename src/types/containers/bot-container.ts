@@ -1,10 +1,9 @@
 import { Snowflake, TextChannel } from "discord.js";
 import { GuildQueue, Player, Track } from "discord-player";
-import { DApplicationCommand, MetadataStorage } from "discordx";
+import { Client, DApplicationCommand, MetadataStorage } from "discordx";
 import { ICategory } from "@discordx/utilities";
 import { DANIEL_ID } from "../../constants.js";
 import { AfkPicContainer } from "./afk-pic-container.js";
-import { client } from "../../app.js";
 import { ICooldownTime } from "../cooldown-time.js";
 import { CooldownContainer } from "./cooldown-container.js";
 import { getCmdCooldownStr } from "../../util/index.js";
@@ -15,18 +14,11 @@ export class BDBot {
 	private readonly afkPicContainer = new AfkPicContainer();
 	private readonly cdContainers = new Map<string, CooldownContainer>();
 	public readonly typingTimestamps = new Map<string, number>().set(DANIEL_ID, null);
-	public readonly player = new Player(client, {
-		ytdlOptions: {
-			quality: "lowestaudio",
-			filter: "audioonly",
-			// eslint-disable-next-line no-bitwise
-			highWaterMark: 1 << 25,
-		},
-	});
+	public player: Player;
 
-	public async initContainter() {
+	public async initContainter(client: Client) {
 		const afkPicContainerPromise = this.afkPicContainer.initContainer();
-		const initPlayerPromise = this.initPlayer();
+		const initPlayerPromise = this.initPlayer(client);
 		this.initCooldowns();
 
 		await Promise.all([afkPicContainerPromise, initPlayerPromise]);
@@ -95,7 +87,16 @@ export class BDBot {
 		);
 	}
 
-	private async initPlayer() {
+	private async initPlayer(client: Client) {
+		this.player = new Player(client, {
+			ytdlOptions: {
+				quality: "lowestaudio",
+				filter: "audioonly",
+				// eslint-disable-next-line no-bitwise
+				highWaterMark: 1 << 25,
+			},
+		});
+
 		await this.player.extractors.loadDefault();
 
 		this.player.events.on("playerStart", async (queue: GuildQueue<{ channel: TextChannel }>, track: Track) => {
