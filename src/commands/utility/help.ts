@@ -66,7 +66,7 @@ export class HelpCommand {
 
 		if (cmdNames.length === 0) return [];
 
-		const catName = `${cmdCatIconMap.get(cmdCat)} ${CommandCategory[cmdCat]}`;
+		const catName = `${cmdCatIconMap.get(cmdCat)} ${cmdCat}`;
 		return [{ name: catName, value: this.formatCmdNames(cmdNames.sort()) }];
 	}
 

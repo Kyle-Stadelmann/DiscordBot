@@ -1,5 +1,6 @@
-import { ArgsOf, Discord, On } from "discordx";
+import { ArgsOf, Discord, Guard, On } from "discordx";
 import { client } from "../../app.js";
+import { GuildOnly } from "../../util/guards.js";
 
 const activeTrains = new Set<String>();
 
@@ -8,6 +9,7 @@ const START_TRAIN_COUNT = 4;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class Train {
+	@Guard(GuildOnly)
 	@On({ event: "messageCreate" })
 	private async handleTrain([msg]: ArgsOf<"messageCreate">) {
 		const msgs = await msg.channel.messages.fetch({ limit: START_TRAIN_COUNT });
