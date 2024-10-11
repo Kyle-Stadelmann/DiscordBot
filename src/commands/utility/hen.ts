@@ -15,7 +15,16 @@ import {
 import { ButtonComponent, Discord, Slash, SlashOption } from "discordx";
 import { CommandCategory } from "../../types/command.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
-import { Activity, getActivity } from "../../types/data-access/activity.js";
+import { Activity, createActivity, getActivity } from "../../types/data-access/activity.js";
+
+const DEFAULT_SIZES = new Map([
+	["skowhen", 5],
+	["owhen", 5],
+	["valhen", 5],
+	["apexhen", 3],
+]);
+
+const DEFAULT_EXPIRE = 90 * 60 * 1000;
 
 @Discord()
 @Category(CommandCategory.Utility)
@@ -45,7 +54,7 @@ class HenCommand {
 			description: "The max number of people allowed (default: no max)",
 			type: ApplicationCommandOptionType.Integer,
 		})
-		size: number | undefined,
+		sizeParam: number | undefined,
 		@SlashOption({
 			name: "time",
 			description: "The time you would like to start the activity",
@@ -62,14 +71,35 @@ class HenCommand {
 			return false;
 		}
 
+		const { user } = interaction;
 		const guildId = interaction.guild.id;
-		const activityName = role?.name ?? name;
+		const activityName = role?.name.toLowerCase() ?? name;
+		const size = sizeParam ?? DEFAULT_SIZES.get(activityName);
+		const expire = new Date(new Date().getTime() + DEFAULT_EXPIRE);
+
+		let activity = await getActivity(guildId, activityName);
+
+		if (activity !== undefined && activity.expire > new Date()) {
+			await interaction.reply(
+				`An active ${activityName} queue already exists, please attempt to join that instead.`
+			);
+			return false;
+		}
+
+		if (activity === undefined) {
+			activity = await createActivity(guildId, activityName, [user.id], size, expire);
+		} else {
+			activity.participantIds = [user.id];
+			activity.size = size;
+			activity.expire = expire;
+			await activity.save();
+		}
 
 		const embed = new EmbedBuilder()
 			.setTitle(`${activityName}`)
 			.setAuthor({ name: interaction.user.displayName, iconURL: interaction.user.avatarURL() })
 			.setDescription(
-				`A ${activityName} queue has been initiated. Use the buttons below to join, leave, or subscribe to the ${activityName} queue!`
+				`${user.toString()} has initiated ${activityName}. Use the buttons below to join, leave, or subscribe to the ${activityName} queue!`
 			);
 
 		const btnRow = this.createButtonRow(guildId, activityName);
@@ -126,6 +156,12 @@ class HenCommand {
 		const userId = user.id;
 		if (activity.participantIds.includes(userId)) {
 			await interaction.reply({ content: "You've already joined this activity!", ephemeral: true });
+		} else if (activity.participantIds.length >= activity.size) {
+			await interaction.reply({
+				content:
+					"Sorry this queue is already full. Please wait or ask a participating member to switch with you.",
+				ephemeral: true,
+			});
 		} else {
 			activity.participantIds.push(userId);
 			await activity.save();

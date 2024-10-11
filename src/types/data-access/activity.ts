@@ -34,10 +34,15 @@ export interface Activity extends Item {
 	name: string;
 	participantIds: string[];
 	subscriberIds: string[];
+	size: number;
 	expire: Date;
 }
 export const ActivityTypedModel = dynamoose.model<Activity>("activity", activitySchema);
 
 export function getActivity(guildId: string, name: string): Promise<Activity | undefined> {
 	return ActivityTypedModel.get({ guildId, name });
+}
+
+export function createActivity(guildId: string, name: string, participantIds: string[], size: number, expire: Date) {
+	return ActivityTypedModel.create({ guildId, name, participantIds, subscriberIds: [], size, expire });
 }
