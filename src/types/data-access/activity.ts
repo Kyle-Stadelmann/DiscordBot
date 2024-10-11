@@ -1,4 +1,3 @@
-import { Snowflake } from "discord.js";
 import dynamoose from "dynamoose";
 import { Item } from "dynamoose/dist/Item";
 
@@ -39,6 +38,6 @@ export interface Activity extends Item {
 }
 export const ActivityTypedModel = dynamoose.model<Activity>("activity", activitySchema);
 
-export function getActivity(guildId: Snowflake, name: Snowflake) {
+export function getActivity(guildId: string, name: string): Promise<Activity | undefined> {
 	return ActivityTypedModel.get({ guildId, name });
 }
