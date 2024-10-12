@@ -3,11 +3,13 @@ import { Category } from "@discordx/utilities";
 import {
 	ActionRowBuilder,
 	ApplicationCommandOptionType,
+	BaseMessageOptions,
 	ButtonBuilder,
 	ButtonInteraction,
 	ButtonStyle,
 	CommandInteraction,
 	EmbedBuilder,
+	Guild,
 	MessageActionRowComponentBuilder,
 	Role,
 	User,
@@ -16,6 +18,8 @@ import { ButtonComponent, Discord, Slash, SlashOption } from "discordx";
 import { CommandCategory } from "../../types/command.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
 import { Activity, createActivity, getActivity } from "../../types/data-access/activity.js";
+import { client } from "../../app.js";
+import { tryDM } from "../../util/message-helper.js";
 
 const DEFAULT_SIZES = new Map([
 	["skowhen", 5],
@@ -24,7 +28,7 @@ const DEFAULT_SIZES = new Map([
 	["apexhen", 3],
 ]);
 
-const DEFAULT_EXPIRE = 90 * 60 * 1000;
+const DEFAULT_EXPIRE = 1 * 60 * 1000;
 
 @Discord()
 @Category(CommandCategory.Utility)
@@ -71,8 +75,8 @@ class HenCommand {
 			return false;
 		}
 
-		const { user } = interaction;
-		const guildId = interaction.guild.id;
+		const { user, guild } = interaction;
+		const guildId = guild.id;
 		const activityName = role?.name.toLowerCase() ?? name;
 		const size = sizeParam ?? DEFAULT_SIZES.get(activityName);
 		const expire = new Date(new Date().getTime() + DEFAULT_EXPIRE);
@@ -86,31 +90,52 @@ class HenCommand {
 			return false;
 		}
 
+		activity = await this.updateActivity(activity, guildId, user.id, size, expire);
+
+		const henResponse = this.createHenResponse(user, guild, activityName);
+
+		await interaction.reply(henResponse);
+
+		const interactionLink = `https://discord.com/channels/${guildId}/${interaction.channelId}/${interaction.id}`;
+		const dmMsg = this.createDMMessage(user, guild, activityName, interactionLink);
+		await this.notifySubscribers(
+			activity.subscriberIds.filter((id) => id === user.id),
+			dmMsg
+		);
+		return true;
+	}
+
+	async updateActivity(activity: Activity, guildId: string, userId: string, size: number, expire: Date) {
+		let newActivity: Activity;
 		if (activity === undefined) {
-			activity = await createActivity(guildId, activityName, [user.id], size, expire);
+			newActivity = await createActivity(guildId, activity.name, [userId], size, expire);
 		} else {
-			activity.participantIds = [user.id];
+			activity.participantIds = [userId];
 			activity.size = size;
 			activity.expire = expire;
 			await activity.save();
+			newActivity = activity;
 		}
+		return newActivity;
+	}
 
+	createHenResponse(user: User, guild: Guild, activityName: string) {
 		const aActivityStr = `a${["a", "e", "i", "o", "u"].includes(activityName.charAt(0)) ? "n" : ""} ${activityName}`;
 
 		const embed = new EmbedBuilder()
 			.setTitle(`${activityName}`)
-			.setAuthor({ name: interaction.user.displayName, iconURL: interaction.user.avatarURL() })
+			.setAuthor({ name: user.displayName, iconURL: user.avatarURL() })
 			.setDescription(
 				`${user.toString()} has created ${aActivityStr} queue. Use the buttons below to join, leave, or subscribe to the ${activityName} queue!`
-			);
+			)
+			.setFooter({ text: guild.name, iconURL: guild.iconURL() });
 
-		const btnRow = this.createButtonRow(guildId, activityName);
-
-		await interaction.reply({ embeds: [embed], components: [btnRow] });
-		return true;
+		const btnRow = this.createHenButtonRow(guild.id, activityName);
+		const response: BaseMessageOptions = { embeds: [embed], components: [btnRow] };
+		return response;
 	}
 
-	createButtonRow(guildId: string, activityName: string) {
+	createHenButtonRow(guildId: string, activityName: string) {
 		const joinBtn = new ButtonBuilder()
 			.setLabel("Join")
 			.setStyle(ButtonStyle.Success)
@@ -125,6 +150,40 @@ class HenCommand {
 			.setCustomId(`hen_subscribe_${guildId}_${activityName}`);
 
 		return new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(joinBtn, leaveBtn, subscribeBtn);
+	}
+
+	createDMMessage(user: User, guild: Guild, activityName: string, interactionLink: string) {
+		const aActivityStr = `a${["a", "e", "i", "o", "u"].includes(activityName.charAt(0)) ? "n" : ""} ${activityName}`;
+		const embed = new EmbedBuilder()
+			.setTitle(`${activityName}`)
+			.setAuthor({ name: user.displayName, iconURL: user.avatarURL() })
+			.setDescription(
+				`${user.toString()} has created ${aActivityStr} queue: ${interactionLink}. Use the button below to unsubscribe/subscribe to the ${activityName} queue.`
+			)
+			.setFooter({ text: guild.name, iconURL: guild.iconURL() });
+
+		const btnRow = this.createDMButtonRow(guild.id, activityName);
+		const response: BaseMessageOptions = { embeds: [embed], components: [btnRow] };
+		return response;
+	}
+
+	createDMButtonRow(guildId: string, activityName: string) {
+		const subscribeBtn = new ButtonBuilder()
+			.setLabel("Subscribe")
+			.setStyle(ButtonStyle.Primary)
+			.setCustomId(`hen_subscribe_${guildId}_${activityName}`);
+
+		return new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(subscribeBtn);
+	}
+
+	async notifySubscribers(subscribers: string[], subscriberMsg: BaseMessageOptions) {
+		const promises = subscribers.map((userId) => this.tryNotifySubscriber(userId, subscriberMsg));
+		await Promise.all(promises);
+	}
+
+	async tryNotifySubscriber(userId: string, subscriberMsg: BaseMessageOptions) {
+		const user = await client.users.fetch(userId);
+		await tryDM(user, subscriberMsg);
 	}
 
 	@ButtonComponent({ id: /hen_.*_.*_.*/ })

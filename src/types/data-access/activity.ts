@@ -14,10 +14,12 @@ const activitySchema = new dynamoose.Schema({
 	},
 	participantIds: {
 		type: Array,
+		schema: [String],
 		required: true,
 	},
 	subscriberIds: {
 		type: Array,
+		schema: [String],
 		required: true,
 	},
 	size: {
