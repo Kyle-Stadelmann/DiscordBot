@@ -17,7 +17,7 @@ import {
 import { ButtonComponent, Discord, Slash, SlashOption } from "discordx";
 import { CommandCategory } from "../../types/command.js";
 import { CooldownTime } from "../../types/cooldown-time.js";
-import { Activity, createActivity, getActivity } from "../../types/data-access/activity.js";
+import { Activity, createActivity, endActivity, getActivity } from "../../types/data-access/activity.js";
 import { client } from "../../app.js";
 import { tryDM } from "../../util/message-helper.js";
 
@@ -90,7 +90,7 @@ class HenCommand {
 			return false;
 		}
 
-		activity = await this.updateActivity(activity, guildId, user.id, size, expire);
+		activity = await this.updateActivity(activity, guildId, user.id, size, expire, activityName);
 
 		const henResponse = this.createHenResponse(user, guild, activityName);
 
@@ -105,10 +105,17 @@ class HenCommand {
 		return true;
 	}
 
-	async updateActivity(activity: Activity, guildId: string, userId: string, size: number, expire: Date) {
+	async updateActivity(
+		activity: Activity,
+		guildId: string,
+		userId: string,
+		size: number,
+		expire: Date,
+		name: string
+	) {
 		let newActivity: Activity;
 		if (activity === undefined) {
-			newActivity = await createActivity(guildId, activity.name, [userId], size, expire);
+			newActivity = await createActivity(guildId, name, [userId], size, expire);
 		} else {
 			activity.participantIds = [userId];
 			activity.size = size;
@@ -195,66 +202,97 @@ class HenCommand {
 
 		if (activity === undefined) {
 			console.error(
-				`Userid=${userId} couldn't ${action} activity=${name} for guildId=${guildId}. DB Activity was undefined`
+				`Userid=${userId} couldn't ${action} activity=${name} for guildId=${guildId}. DB activity was undefined`
 			);
 			await interaction.reply({
-				content: "Sorry this action failed. Internal bot error. Please report this.",
+				content: "This action failed. Internal bot error. Please report this.",
 				ephemeral: true,
 			});
 			return;
 		}
 
 		if (action === "subscribe") {
-			await this.handleSubscribe(interaction, activity, user, name);
-		} else if (action === "join") {
-			await this.handleJoin(interaction, activity, user, name);
+			await this.handleSubscribe(interaction, activity, user);
 		} else {
-			await this.handleLeave(interaction, activity, user, name);
+			if (activity.expire <= new Date()) {
+				await interaction.reply({
+					content: "This action failed. This queue has expired. Please recreate it with `/hen`.",
+					ephemeral: true,
+				});
+				return;
+			}
+			if (action === "join") {
+				await this.handleJoin(interaction, activity, user);
+			} else {
+				await this.handleLeave(interaction, activity, user);
+			}
 		}
 	}
 
-	async handleJoin(interaction: ButtonInteraction, activity: Activity, user: User, name: string) {
+	async handleJoin(interaction: ButtonInteraction, activity: Activity, user: User) {
 		const userId = user.id;
 		if (activity.participantIds.includes(userId)) {
 			await interaction.reply({ content: "You've already joined this activity!", ephemeral: true });
 		} else if (activity.participantIds.length >= activity.size) {
 			await interaction.reply({
-				content:
-					"Sorry this queue is already full. Please wait or ask a participating member to switch with you.",
+				content: "This queue is already full. Please wait or ask a participating member to switch with you.",
 				ephemeral: true,
 			});
 		} else {
 			activity.participantIds.push(userId);
 			await activity.save();
-			await interaction.reply(`${user.toString()} has joined the ***${name}*** queue`);
+
+			if (activity.participantIds.length === activity.size) {
+				await this.handleFilledQueue(interaction, activity, user);
+			} else {
+				await interaction.reply(`${user.toString()} has joined the ***${activity.name}*** queue`);
+			}
 		}
 	}
 
-	async handleLeave(interaction: ButtonInteraction, activity: Activity, user: User, name: string) {
+	async handleFilledQueue(interaction: ButtonInteraction, activity: Activity, user: User) {
+		await interaction.reply(
+			`${user.toString()} has joined the ***${activity.name}*** queue\n\nThis queue is now full.`
+		);
+	}
+
+	async handleLeave(interaction: ButtonInteraction, activity: Activity, user: User) {
 		const userId = user.id;
 		if (activity.participantIds.includes(userId)) {
 			activity.participantIds = activity.participantIds.filter((id) => id !== userId);
 			await activity.save();
-			await interaction.reply(`${user.toString()} has left the ***${name}*** queue`);
+
+			if (activity.participantIds.length === 0) {
+				await this.handleEmptyQueue(interaction, activity, user);
+			} else {
+				await interaction.reply(`${user.toString()} has left the ***${activity.name}*** queue`);
+			}
 		} else {
 			await interaction.reply({ content: "You haven't joined this activity!", ephemeral: true });
 		}
 	}
 
-	async handleSubscribe(interaction: ButtonInteraction, activity: Activity, user: User, name: string) {
+	async handleEmptyQueue(interaction: ButtonInteraction, activity: Activity, user: User) {
+		await interaction.reply(
+			`${user.toString()} has left the ***${activity.name}*** queue\nThis queue is now empty and will be deleted. Use \`/hen\` to create another queue.`
+		);
+		await endActivity(activity);
+	}
+
+	async handleSubscribe(interaction: ButtonInteraction, activity: Activity, user: User) {
 		const userId = user.id;
 		if (activity.subscriberIds.includes(userId)) {
 			activity.subscriberIds = activity.subscriberIds.filter((id) => id !== userId);
 			await activity.save();
 			await interaction.reply({
-				content: `You've unsubscribed from the ***${name}*** activity! You will no longer receive notifications.`,
+				content: `You've unsubscribed from the ***${activity.name}*** activity! You will no longer receive notifications.`,
 				ephemeral: true,
 			});
 		} else {
 			activity.subscriberIds.push(userId);
 			await activity.save();
 			await interaction.reply({
-				content: `You've subscribed to the ***${name}*** activity! You will receive a DM notification whenever this activity is hen'd in the future. Click again to unsubscribe.`,
+				content: `You've subscribed to the ***${activity.name}*** activity! You will receive a DM notification whenever this activity is hen'd in the future. Click again to unsubscribe.`,
 				ephemeral: true,
 			});
 		}

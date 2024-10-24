@@ -22,6 +22,7 @@ const activitySchema = new dynamoose.Schema({
 		schema: [String],
 		required: true,
 	},
+	// No specified size = unlimited size
 	size: {
 		type: Number,
 	},
@@ -47,4 +48,13 @@ export function getActivity(guildId: string, name: string): Promise<Activity | u
 
 export function createActivity(guildId: string, name: string, participantIds: string[], size: number, expire: Date) {
 	return ActivityTypedModel.create({ guildId, name, participantIds, subscriberIds: [], size, expire });
+}
+
+// Activities retain state (subscriberIds) even after expiration.
+// This means when an activity expires, we cannot delete its db entry.
+// Therefore, to end an activity, we simply set the expiration time to now.
+export async function endActivity(activity: Activity) {
+	// eslint-disable-next-line no-param-reassign
+	activity.expire = new Date();
+	await activity.save();
 }
