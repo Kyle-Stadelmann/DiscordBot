@@ -213,19 +213,15 @@ class HenCommand {
 
 		if (action === "subscribe") {
 			await this.handleSubscribe(interaction, activity, user);
+		} else if (activity.expire <= new Date()) {
+			await interaction.reply({
+				content: "This action failed. This queue has expired. Please recreate it with `/hen`.",
+				ephemeral: true,
+			});
+		} else if (action === "join") {
+			await this.handleJoin(interaction, activity, user);
 		} else {
-			if (activity.expire <= new Date()) {
-				await interaction.reply({
-					content: "This action failed. This queue has expired. Please recreate it with `/hen`.",
-					ephemeral: true,
-				});
-				return;
-			}
-			if (action === "join") {
-				await this.handleJoin(interaction, activity, user);
-			} else {
-				await this.handleLeave(interaction, activity, user);
-			}
+			await this.handleLeave(interaction, activity, user);
 		}
 	}
 
