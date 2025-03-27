@@ -28,6 +28,10 @@ export const ExceptionCatcher: GuardFunction = async (p, c, next, data) => {
 	try {
 		return await next();
 	} catch (e) {
+		// Don't print/notify for connection errors
+		if (e.name === "ConnectTimeoutError") {
+			return false;
+		}
 		let errStr = `**Error when executing event**\n`;
 		errStr += `**params**: ${p}\n\n`;
 		errStr += `**data**: ${JSON.stringify(data)}\n\n`;
