@@ -1,13 +1,13 @@
 import { VoiceState } from "discord.js";
+import { QueryType } from "discord-player";
 import { bdbot } from "../app.js";
 import { random, sleep } from "./index.js";
 import { isNullOrUndefined } from "./general.js";
-import { queueSong } from "./music-helpers.js";
 
 export async function tryPlayPersonTheme(
 	personId: string,
 	chance: number,
-	themeUrl: string,
+	themeFilePath: string,
 	oldState: VoiceState,
 	newState: VoiceState,
 	startTime?: number // In ms
@@ -23,16 +23,22 @@ export async function tryPlayPersonTheme(
 		}
 
 		try {
-			await queueSong(newState.channel, themeUrl, newState.channel, newState.member.user);
-			await queue.node.seek(startTime);
+			await player.play(newState.channel, themeFilePath, {
+				requestedBy: newState.member.user,
+				searchEngine: QueryType.FILE,
+				nodeOptions: {
+					disableSeeker: false,
+				},
+				audioPlayerOptions: { seek: startTime },
+			});
 		} catch (e) {
 			console.error(`Failed to play theme for memberId: ${stateMemberId}`);
+			console.error(e);
 		}
 
-		// disconnect after 15 seconds
-		await sleep(15000);
-
+		// Disconnect after a few seconds
+		await sleep(5000);
 		queue = player.queues.resolve(newState.guild.id);
-		if (queue) queue.delete();
+		if (queue && queue.size === 0) queue.delete();
 	}
 }
