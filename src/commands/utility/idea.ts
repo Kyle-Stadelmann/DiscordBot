@@ -9,7 +9,7 @@ import {
 } from "discord.js";
 import { Discord, ModalComponent, Slash, SlashChoice, SlashGroup, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
-import { Pagination, PaginationType } from "@discordx/pagination";
+import { Pagination } from "@discordx/pagination";
 import { v4 as uuid } from "uuid";
 import { CommandCategory } from "../../types/command.js";
 import { createIdea, getAllIdeas, getIdeasByType } from "../../types/data-access/idea.js";
@@ -91,9 +91,10 @@ class IdeaCommand {
 
 		const pagination = new Pagination(interaction, ideaPages, {
 			filter: (interact) => interact.user.id === interaction.user.id,
-			type: PaginationType.Button,
-			next: { label: `${ARROW_FORWARD_EMOJI} Next` },
-			previous: { label: `${ARROW_BACKWARD_EMOJI} Previous` },
+			buttons: {
+				next: { label: `${ARROW_FORWARD_EMOJI} Next` },
+				previous: { label: `${ARROW_BACKWARD_EMOJI} Previous` },
+			},
 		});
 		await pagination.send();
 

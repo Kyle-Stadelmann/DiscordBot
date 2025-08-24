@@ -1,5 +1,6 @@
 import { Snowflake, TextChannel } from "discord.js";
 import { GuildQueue, Player, Track } from "discord-player";
+import { DefaultExtractors } from "@discord-player/extractor";
 import { Client, DApplicationCommand, MetadataStorage } from "discordx";
 import { ICategory } from "@discordx/utilities";
 import { DANIEL_ID } from "../../constants.js";
@@ -89,15 +90,15 @@ export class BDBot {
 
 	private async initPlayer(client: Client) {
 		this.player = new Player(client, {
-			ytdlOptions: {
-				quality: "lowestaudio",
-				filter: "audioonly",
-				// eslint-disable-next-line no-bitwise
-				highWaterMark: 1 << 25,
-			},
+			// ytdlOptions: {
+			// 	quality: "lowestaudio",
+			// 	filter: "audioonly",
+			// 	// eslint-disable-next-line no-bitwise
+			// 	highWaterMark: 1 << 25,
+			// },
 		});
 
-		await this.player.extractors.loadDefault();
+		await this.player.extractors.loadMulti(DefaultExtractors);
 
 		this.player.events.on("playerStart", async (queue: GuildQueue<{ channel: TextChannel }>, track: Track) => {
 			await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);
