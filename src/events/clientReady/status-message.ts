@@ -20,7 +20,7 @@ const statuses = [
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class StatusMessage {
-	@On({ event: "ready" })
+	@On({ event: "clientReady" })
 	private async handleStatusRotation() {
 		console.log("Bot starting up...");
 		printSpace();

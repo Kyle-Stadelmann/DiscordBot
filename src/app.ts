@@ -8,7 +8,7 @@ import { ExceptionCatcher, initDb, isDevMode, isProdMode } from "./util/index.js
 const myIntents = [
 	GatewayIntentBits.Guilds,
 	GatewayIntentBits.GuildMembers,
-	GatewayIntentBits.GuildEmojisAndStickers,
+	GatewayIntentBits.GuildExpressions,
 	GatewayIntentBits.GuildIntegrations,
 	GatewayIntentBits.GuildVoiceStates,
 	GatewayIntentBits.GuildPresences,
@@ -33,7 +33,7 @@ export const bdbot = new BDBot();
 async function startup() {
 	initDb();
 
-	client.once("ready", async () => {
+	client.once("clientReady", async () => {
 		await client.initApplicationCommands();
 		await bdbot.initContainter(client);
 	});
