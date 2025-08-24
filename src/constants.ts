@@ -79,13 +79,12 @@ export const SEVEN_EMOJI = "7️⃣";
 export const EIGHT_EMOJI = "8️⃣";
 export const NINE_EMOJI = "9️⃣";
 
-export const L_THEME_URL = "https://www.youtube.com/watch?v=qR6dzwQahOM";
-export const GHOST_TRAIN_ROBBERY = "https://www.youtube.com/watch?v=jgWziW2iNjE";
-export const TOXIC_URL = "https://www.youtube.com/watch?v=LOZuxwVk7TU";
-export const PLAYER_SITES = ["spotify", "youtube", "youtu.be", "soundcloud"];
 // TODO: Standardize paths
 export const SRC_DIR = path.resolve(`${dirname}`);
 export const PROJECT_DIR = path.dirname(SRC_DIR);
+
+export const L_THEME_URL = "https://www.youtube.com/watch?v=qR6dzwQahOM";
+export const PLAYER_SITES = ["spotify", "youtube", "youtu.be", "soundcloud"];
 
 export const TYPE_SPEED_RESET_TIME = 30 * 1000;
 export const TYPESCRIPT_URL = "https://i.imgur.com/PUkCMgu.png";

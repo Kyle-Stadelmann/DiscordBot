@@ -90,20 +90,15 @@ export class BDBot {
 	}
 
 	private async initPlayer(client: Client) {
-		this.player = new Player(client, {
-			// ytdlOptions: {
-			// 	quality: "lowestaudio",
-			// 	filter: "audioonly",
-			// 	// eslint-disable-next-line no-bitwise
-			// 	highWaterMark: 1 << 25,
-			// },
-		});
+		this.player = new Player(client, {});
 
 		await this.player.extractors.loadMulti(DefaultExtractors);
 		await this.player.extractors.register(YoutubeiExtractor, {});
 
 		this.player.events.on("playerStart", async (queue: GuildQueue<{ channel: TextChannel }>, track: Track) => {
-			await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);
+			if (queue.metadata?.channel !== undefined) {
+				await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);
+			}
 		});
 
 		this.player.on("error", (error: Error) => {
