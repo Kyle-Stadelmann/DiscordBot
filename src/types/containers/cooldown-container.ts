@@ -23,7 +23,7 @@ export class CooldownContainer {
 		if (!isNullOrUndefined(guildId) && (await this.isIdOnCooldown(guildId))) {
 			return true;
 		}
-		return this.isIdOnCooldown(userId);
+		return this.isIdOnCooldown(convertCooldownId(userId, guildId));
 	}
 
 	public async putOnCooldown(userId: Snowflake, guildId?: Snowflake) {
