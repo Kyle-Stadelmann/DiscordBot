@@ -60,7 +60,7 @@ abstract class NyaaEmbed {
 
 		const author = mainPanel[mainPanel.findIndex((str) => str === "Submitter:") + 1];
 		const date = mainPanel[mainPanel.findIndex((str) => str === "Date:") + 1];
-		const image = this.getImage($);
+		const image = this.findImage($);
 		const seeders = mainPanel[mainPanel.findIndex((str) => str === "Seeders:") + 1];
 		const leechers = mainPanel[mainPanel.findIndex((str) => str === "Leechers:") + 1];
 		const completed = mainPanel[mainPanel.findIndex((str) => str === "Completed:") + 1];
@@ -94,6 +94,7 @@ abstract class NyaaEmbed {
 		} catch (err) {
 			console.error(`Couldn't build nyaa embed for url: ${url}`);
 			console.error(err);
+			throw err;
 		}
 
 		return embed;
@@ -108,7 +109,7 @@ abstract class NyaaEmbed {
 			.filter((str) => str !== "");
 	}
 
-	private getImage($: cheerio.CheerioAPI): string | undefined {
+	private findImage($: cheerio.CheerioAPI): string | undefined {
 		const description = $("#torrent-description").text();
 
 		// Img isolator
@@ -124,13 +125,6 @@ abstract class NyaaEmbed {
 				// Convert 'imgUrl "Image Hover Text"' into imgUrl
 				img = img.substring(0, img.indexOf(" "));
 			}
-
-			let index: number;
-			if (img.includes(".jpg")) index = img.indexOf(".jpg");
-			if (img.includes(".JPG")) index = img.indexOf(".JPG");
-			if (img.includes(".png")) index = img.indexOf(".png");
-			if (img.includes(".PNG")) index = img.indexOf(".PNG");
-			img = img.substring(0, index + 4);
 		}
 		return img;
 	}
