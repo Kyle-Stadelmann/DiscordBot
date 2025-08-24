@@ -3,6 +3,7 @@ import { GuildQueue, Player, Track } from "discord-player";
 import { DefaultExtractors } from "@discord-player/extractor";
 import { Client, DApplicationCommand, MetadataStorage } from "discordx";
 import { ICategory } from "@discordx/utilities";
+import { YoutubeiExtractor } from "discord-player-youtubei";
 import { DANIEL_ID } from "../../constants.js";
 import { AfkPicContainer } from "./afk-pic-container.js";
 import { ICooldownTime } from "../cooldown-time.js";
@@ -99,6 +100,7 @@ export class BDBot {
 		});
 
 		await this.player.extractors.loadMulti(DefaultExtractors);
+		await this.player.extractors.register(YoutubeiExtractor, {});
 
 		this.player.events.on("playerStart", async (queue: GuildQueue<{ channel: TextChannel }>, track: Track) => {
 			await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);
