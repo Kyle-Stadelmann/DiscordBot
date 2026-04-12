@@ -6,13 +6,13 @@ export function random(chance: number) {
 }
 
 export function getRandomElement<T>(arr: T[]): T | undefined {
-	if (arr.length === 0) return undefined;
+	if (arr.length === 0) {return undefined;}
 	const randomIndex = Math.floor(Math.random() * arr.length);
 	return arr[randomIndex];
 }
 
 export function getRandomElements<T>(arr: T[], count: number): T[] {
-	if (count <= 0 || arr.length <= count) return arr;
+	if (count <= 0 || arr.length <= count) {return arr;}
 	const result: T[] = [];
 	const usedIndicies = new Set<number>();
 

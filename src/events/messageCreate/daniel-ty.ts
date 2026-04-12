@@ -11,7 +11,7 @@ abstract class DanielTy {
 		const { channel } = msg;
 		const content = msg.content.toLowerCase();
 		// Only continue if Daniel sent the message
-		if (msg.author.id !== DANIEL_ID) return;
+		if (msg.author.id !== DANIEL_ID) {return;}
 
 		if (content.includes("thank") && content.includes("bot")) {
 			await channel.send("You're welcome DualKim! :)");
