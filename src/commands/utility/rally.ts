@@ -10,6 +10,7 @@ import {
 import { Category } from "@discordx/utilities";
 import { Discord, Slash, SlashChoice, SlashOption } from "discordx";
 import { CommandCategory } from "../../types/command.js";
+import { hasHumans } from "../../util/index.js";
 
 // TODO: Add back ability to add multiple roles
 // (seems impossible to do variable number of roles like before though)
@@ -87,13 +88,13 @@ class RallyCommand {
 		}
 
 		// Check for a valid member (rally is successful as long as there is one member in one valid channel)
-		const areValidMembers = !validChannels.some((vChannel) =>
-			vChannel.members.some((chMember) => {
-				if (rolesToCall.length === 0) return true;
+		const areValidMembers = !validChannels.some((vChannel) => {
+			if (rolesToCall.length === 0) return hasHumans(vChannel);
 
-				return rolesToCall.some((membRole) => chMember.roles.cache.has(membRole.id));
-			})
-		);
+			return vChannel.members.some(
+				(chMember) => !chMember.user.bot && rolesToCall.some((membRole) => chMember.roles.cache.has(membRole.id))
+			);
+		});
 
 		if (areValidMembers) {
 			await interaction.editReply("Rally failed, no users to Rally with");
@@ -105,11 +106,13 @@ class RallyCommand {
 		// Move all valid users to caller's voice channel
 		validChannels.forEach((userChannel) => {
 			userChannel.members.forEach((chMember) => {
+				if (chMember.user.bot) return;
+
 				// size of roles list && whether any entry in roles list overlaps with user's roles
 				if (
 					!(rolesToCall.length > 0 && !rolesToCall.some((userRole) => chMember.roles.cache.has(userRole.id)))
 				) {
-					console.log(`Moving user with ID: ${member.id}`);
+					console.log(`Moving user with ID: ${chMember.id}`);
 					chMember.edit({ channel: voiceChannel }).catch((error) => {
 						console.error(error);
 					});
