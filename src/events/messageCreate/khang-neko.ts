@@ -12,7 +12,7 @@ abstract class KhangNeko {
 	@Guard(BD5Only)
 	@On({ event: "messageCreate" })
 	private async tryKhangNeko([msg]: ArgsOf<"messageCreate">) {
-		if (msg.author.id !== KHANG_ID) return;
+		if (msg.author.id !== KHANG_ID) {return;}
 		const KHANG_NEKO_EMOJI = client.emojis.cache.get(KHANG_NEKO_EMOJI_ID);
 
 		if (random(KHANG_NEKO_CHANCE) && KHANG_NEKO_EMOJI) {

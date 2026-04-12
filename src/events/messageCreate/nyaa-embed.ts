@@ -23,7 +23,7 @@ const OTAKU_NAME = "ot4ku";
 abstract class NyaaEmbed {
 	@On({ event: "messageCreate" })
 	private async tryNyaaEmbed([msg]: ArgsOf<"messageCreate">) {
-		if (!msg.content.includes(TARGET_SITE)) return;
+		if (!msg.content.includes(TARGET_SITE)) {return;}
 
 		// Clear/block normal embed
 		await msg.suppressEmbeds(true);
@@ -40,12 +40,12 @@ abstract class NyaaEmbed {
 		const { data } = response;
 
 		// Issue connecting, simply stop this event
-		if (!(response.statusText === "OK")) return;
+		if (!(response.statusText === "OK")) {return;}
 
 		const $ = cheerio.load(data);
 
 		const embed = this.createEmbed($, url, data);
-		if (!embed) return;
+		if (!embed) {return;}
 
 		await msg.channel.send({ embeds: [embed] });
 	}
@@ -85,8 +85,8 @@ abstract class NyaaEmbed {
 			const otakusComment = this.tryGetUsersComment(data, $, OTAKU_NAME);
 			if (rowansComment || otakusComment) {
 				const userTakes: APIEmbedField[] = [];
-				if (otakusComment) userTakes.push({ name: "ot4ku's Take", value: otakusComment, inline: true });
-				if (rowansComment) userTakes.push({ name: "Rowan's Take", value: rowansComment, inline: true });
+				if (otakusComment) {userTakes.push({ name: "ot4ku's Take", value: otakusComment, inline: true });}
+				if (rowansComment) {userTakes.push({ name: "Rowan's Take", value: rowansComment, inline: true });}
 				embed.addFields(userTakes);
 			} else {
 				embed.setFooter({ text: "Rowan and ot4ku were not here :(" });

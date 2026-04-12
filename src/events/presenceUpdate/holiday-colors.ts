@@ -50,7 +50,7 @@ abstract class HolidayColors {
 	@Guard(BD5Only)
 	@On({ event: "presenceUpdate" })
 	private async updateHolidayColors([oldPresence, newPresence]: ArgsOf<"presenceUpdate">) {
-		if (!oldPresence || !newPresence) return;
+		if (!oldPresence || !newPresence) {return;}
 
 		const currDate = new Date();
 		if (!holidayRoleMap.has(currDate.getMonth())) {
@@ -77,12 +77,12 @@ abstract class HolidayColors {
 	private async tryUpdateMemberRole(oldPresence: Presence, newPresence: Presence, holidayRoleIds: string[]) {
 		// Only activate if user went from an offline->online or an online->offline state
 		// meaning, either old or new presence needs to be offline, but the other can't be as well
-		if (oldPresence.status === "offline" && newPresence.status !== "offline") return;
+		if (oldPresence.status === "offline" && newPresence.status !== "offline") {return;}
 
 		const { member } = newPresence;
 		const lastUpdatedTime = lastUpdatedColorMemberMap.get(member.id);
 		if (lastUpdatedTime !== undefined && new Date().getTime() < lastUpdatedTime.getTime() + UPDATE_DATE_PERIOD_MS)
-			return;
+			{return;}
 
 		const randomRole = getRandomElement(holidayRoleIds);
 		const otherRoles = holidayRoleIds.filter((r) => r !== randomRole);
@@ -101,7 +101,7 @@ abstract class HolidayColors {
 	private async giveAllMembersHolidayColors(holidayRoleIds: string[]) {
 		const promises = client.guilds.resolve(BD5_ID).members.cache.map(async (mem) => {
 			// Member already has a holiday role
-			if (holidayRoleIds.some((r) => mem.roles.resolve(r) != null)) return;
+			if (holidayRoleIds.some((r) => mem.roles.resolve(r) != null)) {return;}
 			await mem.roles.add(getRandomElement(holidayRoleIds));
 		});
 

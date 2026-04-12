@@ -34,7 +34,7 @@ abstract class GoodNight {
 	@Guard(BD5Only)
 	@On({ event: "voiceStateUpdate" })
 	private async tryGoodNight([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
-		if (newState.member.user.bot) return;
+		if (newState.member.user.bot) {return;}
 
 		// TODO: We need a guild config that allows us to use bot_stuff channels more generally
 		const botStuffChannel = client.channels.resolve(BD5_BOT_STUFF_CHANNEL_ID) as TextChannel;
@@ -69,8 +69,8 @@ abstract class GoodNight {
 
 					await botStuffChannel.send({ embeds: [embed] });
 				} catch (error) {
-					if (isProdMode()) await sendErrorToDiscordChannel(error);
-					else console.error(error);
+					if (isProdMode()) {await sendErrorToDiscordChannel(error);}
+					else {console.error(error);}
 				}
 			}
 		}

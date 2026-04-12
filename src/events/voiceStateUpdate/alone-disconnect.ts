@@ -12,7 +12,7 @@ abstract class AloneDisconnect {
 		const guildId = oldState.guild.id;
 		const connection = getVoiceConnection(guildId);
 
-		if (!connection) return;
+		if (!connection) {return;}
 
 		const currBotChannelId = connection.joinConfig.channelId;
 		// Guaranteed to be guild voice channel, bots can't connect otherwise
@@ -22,9 +22,9 @@ abstract class AloneDisconnect {
 			(oldState.channelId === currBotChannelId || newState.channelId === currBotChannelId) &&
 			!hasHumans(currBotChannel)
 		) {
-			if (connection) connection.destroy();
+			if (connection) {connection.destroy();}
 			const musicQueue = bdbot.player.queues.resolve(guildId);
-			if (musicQueue) musicQueue.delete();
+			if (musicQueue) {musicQueue.delete();}
 		}
 	}
 }

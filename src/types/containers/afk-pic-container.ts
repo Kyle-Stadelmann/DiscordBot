@@ -73,7 +73,7 @@ export class AfkPicContainer {
 	}
 
 	public getRandomPicUrls(shouldGetStagingPic?: boolean, count?: number): string[] {
-		if (shouldGetStagingPic) return getRandomElements(this.stagingPics, count).map((p) => p.url);
+		if (shouldGetStagingPic) {return getRandomElements(this.stagingPics, count).map((p) => p.url);}
 		const pics = [...this.allPics, ...this.stagingPics];
 		return getRandomElements(pics, count).map((p) => p.url);
 	}

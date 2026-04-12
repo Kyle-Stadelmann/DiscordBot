@@ -115,7 +115,7 @@ class WhipCommand {
 
 			const victimChannel = victim.voice.channel;
 			// Check to make sure victim hasn't left channel while moving was happening
-			if (victimChannel === null) break;
+			if (victimChannel === null) {break;}
 
 			// If there are no available channels, create a new temp one
 			if (nextIterator.done) {
@@ -129,7 +129,7 @@ class WhipCommand {
 			}
 
 			try {
-				if (victim.voice.channel === null) break;
+				if (victim.voice.channel === null) {break;}
 				await victim.voice.setChannel(nextChannel);
 			} catch (err) {
 				break;
@@ -146,8 +146,8 @@ class WhipCommand {
 
 		const validChannels = guild.channels.cache
 			.filter((channel) => {
-				if (!channel.isVoiceBased()) return false;
-				if (guild.afkChannel === channel) return false;
+				if (!channel.isVoiceBased()) {return false;}
+				if (guild.afkChannel === channel) {return false;}
 
 				const everyonePermissions = guild.roles.everyone.permissionsIn(channel);
 				const visibleToAll = everyonePermissions.has(PermissionFlagsBits.ViewChannel);

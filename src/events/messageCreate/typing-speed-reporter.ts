@@ -7,7 +7,7 @@ function danielWPMChanceFunction(numWords: number): number {
 	const MAX_CHANCE = 5;
 
 	// If not enough words, chance is 0%
-	if (numWords < MIN_WORDS) return 0;
+	if (numWords < MIN_WORDS) {return 0;}
 
 	// Chance equation (exponential)
 	return Math.min(numWords ** 1.7 * 0.01, MAX_CHANCE);
@@ -25,10 +25,10 @@ abstract class TypingSpeedReporter {
 		const userId = msg.author.id;
 		const { channel } = msg;
 
-		if (!bdbot.typingTimestamps.has(userId) || !bdbot.typingTimestamps.get(userId)) return;
+		if (!bdbot.typingTimestamps.has(userId) || !bdbot.typingTimestamps.get(userId)) {return;}
 
 		const wordCount = countWords(msg.content);
-		if (wordCount === 0) return;
+		if (wordCount === 0) {return;}
 
 		if (random(danielWPMChanceFunction(wordCount))) {
 			// Time spent typing message in seconds

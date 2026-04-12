@@ -14,9 +14,9 @@ abstract class Train {
 	private async handleTrain([msg]: ArgsOf<"messageCreate">) {
 		const msgs = await msg.channel.messages.fetch({ limit: START_TRAIN_COUNT });
 
-		if (msgs.every((e) => e.content === "")) return;
+		if (msgs.every((e) => e.content === "")) {return;}
 		// Checks if train started/continued off of a bot message
-		if (msgs.some((e) => e.author.id === client.user.id)) return;
+		if (msgs.some((e) => e.author.id === client.user.id)) {return;}
 
 		const msgContents = new Set(msgs.map((m) => m.content));
 		const msgAuthors = new Set(msgs.map((m) => m.author.id));

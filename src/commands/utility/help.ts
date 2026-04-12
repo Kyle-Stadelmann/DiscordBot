@@ -1,4 +1,4 @@
-import { EmbedBuilder, APIEmbedField, CommandInteraction } from "discord.js";
+import { EmbedBuilder, APIEmbedField, CommandInteraction, InteractionContextType } from "discord.js";
 import { DApplicationCommand, Discord, Slash } from "discordx";
 import { Category, ICategory } from "@discordx/utilities";
 import { client } from "../../app.js";
@@ -40,10 +40,10 @@ export class HelpCommand {
 
 		let validCmds = client.application.commands.cache;
 		if (isDm) {
-			// typescript-eslint v8 flags dmPermission as deprecated in favor of contexts. 
-			// We maintain this check for compatibility and simplicity.
+			// typescript-eslint v8 flags dmPermission as deprecated in favor of contexts (InteractionContextType.BotDM).
+			// We maintain a fallback to dmPermission for commands where contexts might not be defined.
 			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			validCmds = validCmds.filter((ac) => ac.dmPermission);
+			validCmds = validCmds.filter((ac) => ac.contexts?.includes(InteractionContextType.BotDM) ?? ac.dmPermission);
 		} else {
 			const guildSpecificCmds = interaction.guild.commands.cache.filter(
 				(c) => c.applicationId === client.application.id
@@ -62,7 +62,7 @@ export class HelpCommand {
 		const cmdNames = cmds
 			.filter((ac) => {
 				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & ICategory & ICooldownTime;
-				if (!cmd) return false;
+				if (!cmd) {return false;}
 				// Comparison with CommandCategory enum requires either a cast or suppression 
 				// since cmd.category is typed as any from discordx metadata.
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
@@ -70,7 +70,7 @@ export class HelpCommand {
 			})
 			.map((cmd) => `\`${cmd.name}\``);
 
-		if (cmdNames.length === 0) return [];
+		if (cmdNames.length === 0) {return [];}
 
 		const catName = `${cmdCatIconMap.get(cmdCat)} ${cmdCat}`;
 		return [{ name: catName, value: this.formatCmdNames(cmdNames.sort()) }];
