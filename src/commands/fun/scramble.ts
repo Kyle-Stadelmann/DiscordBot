@@ -51,8 +51,6 @@ class ScrambleCommand {
 		const channelMembers = startChannel.members.toJSON();
 
 		const promises = channelMembers.flatMap((victim) => {
-			if (victim.user.bot) return [];
-
 			const randomChannel = getRandomElement(destinationChannels);
 			if (victim.voice.channel) {
 				return [victim.edit({ channel: randomChannel })];
