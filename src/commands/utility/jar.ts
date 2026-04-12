@@ -28,7 +28,8 @@ const cmdConfig: CommandConfig = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class JarCommand {
 	// @Slash({name: "jar", description: "Create a jar based on a certain topic. Users can then add entires and pull a random entry"})
-	public run(): Promise<boolean> {
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async run(): Promise<boolean> {
 		return true;
 	}
 }

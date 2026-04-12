@@ -7,7 +7,8 @@ import { CommandCategory } from "../../types/command.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class ScheduleCommand {
 	// @Slash({name: "schedule", description: " "})
-	run(): Promise<boolean> {
+	// eslint-disable-next-line @typescript-eslint/require-await
+	async run(): Promise<boolean> {
 		return true;
 	}
 }

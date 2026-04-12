@@ -38,6 +38,7 @@ export class HelpCommand {
 	private getAvailableCmds(interaction: CommandInteraction): DApplicationCommand[] {
 		const isDm = !interaction.inGuild();
 
+		let validCmds = client.application.commands.cache;
 		if (isDm) {
 			// typescript-eslint v8 flags dmPermission as deprecated in favor of contexts. 
 			// We maintain this check for compatibility and simplicity.
