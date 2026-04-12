@@ -1,5 +1,6 @@
-import { ArgsOf, Discord, On } from "discordx";
+import { ArgsOf, Discord, Guard, On } from "discordx";
 import { random } from "../../util/index.js";
+import { BD5Only } from "../../util/guards.js";
 
 const ZACC_CHANCE = 7.5;
 const ZACH_REGEX = /[Zz][Aa][Cc][Hh]/gm;
@@ -7,6 +8,7 @@ const ZACH_REGEX = /[Zz][Aa][Cc][Hh]/gm;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class ZachZacc {
+	@Guard(BD5Only)
 	@On({ event: "messageCreate" })
 	private async handleZachZacc([msg]: ArgsOf<"messageCreate">) {
 		const { content } = msg;

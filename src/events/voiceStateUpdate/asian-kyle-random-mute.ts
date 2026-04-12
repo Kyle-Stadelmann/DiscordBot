@@ -1,12 +1,14 @@
-import { ArgsOf, Discord, On } from "discordx";
+import { ArgsOf, Discord, Guard, On } from "discordx";
 import { ASIAN_KYLE_ID } from "../../constants.js";
 import { random } from "../../util/index.js";
+import { BD5Only } from "../../util/guards.js";
 
 const MUTE_ASIAN_KYLE_CHANCE = 0;
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class AsianKyleRandomMute {
+	@Guard(BD5Only)
 	@On({ event: "voiceStateUpdate" })
 	private async tryMute([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
 		const memberId = oldState.member.id;

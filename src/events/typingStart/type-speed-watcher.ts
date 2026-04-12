@@ -1,10 +1,12 @@
-import { ArgsOf, Discord, On } from "discordx";
+import { ArgsOf, Discord, Guard, On } from "discordx";
 import { bdbot } from "../../app.js";
 import { TYPE_SPEED_RESET_TIME } from "../../constants.js";
+import { BD5Only } from "../../util/guards.js";
 
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class TypeSpeedWatcher {
+	@Guard(BD5Only)
 	@On({ event: "typingStart" })
 	private async watchTypeState([typingState]: ArgsOf<"typingStart">) {
 		const userId = typingState.user.id;
