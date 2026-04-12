@@ -80,7 +80,7 @@ function isKyleName(name: string): boolean {
 }
 
 function getKyleName(id: string): string {
-	if (nicknameMap.has(id)) {return nicknameMap.get(id);}
+	if (nicknameMap.has(id)) return nicknameMap.get(id);
 	let randomWord = generate(1)[0];
 	randomWord = `${randomWord.charAt(0).toUpperCase()}${randomWord.substring(1)}`;
 	return `${randomWord}Kyle`;
@@ -98,7 +98,7 @@ class AprilFoolsStartCommand {
 		const isDm = msg.channel.type === ChannelType.DM;
 		const date = new Date();
 
-		if (!isDm || msg.author.id !== CHRISTINA_ID || date.getDate() !== 1 || date.getMonth() !== 3) {return false;}
+		if (!isDm || msg.author.id !== CHRISTINA_ID || date.getDate() !== 1 || date.getMonth() !== 3) return false;
 
 		const bd5 = client.guilds.resolve(BD5_ID);
 
@@ -111,11 +111,7 @@ class AprilFoolsStartCommand {
 			if (currName == null) oldnick = new OldNicknameModel({ userId: id });
 			else if (!isKyleName(currName)) oldnick = new OldNicknameModel({ userId: id, name: currName });
 
-			if (oldnick != null) {
-				oldnick.save().catch((e: unknown) => {
-					console.error(e);
-				});
-			}
+			if (oldnick != null) oldnick.save().catch((e: unknown) => { console.error(e); });
 
 			if (m.manageable) {
 				const newName = getKyleName(id);
@@ -123,12 +119,8 @@ class AprilFoolsStartCommand {
 				// Don't want to throw out all rename requests if one produces an error somehow
 				const renamePromise = new Promise((resolve) => {
 					m.setNickname(newName)
-						.then((result) => {
-							resolve(result);
-						})
-						.catch((e: unknown) => {
-							console.error(e);
-						});
+						.then((result) => { resolve(result); })
+						.catch((e: unknown) => { console.error(e); });
 				});
 				nicknamePromises.push(renamePromise);
 			}
@@ -140,7 +132,7 @@ class AprilFoolsStartCommand {
 
 	// @Slash({ name: "undo", description: "!", dmPermission: false })
 	async undo(msg: Message): Promise<boolean> {
-		if (msg.author.id !== CHRISTINA_ID) {return false;}
+		if (msg.author.id !== CHRISTINA_ID) return false;
 		const bd5 = client.guilds.resolve(BD5_ID);
 
 		const nicknamePromises: Promise<GuildMember>[] = [];

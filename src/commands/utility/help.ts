@@ -59,13 +59,13 @@ export class HelpCommand {
 		const cmdNames = cmds
 			.filter((ac) => {
 				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & ICategory & ICooldownTime;
-				if (!cmd) {return false;}
+				if (!cmd) return false;
 				const category = cmd.category ?? CommandCategory.Utility;
 				return category === cmdCat;
 			})
 			.map((cmd) => `\`${cmd.name}\``);
 
-		if (cmdNames.length === 0) {return [];}
+		if (cmdNames.length === 0) return [];
 
 		const catName = `${cmdCatIconMap.get(cmdCat)} ${cmdCat}`;
 		return [{ name: catName, value: this.formatCmdNames(cmdNames.sort()) }];

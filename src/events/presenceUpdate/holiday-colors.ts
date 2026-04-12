@@ -101,7 +101,7 @@ abstract class HolidayColors {
 	private async giveAllMembersHolidayColors(holidayRoleIds: string[]) {
 		const promises = client.guilds.resolve(BD5_ID).members.cache.map(async (mem) => {
 			// Member already has a holiday role
-			if (holidayRoleIds.some((r) => mem.roles.resolve(r) != null)) {return;}
+			if (holidayRoleIds.some((r) => mem.roles.resolve(r) != null)) return;
 			await mem.roles.add(getRandomElement(holidayRoleIds));
 		});
 
