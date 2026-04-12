@@ -71,7 +71,7 @@ class RallyCommand {
 		guild.channels.cache.forEach((userChannel) => {
 			const perm = userChannel.permissionsFor(guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
 			if (
-				!(guild.afkChannel && userChannel.id === guild.afkChannel.id) &&
+				!(userChannel.id === guild.afkChannel?.id) &&
 				userChannel.id !== member.voice.channel.id &&
 				userChannel.isVoiceBased() &&
 				perm

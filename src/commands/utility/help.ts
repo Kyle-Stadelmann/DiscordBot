@@ -6,7 +6,7 @@ import { getEnumValues } from "../../util/enum-helper.js";
 import { CommandCategory } from "../../types/command.js";
 import { ICooldownTime } from "../../types/cooldown-time.js";
 
-const cmdCatIconMap: Map<CommandCategory, string> = new Map([
+const cmdCatIconMap = new Map<CommandCategory, string>([
 	[CommandCategory.Fun, ":tada:"],
 	[CommandCategory.Music, ":notes:"],
 	[CommandCategory.Utility, ":tools:"],
@@ -26,7 +26,7 @@ export class HelpCommand {
 		const helpEmbed = new EmbedBuilder()
 			.addFields(fields)
 			.setThumbnail(interaction.guild ? interaction.guild.iconURL() : undefined)
-			.setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.avatarURL()}` })
+			.setAuthor({ name: client.user.username, iconURL: client.user.avatarURL() })
 			.setTitle(`All ${interaction.inGuild() ? "" : "DM"} Commands`)
 			.setColor(0x0);
 

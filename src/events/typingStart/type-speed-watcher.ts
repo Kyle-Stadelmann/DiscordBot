@@ -8,7 +8,7 @@ import { BD5Only } from "../../util/guards.js";
 abstract class TypeSpeedWatcher {
 	@Guard(BD5Only)
 	@On({ event: "typingStart" })
-	private async watchTypeState([typingState]: ArgsOf<"typingStart">) {
+	private watchTypeState([typingState]: ArgsOf<"typingStart">) {
 		const userId = typingState.user.id;
 		// Only watch people in the typingTimestamps collection
 		if (!bdbot.typingTimestamps.has(userId)) return;

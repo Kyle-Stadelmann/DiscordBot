@@ -106,7 +106,7 @@ export class AfkPicContainer {
 
 	private async populateUserPicsMap() {
 		for (const [, userId] of AfkPicCodeMap) {
-			// eslint-disable-next-line no-await-in-loop
+			 
 			const userPics = await getAllPicsForUser(userId);
 			this.userPicsMap.set(userId, userPics);
 		}

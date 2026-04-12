@@ -80,7 +80,7 @@ export const EIGHT_EMOJI = "8️⃣";
 export const NINE_EMOJI = "9️⃣";
 
 // TODO: Standardize paths
-export const SRC_DIR = path.resolve(`${dirname}`);
+export const SRC_DIR = path.resolve(dirname);
 export const PROJECT_DIR = path.dirname(SRC_DIR);
 
 export const L_THEME_URL = "https://www.youtube.com/watch?v=qR6dzwQahOM";

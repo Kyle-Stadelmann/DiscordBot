@@ -10,7 +10,7 @@ const QUESTION_MARK_CHANCE = 0.3;
 abstract class QuestionMarkEnding {
 	@On({ event: "messageCreate" })
 	private async handleQuestionMarkEnding([msg]: ArgsOf<"messageCreate">) {
-		if (msg.content.charAt(msg.content.length - 1) !== "?") return;
+		if (!msg.content.endsWith("?")) return;
 
 		if (random(QUESTION_MARK_CHANCE)) {
 			const embed = new EmbedBuilder().setImage(QUESTION_MARK_URL);

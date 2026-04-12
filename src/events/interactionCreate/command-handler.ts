@@ -12,7 +12,7 @@ import {
 } from "../../util/index.js";
 
 @Discord()
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export abstract class CommandHandler {
 	@On({ event: "interactionCreate" })
 	private async handleCommand([interaction]: ArgsOf<"interactionCreate">) {
