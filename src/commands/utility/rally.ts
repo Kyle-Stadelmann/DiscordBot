@@ -68,14 +68,11 @@ class RallyCommand {
 			return false;
 		}
 
-		const canRallyAnyMembers = validChannels.some((vChannel) =>
-			vChannel.members.some((chMember) => {
-				if (chMember.id === member.id) return false;
-				if (!role) return true;
+		const canRallyAnyMembers = validChannels.some((vChannel) => {
+			if (!role) return vChannel.members.size > 0;
 
-				return chMember.roles.cache.has(role.id);
-			})
-		);
+			return vChannel.members.some((chMember) => chMember.roles.cache.has(role.id));
+		});
 
 		if (!canRallyAnyMembers) {
 			await interaction.editReply("Rally failed, no users to Rally with");
@@ -104,7 +101,7 @@ class RallyCommand {
 			const isCallerChannel = userChannel.id === callerVoiceChannel.id;
 
 			if (!isAfkChannel && !isCallerChannel && userChannel.isVoiceBased() && (isPublicChannel || shouldPullToHidden)) {
-				validChannels.set(userChannel.id, userChannel as VoiceChannel | StageChannel);
+				validChannels.set(userChannel.id, userChannel);
 			}
 		});
 
