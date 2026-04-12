@@ -1,6 +1,6 @@
 import { EmbedBuilder, APIEmbedField, CommandInteraction, InteractionContextType } from "discord.js";
 import { DApplicationCommand, Discord, Slash } from "discordx";
-import { Category, ICategory } from "@discordx/utilities";
+import { Category } from "@discordx/utilities";
 import { client } from "../../app.js";
 import { getEnumValues } from "../../util/enum-helper.js";
 import { CommandCategory } from "../../types/command.js";
@@ -58,10 +58,10 @@ export class HelpCommand {
 	private getCmdCategoryEmbedField(cmds: DApplicationCommand[], cmdCat: CommandCategory): APIEmbedField[] {
 		const cmdNames = cmds
 			.filter((ac) => {
-				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & ICategory & ICooldownTime;
+				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & { category?: CommandCategory } & ICooldownTime;
 				if (!cmd) {return false;}
 				const category = cmd.category ?? CommandCategory.Utility;
-				return (category as unknown) === (cmdCat as unknown);
+				return category === cmdCat;
 			})
 			.map((cmd) => `\`${cmd.name}\``);
 
