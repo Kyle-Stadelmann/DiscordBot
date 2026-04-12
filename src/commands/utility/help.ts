@@ -40,10 +40,7 @@ export class HelpCommand {
 
 		let validCmds = client.application.commands.cache;
 		if (isDm) {
-			// typescript-eslint v8 flags dmPermission as deprecated in favor of contexts (InteractionContextType.BotDM).
-			// We maintain a fallback to dmPermission for commands where contexts might not be defined.
-			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			validCmds = validCmds.filter((ac) => ac.contexts?.includes(InteractionContextType.BotDM) ?? ac.dmPermission);
+			validCmds = validCmds.filter((ac) => ac.contexts?.includes(InteractionContextType.BotDM) ?? false);
 		} else {
 			const guildSpecificCmds = interaction.guild.commands.cache.filter(
 				(c) => c.applicationId === client.application.id
@@ -63,10 +60,8 @@ export class HelpCommand {
 			.filter((ac) => {
 				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & ICategory & ICooldownTime;
 				if (!cmd) {return false;}
-				// Comparison with CommandCategory enum requires either a cast or suppression 
-				// since cmd.category is typed as any from discordx metadata.
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-				return (cmd.category ?? CommandCategory.Utility) === cmdCat;
+				const category = cmd.category ?? CommandCategory.Utility;
+				return (category as unknown) === (cmdCat as unknown);
 			})
 			.map((cmd) => `\`${cmd.name}\``);
 
