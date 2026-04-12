@@ -111,7 +111,7 @@ class WhipCommand {
 		for (let i = 0; i < NUM_CHANNELS_WHIPPED; i += 1) {
 			// Next channel to move victim to is the next available channel below current one in guild
 			const nextIterator = voiceChannels.next();
-			let nextChannel = nextIterator.value;
+			let nextChannel = nextIterator.value as VoiceChannel | StageChannel;
 
 			const victimChannel = victim.voice.channel;
 			// Check to make sure victim hasn't left channel while moving was happening
@@ -131,7 +131,7 @@ class WhipCommand {
 			try {
 				if (victim.voice.channel === null) break;
 				await victim.voice.setChannel(nextChannel);
-			} catch (err) {
+			} catch {
 				break;
 			}
 			// TODO: Test the best number to put here

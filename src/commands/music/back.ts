@@ -20,7 +20,7 @@ class BackCommand {
 
 		try {
 			await queue.history.previous();
-		} catch (error) {
+		} catch {
 			await interaction.reply("Could not find previous track");
 			return false;
 		}
