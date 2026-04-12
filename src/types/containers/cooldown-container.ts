@@ -47,7 +47,7 @@ export class CooldownContainer {
 
 	private async isIdOnCooldown(id: string): Promise<boolean> {
 		const cd = await this.getCooldown(id);
-		if (cd == null) {return false;}
+		if (cd == null) return false;
 		return cd.date > new Date();
 	}
 
@@ -68,7 +68,7 @@ export class CooldownContainer {
 
 	private async endCooldownById(id: string) {
 		const cd = await this.getCooldown(id);
-		if (!cd) {return;}
+		if (!cd) return;
 
 		await cd.delete();
 		this.cooldowns.delete(id);

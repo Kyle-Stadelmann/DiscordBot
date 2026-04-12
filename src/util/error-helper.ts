@@ -38,7 +38,7 @@ export const ExceptionCatcher: GuardFunction = async (p, c, next, data) => {
 		errStr += `**error**: ${e.stack}\n\n`;
 		console.error(errStr);
 		printSpace();
-		if (isProdMode()) {await sendErrorToDiscordChannel(errStr);}
+		if (isProdMode()) await sendErrorToDiscordChannel(errStr);
 		return false;
 	}
 };

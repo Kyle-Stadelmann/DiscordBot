@@ -11,7 +11,7 @@ abstract class TypeSpeedWatcher {
 	private watchTypeState([typingState]: ArgsOf<"typingStart">) {
 		const userId = typingState.user.id;
 		// Only watch people in the typingTimestamps collection
-		if (!bdbot.typingTimestamps.has(userId)) {return;}
+		if (!bdbot.typingTimestamps.has(userId)) return;
 
 		const timestamp = bdbot.typingTimestamps.get(userId);
 		if (timestamp === null || timestamp + TYPE_SPEED_RESET_TIME < new Date().getTime()) {

@@ -12,7 +12,7 @@ abstract class ZachZacc {
 	@On({ event: "messageCreate" })
 	private async handleZachZacc([msg]: ArgsOf<"messageCreate">) {
 		const { content } = msg;
-		if (msg.author.bot || !content.match(ZACH_REGEX)) {return;}
+		if (msg.author.bot || !content.match(ZACH_REGEX)) return;
 
 		if (random(ZACC_CHANCE)) {
 			const output = content.replaceAll(ZACH_REGEX, (s) => s.slice(0, 3) + s.charAt(2));

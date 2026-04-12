@@ -38,6 +38,6 @@ export async function tryPlayPersonTheme(
 		// Disconnect after a few seconds
 		await sleep(5000);
 		queue = player.queues.resolve(newState.guild.id);
-		if (queue?.size === 0) {queue.delete();}
+		if (queue?.size === 0) queue.delete();
 	}
 }

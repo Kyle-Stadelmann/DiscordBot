@@ -58,7 +58,7 @@ class SeekCommand {
 		});
 
 		// Formats with more than 4 'time places' aren't supported
-		if (hadError || times.length > 3) {return null;}
+		if (hadError || times.length > 3) return null;
 		return times;
 	}
 

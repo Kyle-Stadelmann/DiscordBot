@@ -68,7 +68,7 @@ class RallyCommand {
 		}
 
 		const canRallyAnyMembers = validChannels.some((vChannel) => {
-			if (!role) {return vChannel.members.size > 0;}
+			if (!role) return vChannel.members.size > 0;
 
 			return vChannel.members.some((chMember) => chMember.roles.cache.has(role.id));
 		});
@@ -122,7 +122,7 @@ class RallyCommand {
 	) {
 		validChannels.forEach((userChannel) => {
 			userChannel.members.forEach((chMember) => {
-				if (chMember.id === callerId) {return;}
+				if (chMember.id === callerId) return;
 
 				if (!role || chMember.roles.cache.has(role.id)) {
 					console.log(`Moving user with ID: ${chMember.id}`);

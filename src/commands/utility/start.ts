@@ -24,7 +24,7 @@ class StartCommand {
 
 		const msgActionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(playBtn);
 
-		if (msg.channel.isDMBased()) {return false;}
+		if (msg.channel.isDMBased()) return false;
 		await msg.channel.send({ components: [msgActionRow] });
 
 		return true;
