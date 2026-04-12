@@ -24,7 +24,7 @@ function createMembersToRemindList(userIds: string[], bd5: Guild): GuildMember[]
 }
 
 async function remindCSPlayers(userIds: string[], matchDate: Date) {
-	const bd5 = await client.guilds.resolve(BD5_ID);
+	const bd5 = client.guilds.resolve(BD5_ID);
 	const membersToRemind = createMembersToRemindList(userIds, bd5);
 
 	if (membersToRemind.length === 0) {

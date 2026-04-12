@@ -53,7 +53,7 @@ export async function backupAfkPics() {
 		console.log(`Downloading ${url} to ${outputPath}`);
 
 		try {
-			// eslint-disable-next-line no-await-in-loop
+			 
 			await downloadImage(url, outputPath);
 		} catch (e) {
 			console.error(`Failed to download afk pic with url=${url}`);

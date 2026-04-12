@@ -1,4 +1,4 @@
-/* eslint-disable no-promise-executor-return */
+ 
 
 // Sleep for ms amount of milliseconds
 // Input: The # of ms you want to sleep for

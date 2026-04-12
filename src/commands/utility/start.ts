@@ -1,4 +1,4 @@
-// eslint-disable-next-line max-classes-per-file
+ 
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Message } from "discord.js";
 import type { ButtonInteraction } from "discord.js";
 import { ButtonComponent, Discord } from "discordx";
@@ -36,6 +36,6 @@ class StartCommand {
 class StartBtn {
 	@ButtonComponent({ id: "start-btn" })
 	private async myBtn(interaction: ButtonInteraction) {
-		await interaction.reply(`hello ${interaction.member}`);
+		await interaction.reply(`hello ${interaction.user.toString()}`);
 	}
 }

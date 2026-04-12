@@ -17,8 +17,14 @@ async function isAllowedSite(url: string): Promise<boolean> {
 }
 
 async function validateAfkPics(urls: string[]): Promise<string[]> {
-	const allowedSites = urls.filter((url) => isAllowedSite(url));
-	return allowedSites.map((url) => sanitizeUrl(url));
+	const results = await Promise.all(urls.map(async (url) => ({
+		url,
+		allowed: await isAllowedSite(url),
+	})));
+
+	return results
+		.filter((r) => r.allowed)
+		.map((r) => sanitizeUrl(r.url));
 }
 
 export async function tryAddAfkPics(urls: string[], interaction: CommandInteraction): Promise<boolean> {

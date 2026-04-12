@@ -2,7 +2,7 @@ import { ArgsOf, Discord, Guard, On } from "discordx";
 import { client } from "../../app.js";
 import { GuildOnly } from "../../util/guards.js";
 
-const activeTrains = new Set<String>();
+const activeTrains = new Set<string>();
 
 const START_TRAIN_COUNT = 4;
 
