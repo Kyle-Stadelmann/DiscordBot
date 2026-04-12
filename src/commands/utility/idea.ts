@@ -84,7 +84,7 @@ class IdeaCommand {
 			return true;
 		}
 
-		// eslint-disable-next-line arrow-body-style
+		 
 		const ideaPages = buildIdeaEmbeds(ideas, type as IdeaType).map((e) => {
 			return { embeds: [e] };
 		});
@@ -116,7 +116,7 @@ class IdeaCommand {
 					`${interaction.user.toString()}, please make sure your type ` +
 					"matches one of: `Utility | Fun | Music | General`.\n" +
 					"Here's your idea if you would like to resubmit:\n" +
-					`${ideaStr}`,
+					ideaStr,
 			});
 
 			return;

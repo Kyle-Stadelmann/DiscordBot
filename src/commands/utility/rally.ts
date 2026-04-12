@@ -60,7 +60,6 @@ class RallyCommand {
 			await interaction.editReply("Rally failed, caller is not in a valid voice channel");
 			return false;
 		}
-
 		const validChannels = this.getValidRallyChannels(guild, callerVoiceChannel, shouldPullToHidden);
 
 		if (validChannels.size <= 0) {

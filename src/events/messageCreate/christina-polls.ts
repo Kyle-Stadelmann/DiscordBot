@@ -1,4 +1,4 @@
-/* eslint-disable no-await-in-loop */
+ 
 import { ArgsOf, Discord, Guard, On } from "discordx";
 import {
 	CHRISTINA_POLLS_CHANNEL_ID,
@@ -15,7 +15,7 @@ import {
 import { tryReactMessage } from "../../util/message-helper.js";
 import { BD5Only } from "../../util/guards.js";
 
-const numToUnicodeEmojiMap: Map<number, string> = new Map([
+const numToUnicodeEmojiMap = new Map<number, string>([
 	[1, ONE_EMOJI],
 	[2, TWO_EMOJI],
 	[3, THREE_EMOJI],

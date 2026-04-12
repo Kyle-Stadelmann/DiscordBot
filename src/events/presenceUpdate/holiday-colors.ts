@@ -40,7 +40,7 @@ const allRoleIds = Array.from(new Set([...holidayRoleMap.values()].flat()));
 // Assume cycler was active last time the bot was on, in case there's leftover holiday roles
 let cyclerActive = true;
 
-const lastUpdatedColorMemberMap: Map<string, Date> = new Map();
+const lastUpdatedColorMemberMap = new Map<string, Date>();
 
 const UPDATE_DATE_PERIOD_MS = 6 * 60 * 60 * 1000;
 
