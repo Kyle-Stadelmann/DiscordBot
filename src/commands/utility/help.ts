@@ -3,7 +3,7 @@ import { DApplicationCommand, Discord, Slash } from "discordx";
 import { Category } from "@discordx/utilities";
 import { client } from "../../app.js";
 import { getEnumValues } from "../../util/enum-helper.js";
-import { CommandCategory } from "../../types/command.js";
+import { CommandCategory, ICategory } from "../../types/command.js";
 import { ICooldownTime } from "../../types/cooldown-time.js";
 
 const cmdCatIconMap = new Map<CommandCategory, string>([
@@ -58,7 +58,7 @@ export class HelpCommand {
 	private getCmdCategoryEmbedField(cmds: DApplicationCommand[], cmdCat: CommandCategory): APIEmbedField[] {
 		const cmdNames = cmds
 			.filter((ac) => {
-				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & { category?: CommandCategory } & ICooldownTime;
+				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & ICategory & ICooldownTime;
 				if (!cmd) {return false;}
 				const category = cmd.category ?? CommandCategory.Utility;
 				return category === cmdCat;
