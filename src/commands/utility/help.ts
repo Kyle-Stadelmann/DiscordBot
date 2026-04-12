@@ -38,9 +38,9 @@ export class HelpCommand {
 	private getAvailableCmds(interaction: CommandInteraction): DApplicationCommand[] {
 		const isDm = !interaction.inGuild();
 
-		let validCmds = client.application.commands.cache;
 		if (isDm) {
-			validCmds = validCmds.filter((ac) => ac.dmPermission);
+			// eslint-disable-next-line @typescript-eslint/no-deprecated
+			validCmds = validCmds.filter((ac) => ac.contexts?.includes(1) ?? ac.dmPermission);
 		} else {
 			const guildSpecificCmds = interaction.guild.commands.cache.filter(
 				(c) => c.applicationId === client.application.id
@@ -60,7 +60,7 @@ export class HelpCommand {
 			.filter((ac) => {
 				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & ICategory & ICooldownTime;
 				if (!cmd) return false;
-				return (cmd.category ?? CommandCategory.Utility) === cmdCat;
+				return ((cmd.category as CommandCategory) ?? CommandCategory.Utility) === cmdCat;
 			})
 			.map((cmd) => `\`${cmd.name}\``);
 

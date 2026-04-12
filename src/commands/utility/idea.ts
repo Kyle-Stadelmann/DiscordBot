@@ -84,7 +84,6 @@ class IdeaCommand {
 			return true;
 		}
 
-		 
 		const ideaPages = buildIdeaEmbeds(ideas, type as IdeaType).map((e) => {
 			return { embeds: [e] };
 		});

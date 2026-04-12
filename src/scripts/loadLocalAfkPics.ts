@@ -17,11 +17,10 @@ async function uploadPics(picPaths: string[]): Promise<Map<string, string>> {
 		console.log(`Uploading afk pic: ${picPath}`);
 		let msg: Message;
 		try {
-			 
 			msg = await devChannel.send({ files: [picPath] });
 
 			// Waiting extra time between uploading images, do not want to get smited by the discord gods
-			 
+
 			await sleep(5000);
 
 			const url = sanitizeUrl(msg.attachments.first().url);
