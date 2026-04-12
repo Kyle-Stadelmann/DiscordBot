@@ -1,5 +1,5 @@
 // Awaits in loops are critical to the functionality of this command
-
+ 
 import {
 	ApplicationCommandOptionType,
 	ChannelType,

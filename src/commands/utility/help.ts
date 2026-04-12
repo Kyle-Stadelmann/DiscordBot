@@ -39,8 +39,10 @@ export class HelpCommand {
 		const isDm = !interaction.inGuild();
 
 		if (isDm) {
+			// typescript-eslint v8 flags dmPermission as deprecated in favor of contexts. 
+			// We maintain this check for compatibility and simplicity.
 			// eslint-disable-next-line @typescript-eslint/no-deprecated
-			validCmds = validCmds.filter((ac) => ac.contexts?.includes(1) ?? ac.dmPermission);
+			validCmds = validCmds.filter((ac) => ac.dmPermission);
 		} else {
 			const guildSpecificCmds = interaction.guild.commands.cache.filter(
 				(c) => c.applicationId === client.application.id
@@ -60,7 +62,10 @@ export class HelpCommand {
 			.filter((ac) => {
 				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & ICategory & ICooldownTime;
 				if (!cmd) return false;
-				return ((cmd.category as CommandCategory) ?? CommandCategory.Utility) === cmdCat;
+				// Comparison with CommandCategory enum requires either a cast or suppression 
+				// since cmd.category is typed as any from discordx metadata.
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+				return (cmd.category ?? CommandCategory.Utility) === cmdCat;
 			})
 			.map((cmd) => `\`${cmd.name}\``);
 

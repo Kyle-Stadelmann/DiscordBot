@@ -12,6 +12,7 @@ import {
 } from "../../util/index.js";
 
 @Discord()
+ 
 export abstract class CommandHandler {
 	@On({ event: "interactionCreate" })
 	private async handleCommand([interaction]: ArgsOf<"interactionCreate">) {

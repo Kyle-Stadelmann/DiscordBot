@@ -1,3 +1,4 @@
+ 
 import { EmbedBuilder, CommandInteraction, ApplicationCommandOptionType, User, Attachment } from "discord.js";
 import { Discord, Guild, Slash, SlashGroup, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";

@@ -25,10 +25,11 @@ abstract class StatusMessage {
 		console.log("Bot starting up...");
 		printSpace();
 
+		 
 		while (true) {
 			const randomStatus = getRandomElement(statuses);
 			client.user.setActivity({ name: randomStatus, type: 4 });
-
+			 
 			await sleep(STATUS_ROTATION_TIME);
 		}
 	}
