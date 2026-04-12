@@ -108,11 +108,8 @@ class AprilFoolsStartCommand {
 			const currName = m.nickname;
 			let oldnick: OldNickname | undefined;
 
-			if (currName == null) {
-				oldnick = new OldNicknameModel({ userId: id });
-			} else if (!isKyleName(currName)) {
-				oldnick = new OldNicknameModel({ userId: id, name: currName });
-			}
+			if (currName == null) oldnick = new OldNicknameModel({ userId: id });
+			else if (!isKyleName(currName)) oldnick = new OldNicknameModel({ userId: id, name: currName });
 
 			if (oldnick != null) {
 				oldnick.save().catch((e: unknown) => {
