@@ -1,8 +1,8 @@
 import axios from "axios";
 import { EmbedBuilder, GuildMember, TextChannel } from "discord.js";
-import { ArgsOf, Discord, On } from "discordx";
+import { ArgsOf, Discord, Guard, On } from "discordx";
 import { client } from "../../app.js";
-import { BD5_BOT_STUFF_CHANNEL_ID, BD5_ID } from "../../constants.js";
+import { BD5_BOT_STUFF_CHANNEL_ID } from "../../constants.js";
 import {
 	getRandomElement,
 	hasHumans,
@@ -11,6 +11,7 @@ import {
 	random,
 	sendErrorToDiscordChannel,
 } from "../../util/index.js";
+import { BD5Only } from "../../util/guards.js";
 
 const GOOD_NIGHT_VARIATIONS = [
 	"goot!",
@@ -37,9 +38,10 @@ async function randomGifUrl(lmt, searchString) {
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class GoodNight {
+	@Guard(BD5Only)
 	@On({ event: "voiceStateUpdate" })
 	private async tryGoodNight([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
-		if (newState.guild.id !== BD5_ID || newState.member.user.bot) return;
+		if (newState.member.user.bot) return;
 
 		// TODO: We need a guild config that allows us to use bot_stuff channels more generally
 		const botStuffChannel = client.channels.resolve(BD5_BOT_STUFF_CHANNEL_ID) as TextChannel;

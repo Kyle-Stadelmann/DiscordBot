@@ -1,4 +1,4 @@
-import { ArgsOf, Discord, On } from "discordx";
+import { ArgsOf, Discord, Guard, On } from "discordx";
 import { Presence } from "discord.js";
 import {
 	BD5_ID,
@@ -13,6 +13,7 @@ import {
 } from "../../constants.js";
 import { client } from "../../app.js";
 import { getRandomElement, isNullOrUndefined } from "../../util/index.js";
+import { BD5Only } from "../../util/guards.js";
 
 export enum Month {
 	January = 0,
@@ -46,10 +47,10 @@ const UPDATE_DATE_PERIOD_MS = 6 * 60 * 60 * 1000;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class HolidayColors {
+	@Guard(BD5Only)
 	@On({ event: "presenceUpdate" })
 	private async updateHolidayColors([oldPresence, newPresence]: ArgsOf<"presenceUpdate">) {
 		if (!oldPresence || !newPresence) return;
-		if (oldPresence.guild.id !== BD5_ID) return;
 
 		const currDate = new Date();
 		if (!holidayRoleMap.has(currDate.getMonth())) {

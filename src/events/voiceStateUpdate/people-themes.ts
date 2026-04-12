@@ -1,6 +1,7 @@
-import { ArgsOf, Discord, On } from "discordx";
+import { ArgsOf, Discord, Guard, On } from "discordx";
 import { DANIEL_ID, JUSTIN_M_ID, PROJECT_DIR } from "../../constants.js";
 import { tryPlayPersonTheme } from "../../util/person-theme-helpers.js";
+import { BD5Only } from "../../util/guards.js";
 
 const JUSTIN_THEME_CHANCE = 1;
 const TOXIC_THEME_CHANCE = 1;
@@ -11,6 +12,7 @@ export const TOXIC_FILE_PATH = `${PROJECT_DIR}/audio/toxic.mp3`;
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class PeopleThemes {
+	@Guard(BD5Only)
 	@On({ event: "voiceStateUpdate" })
 	private async tryPlayThemes([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
 		await tryPlayPersonTheme(

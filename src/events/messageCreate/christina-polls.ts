@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import { ArgsOf, Discord, On } from "discordx";
+import { ArgsOf, Discord, Guard, On } from "discordx";
 import {
 	CHRISTINA_POLLS_CHANNEL_ID,
 	EIGHT_EMOJI,
@@ -13,6 +13,7 @@ import {
 	TWO_EMOJI,
 } from "../../constants.js";
 import { tryReactMessage } from "../../util/message-helper.js";
+import { BD5Only } from "../../util/guards.js";
 
 const numToUnicodeEmojiMap: Map<number, string> = new Map([
 	[1, ONE_EMOJI],
@@ -29,6 +30,7 @@ const numToUnicodeEmojiMap: Map<number, string> = new Map([
 @Discord()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 abstract class ChristinaPolls {
+	@Guard(BD5Only)
 	@On({ event: "messageCreate" })
 	private async tryReactPoll([msg]: ArgsOf<"messageCreate">) {
 		if (msg.channelId === CHRISTINA_POLLS_CHANNEL_ID) {

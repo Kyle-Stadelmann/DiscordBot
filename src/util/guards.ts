@@ -1,9 +1,25 @@
 import { GuardFunction } from "discordx";
+import { BD5_ID } from "../constants.js";
 import { isNullOrUndefined } from "./general.js";
 
-// Guard function, used for events (@On) that should only execute in guilds
-export const GuildOnly: GuardFunction = (p, c, next) => {
-	if (isNullOrUndefined(p) || p.length === 0 || isNullOrUndefined(p[0]?.guild)) {
+// Guard: block execution in DMs — only run in guilds.
+// For @On() event handlers only. Params is the array of event args, e.g. [message].
+export const GuildOnly: GuardFunction = (params, _client, next) => {
+	if (isNullOrUndefined(params) || params.length === 0 || isNullOrUndefined(params[0]?.guild)) {
+		return false;
+	}
+	return next();
+};
+
+// Guard: only run inside the BD5 server.
+// For @On() event handlers only. Params is the array of event args, e.g. [message].
+export const BD5Only: GuardFunction = (params, _client, next) => {
+	if (isNullOrUndefined(params) || params.length === 0) {
+		return false;
+	}
+	// Fallback to .guild.id for types lacking a direct .guildId property (VoiceState, Presence)
+	const guildId = params[0]?.guildId ?? params[0]?.guild?.id;
+	if (guildId !== BD5_ID) {
 		return false;
 	}
 	return next();
