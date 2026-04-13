@@ -21,9 +21,22 @@ const KISS_CHANCE = 10;
 
 const leftOnLog = new Map<GuildMember, Date>();
 
-async function randomGifUrl(lmt, searchString) {
+interface TenorResult {
+	media_formats: {
+		gif: {
+			url: string;
+		};
+	};
+}
+
+interface TenorResponse {
+	results: TenorResult[];
+}
+
+async function randomGifUrl(lmt: number, searchString: string): Promise<string> {
 	const searchUrl = `https://tenor.googleapis.com/v2/search?key=${process.env.TENOR_API_KEY}&q=${searchString}&limit=${lmt}&random=true`;
-	const { url } = (await axios.get(searchUrl)).data.results[0].media_formats.gif;
+	const response = await axios.get<TenorResponse>(searchUrl);
+	const { url } = response.data.results[0].media_formats.gif;
 
 	return url;
 }
