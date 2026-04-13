@@ -23,7 +23,7 @@ export function CooldownTime<T = number>(data: T): ClassMethodDecorator {
 				DApplicationCommand,
 				DSimpleCommand,
 				DDiscord
-			).decorateUnknown(target, key, descriptor)
+			).attachToTarget(target, key, descriptor)
 		);
 	};
 }
