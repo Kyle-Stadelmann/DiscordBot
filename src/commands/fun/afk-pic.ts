@@ -68,6 +68,7 @@ class AfkPicCommand {
 		if (user) {
 			return bdbot.getRandomAfkPicUrlByUser(user.id, count);
 		}
+
 		return bdbot.getRandomAfkPicUrl(shouldFetchStaging, count);
 	}
 

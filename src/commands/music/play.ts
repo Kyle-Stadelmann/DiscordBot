@@ -62,6 +62,7 @@ class PlayCommand {
 		} else {
 			await interaction.editReply(`${tracks[0].title} by ${tracks[0].author} has been added to the queue.`);
 		}
+
 		return true;
 	}
 }

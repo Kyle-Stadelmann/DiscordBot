@@ -161,7 +161,7 @@ All re-exported through `src/util/index.ts` barrel file.
 | `embed-helpers.ts` | `getRandomHexColorStr()` — random color for embeds. |
 | `enum-helper.ts` | `getEnumValues()` — extracts values from TypeScript string enums. |
 | `error-helper.ts` | `ExceptionCatcher` guard, `sendErrorToDiscordChannel()`, error string formatters. |
-| `general.ts` | `isNullOrUndefined()` — null/undefined type guard used pervasively. |
+| `general.ts` | **Removed.** Replaced with idiomatic `== null` / `!= null` checks pervasively. |
 | `idea-helpers.ts` | `buildIdeaEmbeds()` — paginated embed builder for `/idea list`. |
 | `music-helpers.ts` | `queueSong()`, `getSearchResult()`, `findTrack()`, `isQueueValid()`, `createNpString()`. |
 | `person-theme-helpers.ts` | `tryPlayPersonTheme()` — plays a local audio file in the user's VC with random seek, auto-disconnects after 5s. |

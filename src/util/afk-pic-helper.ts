@@ -12,6 +12,7 @@ async function isAllowedSite(url: string): Promise<boolean> {
 	if (!isUrlAllowed) {
 		return false;
 	}
+
 	// Discord cdn files can't be fetched (error 403 Forbidden). So assume link has valid pic
 	return discordRegex.test(cleanUrl) ? true : (await fetch(cleanUrl)).ok;
 }

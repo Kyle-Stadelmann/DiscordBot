@@ -98,7 +98,7 @@ class RallyCommand {
 			const isPublicChannel = userChannel
 				.permissionsFor(guild.roles.everyone)
 				.has(PermissionFlagsBits.ViewChannel);
-			const isAfkChannel = guild.afkChannel && userChannel.id === guild.afkChannel.id;
+			const isAfkChannel = userChannel.id === guild.afkChannel?.id;
 			const isCallerChannel = userChannel.id === callerVoiceChannel.id;
 
 			if (
@@ -126,7 +126,7 @@ class RallyCommand {
 
 				if (!role || chMember.roles.cache.has(role.id)) {
 					console.log(`Moving user with ID: ${chMember.id}`);
-					chMember.edit({ channel: destinationChannel }).catch((error) => {
+					chMember.edit({ channel: destinationChannel }).catch((error: unknown) => {
 						console.error(error);
 					});
 				}

@@ -31,7 +31,7 @@ class JumpCommand {
 		const ptlen = queue.history.size;
 		try {
 			queue.node.skipTo(queue.node.getTrackPosition(index - ptlen - 2));
-		} catch (error) {
+		} catch {
 			await interaction.reply("Jump failed, double check provided index.");
 			return false;
 		}

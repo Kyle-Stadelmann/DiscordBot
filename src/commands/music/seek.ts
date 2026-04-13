@@ -70,6 +70,7 @@ class SeekCommand {
 		if (numc === 0) {
 			time += times[0] * 1000;
 		}
+
 		// seek(x:x) format
 		else if (numc === 1) {
 			time += times[0] * 60000;

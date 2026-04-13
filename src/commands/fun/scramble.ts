@@ -55,6 +55,7 @@ class ScrambleCommand {
 			if (victim.voice.channel) {
 				return [victim.edit({ channel: randomChannel })];
 			}
+
 			return [];
 		});
 		await Promise.all(promises);
