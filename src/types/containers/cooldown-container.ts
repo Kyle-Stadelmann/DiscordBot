@@ -30,6 +30,7 @@ export class CooldownContainer {
 		if (guildId != null && (await this.isIdOnCooldown(guildId))) {
 			return true;
 		}
+
 		return this.isIdOnCooldown(convertCooldownId(userId, guildId));
 	}
 

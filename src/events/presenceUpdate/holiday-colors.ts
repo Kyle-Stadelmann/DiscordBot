@@ -81,8 +81,9 @@ abstract class HolidayColors {
 
 		const { member } = newPresence;
 		const lastUpdatedTime = lastUpdatedColorMemberMap.get(member.id);
-		if (lastUpdatedTime !== undefined && new Date().getTime() < lastUpdatedTime.getTime() + UPDATE_DATE_PERIOD_MS)
+		if (lastUpdatedTime !== undefined && new Date().getTime() < lastUpdatedTime.getTime() + UPDATE_DATE_PERIOD_MS) {
 			return;
+		}
 
 		const randomRole = getRandomElement(holidayRoleIds);
 		const otherRoles = holidayRoleIds.filter((r) => r !== randomRole);

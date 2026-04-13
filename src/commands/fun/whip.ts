@@ -1,5 +1,5 @@
 // Awaits in loops are critical to the functionality of this command
- 
+
 import {
 	ApplicationCommandOptionType,
 	ChannelType,
@@ -98,6 +98,7 @@ class WhipCommand {
 		if (tempChannels.includes(victimChannel) && originalChannel.isVoiceBased()) {
 			await victim.voice.setChannel(originalChannel);
 		}
+
 		tempChannels.forEach((channel) => deleteVoiceChannel(channel));
 	}
 

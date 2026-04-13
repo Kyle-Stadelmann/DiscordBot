@@ -106,7 +106,6 @@ export class AfkPicContainer {
 
 	private async populateUserPicsMap() {
 		for (const [, userId] of AfkPicCodeMap) {
-			 
 			const userPics = await getAllPicsForUser(userId);
 			this.userPicsMap.set(userId, userPics);
 		}

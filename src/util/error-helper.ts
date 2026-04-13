@@ -20,7 +20,7 @@ export function createInteractionErrorStr(interaction: Interaction, error: unkno
 
 export function sendErrorToDiscordChannel(error: unknown) {
 	const debugChannel = client.channels.resolve(DEV_SERVER_ERROR_CHANNEL) as TextChannel;
-	const errStr = error instanceof Error ? error.stack ?? error.message : JSON.stringify(error);
+	const errStr = error instanceof Error ? (error.stack ?? error.message) : JSON.stringify(error);
 	const errEmbed = new EmbedBuilder().setDescription(errStr);
 	return debugChannel.send({ embeds: [errEmbed] });
 }
@@ -33,6 +33,7 @@ export const ExceptionCatcher: GuardFunction = async (p, c, next, data) => {
 		if (e instanceof Error && e.name === "ConnectTimeoutError") {
 			return false;
 		}
+
 		let errStr = `**Error when executing event**\n`;
 		errStr += `**params**: ${JSON.stringify(p)}\n\n`;
 		errStr += `**data**: ${JSON.stringify(data)}\n\n`;

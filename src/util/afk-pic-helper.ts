@@ -12,19 +12,20 @@ async function isAllowedSite(url: string): Promise<boolean> {
 	if (!isUrlAllowed) {
 		return false;
 	}
+
 	// Discord cdn files can't be fetched (error 403 Forbidden). So assume link has valid pic
 	return discordRegex.test(cleanUrl) ? true : (await fetch(cleanUrl)).ok;
 }
 
 async function validateAfkPics(urls: string[]): Promise<string[]> {
-	const results = await Promise.all(urls.map(async (url) => ({
-		url,
-		allowed: await isAllowedSite(url),
-	})));
+	const results = await Promise.all(
+		urls.map(async (url) => ({
+			url,
+			allowed: await isAllowedSite(url),
+		}))
+	);
 
-	return results
-		.filter((r) => r.allowed)
-		.map((r) => sanitizeUrl(r.url));
+	return results.filter((r) => r.allowed).map((r) => sanitizeUrl(r.url));
 }
 
 export async function tryAddAfkPics(urls: string[], interaction: CommandInteraction): Promise<boolean> {

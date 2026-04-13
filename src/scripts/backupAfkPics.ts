@@ -53,7 +53,6 @@ export async function backupAfkPics() {
 		console.log(`Downloading ${url} to ${outputPath}`);
 
 		try {
-			 
 			await downloadImage(url, outputPath);
 		} catch (e) {
 			console.error(`Failed to download afk pic with url=${url}`);

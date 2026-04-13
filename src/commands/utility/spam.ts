@@ -1,5 +1,5 @@
 // Critical to functionality of command
- 
+
 import { ApplicationCommandOptionType, CommandInteraction, User } from "discord.js";
 import { Discord, Slash, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";

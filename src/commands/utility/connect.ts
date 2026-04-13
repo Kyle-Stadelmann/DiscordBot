@@ -35,7 +35,7 @@ export class ConnectCommand {
 		joinVoiceChannel({
 			channelId: voiceChannel.id,
 			guildId: voiceChannel.guildId,
-			adapterCreator: guild.voiceAdapterCreator
+			adapterCreator: guild.voiceAdapterCreator,
 		});
 
 		return true;

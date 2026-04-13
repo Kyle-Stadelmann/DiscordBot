@@ -111,7 +111,11 @@ class AprilFoolsStartCommand {
 			if (currName == null) oldnick = new OldNicknameModel({ userId: id });
 			else if (!isKyleName(currName)) oldnick = new OldNicknameModel({ userId: id, name: currName });
 
-			if (oldnick != null) oldnick.save().catch((e: unknown) => { console.error(e); });
+			if (oldnick != null) {
+				oldnick.save().catch((e: unknown) => {
+					console.error(e);
+				});
+			}
 
 			if (m.manageable) {
 				const newName = getKyleName(id);
@@ -119,8 +123,12 @@ class AprilFoolsStartCommand {
 				// Don't want to throw out all rename requests if one produces an error somehow
 				const renamePromise = new Promise((resolve) => {
 					m.setNickname(newName)
-						.then((result) => { resolve(result); })
-						.catch((e: unknown) => { console.error(e); });
+						.then((result) => {
+							resolve(result);
+						})
+						.catch((e: unknown) => {
+							console.error(e);
+						});
 				});
 				nicknamePromises.push(renamePromise);
 			}

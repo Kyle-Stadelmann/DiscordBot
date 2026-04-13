@@ -73,4 +73,9 @@ export default tseslint.config(
 		...tseslint.configs.disableTypeChecked,
 	},
 	prettierConfig,
+	{
+		rules: {
+			curly: ["error", "multi-line", "consistent"],
+		},
+	},
 );

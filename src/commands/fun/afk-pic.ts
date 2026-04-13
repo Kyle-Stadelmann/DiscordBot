@@ -1,4 +1,3 @@
- 
 import { EmbedBuilder, CommandInteraction, ApplicationCommandOptionType, User, Attachment } from "discord.js";
 import { Discord, Guild, Slash, SlashGroup, SlashOption } from "discordx";
 import { Category } from "@discordx/utilities";
@@ -69,6 +68,7 @@ class AfkPicCommand {
 		if (user) {
 			return bdbot.getRandomAfkPicUrlByUser(user.id, count);
 		}
+
 		return bdbot.getRandomAfkPicUrl(shouldFetchStaging, count);
 	}
 

@@ -11,6 +11,7 @@ export const GuildOnly: GuardFunction<CommonDiscordObject[]> = (params, _client,
 	if (arg?.guild == null) {
 		return false;
 	}
+
 	return next();
 };
 
@@ -26,5 +27,6 @@ export const BD5Only: GuardFunction<CommonDiscordObject[]> = (params, _client, n
 	if (guildId !== BD5_ID) {
 		return false;
 	}
+
 	return next();
 };
