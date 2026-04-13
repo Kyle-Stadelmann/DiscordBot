@@ -61,6 +61,10 @@ export default tseslint.config(
 					checksVoidReturn: false, // Vital for Discord event handlers
 				},
 			],
+			"@typescript-eslint/use-unknown-in-catch-callback-variable": "off",
+			"@typescript-eslint/no-deprecated": "warn",
+			"@typescript-eslint/no-unnecessary-type-parameters": "off",
+			"@typescript-eslint/no-unsafe-enum-comparison": "off",
 		},
 	},
 	{
