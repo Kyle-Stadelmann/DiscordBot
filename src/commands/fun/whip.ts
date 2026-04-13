@@ -102,7 +102,7 @@ class WhipCommand {
 	}
 
 	private async flail(
-		voiceChannels: IterableIterator<VoiceChannel | StageChannel>,
+		voiceChannels: (VoiceChannel | StageChannel)[],
 		victim: GuildMember,
 		guild: Guild
 	): Promise<VoiceChannel[]> {
@@ -110,15 +110,14 @@ class WhipCommand {
 
 		for (let i = 0; i < NUM_CHANNELS_WHIPPED; i += 1) {
 			// Next channel to move victim to is the next available channel below current one in guild
-			const nextIterator = voiceChannels.next();
-			let nextChannel = nextIterator.value;
+			let nextChannel = voiceChannels[i];
 
 			const victimChannel = victim.voice.channel;
 			// Check to make sure victim hasn't left channel while moving was happening
 			if (victimChannel === null) break;
 
 			// If there are no available channels, create a new temp one
-			if (nextIterator.done) {
+			if (nextChannel === undefined) {
 				nextChannel = await guild.channels.create({
 					name: "rekt",
 					type: ChannelType.GuildVoice,
@@ -131,7 +130,7 @@ class WhipCommand {
 			try {
 				if (victim.voice.channel === null) break;
 				await victim.voice.setChannel(nextChannel);
-			} catch (err) {
+			} catch {
 				break;
 			}
 			// TODO: Test the best number to put here
@@ -141,11 +140,11 @@ class WhipCommand {
 		return tempChannels;
 	}
 
-	private getValidVoiceChannels(guild: Guild, victim: GuildMember): IterableIterator<VoiceChannel | StageChannel> {
+	private getValidVoiceChannels(guild: Guild, victim: GuildMember): (VoiceChannel | StageChannel)[] {
 		const currPos = victim.voice.channel.position;
 
 		const validChannels = guild.channels.cache
-			.filter((channel) => {
+			.filter((channel): channel is VoiceChannel | StageChannel => {
 				if (!channel.isVoiceBased()) return false;
 				if (guild.afkChannel === channel) return false;
 
@@ -155,12 +154,8 @@ class WhipCommand {
 				// Only capture visible, higher position channels
 				return channel.position > currPos && visibleToAll;
 			})
-			.sort(
-				(ch1, ch2) =>
-					(ch1 as VoiceChannel | StageChannel).position - (ch2 as VoiceChannel | StageChannel).position
-			)
-			.values();
+			.sort((ch1, ch2) => ch1.position - ch2.position);
 
-		return validChannels as IterableIterator<VoiceChannel | StageChannel>;
+		return Array.from(validChannels.values());
 	}
 }

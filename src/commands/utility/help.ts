@@ -1,9 +1,9 @@
-import { EmbedBuilder, APIEmbedField, CommandInteraction } from "discord.js";
+import { EmbedBuilder, APIEmbedField, CommandInteraction, InteractionContextType } from "discord.js";
 import { DApplicationCommand, Discord, Slash } from "discordx";
-import { Category, ICategory } from "@discordx/utilities";
+import { Category } from "@discordx/utilities";
 import { client } from "../../app.js";
 import { getEnumValues } from "../../util/enum-helper.js";
-import { CommandCategory } from "../../types/command.js";
+import { CommandCategory, ICategory } from "../../types/command.js";
 import { ICooldownTime } from "../../types/cooldown-time.js";
 
 const cmdCatIconMap = new Map<CommandCategory, string>([
@@ -40,7 +40,7 @@ export class HelpCommand {
 
 		let validCmds = client.application.commands.cache;
 		if (isDm) {
-			validCmds = validCmds.filter((ac) => ac.dmPermission);
+			validCmds = validCmds.filter((ac) => ac.contexts?.includes(InteractionContextType.BotDM) ?? false);
 		} else {
 			const guildSpecificCmds = interaction.guild.commands.cache.filter(
 				(c) => c.applicationId === client.application.id
@@ -60,7 +60,8 @@ export class HelpCommand {
 			.filter((ac) => {
 				const cmd = ac.discord.applicationCommands[0] as DApplicationCommand & ICategory & ICooldownTime;
 				if (!cmd) return false;
-				return (cmd.category ?? CommandCategory.Utility) === cmdCat;
+				const category = cmd.category ?? CommandCategory.Utility;
+				return category === cmdCat;
 			})
 			.map((cmd) => `\`${cmd.name}\``);
 

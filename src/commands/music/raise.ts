@@ -40,7 +40,7 @@ class RaiseCommand {
 		try {
 			track = queue.tracks.at(index - ptlen - 2);
 			queue.moveTrack(track, 0);
-		} catch (error) {
+		} catch {
 			await interaction.reply("Raise failed, maybe double check provided index.");
 			return false;
 		}

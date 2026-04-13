@@ -95,11 +95,18 @@ class RallyCommand {
 		const validChannels = new Collection<string, VoiceChannel | StageChannel>();
 
 		guild.channels.cache.forEach((userChannel) => {
-			const isPublicChannel = userChannel.permissionsFor(guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
+			const isPublicChannel = userChannel
+				.permissionsFor(guild.roles.everyone)
+				.has(PermissionFlagsBits.ViewChannel);
 			const isAfkChannel = userChannel.id === guild.afkChannel?.id;
 			const isCallerChannel = userChannel.id === callerVoiceChannel.id;
 
-			if (!isAfkChannel && !isCallerChannel && userChannel.isVoiceBased() && (isPublicChannel || shouldPullToHidden)) {
+			if (
+				!isAfkChannel &&
+				!isCallerChannel &&
+				userChannel.isVoiceBased() &&
+				(isPublicChannel || shouldPullToHidden)
+			) {
 				validChannels.set(userChannel.id, userChannel);
 			}
 		});
@@ -119,7 +126,7 @@ class RallyCommand {
 
 				if (!role || chMember.roles.cache.has(role.id)) {
 					console.log(`Moving user with ID: ${chMember.id}`);
-					chMember.edit({ channel: destinationChannel }).catch((error) => {
+					chMember.edit({ channel: destinationChannel }).catch((error: unknown) => {
 						console.error(error);
 					});
 				}

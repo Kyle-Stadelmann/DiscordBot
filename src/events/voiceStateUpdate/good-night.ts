@@ -3,14 +3,7 @@ import { EmbedBuilder, GuildMember, TextChannel } from "discord.js";
 import { ArgsOf, Discord, Guard, On } from "discordx";
 import { client } from "../../app.js";
 import { BD5_BOT_STUFF_CHANNEL_ID } from "../../constants.js";
-import {
-	getRandomElement,
-	hasHumans,
-	isNullOrUndefined,
-	isProdMode,
-	random,
-	sendErrorToDiscordChannel,
-} from "../../util/index.js";
+import { getRandomElement, hasHumans, isProdMode, random, sendErrorToDiscordChannel } from "../../util/index.js";
 import { BD5Only } from "../../util/guards.js";
 
 const GOOD_NIGHT_VARIATIONS = [
@@ -28,9 +21,22 @@ const KISS_CHANCE = 10;
 
 const leftOnLog = new Map<GuildMember, Date>();
 
-async function randomGifUrl(lmt, searchString) {
+interface TenorResult {
+	media_formats: {
+		gif: {
+			url: string;
+		};
+	};
+}
+
+interface TenorResponse {
+	results: TenorResult[];
+}
+
+async function randomGifUrl(lmt: number, searchString: string): Promise<string> {
 	const searchUrl = `https://tenor.googleapis.com/v2/search?key=${process.env.TENOR_API_KEY}&q=${searchString}&limit=${lmt}&random=true`;
-	const { url } = (await axios.get(searchUrl)).data.results[0].media_formats.gif;
+	const response = await axios.get<TenorResponse>(searchUrl);
+	const { url } = response.data.results[0].media_formats.gif;
 
 	return url;
 }
@@ -46,7 +52,7 @@ abstract class GoodNight {
 		// TODO: We need a guild config that allows us to use bot_stuff channels more generally
 		const botStuffChannel = client.channels.resolve(BD5_BOT_STUFF_CHANNEL_ID) as TextChannel;
 
-		if (isNullOrUndefined(newState.channelId)) {
+		if (newState.channelId == null) {
 			const currTime = new Date();
 			leftOnLog.set(newState.member, currTime);
 			if ((currTime.getHours() >= 22 || currTime.getHours() <= 5) && !hasHumans(oldState.channel)) {

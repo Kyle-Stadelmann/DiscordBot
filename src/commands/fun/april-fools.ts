@@ -1,4 +1,3 @@
- 
 import { Message, ChannelType, GuildMember } from "discord.js";
 import { generate } from "random-words";
 import { Discord, Guild } from "discordx";
@@ -41,7 +40,6 @@ import {
 } from "../../constants.js";
 import { CommandCategory } from "../../types/command.js";
 import { getNicknames, OldNickname, OldNicknameModel } from "../../types/data-access/curr-nickname.js";
-import { isNullOrUndefined } from "../../util/index.js";
 
 const nicknameMap = new Map([
 	[ASIAN_KYLE_ID, "AsianKyle"],
@@ -110,13 +108,10 @@ class AprilFoolsStartCommand {
 			const currName = m.nickname;
 			let oldnick: OldNickname | undefined;
 
-			if (isNullOrUndefined(currName)) {
-				oldnick = new OldNicknameModel({ userId: id });
-			} else if (!isKyleName(currName)) {
-				oldnick = new OldNicknameModel({ userId: id, name: currName });
-			}
+			if (currName == null) oldnick = new OldNicknameModel({ userId: id });
+			else if (!isKyleName(currName)) oldnick = new OldNicknameModel({ userId: id, name: currName });
 
-			if (!isNullOrUndefined(oldnick)) oldnick.save().catch((e) => { console.error(e); });
+			if (oldnick != null) oldnick.save().catch((e: unknown) => { console.error(e); });
 
 			if (m.manageable) {
 				const newName = getKyleName(id);
@@ -125,7 +120,7 @@ class AprilFoolsStartCommand {
 				const renamePromise = new Promise((resolve) => {
 					m.setNickname(newName)
 						.then((result) => { resolve(result); })
-						.catch((e) => { console.error(e); });
+						.catch((e: unknown) => { console.error(e); });
 				});
 				nicknamePromises.push(renamePromise);
 			}
@@ -152,7 +147,7 @@ class AprilFoolsStartCommand {
 
 			const currName = member?.nickname;
 
-			const doChangeName = !isNullOrUndefined(currName) && isKyleName(currName);
+			const doChangeName = currName != null && isKyleName(currName);
 			// If user already changed their name to something other than "*Kyle", don't touch their new name
 			// otherwise set their name to their old nickname
 			if (member !== null && doChangeName && member.manageable) {
