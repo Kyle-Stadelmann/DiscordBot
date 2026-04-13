@@ -24,7 +24,7 @@
 		"axios": "^1.11.0",
 		"cheerio": "^1.1.2",
 		"cross-env": "^10.0.0",
-		"csgo-predict-api": "^2.0.10",
+		"csgo-predict-api": "^1.1.8",
 		"discord-api-types": "^0.38.21",
 		"discord-player": "^7.2.0-dev.2",
 		"discord-player-youtubei": "^2.0.0",
