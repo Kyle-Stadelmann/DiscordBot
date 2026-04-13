@@ -4,14 +4,14 @@ import { DApplicationCommand, DDiscord, DSimpleCommand, MetadataStorage, Modifie
 export interface ICooldownTime<T = number> {
 	cooldownTime?: T;
 }
-export function CooldownTime<T = number>(data: T): ClassMethodDecorator {
+export function CooldownTime(data: number): ClassMethodDecorator {
 	return function <D>(target: Record<string, D>, key?: string, descriptor?: PropertyDescriptor) {
 		MetadataStorage.instance.addModifier(
 			Modifier.create<DApplicationCommand | DSimpleCommand | DDiscord>(
-				(original: ((DApplicationCommand | DSimpleCommand) & ICooldownTime<T>) | DDiscord) => {
+				(original: ((DApplicationCommand | DSimpleCommand) & ICooldownTime) | DDiscord) => {
 					if (original instanceof DDiscord) {
 						[...original.applicationCommands, ...original.simpleCommands].forEach(
-							(ob: (DApplicationCommand | DSimpleCommand) & ICooldownTime<T>) => {
+							(ob: (DApplicationCommand | DSimpleCommand) & ICooldownTime) => {
 								ob.cooldownTime = data;
 							}
 						);

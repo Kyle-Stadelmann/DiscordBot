@@ -1,11 +1,10 @@
 import { GuardFunction } from "discordx";
 import { BD5_ID } from "../constants.js";
-import { isNullOrUndefined } from "./general.js";
 
 // Guard: block execution in DMs — only run in guilds.
 // For @On() event handlers only. Params is the array of event args, e.g. [message].
 export const GuildOnly: GuardFunction = (params, _client, next) => {
-	if (isNullOrUndefined(params) || params.length === 0 || isNullOrUndefined(params[0]?.guild)) {
+	if (params == null || params.length === 0 || params[0]?.guild == null) {
 		return false;
 	}
 
@@ -15,7 +14,7 @@ export const GuildOnly: GuardFunction = (params, _client, next) => {
 // Guard: only run inside the BD5 server.
 // For @On() event handlers only. Params is the array of event args, e.g. [message].
 export const BD5Only: GuardFunction = (params, _client, next) => {
-	if (isNullOrUndefined(params) || params.length === 0) {
+	if (params == null || params.length === 0) {
 		return false;
 	}
 

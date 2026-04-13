@@ -42,7 +42,7 @@ abstract class NyaaEmbed {
 		// Issue connecting, simply stop this event
 		if (!(response.statusText === "OK")) return;
 
-		const $ = await cheerio.load(data);
+		const $ = cheerio.load(data);
 
 		const embed = this.createEmbed($, url, data);
 		if (!embed) return;

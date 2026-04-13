@@ -3,14 +3,7 @@ import { EmbedBuilder, GuildMember, TextChannel } from "discord.js";
 import { ArgsOf, Discord, Guard, On } from "discordx";
 import { client } from "../../app.js";
 import { BD5_BOT_STUFF_CHANNEL_ID } from "../../constants.js";
-import {
-	getRandomElement,
-	hasHumans,
-	isNullOrUndefined,
-	isProdMode,
-	random,
-	sendErrorToDiscordChannel,
-} from "../../util/index.js";
+import { getRandomElement, hasHumans, isProdMode, random, sendErrorToDiscordChannel } from "../../util/index.js";
 import { BD5Only } from "../../util/guards.js";
 
 const GOOD_NIGHT_VARIATIONS = [
@@ -46,7 +39,7 @@ abstract class GoodNight {
 		// TODO: We need a guild config that allows us to use bot_stuff channels more generally
 		const botStuffChannel = client.channels.resolve(BD5_BOT_STUFF_CHANNEL_ID) as TextChannel;
 
-		if (isNullOrUndefined(newState.channelId)) {
+		if (newState.channelId == null) {
 			const currTime = new Date();
 			leftOnLog.set(newState.member, currTime);
 			if ((currTime.getHours() >= 22 || currTime.getHours() <= 5) && !hasHumans(oldState.channel)) {

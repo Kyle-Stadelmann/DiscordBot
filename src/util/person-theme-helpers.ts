@@ -2,7 +2,6 @@ import { VoiceState } from "discord.js";
 import { QueryType } from "discord-player";
 import { bdbot } from "../app.js";
 import { random, sleep } from "./index.js";
-import { isNullOrUndefined } from "./general.js";
 
 export async function tryPlayPersonTheme(
 	personId: string,
@@ -18,7 +17,7 @@ export async function tryPlayPersonTheme(
 	if (stateMemberId === personId && oldState.channel === null && newState.channel !== null && random(chance)) {
 		// Don't run if a queue currently exists
 		let queue = player.queues.resolve(newState.guild.id);
-		if (!isNullOrUndefined(queue) && !queue.isEmpty()) {
+		if (queue != null && !queue.isEmpty()) {
 			return;
 		}
 

@@ -126,7 +126,7 @@ class RallyCommand {
 
 				if (!role || chMember.roles.cache.has(role.id)) {
 					console.log(`Moving user with ID: ${chMember.id}`);
-					chMember.edit({ channel: destinationChannel }).catch((error) => {
+					chMember.edit({ channel: destinationChannel }).catch((error: unknown) => {
 						console.error(error);
 					});
 				}

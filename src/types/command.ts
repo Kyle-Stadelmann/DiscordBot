@@ -4,3 +4,7 @@ export enum CommandCategory {
 	Music = "Music",
 	ContextMenu = "ContextMenu",
 }
+
+export interface ICategory {
+	category?: CommandCategory;
+}

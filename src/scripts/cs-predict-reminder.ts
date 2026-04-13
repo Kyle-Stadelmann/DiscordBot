@@ -2,7 +2,7 @@ import { Reminder, getUsersToRemind } from "csgo-predict-api";
 import { EmbedBuilder, Guild, GuildMember } from "discord.js";
 import { client } from "../app.js";
 import { BD5_ID, CSGO_PREDICTION_IMG_URL, CS_PREDICTION_URL } from "../constants.js";
-import { isNullOrUndefined } from "../util/general.js";
+
 
 export const REPEAT_CS_REMINDER_CHECK_TIME_MS = 30 * 60 * 1000;
 const HARDCODED_LEAGUE_ID = 3;
@@ -14,7 +14,7 @@ let lastRemindedMatchTime = new Date(0);
 function createMembersToRemindList(userIds: string[], bd5: Guild): GuildMember[] {
 	return userIds.flatMap((userId) => {
 		const discordUserId = process.env[userId];
-		if (isNullOrUndefined(discordUserId)) {
+		if (discordUserId == null) {
 			// This user probably does not wish to be reminded
 			return [];
 		}
