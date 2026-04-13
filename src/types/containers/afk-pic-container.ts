@@ -92,9 +92,9 @@ export class AfkPicContainer {
 	}
 
 	public async tryAddAfkPics(picUrls: string[], submitterUserId: string): Promise<boolean> {
-		if (picUrls.some((picUrl) => this.doesPicUrlAlreadyExist(picUrl))) {
-			return false;
-		}
+		if (picUrls.some((picUrl) => this.doesPicUrlAlreadyExist(picUrl))) 
+			{return false;}
+		
 
 		const createPromises = picUrls.map(async (url) => {
 			const stagingPic = await StagingAfkPicTypedModel.create({ url, submitterUserId });

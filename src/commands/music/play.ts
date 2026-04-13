@@ -57,11 +57,11 @@ class PlayCommand {
 
 		const { tracks } = result.searchResult;
 
-		if (result.track.playlist) {
-			await interaction.editReply(`Added playlist ${result.searchResult.playlist?.title} to the queue.`);
-		} else {
-			await interaction.editReply(`${tracks[0].title} by ${tracks[0].author} has been added to the queue.`);
-		}
+		if (result.track.playlist) 
+			{await interaction.editReply(`Added playlist ${result.searchResult.playlist?.title} to the queue.`);}
+		 else 
+			{await interaction.editReply(`${tracks[0].title} by ${tracks[0].author} has been added to the queue.`);}
+		
 
 		return true;
 	}

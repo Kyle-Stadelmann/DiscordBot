@@ -14,8 +14,8 @@ abstract class TypeSpeedWatcher {
 		if (!bdbot.typingTimestamps.has(userId)) return;
 
 		const timestamp = bdbot.typingTimestamps.get(userId);
-		if (timestamp === null || timestamp + TYPE_SPEED_RESET_TIME < new Date().getTime()) {
-			bdbot.typingTimestamps.set(userId, typingState.startedTimestamp);
-		}
+		if (timestamp === null || timestamp + TYPE_SPEED_RESET_TIME < new Date().getTime()) 
+			{bdbot.typingTimestamps.set(userId, typingState.startedTimestamp);}
+		
 	}
 }

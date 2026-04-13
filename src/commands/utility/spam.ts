@@ -55,9 +55,9 @@ class SpamCommand {
 		await interaction.reply(`Spamming ${batchCount} times${batchCount === 1 ? "" : "s"}...`);
 
 		for (let i = 0; i < batchCount; i += 1) {
-			for (let s = 0; s < SPAM_AMMOUNT; s += 1) {
-				await channel.send(`${victim.toString()} ${spamStr}`);
-			}
+			for (let s = 0; s < SPAM_AMMOUNT; s += 1) 
+				{await channel.send(`${victim.toString()} ${spamStr}`);}
+			
 
 			await sleep(SLEEP_TIME_MS);
 

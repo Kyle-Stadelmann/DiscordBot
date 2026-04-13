@@ -45,9 +45,9 @@ abstract class GoodNight {
 			if ((currTime.getHours() >= 22 || currTime.getHours() <= 5) && !hasHumans(oldState.channel)) {
 				const membersInLast15Mins: GuildMember[] = [];
 				leftOnLog.forEach((lastLeftTime, member) => {
-					if (currTime.getTime() - lastLeftTime.getTime() <= 15 * 60 * 1000) {
-						membersInLast15Mins.push(member);
-					}
+					if (currTime.getTime() - lastLeftTime.getTime() <= 15 * 60 * 1000) 
+						{membersInLast15Mins.push(member);}
+					
 				});
 
 				let goodNightMsg = "";

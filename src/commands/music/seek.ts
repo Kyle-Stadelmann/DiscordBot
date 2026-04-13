@@ -50,11 +50,11 @@ class SeekCommand {
 
 		splitTimes.forEach((time) => {
 			const parsedTime = +time;
-			if (Number.isNaN(parsedTime)) {
-				hadError = true;
-			} else {
-				times.push(parsedTime);
-			}
+			if (Number.isNaN(parsedTime)) 
+				{hadError = true;}
+			 else 
+				{times.push(parsedTime);}
+			
 		});
 
 		// Formats with more than 4 'time places' aren't supported
@@ -67,9 +67,9 @@ class SeekCommand {
 		const numc = times.length - 1;
 
 		// seek(x) format
-		if (numc === 0) {
-			time += times[0] * 1000;
-		}
+		if (numc === 0) 
+			{time += times[0] * 1000;}
+		
 
 		// seek(x:x) format
 		else if (numc === 1) {

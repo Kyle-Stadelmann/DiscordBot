@@ -11,9 +11,9 @@ abstract class Epic {
 	@On({ event: "messageCreate" })
 	private async handleEpic([msg]: ArgsOf<"messageCreate">) {
 		// Reads "epic" from chat and reacts with sunglasses emoji
-		if (msg.content.toLowerCase().includes("epic") && random(EPIC_SUNGLASSES_CHANCE)) {
-			await tryReactMessage(msg, SUNGLASSES);
-		}
+		if (msg.content.toLowerCase().includes("epic") && random(EPIC_SUNGLASSES_CHANCE)) 
+			{await tryReactMessage(msg, SUNGLASSES);}
+		
 
 		// Reads sunglasses emoji from chat and reacts with E, P, I, C
 		if (msg.content.includes(SUNGLASSES) && random(SUNGLASSES_EPIC_CHANCE)) {

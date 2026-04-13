@@ -5,10 +5,10 @@ export async function tryReactMessage(msg: Message, emoji: EmojiIdentifierResolv
 		await msg.react(emoji);
 		return true;
 	} catch (e) {
-		if (e.code === 90001) {
+		if (e.code === 90001) 
 			// DiscordAPIError: Reaction blocked
-			return false;
-		}
+			{return false;}
+		
 
 		throw e;
 	}

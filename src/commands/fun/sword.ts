@@ -34,9 +34,9 @@ class SwordCommand {
 			return false;
 		}
 
-		if (!victimUser) {
-			return this.beginSharpening(interaction);
-		}
+		if (!victimUser) 
+			{return this.beginSharpening(interaction);}
+		
 
 		// Make sure he sharpened for enough time
 		if (this.sharpeningDate == null || this.sharpeningDate.getTime() + MIN_SHARPEN_TIME > date.getTime()) {

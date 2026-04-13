@@ -14,10 +14,10 @@ let lastRemindedMatchTime = new Date(0);
 function createMembersToRemindList(userIds: string[], bd5: Guild): GuildMember[] {
 	return userIds.flatMap((userId) => {
 		const discordUserId = process.env[userId];
-		if (discordUserId == null) {
+		if (discordUserId == null) 
 			// This user probably does not wish to be reminded
-			return [];
-		}
+			{return [];}
+		
 
 		return bd5.members.resolve(discordUserId);
 	});
@@ -64,9 +64,9 @@ async function tryRemindCSPlayersHelper() {
 		// We only want to remind once per batches of matches
 		reminder.firstMatchDate.getTime() === lastRemindedMatchTime.getTime() ||
 		reminder.userIds.length === 0
-	) {
-		return;
-	}
+	) 
+		{return;}
+	
 
 	await remindCSPlayers(reminder.userIds, reminder.firstMatchDate);
 

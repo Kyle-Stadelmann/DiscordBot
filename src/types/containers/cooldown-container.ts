@@ -27,9 +27,9 @@ export class CooldownContainer {
 
 	public async isOnCooldown(userId: Snowflake, guildId?: Snowflake): Promise<boolean> {
 		// If person is in Guild, check guild-wide cooldown
-		if (guildId != null && (await this.isIdOnCooldown(guildId))) {
-			return true;
-		}
+		if (guildId != null && (await this.isIdOnCooldown(guildId))) 
+			{return true;}
+		
 
 		return this.isIdOnCooldown(convertCooldownId(userId, guildId));
 	}
@@ -55,10 +55,10 @@ export class CooldownContainer {
 		if (cd) return cd;
 
 		cd = await getCooldown(id, this.cooldownName);
-		if (cd) {
+		if (cd) 
 			// Hydrate the cache from the DB result to avoid redundant database reads for this active cooldown
-			this.cooldowns.set(id, cd);
-		}
+			{this.cooldowns.set(id, cd);}
+		
 
 		return cd;
 	}
@@ -78,9 +78,9 @@ export class CooldownContainer {
 		if (cd) {
 			cd.date = endCooldownDate;
 			await cd.save();
-		} else {
-			cd = await createCooldown(id, this.cooldownName, endCooldownDate);
-		}
+		} else 
+			{cd = await createCooldown(id, this.cooldownName, endCooldownDate);}
+		
 
 		// Refresh the TTL in the cache so the entry eviction timer resets for this renewed cooldown
 		this.cooldowns.set(id, cd);

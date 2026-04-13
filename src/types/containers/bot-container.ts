@@ -96,9 +96,9 @@ export class BDBot {
 		await this.player.extractors.register(YoutubeiExtractor, {});
 
 		this.player.events.on("playerStart", async (queue: GuildQueue<{ channel: TextChannel }>, track: Track) => {
-			if (queue.metadata?.channel !== undefined) {
-				await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);
-			}
+			if (queue.metadata?.channel !== undefined) 
+				{await queue.metadata.channel.send(`:notes: | Now playing **${track.title}**!`);}
+			
 		});
 
 		this.player.on("error", (error: Error) => {
