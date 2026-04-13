@@ -20,8 +20,7 @@ export abstract class CommandHandler {
 			try {
 				await client.executeInteraction(interaction);
 			} catch (error) {
-				const err = error as Error;
-				const errStr = createInteractionErrorStr(interaction, err);
+				const errStr = createInteractionErrorStr(interaction, error);
 				console.error(errStr);
 				printSpace();
 
@@ -38,10 +37,9 @@ export abstract class CommandHandler {
 		try {
 			await this.processCmd(interaction, user, guildId);
 		} catch (error) {
-			const err = error as Error;
 			const cmdCooldownName = getCmdCooldownStrInteraction(interaction);
 
-			const errStr = createCmdErrorStr(cmdCooldownName, err, interaction);
+			const errStr = createCmdErrorStr(cmdCooldownName, error, interaction);
 			console.error(errStr);
 			printSpace();
 			if (isProdMode()) {

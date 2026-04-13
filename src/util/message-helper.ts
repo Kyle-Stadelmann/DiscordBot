@@ -1,13 +1,11 @@
-import { EmojiIdentifierResolvable, Message } from "discord.js";
+import { DiscordAPIError, EmojiIdentifierResolvable, Message, RESTJSONErrorCodes } from "discord.js";
 
 export async function tryReactMessage(msg: Message, emoji: EmojiIdentifierResolvable) {
 	try {
 		await msg.react(emoji);
 		return true;
-	} catch (e) {
-		const err = e as { code: number };
-		if (err.code === 90001) {
-			// DiscordAPIError: Reaction blocked
+	} catch (e: unknown) {
+		if (e instanceof DiscordAPIError && e.code === RESTJSONErrorCodes.ReactionWasBlocked) {
 			return false;
 		}
 		throw e;

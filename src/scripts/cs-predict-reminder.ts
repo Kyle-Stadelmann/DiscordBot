@@ -13,7 +13,10 @@ let lastRemindedMatchTime = new Date(0);
 function createMembersToRemindList(userIds: string[], bd5: Guild): GuildMember[] {
 	return userIds.flatMap((userId) => {
 		const discordUserId = process.env[userId];
-		if (discordUserId == null) return [];
+		if (discordUserId == null) {
+			// This user probably does not wish to be reminded
+			return [];
+		}
 		const member = bd5.members.resolve(discordUserId);
 		return member ? [member] : [];
 	});
