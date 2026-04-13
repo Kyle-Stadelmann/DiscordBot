@@ -17,8 +17,8 @@ function createMembersToRemindList(userIds: string[], bd5: Guild): GuildMember[]
 			// This user probably does not wish to be reminded
 			return [];
 		}
-
-		return bd5.members.resolve(discordUserId);
+		const member = bd5.members.resolve(discordUserId);
+		return member ? [member] : [];
 	});
 }
 

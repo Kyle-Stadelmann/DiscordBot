@@ -33,7 +33,7 @@ abstract class NyaaEmbed {
 		let response: AxiosResponse<string>;
 		try {
 			response = await axios.get(url);
-		} catch (err) {
+		} catch {
 			// Issue connecting, simply stop this event
 			return;
 		}
