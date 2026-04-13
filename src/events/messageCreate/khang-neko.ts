@@ -15,8 +15,8 @@ abstract class KhangNeko {
 		if (msg.author.id !== KHANG_ID) return;
 		const KHANG_NEKO_EMOJI = client.emojis.cache.get(KHANG_NEKO_EMOJI_ID);
 
-		if (random(KHANG_NEKO_CHANCE) && KHANG_NEKO_EMOJI) 
-			{await tryReactMessage(msg, KHANG_NEKO_EMOJI);}
-		
+		if (random(KHANG_NEKO_CHANCE) && KHANG_NEKO_EMOJI) {
+			await tryReactMessage(msg, KHANG_NEKO_EMOJI);
+		}
 	}
 }

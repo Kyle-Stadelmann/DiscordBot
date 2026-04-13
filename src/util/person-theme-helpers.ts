@@ -17,9 +17,9 @@ export async function tryPlayPersonTheme(
 	if (stateMemberId === personId && oldState.channel === null && newState.channel !== null && random(chance)) {
 		// Don't run if a queue currently exists
 		let queue = player.queues.resolve(newState.guild.id);
-		if (queue != null && !queue.isEmpty()) 
-			{return;}
-		
+		if (queue != null && !queue.isEmpty()) {
+			return;
+		}
 
 		try {
 			await player.play(newState.channel, themeFilePath, {

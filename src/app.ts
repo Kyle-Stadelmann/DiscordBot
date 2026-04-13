@@ -46,11 +46,11 @@ async function startup() {
 		importx(`${dirname(import.meta.url)}/context-menus/**/*.${fileType}`),
 	]);
 
-	if (isDevMode()) 
-		{await client.login(process.env.DEV_BOT_TOKEN);}
-	 else 
-		{await client.login(process.env.BOT_TOKEN);}
-	
+	if (isDevMode()) {
+		await client.login(process.env.DEV_BOT_TOKEN);
+	} else {
+		await client.login(process.env.BOT_TOKEN);
+	}
 }
 
 startup().catch(console.error);

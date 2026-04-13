@@ -23,9 +23,9 @@ export abstract class CommandHandler {
 				console.error(errStr);
 				printSpace();
 
-				if (isProdMode()) 
-					{await sendErrorToDiscordChannel(errStr);}
-				
+				if (isProdMode()) {
+					await sendErrorToDiscordChannel(errStr);
+				}
 			}
 			return;
 		}
@@ -41,16 +41,16 @@ export abstract class CommandHandler {
 			const errStr = createCmdErrorStr(cmdCooldownName, error, interaction);
 			console.error(errStr);
 			printSpace();
-			if (isProdMode()) 
-				{await sendErrorToDiscordChannel(errStr);}
-			
+			if (isProdMode()) {
+				await sendErrorToDiscordChannel(errStr);
+			}
 
 			try {
-				if (!interaction.replied && !interaction.deferred) 
-					{await interaction.reply("Sorry, an error has occurred!");}
-				 else 
-					{await interaction.editReply("Sorry, an error has occurred!");}
-				
+				if (!interaction.replied && !interaction.deferred) {
+					await interaction.reply("Sorry, an error has occurred!");
+				} else {
+					await interaction.editReply("Sorry, an error has occurred!");
+				}
 			} catch (replyErr) {
 				// This happens when it took 15 minutes for cmd to error out
 				// and now can't reply to the interaction, log and don't followup

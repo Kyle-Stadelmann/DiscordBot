@@ -52,9 +52,9 @@ class ScrambleCommand {
 
 		const promises = channelMembers.flatMap((victim) => {
 			const randomChannel = getRandomElement(destinationChannels);
-			if (victim.voice.channel) 
-				{return [victim.edit({ channel: randomChannel })];}
-			
+			if (victim.voice.channel) {
+				return [victim.edit({ channel: randomChannel })];
+			}
 
 			return [];
 		});
@@ -69,9 +69,9 @@ class ScrambleCommand {
 		guild.channels.cache.forEach((channel) => {
 			const notAfkChannel = guild.afkChannel !== channel;
 			const perm = channel.permissionsFor(guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
-			if (channel.isVoiceBased() && channel.id !== voiceChannel.id && perm && notAfkChannel) 
-				{validChannels.push(channel);}
-			
+			if (channel.isVoiceBased() && channel.id !== voiceChannel.id && perm && notAfkChannel) {
+				validChannels.push(channel);
+			}
 		});
 
 		return validChannels;

@@ -111,9 +111,11 @@ class AprilFoolsStartCommand {
 			if (currName == null) oldnick = new OldNicknameModel({ userId: id });
 			else if (!isKyleName(currName)) oldnick = new OldNicknameModel({ userId: id, name: currName });
 
-			if (oldnick != null) {oldnick.save().catch((e: unknown) => {
-				console.error(e);
-			});}
+			if (oldnick != null) {
+				oldnick.save().catch((e: unknown) => {
+					console.error(e);
+				});
+			}
 
 			if (m.manageable) {
 				const newName = getKyleName(id);
@@ -156,9 +158,9 @@ class AprilFoolsStartCommand {
 			const doChangeName = currName != null && isKyleName(currName);
 			// If user already changed their name to something other than "*Kyle", don't touch their new name
 			// otherwise set their name to their old nickname
-			if (member !== null && doChangeName && member.manageable) 
-				{nicknamePromises.push(member.setNickname(name ?? null));}
-			
+			if (member !== null && doChangeName && member.manageable) {
+				nicknamePromises.push(member.setNickname(name ?? null));
+			}
 		});
 
 		await Promise.all(nicknamePromises);

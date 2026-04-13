@@ -52,9 +52,9 @@ abstract class NyaaEmbed {
 
 	private createEmbed($: cheerio.CheerioAPI, url: string, data: string): EmbedBuilder | undefined {
 		let title = $("title").text();
-		if (title.length > MAX_TITLE_CHARS) 
-			{title = `${title.substring(0, MAX_TITLE_CHARS)}...`;}
-		
+		if (title.length > MAX_TITLE_CHARS) {
+			title = `${title.substring(0, MAX_TITLE_CHARS)}...`;
+		}
 
 		const mainPanel = this.getMainPanel($);
 
@@ -88,9 +88,9 @@ abstract class NyaaEmbed {
 				if (otakusComment) userTakes.push({ name: "ot4ku's Take", value: otakusComment, inline: true });
 				if (rowansComment) userTakes.push({ name: "Rowan's Take", value: rowansComment, inline: true });
 				embed.addFields(userTakes);
-			} else 
-				{embed.setFooter({ text: "Rowan and ot4ku were not here :(" });}
-			
+			} else {
+				embed.setFooter({ text: "Rowan and ot4ku were not here :(" });
+			}
 		} catch (err) {
 			console.error(`Couldn't build nyaa embed for url: ${url}`);
 			console.error(err);
@@ -121,10 +121,10 @@ abstract class NyaaEmbed {
 			// Cut off the parentheses
 			img = img.substring(1, img.length - 1);
 
-			if (img.includes(" ")) 
+			if (img.includes(" ")) {
 				// Convert 'imgUrl "Image Hover Text"' into imgUrl
-				{img = img.substring(0, img.indexOf(" "));}
-			
+				img = img.substring(0, img.indexOf(" "));
+			}
 		}
 		return img;
 	}

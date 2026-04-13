@@ -9,15 +9,15 @@ export function CooldownTime(data: number): ClassMethodDecorator {
 		MetadataStorage.instance.addModifier(
 			Modifier.create<DApplicationCommand | DSimpleCommand | DDiscord>(
 				(original: ((DApplicationCommand | DSimpleCommand) & ICooldownTime) | DDiscord) => {
-					if (original instanceof DDiscord) 
-						{[...original.applicationCommands, ...original.simpleCommands].forEach(
+					if (original instanceof DDiscord) {
+						[...original.applicationCommands, ...original.simpleCommands].forEach(
 							(ob: (DApplicationCommand | DSimpleCommand) & ICooldownTime) => {
 								ob.cooldownTime = data;
 							}
-						);}
-					 else 
-						{original.cooldownTime = data;}
-					
+						);
+					} else {
+						original.cooldownTime = data;
+					}
 				},
 				DApplicationCommand,
 				DSimpleCommand,

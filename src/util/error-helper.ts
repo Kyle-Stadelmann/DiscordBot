@@ -29,9 +29,9 @@ export const ExceptionCatcher: GuardFunction = async (p, c, next, data) => {
 		return await next();
 	} catch (e) {
 		// Don't print/notify for connection errors
-		if (e.name === "ConnectTimeoutError") 
-			{return false;}
-		
+		if (e.name === "ConnectTimeoutError") {
+			return false;
+		}
 
 		let errStr = `**Error when executing event**\n`;
 		errStr += `**params**: ${p}\n\n`;

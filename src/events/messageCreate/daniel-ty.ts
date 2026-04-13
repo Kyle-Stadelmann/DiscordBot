@@ -13,12 +13,12 @@ abstract class DanielTy {
 		// Only continue if Daniel sent the message
 		if (msg.author.id !== DANIEL_ID) return;
 
-		if (content.includes("thank") && content.includes("bot")) 
-			{await channel.send("You're welcome DualKim! :)");}
-		
+		if (content.includes("thank") && content.includes("bot")) {
+			await channel.send("You're welcome DualKim! :)");
+		}
 
-		if (content.includes("fuck") && content.includes("bot")) 
-			{await channel.send("I'm just doing my job DualKim >:(");}
-		
+		if (content.includes("fuck") && content.includes("bot")) {
+			await channel.send("I'm just doing my job DualKim >:(");
+		}
 	}
 }

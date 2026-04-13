@@ -65,9 +65,9 @@ class AfkPicCommand {
 	}
 
 	private getCorrespondingAfkPicUrls(user?: User, shouldFetchStaging?: boolean, count?: number): string[] {
-		if (user) 
-			{return bdbot.getRandomAfkPicUrlByUser(user.id, count);}
-		
+		if (user) {
+			return bdbot.getRandomAfkPicUrlByUser(user.id, count);
+		}
 
 		return bdbot.getRandomAfkPicUrl(shouldFetchStaging, count);
 	}

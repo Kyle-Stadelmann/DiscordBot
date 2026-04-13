@@ -9,8 +9,8 @@ const HEAVY_DOLLAR_SIGN_CHANCE = 0.5;
 abstract class RandomHeavyDollarSigns {
 	@On({ event: "messageCreate" })
 	private async tryHeavyDollarSign([msg]: ArgsOf<"messageCreate">) {
-		if (random(HEAVY_DOLLAR_SIGN_CHANCE)) 
-			{await tryReactMessage(msg, HEAVY_DOLLAR_SIGN);}
-		
+		if (random(HEAVY_DOLLAR_SIGN_CHANCE)) {
+			await tryReactMessage(msg, HEAVY_DOLLAR_SIGN);
+		}
 	}
 }

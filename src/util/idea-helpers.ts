@@ -17,14 +17,14 @@ export function buildIdeaEmbeds(ideas: UserIdea[], type: IdeaType | undefined): 
 		const idea = ideas[i];
 		const pageNum = Math.floor(i / MAX_IDEAS_PER_PAGE);
 
-		if (i % MAX_IDEAS_PER_PAGE === 0) 
-			{pages.push(
+		if (i % MAX_IDEAS_PER_PAGE === 0) {
+			pages.push(
 				new EmbedBuilder()
 					.setTitle(type === undefined ? "All Ideas" : `${capitalizeFirstLetter(type)} Ideas`)
 					.setFooter({ text: `Page ${pageNum + 1} of ${maxPagesCount}` })
 					.setColor(0x0)
-			);}
-		
+			);
+		}
 
 		const embed = pages[pageNum];
 		embed.addFields({

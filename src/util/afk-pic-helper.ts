@@ -9,9 +9,9 @@ const allowedImageRegex = [discordRegex, /(https?:)?\/\/(\w+\.)?imgur\.com\/(\S*
 async function isAllowedSite(url: string): Promise<boolean> {
 	const cleanUrl = sanitizeUrl(url);
 	const isUrlAllowed = allowedImageRegex.some((regex) => regex.test(cleanUrl));
-	if (!isUrlAllowed) 
-		{return false;}
-	
+	if (!isUrlAllowed) {
+		return false;
+	}
 
 	// Discord cdn files can't be fetched (error 403 Forbidden). So assume link has valid pic
 	return discordRegex.test(cleanUrl) ? true : (await fetch(cleanUrl)).ok;

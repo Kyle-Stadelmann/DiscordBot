@@ -24,8 +24,8 @@ abstract class Train {
 		if (!activeTrains.has(msg.channelId) && msgContents.size === 1 && msgAuthors.size === START_TRAIN_COUNT) {
 			activeTrains.add(msg.channelId);
 			await msg.channel.send(msgs.at(0).content);
-		} else if (msgContents.size > 1) 
-			{activeTrains.delete(msg.channelId);}
-		
+		} else if (msgContents.size > 1) {
+			activeTrains.delete(msg.channelId);
+		}
 	}
 }

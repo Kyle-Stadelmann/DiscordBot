@@ -106,9 +106,9 @@ class RallyCommand {
 				!isCallerChannel &&
 				userChannel.isVoiceBased() &&
 				(isPublicChannel || shouldPullToHidden)
-			) 
-				{validChannels.set(userChannel.id, userChannel);}
-			
+			) {
+				validChannels.set(userChannel.id, userChannel);
+			}
 		});
 
 		return validChannels;

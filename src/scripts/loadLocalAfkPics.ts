@@ -62,11 +62,11 @@ export async function parseFiles() {
 	for (const [picPath, url] of picPathUrlMap) {
 		const picFileName = path.basename(picPath);
 
-		for (const [code, userId] of AfkPicCodeMap) 
-			{if (picFileName.includes(code)) 
-				{createPromises.push(UserAfkPicTypedModel.create({ filename: picFileName, url, userId }));}}
-			
-		
+		for (const [code, userId] of AfkPicCodeMap) {
+			if (picFileName.includes(code)) {
+				createPromises.push(UserAfkPicTypedModel.create({ filename: picFileName, url, userId }));
+			}
+		}
 	}
 
 	await Promise.all(createPromises);

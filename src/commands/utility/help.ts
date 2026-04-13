@@ -39,9 +39,9 @@ export class HelpCommand {
 		const isDm = !interaction.inGuild();
 
 		let validCmds = client.application.commands.cache;
-		if (isDm) 
-			{validCmds = validCmds.filter((ac) => ac.contexts?.includes(InteractionContextType.BotDM) ?? false);}
-		 else {
+		if (isDm) {
+			validCmds = validCmds.filter((ac) => ac.contexts?.includes(InteractionContextType.BotDM) ?? false);
+		} else {
 			const guildSpecificCmds = interaction.guild.commands.cache.filter(
 				(c) => c.applicationId === client.application.id
 			);
