@@ -1,4 +1,3 @@
- 
 import {
 	ApplicationCommandOptionType,
 	Collection,
@@ -43,7 +42,7 @@ class RandomMoveCommand {
 		const victim = await guild.members.fetch(user.id);
 
 		const hadError = await this.validateArgs(victim, interaction, sender, guild);
-		if (hadError) {return false;}
+		if (hadError) return false;
 
 		await interaction.reply("Initiating start of randomMove...");
 

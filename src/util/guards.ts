@@ -8,6 +8,7 @@ export const GuildOnly: GuardFunction = (params, _client, next) => {
 	if (isNullOrUndefined(params) || params.length === 0 || isNullOrUndefined(params[0]?.guild)) {
 		return false;
 	}
+
 	return next();
 };
 
@@ -17,10 +18,12 @@ export const BD5Only: GuardFunction = (params, _client, next) => {
 	if (isNullOrUndefined(params) || params.length === 0) {
 		return false;
 	}
+
 	// Fallback to .guild.id for types lacking a direct .guildId property (VoiceState, Presence)
 	const guildId = params[0]?.guildId ?? params[0]?.guild?.id;
 	if (guildId !== BD5_ID) {
 		return false;
 	}
+
 	return next();
 };

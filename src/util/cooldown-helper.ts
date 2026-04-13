@@ -5,9 +5,11 @@ export function getCmdCooldownStr(name: string, group: string | undefined, subgr
 	if (!isNullOrUndefined(group) && !isNullOrUndefined(subgroup)) {
 		return `${group}_${subgroup}_${name}`;
 	}
+
 	if (!isNullOrUndefined(group)) {
 		return `${group}_${name}`;
 	}
+
 	return name;
 }
 
@@ -19,8 +21,10 @@ export function getCmdCooldownStrInteraction(interaction: ChatInputCommandIntera
 	if (!isNullOrUndefined(subcmdName) && !isNullOrUndefined(subgroup)) {
 		return `${cmdName}_${subgroup}_${subcmdName}`;
 	}
+
 	if (!isNullOrUndefined(subcmdName)) {
 		return `${cmdName}_${subcmdName}`;
 	}
+
 	return cmdName;
 }

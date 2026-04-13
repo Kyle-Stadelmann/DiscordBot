@@ -34,8 +34,8 @@ export async function getSearchResult(query: string, user: User): Promise<Player
 	if (query.startsWith("https://") && PLAYER_SITES.some((site) => query.includes(site))) {
 		search = query;
 		if (query.includes("playlist")) {
-			if (query.includes("youtube")) {searchEngine = QueryType.YOUTUBE_PLAYLIST;}
-			else if (query.includes("spotify")) {searchEngine = QueryType.SPOTIFY_PLAYLIST;}
+			if (query.includes("youtube")) searchEngine = QueryType.YOUTUBE_PLAYLIST;
+			else if (query.includes("spotify")) searchEngine = QueryType.SPOTIFY_PLAYLIST;
 		}
 	}
 

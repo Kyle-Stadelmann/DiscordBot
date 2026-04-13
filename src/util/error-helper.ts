@@ -32,13 +32,14 @@ export const ExceptionCatcher: GuardFunction = async (p, c, next, data) => {
 		if (e.name === "ConnectTimeoutError") {
 			return false;
 		}
+
 		let errStr = `**Error when executing event**\n`;
 		errStr += `**params**: ${p}\n\n`;
 		errStr += `**data**: ${JSON.stringify(data)}\n\n`;
 		errStr += `**error**: ${e.stack}\n\n`;
 		console.error(errStr);
 		printSpace();
-		if (isProdMode()) {await sendErrorToDiscordChannel(errStr);}
+		if (isProdMode()) await sendErrorToDiscordChannel(errStr);
 		return false;
 	}
 };

@@ -73,7 +73,7 @@ export class AfkPicContainer {
 	}
 
 	public getRandomPicUrls(shouldGetStagingPic?: boolean, count?: number): string[] {
-		if (shouldGetStagingPic) {return getRandomElements(this.stagingPics, count).map((p) => p.url);}
+		if (shouldGetStagingPic) return getRandomElements(this.stagingPics, count).map((p) => p.url);
 		const pics = [...this.allPics, ...this.stagingPics];
 		return getRandomElements(pics, count).map((p) => p.url);
 	}
@@ -106,7 +106,6 @@ export class AfkPicContainer {
 
 	private async populateUserPicsMap() {
 		for (const [, userId] of AfkPicCodeMap) {
-			 
 			const userPics = await getAllPicsForUser(userId);
 			this.userPicsMap.set(userId, userPics);
 		}

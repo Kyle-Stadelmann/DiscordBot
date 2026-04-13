@@ -9,6 +9,7 @@ export async function tryReactMessage(msg: Message, emoji: EmojiIdentifierResolv
 			// DiscordAPIError: Reaction blocked
 			return false;
 		}
+
 		throw e;
 	}
 }

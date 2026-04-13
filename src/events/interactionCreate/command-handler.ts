@@ -12,7 +12,6 @@ import {
 } from "../../util/index.js";
 
 @Discord()
- 
 export abstract class CommandHandler {
 	@On({ event: "interactionCreate" })
 	private async handleCommand([interaction]: ArgsOf<"interactionCreate">) {
@@ -47,9 +46,11 @@ export abstract class CommandHandler {
 			}
 
 			try {
-				if (!interaction.replied && !interaction.deferred)
-					{await interaction.reply("Sorry, an error has occurred!");}
-				else {await interaction.editReply("Sorry, an error has occurred!");}
+				if (!interaction.replied && !interaction.deferred) {
+					await interaction.reply("Sorry, an error has occurred!");
+				} else {
+					await interaction.editReply("Sorry, an error has occurred!");
+				}
 			} catch (replyErr) {
 				// This happens when it took 15 minutes for cmd to error out
 				// and now can't reply to the interaction, log and don't followup

@@ -71,7 +71,7 @@ export default tseslint.config(
 	prettierConfig,
 	{
 		rules: {
-			curly: ["error", "all"],
+			curly: ["error", "multi-line", "consistent"],
 		},
 	},
 );

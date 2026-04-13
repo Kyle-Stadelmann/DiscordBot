@@ -68,7 +68,7 @@ class RallyCommand {
 		}
 
 		const canRallyAnyMembers = validChannels.some((vChannel) => {
-			if (!role) {return vChannel.members.size > 0;}
+			if (!role) return vChannel.members.size > 0;
 
 			return vChannel.members.some((chMember) => chMember.roles.cache.has(role.id));
 		});
@@ -95,11 +95,18 @@ class RallyCommand {
 		const validChannels = new Collection<string, VoiceChannel | StageChannel>();
 
 		guild.channels.cache.forEach((userChannel) => {
-			const isPublicChannel = userChannel.permissionsFor(guild.roles.everyone).has(PermissionFlagsBits.ViewChannel);
+			const isPublicChannel = userChannel
+				.permissionsFor(guild.roles.everyone)
+				.has(PermissionFlagsBits.ViewChannel);
 			const isAfkChannel = userChannel.id === guild.afkChannel?.id;
 			const isCallerChannel = userChannel.id === callerVoiceChannel.id;
 
-			if (!isAfkChannel && !isCallerChannel && userChannel.isVoiceBased() && (isPublicChannel || shouldPullToHidden)) {
+			if (
+				!isAfkChannel &&
+				!isCallerChannel &&
+				userChannel.isVoiceBased() &&
+				(isPublicChannel || shouldPullToHidden)
+			) {
 				validChannels.set(userChannel.id, userChannel);
 			}
 		});
@@ -115,7 +122,7 @@ class RallyCommand {
 	) {
 		validChannels.forEach((userChannel) => {
 			userChannel.members.forEach((chMember) => {
-				if (chMember.id === callerId) {return;}
+				if (chMember.id === callerId) return;
 
 				if (!role || chMember.roles.cache.has(role.id)) {
 					console.log(`Moving user with ID: ${chMember.id}`);
