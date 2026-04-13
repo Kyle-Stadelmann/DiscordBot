@@ -35,8 +35,7 @@ export class ConnectCommand {
 		joinVoiceChannel({
 			channelId: voiceChannel.id,
 			guildId: voiceChannel.guildId,
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			adapterCreator: guild.voiceAdapterCreator as any, // TODO remove any, temporary discord.js type problem ...
+			adapterCreator: guild.voiceAdapterCreator
 		});
 
 		return true;
