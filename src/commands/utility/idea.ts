@@ -1,5 +1,5 @@
 import {
-	ActionRowBuilder,
+	LabelBuilder,
 	ModalSubmitInteraction,
 	TextInputBuilder,
 	TextInputStyle,
@@ -33,20 +33,14 @@ class IdeaCommand {
 	public async submit(interaction: CommandInteraction): Promise<boolean> {
 		const modal = new ModalBuilder().setTitle("Submit an Idea").setCustomId("idea-modal");
 
-		const typeInputComponent = new TextInputBuilder()
-			.setCustomId("type-field")
+		const typeInputComponent = new LabelBuilder()
 			.setLabel("Idea Type (fun/utility/music/general)")
-			.setStyle(TextInputStyle.Short);
-		const ideaInputComponent = new TextInputBuilder()
-			.setCustomId("idea-field")
+			.setTextInputComponent(new TextInputBuilder().setCustomId("type-field").setStyle(TextInputStyle.Short));
+		const ideaInputComponent = new LabelBuilder()
 			.setLabel("Write your idea")
-			.setStyle(TextInputStyle.Paragraph);
+			.setTextInputComponent(new TextInputBuilder().setCustomId("idea-field").setStyle(TextInputStyle.Paragraph));
 
-		const row1 = new ActionRowBuilder<TextInputBuilder>().addComponents(typeInputComponent);
-		const row2 = new ActionRowBuilder<TextInputBuilder>().addComponents(ideaInputComponent);
-		new ActionRowBuilder<TextInputBuilder>().addComponents();
-
-		modal.addComponents(row1, row2);
+		modal.addLabelComponents(typeInputComponent, ideaInputComponent);
 
 		await interaction.showModal(modal);
 
