@@ -21,22 +21,23 @@ const KISS_CHANCE = 10;
 
 const leftOnLog = new Map<GuildMember, Date>();
 
-interface TenorResult {
-	media_formats: {
-		gif: {
+interface GiphyResult {
+	images: {
+		original: {
 			url: string;
 		};
 	};
 }
 
-interface TenorResponse {
-	results: TenorResult[];
+interface GiphyResponse {
+	data: GiphyResult;
 }
 
-async function randomGifUrl(lmt: number, searchString: string): Promise<string> {
-	const searchUrl = `https://tenor.googleapis.com/v2/search?key=${process.env.TENOR_API_KEY}&q=${searchString}&limit=${lmt}&random=true`;
-	const response = await axios.get<TenorResponse>(searchUrl);
-	const { url } = response.data.results[0].media_formats.gif;
+async function randomGifUrl(searchString: string): Promise<string> {
+	const response = await axios.get<GiphyResponse>("https://api.giphy.com/v1/gifs/random", {
+		params: { api_key: process.env.GIPHY_API_KEY, tag: searchString, rating: "pg-13" },
+	});
+	const { url } = response.data.data.images.original;
 
 	return url;
 }
@@ -75,10 +76,10 @@ abstract class GoodNight {
 
 				try {
 					const gifUrl = random(KISS_CHANCE)
-						? await randomGifUrl(1, "good night anime kiss")
-						: await randomGifUrl(1, "good night anime");
+						? await randomGifUrl("good night anime kiss")
+						: await randomGifUrl("good night anime");
 
-					embed.setImage(gifUrl);
+					embed.setImage(gifUrl).setFooter({ text: "Powered by GIPHY" });
 
 					await botStuffChannel.send({ embeds: [embed] });
 				} catch (error) {
