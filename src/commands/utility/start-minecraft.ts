@@ -17,7 +17,7 @@ if (!macAddress || !/^(?:[\da-f]{2}:){5}[\da-f]{2}$/i.test(macAddress)) {
 class StartMinecraftCommand {
 	@Slash({
 		name: "start-minecraft",
-		description: "Sends a Wake-on-LAN request to start the Minecraft server",
+		description: "Sends a request to start the Minecraft server",
 		contexts: [InteractionContextType.Guild],
 	})
 	async run(interaction: CommandInteraction): Promise<boolean> {
